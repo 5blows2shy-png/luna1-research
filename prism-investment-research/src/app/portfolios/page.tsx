@@ -2,24 +2,25 @@
 import { useState } from "react";
 import { PageHeader, SectionHeading } from "@/components/site";
 
-const positions = [
-  ["CASY", "$388.00", "Compounder", "Core thesis intact", "Medium"],
-  ["PANW", "$321.00", "Active growth", "Add on constructive reclaim", "Medium"],
+type ActivePosition={ticker:string;company:string;entry:string;type:string;addLevel:string;risk:string};
+type Holding={ticker:string;company:string};
+type WatchItem=Holding & {status:string};
+const activePositions:ActivePosition[]=[
+  {ticker:"PANW",company:"Palo Alto Networks",entry:"Illustrative",type:"Active growth",addLevel:"Constructive reclaim",risk:"Medium"},
+  {ticker:"PDFS",company:"PDF Solutions",entry:"Illustrative",type:"Inflection",addLevel:"Revenue acceleration",risk:"High"},
+  {ticker:"WWD",company:"Woodward Inc.",entry:"Illustrative",type:"Industrial growth",addLevel:"Trend confirmation",risk:"Medium"},
+  {ticker:"AMAT",company:"Applied Materials",entry:"Illustrative",type:"Semiconductor cycle",addLevel:"Demand confirmation",risk:"Medium"},
+  {ticker:"GS",company:"Goldman Sachs",entry:"Illustrative",type:"Financial leadership",addLevel:"Earnings confirmation",risk:"Medium"},
 ];
+const coreAllocation:Holding[]=[["VOO","Vanguard S&P 500 ETF"],["QQQM","Invesco NASDAQ 100 ETF"],["IAU","iShares Gold Trust"],["SLV","iShares Silver Trust"],["SGOV","iShares 0-3 Month Treasury Bond ETF"]].map(([ticker,company])=>({ticker,company}));
+const compounders:Holding[]=[["LLY","Eli Lilly and Company"],["AAPL","Apple Inc."],["COST","Costco Wholesale Corporation"],["PG","Procter & Gamble Company"],["AMZN","Amazon.com Inc."]].map(([ticker,company])=>({ticker,company}));
+const watchlist:WatchItem[]=[["ROAD","Construction Partners Inc."],["EVR","Evercore Inc."],["VICR","Vicor Corporation"],["VIAV","Viavi Solutions Inc."],["ROK","Rockwell Automation"],["ADPT","Adaptive Biotechnologies Corporation"],["AMKR","Amkor Technology Inc."],["TECH","Bio-Techne Corporation"],["ATRO","Astronics Corporation"],["MRCY","Mercury Systems Inc."],["AYI","Acuity Inc."],["RY","Royal Bank of Canada"],["HOOD","Robinhood Markets Inc."],["HLT","Hilton Worldwide Holdings Inc."],["ANET","Arista Networks Inc."],["AGX","Argan Inc."],["CRDO","Credo Technology Group Holding Ltd."]].map(([ticker,company])=>({ticker,company,status:"Research queue"}));
+const tabs=["Active Trading Portfolio","Long-Term Holdings","Watchlist"];
 
-const watchlist = ["PANW", "PDFS", "WWD", "AMAT", "GS", "ROAD", "EVR", "VICR", "VIAV", "ROK", "ADPT", "AMKR", "TECH", "ATRO", "MRCY", "AYI", "RY", "HOOD", "HLT", "ANET", "AGX", "CRDO"];
-const tabs = ["Active Trading Portfolio", "Long-Term Compounders", "Watchlist", "Closed Positions"];
+function HoldingsTable({title,items}:{title:string;items:Holding[]}){return <div className="holding-group"><span className="eyebrow">{title}</span><div className="table-wrap"><table><thead><tr><th>Ticker</th><th>Company name</th><th>Investment thesis</th><th>Current allocation</th><th>Average cost</th></tr></thead><tbody>{items.map(x=><tr key={x.ticker}><td><b>{x.ticker}</b></td><td>{x.company}</td><td className="placeholder-cell">Thesis placeholder</td><td className="placeholder-cell">Allocation placeholder</td><td className="placeholder-cell">Average cost placeholder</td></tr>)}</tbody></table></div></div>}
 
-export default function Portfolios() {
-  const [activeTab, setActiveTab] = useState("Active Trading Portfolio");
-  return <>
-    <PageHeader kicker="Portfolios" title="Conviction made accountable." description="Positions are organized by thesis, entry, risk, and explicit exit rules. All pricing below is illustrative sample data." />
-    <section>
-      <div className="tabs" role="tablist" aria-label="Portfolio categories">{tabs.map((tab) => <button key={tab} role="tab" aria-selected={activeTab === tab} className={activeTab === tab ? "selected" : ""} onClick={() => setActiveTab(tab)}>{tab}</button>)}</div>
-      {activeTab === "Active Trading Portfolio" && <div className="table-wrap"><table><caption>Illustrative positions · not connected to market data</caption><thead><tr><th>Ticker</th><th>Entry price</th><th>Position type</th><th>Add level</th><th>Risk</th><th>Status</th></tr></thead><tbody>{positions.map((p) => <tr key={p[0]}><td><b>{p[0]}</b></td><td>{p[1]}</td><td>{p[2]}</td><td>{p[3]}</td><td>{p[4]}</td><td><span className="status">Monitoring</span></td></tr>)}</tbody></table></div>}
-      {activeTab === "Watchlist" && <div className="watchlist-panel"><div><span className="eyebrow">Current watchlist</span><p>Ticker symbols only · no live market data</p></div><div className="ticker-watchlist">{watchlist.map((ticker) => <span key={ticker}>{ticker}</span>)}</div></div>}
-      {(activeTab === "Long-Term Compounders" || activeTab === "Closed Positions") && <div className="empty-portfolio"><span className="eyebrow">{activeTab}</span><h2>No positions listed.</h2><p>This portfolio section is ready for future entries.</p></div>}
-    </section>
-    <section><SectionHeading eyebrow="Portfolio rules" title="The process travels with the position."/><div className="category-grid"><div className="category-card"><span>01</span><h3>Initial thesis</h3><p>Write the business change and expected evidence before entry.</p></div><div className="category-card"><span>02</span><h3>Add level</h3><p>Increase exposure only when the company and stock confirm the thesis.</p></div><div className="category-card"><span>03</span><h3>Risk rule</h3><p>Define what would disprove the thesis, not only a percentage stop.</p></div><div className="category-card"><span>04</span><h3>Exit rule</h3><p>Respond to failed structure, material deterioration, or invalidation.</p></div></div></section>
-  </>;
-}
+export default function Portfolios(){const[activeTab,setActiveTab]=useState("Active Trading Portfolio");return <><PageHeader kicker="Portfolios" title="Conviction made accountable." description="Positions are organized by thesis, entry, risk, and explicit exit rules. All portfolio values are illustrative placeholders and are not connected to live market data."/><section><div className="tabs" role="tablist" aria-label="Portfolio categories">{tabs.map(tab=><button key={tab} role="tab" aria-selected={activeTab===tab} className={activeTab===tab?"selected":""} onClick={()=>setActiveTab(tab)}>{tab}</button>)}</div>
+  {activeTab==="Active Trading Portfolio"&&<div className="table-wrap"><table><caption>Illustrative active positions · no live pricing</caption><thead><tr><th>Ticker / Company</th><th>Entry price</th><th>Position type</th><th>Add level</th><th>Risk</th><th>Status</th></tr></thead><tbody>{activePositions.map(p=><tr key={p.ticker}><td><b className="portfolio-ticker">{p.ticker}</b><small className="company-under">{p.company}</small></td><td>{p.entry}</td><td>{p.type}</td><td>{p.addLevel}</td><td>{p.risk}</td><td><span className="status">Monitoring</span></td></tr>)}</tbody></table></div>}
+  {activeTab==="Long-Term Holdings"&&<div className="holdings-stack"><HoldingsTable title="Portfolio 1 · Core Asset Allocation" items={coreAllocation}/><HoldingsTable title="Portfolio 2 · Long-Term Compounders" items={compounders}/></div>}
+  {activeTab==="Watchlist"&&<div className="table-wrap"><table><caption>Research watchlist · scores and notes are placeholders</caption><thead><tr><th>Ticker</th><th>Company name</th><th>LUNA Score</th><th>Research status</th><th>Watchlist notes</th></tr></thead><tbody>{watchlist.map(x=><tr key={x.ticker}><td><b>{x.ticker}</b></td><td>{x.company}</td><td className="placeholder-cell">Score placeholder</td><td><span className="status">{x.status}</span></td><td className="placeholder-cell">Notes placeholder</td></tr>)}</tbody></table></div>}
+  </section><section><SectionHeading eyebrow="Portfolio rules" title="The process travels with the position."/><div className="category-grid"><div className="category-card"><span>01</span><h3>Initial thesis</h3><p>Write the business change and expected evidence before entry.</p></div><div className="category-card"><span>02</span><h3>Add level</h3><p>Increase exposure only when the company and stock confirm the thesis.</p></div><div className="category-card"><span>03</span><h3>Risk rule</h3><p>Define what would disprove the thesis, not only a percentage stop.</p></div><div className="category-card"><span>04</span><h3>Exit rule</h3><p>Respond to failed structure, material deterioration, or invalidation.</p></div></div></section></>}

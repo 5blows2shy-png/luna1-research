@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
