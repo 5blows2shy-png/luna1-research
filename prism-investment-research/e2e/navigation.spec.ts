@@ -1,0 +1,3 @@
+import {test,expect} from "@playwright/test";
+test("primary pages load",async({page})=>{for(const path of ["/","/equity-research","/portfolio-dashboard","/financial-models","/contact"]){await page.goto(path);await expect(page.locator("h1")).toBeVisible()}});
+test("contact form and endpoint validate",async({page,request})=>{await page.goto("/contact");await expect(page.getByRole("button",{name:"Request connection"})).toBeVisible();const response=await request.post("/api/contact",{data:{name:"Research Visitor",organization:"Example Organization",reason:"Research discussion",message:"I would like to discuss the educational research methodology."}});expect(response.ok()).toBeTruthy()});

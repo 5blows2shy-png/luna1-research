@@ -1,0 +1,5 @@
+export type ReturnPoint={period:string;portfolio:number;benchmark:number};
+export function cumulativeReturn(returns:number[]){return returns.reduce((value,r)=>value*(1+r),1)-1}
+export function maxDrawdown(values:number[]){let peak=-Infinity,max=0;for(const value of values){peak=Math.max(peak,value);if(peak>0)max=Math.max(max,(peak-value)/peak)}return max}
+export function annualizedSharpe(returns:number[],riskFree=0){if(returns.length<2)return 0;const excess=returns.map(r=>r-riskFree/12);const mean=excess.reduce((a,b)=>a+b,0)/excess.length;const variance=excess.reduce((a,r)=>a+(r-mean)**2,0)/(excess.length-1);return variance===0?0:(mean/Math.sqrt(variance))*Math.sqrt(12)}
+export function sortinoRatio(returns:number[],target=0){if(!returns.length)return 0;const mean=returns.reduce((a,b)=>a+b,0)/returns.length;const downside=returns.filter(r=>r<target);if(!downside.length)return 0;const deviation=Math.sqrt(downside.reduce((a,r)=>a+(r-target)**2,0)/downside.length);return deviation===0?0:(mean-target)/deviation*Math.sqrt(12)}

@@ -1,11 +1,10 @@
 export type NavigationItem = { label: string; href: string };
 export const navigationItems: NavigationItem[] = [
   { label: "Home", href: "/" }, { label: "About", href: "/about" },
-  { label: "My Investment Philosophy", href: "/investment-philosophy" },
-  { label: "LUNA Framework", href: "/luna1-framework" }, { label: "Research", href: "/research" },
-  { label: "Portfolios", href: "/portfolios" }, { label: "Market Commentary", href: "/market-commentary" },
-  { label: "Valuation Models", href: "/valuation-models" }, { label: "Certifications", href: "/certifications" },
-  { label: "Resume", href: "/resume" }, { label: "Contact", href: "/contact" },
+  { label: "Investment Philosophy", href: "/investment-philosophy" },
+  { label: "Luna1 Framework", href: "/luna1-framework" }, { label: "Equity Research", href: "/equity-research" },
+  { label: "Portfolio Dashboard", href: "/portfolio-dashboard" }, { label: "Financial Models", href: "/financial-models" },
+  { label: "Market Commentary", href: "/market-commentary" }, { label: "Resume", href: "/resume" }, { label: "Contact", href: "/contact" },
 ];
 
 export type ResearchReport = { ticker: string; company: string; industry: string; theme: string; summary: string; score: number; classification: string; catalyst: string; risk: string; date: string; status: string };
