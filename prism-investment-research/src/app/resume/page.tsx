@@ -1,4 +1,3 @@
-"use client";
 import { PageHeader } from "@/components/site";
 
 const roles = [
@@ -29,7 +28,7 @@ const roles = [
 export default function Resume() {
   return <>
     <PageHeader kicker="Resume" title="Shy Lee" description="Finance professional and U.S. Army veteran with experience spanning fundamental investment research, financial analysis, nonprofit finance, and mission-critical operations. Skilled in evaluating company fundamentals, valuation, industry dynamics, and risk to develop investment theses and support informed capital allocation decisions." />
-    <section className="resume-actions"><div><span>Escondido, California</span><a href="mailto:leeshyheim@yahoo.com">leeshyheim@yahoo.com</a></div><div><button className="button primary" onClick={() => window.print()}>Print resume</button></div></section>
+    <section className="resume-actions"><div><span>Escondido, California</span><a href="mailto:leeshyheim@yahoo.com">leeshyheim@yahoo.com</a></div></section>
     <section className="resume-layout">
       <aside>
         <span className="eyebrow">Education</span>
