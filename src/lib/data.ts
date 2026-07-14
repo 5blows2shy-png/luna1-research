@@ -2,7 +2,7 @@ export type NavigationItem = { label: string; href: string };
 export const navigationItems: NavigationItem[] = [
   { label: "Home", href: "/" }, { label: "About", href: "/about" },
   { label: "Investment Philosophy", href: "/investment-philosophy" },
-  { label: "Luna1 Framework", href: "/luna1-framework" }, { label: "Equity Research", href: "/equity-research" },
+  { label: "Luna1 Framework", href: "/luna1-framework" },
   { label: "Portfolio Dashboard", href: "/portfolio-dashboard" }, { label: "Financial Models", href: "/financial-models" },
   { label: "Market Commentary", href: "/market-commentary" }, { label: "Resume", href: "/resume" }, { label: "Contact", href: "/contact" },
 ];
