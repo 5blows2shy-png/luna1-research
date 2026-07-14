@@ -8,7 +8,7 @@ type WatchItem={ticker:string;company:string;status:string;setup:string};
 
 const activePositions:ActivePosition[]=[
   {ticker:"PANW",company:"Palo Alto Networks Inc.",thesis:"Platform consolidation and durable next-generation security demand.",risk:"Medium",exitRule:"Exit if operating evidence or technical structure materially invalidates the thesis.",status:"Monitoring"},
-  {ticker:"PDFS",company:"PDF Solutions Inc.",thesis:"Semiconductor analytics adoption and potential revenue acceleration.",risk:"High",exitRule:"Exit on failed technical structure or material deterioration in the revenue thesis.",status:"Monitoring"},
+  {ticker:"CASY",company:"Casey's General Stores Inc.",thesis:"Store expansion, prepared-food growth, and disciplined execution support durable earnings growth.",risk:"Medium",exitRule:"Exit if operating momentum or technical structure materially invalidates the thesis.",status:"Monitoring"},
 ];
 const coreAllocation:Holding[]=[
   {ticker:"VOO",company:"Vanguard S&P 500 ETF",type:"Core equity ETF",horizon:"Long term"},
