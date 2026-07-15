@@ -1,39 +1,78 @@
 "use client";
-import { useState } from "react";
+
+import { useState, type KeyboardEvent } from "react";
+import { MistakeJournal } from "@/components/mistake-journal";
+import { PortfolioPerformance } from "@/components/portfolio-dashboard";
 import { PageHeader, SectionHeading } from "@/components/site";
 
-type ActivePosition={ticker:string;company:string;entryPrice:number;thesis:string;risk:string;exitRule:string;status:string};
-type Holding={ticker:string;company:string;allocation:string;type:string;horizon:string};
-type WatchItem={ticker:string;company:string;status:string;setup:string};
+type ActivePosition = { ticker: string; company: string; entryPrice: number; thesis: string; risk: string; exitRule: string; status: string };
+type Holding = { ticker: string; company: string; allocation: string; type: string; horizon: string };
+type WatchItem = { ticker: string; company: string; status: string; setup: string };
 
-const activePositions:ActivePosition[]=[
+const activePositions: ActivePosition[] = [
   {ticker:"CASY",company:"Casey's General Stores Inc.",entryPrice:824.00,thesis:"Casey’s is a high-quality retail compounder built around convenience stores, fuel, prepared food, and an efficient distribution network. Management plans to add at least 400 stores over fiscal 2027–2029 through acquisitions and new construction, expanding a system that already serves nearly 3,000 locations. The company can improve acquired stores by connecting them to Casey’s purchasing, distribution, prepared-food, and loyalty infrastructure, while the successful CEFCO integration demonstrates management’s ability to execute this strategy. My thesis remains intact while new locations produce profitable growth, prepared-food sales expand, and EBITDA and returns on invested capital continue improving.",risk:"Medium",exitRule:"Exit if profitable store growth, prepared-food expansion, EBITDA, or returns on invested capital materially deteriorate.",status:"Monitoring"},
   {ticker:"PANW",company:"Palo Alto Networks Inc.",entryPrice:272.54,thesis:"Palo Alto Networks is a cybersecurity leader benefiting from enterprise demand for integrated security platforms and AI-related security products. Fiscal Q3 2026 revenue grew 31% to approximately $3.0 billion, while remaining performance obligations increased 36% to $18.4 billion, providing strong visibility into future contracted revenue. Its platformization strategy, recurring revenue base, and high customer switching costs support durable growth as companies consolidate multiple security tools onto fewer strategic vendors. My thesis remains intact while recurring security revenue, customer commitments, free cash flow, and the Stage 2 price trend continue advancing.",risk:"Medium",exitRule:"Exit if recurring security revenue, customer commitments, free cash flow, or the Stage 2 price trend materially deteriorate.",status:"Monitoring"},
   {ticker:"WELL",company:"Welltower Inc.",entryPrice:237.21,thesis:"Welltower is a healthcare real estate compounder benefiting from rising senior-housing demand, limited new supply, and improving property-level economics. In Q1 2026, normalized FFO per share grew 23% year over year to $1.47, while its senior housing operating portfolio produced 22.1% same-store NOI growth and 370 basis points of occupancy improvement. Revenue per occupied room increased 5%, expenses per occupied room rose only 0.4%, and operating margins expanded by 320 basis points, demonstrating meaningful operating leverage. My thesis remains intact while occupancy, normalized FFO, same-store NOI, and returns from new investment activity continue growing.",risk:"Medium",exitRule:"Exit if occupancy, normalized FFO, same-store NOI, or returns from new investment activity materially deteriorate.",status:"Monitoring"},
 ];
-const coreAllocation:Holding[]=[
+
+const coreAllocation: Holding[] = [
   {ticker:"VOO",company:"Vanguard S&P 500 ETF",allocation:"30%",type:"Core equity ETF",horizon:"Long term"},
   {ticker:"QQQM",company:"Invesco NASDAQ-100 ETF",allocation:"50%",type:"Growth equity ETF",horizon:"Long term"},
   {ticker:"IAU",company:"iShares Gold Trust",allocation:"10%",type:"Real asset",horizon:"Strategic allocation"},
   {ticker:"SLV",company:"iShares Silver Trust",allocation:"9%",type:"Real asset",horizon:"Strategic allocation"},
   {ticker:"SGOV",company:"iShares 0-3 Month Treasury Bond ETF",allocation:"1%",type:"Treasury ETF",horizon:"Capital reserve"},
 ];
-const compounders:Holding[]=[
+
+const compounders: Holding[] = [
   {ticker:"LLY",company:"Eli Lilly and Company",allocation:"25%",type:"Long-term compounder",horizon:"5+ years"},
   {ticker:"AAPL",company:"Apple Inc.",allocation:"20%",type:"Long-term compounder",horizon:"5+ years"},
   {ticker:"COST",company:"Costco Wholesale Corporation",allocation:"20%",type:"Long-term compounder",horizon:"5+ years"},
   {ticker:"PG",company:"The Procter & Gamble Company",allocation:"15%",type:"Long-term compounder",horizon:"5+ years"},
   {ticker:"AMZN",company:"Amazon.com Inc.",allocation:"20%",type:"Long-term compounder",horizon:"5+ years"},
 ];
-const watchlist:WatchItem[]=[
+
+const watchlist: WatchItem[] = [
   ["ROAD","Construction Partners Inc.","Active research","Near Buy"],["EVR","Evercore Inc.","Research queue","Early Stage"],["VICR","Vicor Corporation","Monitoring","Waiting for Earnings"],["VIAV","Viavi Solutions Inc.","Monitoring","Early Stage"],["ROK","Rockwell Automation Inc.","Research queue","Monitoring Pullback"],["ADPT","Adaptive Biotechnologies Corporation","Monitoring","Early Stage"],["AMKR","Amkor Technology Inc.","Research queue","Monitoring Pullback"],["TECH","Bio-Techne Corporation","Monitoring","Waiting for Earnings"],["ATRO","Astronics Corporation","Active research","Near Buy"],["MRCY","Mercury Systems Inc.","Monitoring","Extended"],["AYI","Acuity Inc.","Research queue","Monitoring Pullback"],["RY","Royal Bank of Canada","Monitoring","Early Stage"],["HOOD","Robinhood Markets Inc.","Monitoring","Extended"],["HLT","Hilton Worldwide Holdings Inc.","Research queue","Waiting for Earnings"],["ANET","Arista Networks Inc.","Active research","Monitoring Pullback"],["AGX","Argan Inc.","Research queue","Near Buy"],["CRDO","Credo Technology Group Holding Ltd.","Monitoring","Extended"],
-].map(([ticker,company,status,setup])=>({ticker,company,status,setup}));
-const tabs=["Active Trading Portfolio","Long-Term Holdings","Watchlist"];
+].map(([ticker, company, status, setup]) => ({ticker, company, status, setup}));
 
-function HoldingsTable({title,items}:{title:string;items:Holding[]}){return <div className="holding-group"><span className="eyebrow">{title}</span><div className="table-wrap"><table><caption>Illustrative model allocation · educational use only</caption><thead><tr><th>Ticker</th><th>Fund / company</th><th>Investment thesis</th><th>Current allocation</th><th>Holding type</th><th>Time horizon</th></tr></thead><tbody>{items.map(x=><tr key={x.ticker}><td><b>{x.ticker}</b></td><td>{x.company}</td><td className="placeholder-cell">Thesis placeholder</td><td><b>{x.allocation}</b></td><td>{x.type}</td><td>{x.horizon}</td></tr>)}</tbody></table></div></div>}
+const tabs = ["Overview", "Active Positions", "Watchlist", "Long-Term Compounders", "Performance", "Mistake Journal"] as const;
+type PortfolioTab = typeof tabs[number];
 
-export default function Portfolios(){const[activeTab,setActiveTab]=useState("Active Trading Portfolio");return <><PageHeader kicker="Portfolios" title="Conviction made accountable." description="Positions are organized by thesis, entry, risk, and explicit exit rules. All portfolio values are manually updated illustrative placeholders and are not connected to live market data."/><section><div className="tabs" role="tablist" aria-label="Portfolio categories">{tabs.map(tab=><button key={tab} role="tab" aria-selected={activeTab===tab} className={activeTab===tab?"selected":""} onClick={()=>setActiveTab(tab)}>{tab}</button>)}</div>
-  {activeTab==="Active Trading Portfolio"&&<div className="table-wrap"><table><caption>Active positions and manually entered entry prices</caption><thead><tr><th>Ticker / Company</th><th>Entry price</th><th>Position thesis</th><th>Risk</th><th>Exit rule</th><th>Status</th></tr></thead><tbody>{activePositions.map(p=><tr key={p.ticker}><td><b className="portfolio-ticker">{p.ticker}</b><small className="company-under">{p.company}</small></td><td>${p.entryPrice.toFixed(2)}</td><td className="portfolio-copy">{p.thesis}</td><td>{p.risk}</td><td className="portfolio-copy">{p.exitRule}</td><td><span className="status">{p.status}</span></td></tr>)}</tbody></table></div>}
-  {activeTab==="Long-Term Holdings"&&<div className="holdings-stack"><HoldingsTable title="Portfolio 1 · Core Asset Allocation" items={coreAllocation}/><HoldingsTable title="Portfolio 2 · Long-Term Compounders" items={compounders}/></div>}
-  {activeTab==="Watchlist"&&<div className="table-wrap"><table><caption>Research watchlist · scores, catalysts, risks, and notes are placeholders</caption><thead><tr><th>Ticker</th><th>Company name</th><th>LUNA Score</th><th>Research status</th><th>Watchlist notes</th><th>Setup status</th><th>Catalyst</th><th>Risk</th></tr></thead><tbody>{watchlist.map(x=><tr key={x.ticker}><td><b>{x.ticker}</b></td><td>{x.company}</td><td className="placeholder-cell">Score placeholder</td><td><span className="status">{x.status}</span></td><td className="placeholder-cell">Notes placeholder</td><td>{x.setup}</td><td className="placeholder-cell">Catalyst placeholder</td><td className="placeholder-cell">Risk placeholder</td></tr>)}</tbody></table></div>}
-  </section><section><SectionHeading eyebrow="Portfolio rules" title="The process travels with the position."/><div className="category-grid"><div className="category-card"><span>01</span><h3>Initial thesis</h3><p>Write the business change and expected evidence before entry.</p></div><div className="category-card"><span>02</span><h3>Add level</h3><p>Increase exposure only when the company and stock confirm the thesis.</p></div><div className="category-card"><span>03</span><h3>Risk rule</h3><p>Define what would disprove the thesis, not only a percentage stop.</p></div><div className="category-card"><span>04</span><h3>Exit rule</h3><p>Respond to failed structure, material deterioration, or invalidation.</p></div></div></section></>}
+function HoldingsTable({ title, items }: { title: string; items: Holding[] }) {
+  return <div className="holding-group"><span className="eyebrow">{title}</span><div className="table-wrap"><table><caption>Illustrative model allocation · educational use only</caption><thead><tr><th>Ticker</th><th>Fund / company</th><th>Investment thesis</th><th>Current allocation</th><th>Holding type</th><th>Time horizon</th></tr></thead><tbody>{items.map((item) => <tr key={item.ticker}><td><b>{item.ticker}</b></td><td>{item.company}</td><td className="placeholder-cell">Thesis placeholder</td><td><b>{item.allocation}</b></td><td>{item.type}</td><td>{item.horizon}</td></tr>)}</tbody></table></div></div>;
+}
+
+function Overview() {
+  return <div className="portfolio-overview"><div className="placeholder-banner">Portfolio information is manually entered and may be delayed or illustrative. Past results do not predict future performance.</div><div className="portfolio-overview-grid"><article><span className="eyebrow">Active positions</span><strong>{activePositions.length}</strong><p>Each position is governed by a written thesis, risk assessment, and exit rule.</p></article><article><span className="eyebrow">Long-term holdings</span><strong>{coreAllocation.length + compounders.length}</strong><p>Core asset allocation and concentrated long-term compounders are reviewed separately.</p></article><article><span className="eyebrow">Research watchlist</span><strong>{watchlist.length}</strong><p>Candidates remain in research until evidence, valuation, and structure align.</p></article><article><span className="eyebrow">Decision reviews</span><strong>1</strong><p>Post-investment reviews translate execution errors into explicit process changes.</p></article></div></div>;
+}
+
+export default function Portfolios() {
+  const [activeTab, setActiveTab] = useState<PortfolioTab>("Overview");
+
+  function handleTabKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    const currentIndex = tabs.indexOf(activeTab);
+    const nextIndex = event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1 : event.key === "ArrowRight" ? (currentIndex + 1) % tabs.length : (currentIndex - 1 + tabs.length) % tabs.length;
+    setActiveTab(tabs[nextIndex]);
+    event.currentTarget.querySelectorAll<HTMLButtonElement>("[role='tab']")[nextIndex]?.focus();
+  }
+
+  return <>
+    <PageHeader kicker="Portfolio Dashboard" title="Conviction made accountable." description="Positions, performance, and decision reviews are organized around evidence, explicit risk, and repeatable process."/>
+    <section>
+      <div className="tabs portfolio-tabs" role="tablist" aria-label="Portfolio Dashboard sections" onKeyDown={handleTabKeyDown}>
+        {tabs.map((tab) => <button id={`tab-${tab.toLowerCase().replaceAll(" ", "-")}`} key={tab} role="tab" aria-selected={activeTab === tab} aria-controls="portfolio-tab-panel" tabIndex={activeTab === tab ? 0 : -1} className={activeTab === tab ? "selected" : ""} onClick={() => setActiveTab(tab)}>{tab}</button>)}
+      </div>
+      <div id="portfolio-tab-panel" className="portfolio-tab-panel" role="tabpanel" aria-labelledby={`tab-${activeTab.toLowerCase().replaceAll(" ", "-")}`}>
+        {activeTab === "Overview" && <Overview/>}
+        {activeTab === "Active Positions" && <div className="table-wrap"><table><caption>Active positions and manually entered entry prices</caption><thead><tr><th>Ticker / Company</th><th>Entry price</th><th>Position thesis</th><th>Risk</th><th>Exit rule</th><th>Status</th></tr></thead><tbody>{activePositions.map((position) => <tr key={position.ticker}><td><b className="portfolio-ticker">{position.ticker}</b><small className="company-under">{position.company}</small></td><td>${position.entryPrice.toFixed(2)}</td><td className="portfolio-copy">{position.thesis}</td><td>{position.risk}</td><td className="portfolio-copy">{position.exitRule}</td><td><span className="status">{position.status}</span></td></tr>)}</tbody></table></div>}
+        {activeTab === "Long-Term Compounders" && <div className="holdings-stack"><HoldingsTable title="Portfolio 1 · Core Asset Allocation" items={coreAllocation}/><HoldingsTable title="Portfolio 2 · Long-Term Compounders" items={compounders}/></div>}
+        {activeTab === "Watchlist" && <div className="table-wrap"><table><caption>Research watchlist · scores, catalysts, risks, and notes are placeholders</caption><thead><tr><th>Ticker</th><th>Company name</th><th>LUNA Score</th><th>Research status</th><th>Watchlist notes</th><th>Setup status</th><th>Catalyst</th><th>Risk</th></tr></thead><tbody>{watchlist.map((item) => <tr key={item.ticker}><td><b>{item.ticker}</b></td><td>{item.company}</td><td className="placeholder-cell">Score placeholder</td><td><span className="status">{item.status}</span></td><td className="placeholder-cell">Notes placeholder</td><td>{item.setup}</td><td className="placeholder-cell">Catalyst placeholder</td><td className="placeholder-cell">Risk placeholder</td></tr>)}</tbody></table></div>}
+        {activeTab === "Performance" && <PortfolioPerformance/>}
+        {activeTab === "Mistake Journal" && <MistakeJournal/>}
+      </div>
+    </section>
+    <section><SectionHeading eyebrow="Portfolio rules" title="The process travels with the position."/><div className="category-grid"><div className="category-card"><span>01</span><h3>Initial thesis</h3><p>Write the business change and expected evidence before entry.</p></div><div className="category-card"><span>02</span><h3>Add level</h3><p>Increase exposure only when the company and stock confirm the thesis.</p></div><div className="category-card"><span>03</span><h3>Risk rule</h3><p>Define what would disprove the thesis, not only a percentage stop.</p></div><div className="category-card"><span>04</span><h3>Exit rule</h3><p>Respond to failed structure, material deterioration, or invalidation.</p></div></div></section>
+  </>;
+}
