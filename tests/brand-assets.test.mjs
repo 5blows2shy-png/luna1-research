@@ -6,11 +6,12 @@ import sharp from "sharp";
 
 const root = process.cwd();
 const brand = path.join(root, "public", "brand");
-const publicAssets = ["luna1-prism.svg", "luna1-prism-black.svg", "luna1-prism-white.svg", "luna1-prism-transparent.png", "luna1-logo-horizontal.svg", "luna1-logo-horizontal.png", "luna1-logo-stacked.svg", "luna1-logo-stacked.png", "luna1-social-card.png", "luna1-commercial-poster.png", "README.md", "luna1-brand-kit.zip"];
+const publicAssets = ["luna1-prism.svg", "luna1-prism-gold.svg", "luna1-prism-black.svg", "luna1-prism-white.svg", "luna1-prism-transparent.png", "luna1-logo-horizontal.svg", "luna1-logo-luxury.svg", "luna1-logo-horizontal.png", "luna1-logo-stacked.svg", "luna1-logo-stacked.png", "luna1-social-card.png", "luna1-commercial-poster.png", "README.md", "luna1-brand-kit.zip"];
 
 test("brand kit and App Router metadata assets exist", async () => {
   for (const file of publicAssets) assert.ok((await fs.stat(path.join(brand, file))).size > 0, `${file} should not be empty`);
   for (const file of ["favicon.ico", "icon.png", "apple-icon.png"]) assert.ok((await fs.stat(path.join(root, "src", "app", file))).size > 0, `${file} should exist`);
+  assert.ok((await fs.stat(path.join(root, "public", "favicon.svg"))).size > 0, "premium SVG favicon should exist");
 });
 
 test("every public SVG declares a valid viewBox", async () => {

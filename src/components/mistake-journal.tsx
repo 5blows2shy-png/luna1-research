@@ -123,11 +123,11 @@ function ReviewDrawer({ entry, onClose }: { entry: MistakeJournalEntry; onClose:
 
         <section className="before-after" aria-labelledby="before-after-heading">
           <span className="eyebrow">Framework Updated</span>
-          <h3 id="before-after-heading">Before vs. After</h3>
+          <h3 id="before-after-heading">Before Rule / After Rule</h3>
           <div>
-            <article><small>Original rule</small><p>Exit when price action creates concern about a possible structural break.</p></article>
-            <article><small>Mistake observed</small><p>Intraday volatility prompted a full exit while the thesis and broader structure remained intact.</p></article>
-            <article><small>Revised Luna1 rule</small><p>Require a daily-close confirmation and a fundamental review before a full exit, absent emergency portfolio risk.</p></article>
+            <article><small>Before Rule</small><p>Exit when price action creates concern about a possible structural break.</p></article>
+            <article><small>Observed Failure</small><p>Intraday volatility prompted a full exit while the thesis and broader structure remained intact.</p></article>
+            <article><small>After Rule</small><p>Require a daily-close confirmation and a fundamental review before a full exit, absent emergency portfolio risk.</p></article>
           </div>
         </section>
       </aside>
