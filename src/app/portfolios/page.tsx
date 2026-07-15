@@ -2,7 +2,6 @@
 
 import { useState, type KeyboardEvent } from "react";
 import { MistakeJournal } from "@/components/mistake-journal";
-import { PortfolioPerformance } from "@/components/portfolio-dashboard";
 import { PageHeader, SectionHeading } from "@/components/site";
 import { watchlist } from "@/lib/watchlist-data";
 
@@ -163,7 +162,6 @@ const tabs = [
   "Long-Term Compounders",
   "Conviction Dashboard",
   "Mistake Journal",
-  "Performance",
 ] as const;
 type PortfolioTab = (typeof tabs)[number];
 
@@ -513,7 +511,6 @@ export default function Portfolios() {
           )}
           {activeTab === "Conviction Dashboard" && <ConvictionDashboard />}
           {activeTab === "Mistake Journal" && <MistakeJournal />}
-          {activeTab === "Performance" && <PortfolioPerformance />}
         </div>
       </section>
       <section>

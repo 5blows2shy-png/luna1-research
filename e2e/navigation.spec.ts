@@ -91,7 +91,6 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
     "Long-Term Compounders",
     "Conviction Dashboard",
     "Mistake Journal",
-    "Performance",
   ])
     await expect(
       page.getByRole("tab", { name: label, exact: true }),
@@ -101,13 +100,18 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
     testInfo.project.name,
   );
   await expect(page.getByText("JBL", { exact: true }).first()).toBeVisible();
-  await activate(
-    page.getByRole("tab", { name: "Performance" }),
-    testInfo.project.name,
-  );
-  await expect(
-    page.getByRole("heading", { name: "Benchmark comparison" }),
-  ).toBeVisible();
+  await expect(page.getByRole("tab", { name: "Performance" })).toHaveCount(0);
+});
+
+test("homepage omits retired overview modules", async ({ page }) => {
+  await page.goto("/");
+  for (const section of [
+    "Career and Credentials",
+    "Portfolio · Latest Decision Review",
+    "Portfolio Snapshot",
+    "Current Areas of Focus",
+  ])
+    await expect(page.getByText(section, { exact: true })).toHaveCount(0);
 });
 
 test("JBL decision review remains under Portfolio", async ({
