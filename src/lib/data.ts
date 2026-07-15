@@ -4,7 +4,6 @@ export const navigationItems: NavigationItem[] = [
   { label: "Investment Philosophy", href: "/investment-philosophy" },
   { label: "Luna1 Framework", href: "/luna1-framework" },
   { label: "Portfolio Dashboard", href: "/portfolio-dashboard" },
-  { label: "Deal Lab", href: "/deal-lab" },
   { label: "Resume", href: "/resume" }, { label: "Recruiter Portal", href: "/recruiter" }, { label: "Contact", href: "/contact" },
 ];
 
