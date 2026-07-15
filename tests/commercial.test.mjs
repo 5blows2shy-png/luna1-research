@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
 const player = readFileSync(new URL("../src/components/commercial/luna-commercial.tsx", import.meta.url), "utf8");
-const page = readFileSync(new URL("../src/app/commercial/page.tsx", import.meta.url), "utf8");
+const home = readFileSync(new URL("../src/app/page.tsx", import.meta.url), "utf8");
 
 test("commercial feature stays under 30 seconds and exposes accessible controls", () => {
   assert.match(player, /commercialCuts\[cut\]\.duration/);
@@ -12,7 +12,7 @@ test("commercial feature stays under 30 seconds and exposes accessible controls"
   assert.match(player, /kind="captions"/);
 });
 
-test("commercial sharing metadata uses the dedicated poster", () => {
-  assert.match(page, /commercial-poster\.png/);
-  assert.match(page, /width: 1200, height: 630/);
+test("commercial source is preserved without a public page or homepage embed", () => {
+  assert.equal(existsSync(new URL("../src/app/commercial/page.tsx", import.meta.url)), false);
+  assert.doesNotMatch(home, /LunaCommercial|href="\/commercial"|home-commercial/);
 });
