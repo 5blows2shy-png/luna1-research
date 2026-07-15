@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { PageHeader } from "@/components/site";
 
 const roles = [
@@ -31,9 +32,7 @@ export default function Resume() {
     <PageHeader kicker="Resume" title="Shy Lee" description="Finance professional and U.S. Army veteran with experience spanning fundamental investment research, financial analysis, nonprofit finance, and mission-critical operations. Skilled in evaluating company fundamentals, valuation, industry dynamics, and risk to develop investment theses and support informed capital allocation decisions." />
     <section className="resume-layout">
       <aside>
-        <span className="eyebrow">Education</span>
-        <h3>SDSU</h3><p>Fowler College of Business<br/>Bachelor of Science in Finance<br/>Expected 2027</p>
-        <h3>Miramar College</h3><p>Associate of Science in Business Administration<br/>Graduated 2024</p>
+        <div className="profile-card resume-profile"><span className="eyebrow">Shy Lee · Founder</span><Image className="profile-photo" src="/shyheim-lee-founder.jpeg" alt="Portrait of Shy Lee, founder of Luna1 Research" width={400} height={400} sizes="(max-width: 760px) calc(100vw - 86px), 300px" priority/><dl><div><dt>Education</dt><dd>B.S. Finance · SDSU, expected 2027<br/>A.S. Business Administration · Miramar College, 2024</dd></div><div><dt>Research focus</dt><dd>Infrastructure, Compounders, Inflections, Bottle Neck Constraint Analysis</dd></div></dl></div>
         <span className="eyebrow">Organization</span>
         <h3>Aztec Investment Fund</h3><p>Conduct fundamental equity research and develop investment theses across financial performance, valuation, and industry trends. Presented an AI infrastructure thesis leveraging more than five years of data center operations experience to identify opportunities across the AI compute and infrastructure value chain.</p>
         <span className="eyebrow">Core perspective</span><p>Analytical rigor, disciplined execution, and an operational perspective applied to investment management, portfolio strategy, and financial planning.</p>

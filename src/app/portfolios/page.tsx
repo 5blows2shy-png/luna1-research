@@ -2,7 +2,6 @@
 
 import { useState, type KeyboardEvent } from "react";
 import { MistakeJournal } from "@/components/mistake-journal";
-import { PortfolioPerformance } from "@/components/portfolio-dashboard";
 import { PageHeader, SectionHeading } from "@/components/site";
 
 type ActivePosition = { ticker: string; company: string; entryPrice: number; thesis: string; risk: string; exitRule: string; status: string };
@@ -35,7 +34,7 @@ const watchlist: WatchItem[] = [
   ["ROAD","Construction Partners Inc.","Active research","Near Buy"],["EVR","Evercore Inc.","Research queue","Early Stage"],["VICR","Vicor Corporation","Monitoring","Waiting for Earnings"],["VIAV","Viavi Solutions Inc.","Monitoring","Early Stage"],["ROK","Rockwell Automation Inc.","Research queue","Monitoring Pullback"],["ADPT","Adaptive Biotechnologies Corporation","Monitoring","Early Stage"],["AMKR","Amkor Technology Inc.","Research queue","Monitoring Pullback"],["TECH","Bio-Techne Corporation","Monitoring","Waiting for Earnings"],["ATRO","Astronics Corporation","Active research","Near Buy"],["MRCY","Mercury Systems Inc.","Monitoring","Extended"],["AYI","Acuity Inc.","Research queue","Monitoring Pullback"],["RY","Royal Bank of Canada","Monitoring","Early Stage"],["HOOD","Robinhood Markets Inc.","Monitoring","Extended"],["HLT","Hilton Worldwide Holdings Inc.","Research queue","Waiting for Earnings"],["ANET","Arista Networks Inc.","Active research","Monitoring Pullback"],["AGX","Argan Inc.","Research queue","Near Buy"],["CRDO","Credo Technology Group Holding Ltd.","Monitoring","Extended"],
 ].map(([ticker, company, status, setup]) => ({ticker, company, status, setup}));
 
-const tabs = ["Overview", "Active Positions", "Watchlist", "Long-Term Compounders", "Performance", "Mistake Journal"] as const;
+const tabs = ["Overview", "Active Positions", "Watchlist", "Long-Term Compounders", "Mistake Journal"] as const;
 type PortfolioTab = typeof tabs[number];
 
 function HoldingsTable({ title, items }: { title: string; items: Holding[] }) {
@@ -69,7 +68,6 @@ export default function Portfolios() {
         {activeTab === "Active Positions" && <div className="table-wrap"><table><caption>Active positions and manually entered entry prices</caption><thead><tr><th>Ticker / Company</th><th>Entry price</th><th>Position thesis</th><th>Risk</th><th>Exit rule</th><th>Status</th></tr></thead><tbody>{activePositions.map((position) => <tr key={position.ticker}><td><b className="portfolio-ticker">{position.ticker}</b><small className="company-under">{position.company}</small></td><td>${position.entryPrice.toFixed(2)}</td><td className="portfolio-copy">{position.thesis}</td><td>{position.risk}</td><td className="portfolio-copy">{position.exitRule}</td><td><span className="status">{position.status}</span></td></tr>)}</tbody></table></div>}
         {activeTab === "Long-Term Compounders" && <div className="holdings-stack"><HoldingsTable title="Portfolio 1 · Core Asset Allocation" items={coreAllocation}/><HoldingsTable title="Portfolio 2 · Long-Term Compounders" items={compounders}/></div>}
         {activeTab === "Watchlist" && <div className="table-wrap"><table><caption>Research watchlist · scores, catalysts, risks, and notes are placeholders</caption><thead><tr><th>Ticker</th><th>Company name</th><th>LUNA Score</th><th>Research status</th><th>Watchlist notes</th><th>Setup status</th><th>Catalyst</th><th>Risk</th></tr></thead><tbody>{watchlist.map((item) => <tr key={item.ticker}><td><b>{item.ticker}</b></td><td>{item.company}</td><td className="placeholder-cell">Score placeholder</td><td><span className="status">{item.status}</span></td><td className="placeholder-cell">Notes placeholder</td><td>{item.setup}</td><td className="placeholder-cell">Catalyst placeholder</td><td className="placeholder-cell">Risk placeholder</td></tr>)}</tbody></table></div>}
-        {activeTab === "Performance" && <PortfolioPerformance/>}
         {activeTab === "Mistake Journal" && <MistakeJournal/>}
       </div>
     </section>
