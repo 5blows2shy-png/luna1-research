@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 
-const routes=["src/app/page.tsx","src/app/about/page.tsx","src/app/investment-philosophy/page.tsx","src/app/luna1-framework/page.tsx","src/app/research/page.tsx","src/app/portfolios/page.tsx","src/app/market-commentary/page.tsx","src/app/valuation-models/page.tsx","src/app/certifications/page.tsx","src/app/resume/page.tsx","src/app/contact/page.tsx"];
+const routes=["src/app/page.tsx","src/app/about/page.tsx","src/app/investment-philosophy/page.tsx","src/app/luna1-framework/page.tsx","src/app/research/page.tsx","src/app/portfolios/page.tsx","src/app/market-commentary/page.tsx","src/app/valuation-models/page.tsx","src/app/certifications/page.tsx","src/app/resume/page.tsx","src/app/recruiter/page.tsx","src/app/contact/page.tsx"];
 
 test("required routes and educational disclosure exist",()=>{for(const path of routes)assert.ok(fs.existsSync(path),path);const footer=fs.readFileSync("src/components/site.tsx","utf8");assert.match(footer,/Educational Disclosure:/);assert.match(footer,/not investment, financial, tax, or legal advice/);assert.match(footer,/Always conduct your own research before making investment decisions/)});
 
@@ -25,3 +25,5 @@ test("equity research navigation alias is removed",()=>{const data=fs.readFileSy
 test("portfolio dashboard hides the performance tab without removing its reusable component",()=>{const page=fs.readFileSync("src/app/portfolios/page.tsx","utf8");const component=fs.readFileSync("src/components/portfolio-dashboard.tsx","utf8");assert.ok(!page.includes('"Performance"'));assert.ok(!page.includes("<PortfolioPerformance"));assert.match(component,/export function PortfolioPerformance/)});
 
 test("temporarily hidden navigation pages remain available",()=>{const data=fs.readFileSync("src/lib/data.ts","utf8");assert.ok(!data.includes('label: "Financial Models"'));assert.ok(!data.includes('label: "Market Commentary"'));assert.ok(fs.existsSync("src/app/financial-models/page.tsx"));assert.ok(fs.existsSync("src/app/market-commentary/page.tsx"))});
+
+test("recruiter portal includes privacy-safe PDF downloads",()=>{const source=fs.readFileSync("src/app/recruiter/page.tsx","utf8");for(const section of ["Professional summary","Experience","Education","Certifications","Featured research","Python projects","Financial models","Investment philosophy","Portfolio","Mistake journal","Timeline","Contact"])assert.ok(source.includes(section),`missing recruiter section: ${section}`);for(const file of ["public/downloads/shy-lee-resume.pdf","public/downloads/shy-lee-one-page-profile.pdf"])assert.ok(fs.existsSync(file),`missing download: ${file}`)});

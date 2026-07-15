@@ -5,7 +5,7 @@ export const navigationItems: NavigationItem[] = [
   { label: "Luna1 Framework", href: "/luna1-framework" },
   { label: "Portfolio Dashboard", href: "/portfolio-dashboard" },
   { label: "Deal Lab", href: "/deal-lab" },
-  { label: "Resume", href: "/resume" }, { label: "Contact", href: "/contact" },
+  { label: "Resume", href: "/resume" }, { label: "Recruiter Portal", href: "/recruiter" }, { label: "Contact", href: "/contact" },
 ];
 
 export type ResearchReport = { ticker: string; company: string; industry: string; theme: string; summary: string; score: number; classification: string; catalyst: string; risk: string; date: string; status: string };
