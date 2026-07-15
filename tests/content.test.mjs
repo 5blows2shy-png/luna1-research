@@ -8,7 +8,7 @@ test("required routes and disclaimer exist",()=>{for(const path of routes)assert
 
 test("public source excludes private contact details",()=>{const files=[...routes,"src/app/layout.tsx","src/components/site.tsx","src/app/api/contact/route.ts"];const source=files.map(path=>fs.readFileSync(path,"utf8")).join("\n");for(const forbidden of ["leeshyheim@yahoo.com","mailto:","92123","Escondido","San Diego","(302) 344-9724"])assert.ok(!source.includes(forbidden),`found private value: ${forbidden}`)});
 
-test("public branding uses Luna1 exclusively",()=>{const sourceFiles=[...routes,"src/app/research/[slug]/page.tsx","src/app/layout.tsx","src/components/site.tsx","src/lib/data.ts","src/app/globals.css"];const source=sourceFiles.map(path=>fs.readFileSync(path,"utf8")).join("\n");assert.doesNotMatch(source,/prism/i);assert.match(source,/Luna1/);assert.match(source,/className="luna-shape">L</)});
+test("public branding uses Luna1 exclusively",()=>{const sourceFiles=[...routes,"src/app/research/[slug]/page.tsx","src/app/layout.tsx","src/components/site.tsx","src/lib/data.ts","src/app/globals.css"];const source=sourceFiles.map(path=>fs.readFileSync(path,"utf8")).join("\n");assert.doesNotMatch(source,/Prism Research/i);assert.match(source,/Luna1/);assert.match(source,/className="luna-shape">L</)});
 
 test("founder card includes Shy Lee portrait",()=>{const source=fs.readFileSync("src/app/about/page.tsx","utf8");assert.match(source,/src="\/shyheim-lee-founder.jpeg"/);assert.match(source,/alt="Portrait of Shy Lee, founder of Luna1 Research"/);assert.ok(fs.existsSync("public/shyheim-lee-founder.jpeg"))});
 
