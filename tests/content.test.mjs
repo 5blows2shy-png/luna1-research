@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 
-const routes=["src/app/page.tsx","src/app/about/page.tsx","src/app/investment-philosophy/page.tsx","src/app/luna1-framework/page.tsx","src/app/research/page.tsx","src/app/portfolios/page.tsx","src/app/market-commentary/page.tsx","src/app/valuation-models/page.tsx","src/app/certifications/page.tsx","src/app/resume/page.tsx","src/app/contact/page.tsx"];
+const routes=["src/app/page.tsx","src/app/about/page.tsx","src/app/investment-philosophy/page.tsx","src/app/luna1-framework/page.tsx","src/app/research/page.tsx","src/app/portfolios/page.tsx","src/app/market-commentary/page.tsx","src/app/valuation-models/page.tsx","src/app/certifications/page.tsx","src/app/resume/page.tsx","src/app/recruiter/page.tsx","src/app/contact/page.tsx"];
 
 test("required routes and disclaimer exist",()=>{for(const path of routes)assert.ok(fs.existsSync(path),path);assert.match(fs.readFileSync("src/components/site.tsx","utf8"),/Nothing on this website constitutes personalized investment advice/)});
 
@@ -17,3 +17,5 @@ test("portfolio reflects approved public positions",()=>{const source=fs.readFil
 test("long-term portfolio allocations are complete",()=>{const source=fs.readFileSync("src/app/portfolios/page.tsx","utf8");for(const [ticker,allocation] of [["VOO","30%"],["QQQM","50%"],["IAU","10%"],["SLV","9%"],["SGOV","1%"],["LLY","25%"],["AAPL","20%"],["COST","20%"],["PG","15%"],["AMZN","20%"]])assert.match(source,new RegExp(`ticker:\"${ticker}\"[^\\n]+allocation:\"${allocation}\"`),`${ticker} allocation is missing`);assert.ok(!source.includes("Average cost"))});
 
 test("equity research navigation alias is removed",()=>{const data=fs.readFileSync("src/lib/data.ts","utf8");assert.ok(!data.includes("Equity Research"));assert.ok(!data.includes("/equity-research"));assert.ok(!fs.existsSync("src/app/equity-research"))});
+
+test("recruiter portal includes privacy-safe PDF downloads",()=>{const source=fs.readFileSync("src/app/recruiter/page.tsx","utf8");for(const section of ["Professional summary","Experience","Education","Certifications","Featured research","Python projects","Financial models","Investment philosophy","Portfolio","Mistake journal","Timeline","Contact"])assert.ok(source.includes(section),`missing recruiter section: ${section}`);for(const file of ["public/downloads/shy-lee-resume.pdf","public/downloads/shy-lee-one-page-profile.pdf"])assert.ok(fs.existsSync(file),`missing download: ${file}`)});
