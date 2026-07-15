@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default function CommercialPage() { return <>
-  <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify({"@context":"https://schema.org","@type":"VideoObject",name:"Luna1 Research — Discipline. Evidence. Evolution.",description:"A cinematic institutional research brand film.",thumbnailUrl:"https://luna1-research.vercel.app/commercial-poster.png",duration:"PT29S",uploadDate:"2026-07-14"})}}/>
+  <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify({"@context":"https://schema.org","@type":"VideoObject",name:"Luna1 Research — Discipline. Evidence. Evolution.",description:"A cinematic institutional research brand film.",thumbnailUrl:"https://luna1research.com/commercial-poster.png",duration:"PT29S",uploadDate:"2026-07-14"}).replace(/</g,"\\u003c")}}/>
   <section className="commercial-header"><span className="eyebrow">Luna1 Research · Brand film</span><h1>From market noise<br/>to research clarity.</h1><p>A 29-second portrait of an independent research process built around discipline, evidence, and continuous improvement.</p></section>
   <section className="commercial-section"><LunaCommercial/><div className="commercial-context"><p>This film uses illustrative data and concept product screens. Luna1 Research is independent educational research—not personalized investment advice, a broker-dealer, or a registered investment adviser.</p><Link className="text-link" href="/luna1-framework">Explore the research framework →</Link></div></section>
   </>; }
