@@ -17,3 +17,5 @@ test("portfolio reflects approved public positions",()=>{const source=fs.readFil
 test("long-term portfolio allocations are complete",()=>{const source=fs.readFileSync("src/app/portfolios/page.tsx","utf8");for(const [ticker,allocation] of [["VOO","30%"],["QQQM","50%"],["IAU","10%"],["SLV","9%"],["SGOV","1%"],["LLY","25%"],["AAPL","20%"],["COST","20%"],["PG","15%"],["AMZN","20%"]])assert.match(source,new RegExp(`ticker:\"${ticker}\"[^\\n]+allocation:\"${allocation}\"`),`${ticker} allocation is missing`);assert.ok(!source.includes("Average cost"))});
 
 test("equity research navigation alias is removed",()=>{const data=fs.readFileSync("src/lib/data.ts","utf8");assert.ok(!data.includes("Equity Research"));assert.ok(!data.includes("/equity-research"));assert.ok(!fs.existsSync("src/app/equity-research"))});
+
+test("temporarily hidden navigation pages remain available",()=>{const data=fs.readFileSync("src/lib/data.ts","utf8");assert.ok(!data.includes('label: "Financial Models"'));assert.ok(!data.includes('label: "Market Commentary"'));assert.ok(fs.existsSync("src/app/financial-models/page.tsx"));assert.ok(fs.existsSync("src/app/market-commentary/page.tsx"))});
