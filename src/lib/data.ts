@@ -3,7 +3,7 @@ export const navigationItems: NavigationItem[] = [
   { label: "Home", href: "/" }, { label: "About", href: "/about" },
   { label: "Investment Philosophy", href: "/investment-philosophy" },
   { label: "Luna1 Framework", href: "/luna1-framework" },
-  { label: "Portfolio Dashboard", href: "/portfolio-dashboard" }, { label: "Financial Models", href: "/financial-models" },
+  { label: "Portfolio Dashboard", href: "/portfolio-dashboard" },
   { label: "Deal Lab", href: "/deal-lab" },
   { label: "Resume", href: "/resume" }, { label: "Contact", href: "/contact" },
 ];

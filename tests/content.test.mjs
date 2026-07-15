@@ -23,3 +23,5 @@ test("long-term portfolio allocations are complete",()=>{const source=fs.readFil
 test("equity research navigation alias is removed",()=>{const data=fs.readFileSync("src/lib/data.ts","utf8");assert.ok(!data.includes("Equity Research"));assert.ok(!data.includes("/equity-research"));assert.ok(!fs.existsSync("src/app/equity-research"))});
 
 test("portfolio dashboard hides the performance tab without removing its reusable component",()=>{const page=fs.readFileSync("src/app/portfolios/page.tsx","utf8");const component=fs.readFileSync("src/components/portfolio-dashboard.tsx","utf8");assert.ok(!page.includes('"Performance"'));assert.ok(!page.includes("<PortfolioPerformance"));assert.match(component,/export function PortfolioPerformance/)});
+
+test("temporarily hidden navigation pages remain available",()=>{const data=fs.readFileSync("src/lib/data.ts","utf8");assert.ok(!data.includes('label: "Financial Models"'));assert.ok(!data.includes('label: "Market Commentary"'));assert.ok(fs.existsSync("src/app/financial-models/page.tsx"));assert.ok(fs.existsSync("src/app/market-commentary/page.tsx"))});
