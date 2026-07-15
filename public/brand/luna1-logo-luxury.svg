@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 220" role="img" aria-labelledby="title desc">
+  <title id="title">Luna1 Research luxury horizontal lockup</title>
+  <desc id="desc">Champagne-gold Luna1 prism beside an ivory institutional wordmark.</desc>
+  <rect width="920" height="220" rx="18" fill="#090c0d"/>
+  <g transform="translate(44 32)">
+    <path d="M78 8 146 151H10L78 8Z" fill="none" stroke="#b79a65" stroke-width="3"/>
+    <path d="M78 82h-58M78 82l92-38M78 82l99-19M78 82h103M78 82l99 19M78 82l92 38" fill="none" stroke="#d7cab2" stroke-width="1.5"/>
+    <circle cx="78" cy="82" r="4" fill="#b79a65"/>
+  </g>
+  <text x="254" y="103" fill="#f1ebdf" font-family="Arial, sans-serif" font-size="54" font-weight="600" letter-spacing="9">LUNA1 RESEARCH</text>
+  <path d="M256 126h550" stroke="#3a3934"/>
+  <text x="256" y="157" fill="#9d9a92" font-family="Arial, sans-serif" font-size="14" font-weight="500" letter-spacing="5">INDEPENDENT INVESTMENT RESEARCH</text>
+</svg>

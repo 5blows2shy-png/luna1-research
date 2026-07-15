@@ -4,7 +4,9 @@ import Image from "next/image";
 export const metadata: Metadata = { title: "Brand Assets", description: "Download approved Luna1 Research logos, prism artwork, social graphics, and the complete brand kit." };
 const assets = [
   { title: "Prism icon", preview: "/brand/luna1-prism.svg", file: "luna1-prism.svg", note: "Primary vector mark" },
+  { title: "Gold prism icon", preview: "/brand/luna1-prism-gold.svg", file: "luna1-prism-gold.svg", note: "Quiet-luxury icon mark", dark: true },
   { title: "Horizontal logo", preview: "/brand/luna1-logo-horizontal.svg", file: "luna1-logo-horizontal.svg", note: "Wide-format lockup" },
+  { title: "Luxury horizontal logo", preview: "/brand/luna1-logo-luxury.svg", file: "luna1-logo-luxury.svg", note: "Gold-accent institutional lockup", dark: true },
   { title: "Stacked logo", preview: "/brand/luna1-logo-stacked.svg", file: "luna1-logo-stacked.svg", note: "Compact lockup" },
   { title: "Transparent PNG", preview: "/brand/luna1-prism-transparent.png", file: "luna1-prism-transparent.png", note: "1024×1024 transparent raster" },
   { title: "SVG version", preview: "/brand/luna1-prism-white.svg", file: "luna1-prism-white.svg", note: "Reversed vector mark", dark: true },

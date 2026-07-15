@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-labelledby="title desc">
+  <title id="title">Luna1 Research gold prism mark</title>
+  <desc id="desc">A restrained champagne-gold prism separating one line into five research dimensions.</desc>
+  <rect width="320" height="320" rx="24" fill="#090c0d"/>
+  <path d="M150 54 236 238H64L150 54Z" fill="none" stroke="#b79a65" stroke-width="4"/>
+  <path d="M26 151h119M150 151l130-54M150 151l139-27M150 151h145M150 151l139 27M150 151l130 54" fill="none" stroke="#d7cab2" stroke-width="2"/>
+  <circle cx="150" cy="151" r="5" fill="#b79a65"/>
+</svg>

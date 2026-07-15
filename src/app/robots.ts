@@ -1,2 +1,2 @@
 import type { MetadataRoute } from "next";
-export default function robots():MetadataRoute.Robots{return {rules:{userAgent:"*",allow:"/",disallow:"/api/"},sitemap:"https://luna1-research.vercel.app/sitemap.xml"}}
+export default function robots():MetadataRoute.Robots{return {rules:{userAgent:"*",allow:"/",disallow:"/api/"},sitemap:"https://luna1research.com/sitemap.xml"}}

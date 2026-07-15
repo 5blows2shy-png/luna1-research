@@ -41,10 +41,10 @@ export function PortfolioPerformance() {
     <div className="placeholder-banner">Illustrative, manually entered data. Results may be simulated or delayed and do not represent audited performance. Past results do not predict future performance.</div>
     <div className="metric-strip">{metrics.map((metric) => <div key={metric.label}><small>{metric.label}</small><strong>{metric.value}</strong></div>)}</div>
     <div className="chart-grid">
-      <div className="chart-card"><h2>Benchmark comparison</h2><ResponsiveContainer width="100%" height={320}><AreaChart data={chart}><CartesianGrid strokeDasharray="3 3" stroke="var(--line)"/><XAxis dataKey="month"/><YAxis/><Tooltip/><Legend/><Area type="monotone" dataKey="portfolio" stroke="#8a6ba8" fill="#8a6ba833"/><Area type="monotone" dataKey="benchmark" stroke="#4079a6" fill="#4079a622"/></AreaChart></ResponsiveContainer></div>
-      <div className="chart-card"><h2>Monthly return</h2><ResponsiveContainer width="100%" height={320}><BarChart data={chart}><CartesianGrid strokeDasharray="3 3" stroke="var(--line)"/><XAxis dataKey="month"/><YAxis/><Tooltip/><Bar dataKey="return" fill="#4d8a72"/></BarChart></ResponsiveContainer></div>
+      <div className="chart-card"><h2>Benchmark comparison</h2><ResponsiveContainer width="100%" height={320}><AreaChart data={chart}><CartesianGrid strokeDasharray="3 3" stroke="var(--divider)"/><XAxis dataKey="month"/><YAxis/><Tooltip/><Legend/><Area type="monotone" dataKey="portfolio" stroke="var(--gold)" fill="var(--gold-soft)"/><Area type="monotone" dataKey="benchmark" stroke="var(--platinum)" fill="var(--platinum-soft)"/></AreaChart></ResponsiveContainer></div>
+      <div className="chart-card"><h2>Monthly return</h2><ResponsiveContainer width="100%" height={320}><BarChart data={chart}><CartesianGrid strokeDasharray="3 3" stroke="var(--divider)"/><XAxis dataKey="month"/><YAxis/><Tooltip/><Bar dataKey="return" fill="var(--emerald)"/></BarChart></ResponsiveContainer></div>
     </div>
-    <div className="chart-card"><h2>Sector exposure</h2><ResponsiveContainer width="100%" height={280}><BarChart layout="vertical" data={sectors}><XAxis type="number"/><YAxis type="category" dataKey="name" width={90}/><Tooltip/><Bar dataKey="weight" fill="#8a6ba8"/></BarChart></ResponsiveContainer></div>
+    <div className="chart-card"><h2>Sector exposure</h2><ResponsiveContainer width="100%" height={280}><BarChart layout="vertical" data={sectors}><XAxis type="number"/><YAxis type="category" dataKey="name" width={90}/><Tooltip/><Bar dataKey="weight" fill="var(--gold)"/></BarChart></ResponsiveContainer></div>
   </div>;
 }
 
