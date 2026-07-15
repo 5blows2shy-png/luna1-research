@@ -1,32 +1,217 @@
 import Link from "next/link";
-import { EditorialLink, LuxuryCard, MetricCard, PrismSignature } from "@/components/luxury";
+import { EditorialLink, MetricCard, PrismSignature } from "@/components/luxury";
 import { Score, SectionHeading } from "@/components/site";
 import { analysisCategories, research } from "@/lib/data";
-import { sampleDeals } from "@/lib/deal-lab";
 import { mistakeJournalEntries } from "@/lib/mistake-journal-data";
-import { pythonProjects, realEstateDeals } from "@/lib/lab-data";
 
-export default function Home(){
-  const review=mistakeJournalEntries[0];
-  return <>
-    <section className="luxury-hero"><div className="hero-copy"><span className="eyebrow">Luna1 Research · Shy Lee</span><h1>Independent Research Across Public Markets, Capital Allocation, and Real Assets</h1><p>A living research platform built around disciplined analysis, transparent decision-making, and continuous improvement.</p><div className="button-row"><Link className="button primary" href="/research">Explore Research <span>↗</span></Link><Link className="button" href="/portfolio-dashboard">View Portfolio <span>→</span></Link><Link className="button quiet" href="/mistake-journal">See Decision Reviews</Link></div><div className="hero-proof"><span>Public markets</span><span>Strategic finance</span><span>Real assets</span></div></div><PrismSignature/></section>
+export default function Home() {
+  const review = mistakeJournalEntries[0];
+  return (
+    <>
+      <section className="luxury-hero">
+        <div className="hero-copy">
+          <span className="eyebrow">Luna1 Research · Shy Lee</span>
+          <h1>
+            Independent research built around evidence, conviction, and
+            accountability.
+          </h1>
+          <p>
+            A focused public-markets research platform for understanding
+            businesses, portfolio decisions, and the evidence that changes a
+            thesis.
+          </p>
+          <div className="button-row">
+            <Link className="button primary" href="/research">
+              Explore Research <span>↗</span>
+            </Link>
+            <Link className="button" href="/portfolio">
+              View Portfolio <span>→</span>
+            </Link>
+          </div>
+          <div className="hero-proof">
+            <span>Public markets</span>
+            <span>Portfolio discipline</span>
+            <span>Decision reviews</span>
+          </div>
+        </div>
+        <PrismSignature />
+      </section>
 
-    <section><SectionHeading eyebrow="Featured Research" title="Evidence before opinion." copy="A focused research library organized around business quality, change, valuation, institutional behavior, and explicit risk."/><div className="research-grid luxury-grid">{research.slice(0,3).map((item,index)=><Link href={`/research/${item.ticker.toLowerCase()}`} className="research-card luxury-card luxury-card--research" key={item.ticker}><div className="card-top"><div><span className="ticker">{item.ticker}</span><small>{String(index+1).padStart(2,"0")} · {item.industry}</small></div><Score score={item.score}/></div><h3>{item.company}</h3><p>{item.summary}</p><div className="card-meta"><span>{item.classification}</span><span>{item.date}</span></div></Link>)}</div></section>
+      <section>
+        <SectionHeading
+          eyebrow="Featured Research"
+          title="Evidence before opinion."
+          copy="A focused research library organized around business quality, change, valuation, institutional behavior, and explicit risk."
+        />
+        <div className="research-grid luxury-grid">
+          {research.slice(0, 3).map((item, index) => (
+            <Link
+              href={`/research/${item.ticker.toLowerCase()}`}
+              className="research-card luxury-card luxury-card--research"
+              key={item.ticker}
+            >
+              <div className="card-top">
+                <div>
+                  <span className="ticker">{item.ticker}</span>
+                  <small>
+                    {String(index + 1).padStart(2, "0")} · {item.industry}
+                  </small>
+                </div>
+                <Score score={item.score} />
+              </div>
+              <h3>{item.company}</h3>
+              <p>{item.summary}</p>
+              <div className="card-meta">
+                <span>{item.classification}</span>
+                <span>{item.date}</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
 
-    <section className="focus-section"><SectionHeading eyebrow="Current Areas of Focus" title="Research where constraints meet durable demand." copy="The platform concentrates on businesses and assets where operational evidence can sharpen financial judgment."/><div className="focus-grid">{analysisCategories.slice(0,6).map((item,index)=><div key={item}><span>{String(index+1).padStart(2,"0")}</span><h3>{item}</h3><p>{["Acceleration, quality, and durability of growth.","Conversion, reinvestment, and operating leverage.","Customer captivity and competitive staying power.","Decision quality and capital allocation across cycles.","Bottlenecks, value chains, and supply discipline.","Evidence of informed and sustained demand."][index]}</p></div>)}</div></section>
+      <section className="focus-section">
+        <SectionHeading
+          eyebrow="Current Areas of Focus"
+          title="Research where constraints meet durable demand."
+          copy="The platform concentrates on public businesses where operational evidence can sharpen financial judgment."
+        />
+        <div className="focus-grid">
+          {analysisCategories.slice(0, 6).map((item, index) => (
+            <div key={item}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <h3>{item}</h3>
+              <p>
+                {
+                  [
+                    "Acceleration, quality, and durability of growth.",
+                    "Conversion, reinvestment, and operating leverage.",
+                    "Customer captivity and competitive staying power.",
+                    "Decision quality and capital allocation across cycles.",
+                    "Bottlenecks, value chains, and supply discipline.",
+                    "Evidence of informed and sustained demand.",
+                  ][index]
+                }
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
 
-    <section className="portfolio-proof"><div><span className="eyebrow">Portfolio Snapshot</span><h2>Conviction, sized with discipline.</h2><p>Each public example connects thesis quality, entry logic, portfolio role, and the evidence that would change the decision.</p><EditorialLink href="/portfolio-dashboard">Open the investment committee view</EditorialLink></div><div className="metric-board"><MetricCard label="Active positions" value="3" note="Manually maintained"/><MetricCard label="Research priorities" value="12" note="LUNA-scored watchlist"/><MetricCard label="Decision reviews" value="1" note="Public postmortem"/><MetricCard label="Data policy" value="Delayed" note="No brokerage connection"/></div></section>
+      <section className="portfolio-proof">
+        <div>
+          <span className="eyebrow">Portfolio Snapshot</span>
+          <h2>Conviction, sized with discipline.</h2>
+          <p>
+            Each public example connects thesis quality, entry logic, portfolio
+            role, and the evidence that would change the decision.
+          </p>
+          <EditorialLink href="/portfolio">Open the portfolio</EditorialLink>
+        </div>
+        <div className="metric-board">
+          <MetricCard
+            label="Active positions"
+            value="3"
+            note="Manually maintained"
+          />
+          <MetricCard
+            label="Research priorities"
+            value="12"
+            note="LUNA-scored watchlist"
+          />
+          <MetricCard
+            label="Decision reviews"
+            value={String(mistakeJournalEntries.length)}
+            note="Portfolio postmortems"
+          />
+          <MetricCard
+            label="Data policy"
+            value="Delayed"
+            note="No brokerage connection"
+          />
+        </div>
+      </section>
 
-    <section className="decision-feature"><SectionHeading eyebrow="Latest Decision Review" title="A process becomes credible when errors are documented."/><LuxuryCard variant="review"><div className="decision-number">01</div><div><span className="eyebrow">{review.ticker} · {review.classification}</span><h3>{review.companyName}</h3><p>{review.finalAssessment}</p><div className="decision-facts"><span><small>Thesis at exit</small>{review.thesisStatus}</span><span><small>Exit quality</small>{review.exitQuality}</span><span><small>Primary lesson</small>{review.lessons[0]}</span></div><EditorialLink href="/mistake-journal">Read the full decision review</EditorialLink></div></LuxuryCard></section>
+      <section className="decision-feature">
+        <SectionHeading
+          eyebrow="Portfolio · Latest Decision Review"
+          title="A process becomes credible when errors are documented."
+        />
+        <div className="luxury-card luxury-card--review">
+          <div className="decision-number">01</div>
+          <div>
+            <span className="eyebrow">
+              {review.ticker} · {review.classification}
+            </span>
+            <h3>{review.companyName}</h3>
+            <p>{review.finalAssessment}</p>
+            <div className="decision-facts">
+              <span>
+                <small>Thesis at exit</small>
+                {review.thesisStatus}
+              </span>
+              <span>
+                <small>Exit quality</small>
+                {review.exitQuality}
+              </span>
+              <span>
+                <small>Primary lesson</small>
+                {review.lessons[0]}
+              </span>
+            </div>
+            <EditorialLink href="/portfolio/mistake-journal">
+              Read the portfolio decision review
+            </EditorialLink>
+          </div>
+        </div>
+      </section>
 
-    <section className="preview-section"><div><span className="eyebrow">Deal Lab Preview</span><h2>Transaction analysis with visible assumptions.</h2><p>Strategic finance work spanning valuation, capital structure, sources and uses, accretion and dilution, and transaction process controls.</p><EditorialLink href="/deal-lab">Enter the transaction room</EditorialLink></div><div className="preview-stack">{sampleDeals.map(deal=><LuxuryCard variant="deal" key={deal.name}><span>{deal.stage}</span><h3>{deal.name}</h3><p>{deal.type} · {deal.industry}</p><dl><div><dt>Estimated value</dt><dd>${deal.estimatedValue.toLocaleString()}m</dd></div><div><dt>Primary bottleneck</dt><dd>{deal.bottleneck}</dd></div></dl></LuxuryCard>)}</div></section>
+      <section className="career-proof">
+        <div>
+          <span className="eyebrow">Career and Credentials</span>
+          <h2>Financial analysis grounded in accountable operations.</h2>
+          <p>
+            Army financial-management experience, mission-critical data-center
+            operations, nonprofit finance, and undergraduate investment research
+            shape the work behind Luna1.
+          </p>
+          <EditorialLink href="/recruiter">Open Recruiter View</EditorialLink>
+        </div>
+        <div className="career-ledger">
+          <div>
+            <span>01</span>
+            <b>U.S. Army veteran</b>
+            <p>Accountability, logistics, and financial management.</p>
+          </div>
+          <div>
+            <span>02</span>
+            <b>Finance assistant</b>
+            <p>Reporting, reconciliations, and decision support.</p>
+          </div>
+          <div>
+            <span>03</span>
+            <b>Data-center operations</b>
+            <p>Firsthand infrastructure and constraint perspective.</p>
+          </div>
+          <div>
+            <span>04</span>
+            <b>SDSU Finance</b>
+            <p>Equity research, valuation, and portfolio analysis.</p>
+          </div>
+        </div>
+      </section>
 
-    <section className="preview-section reverse"><div><span className="eyebrow">Real Estate Preview</span><h2>Underwriting through a private-investment lens.</h2><p>Sample property cases connect basis, cash flow, leverage, coverage, refinance risk, and the reasons a disciplined investor may pass.</p><EditorialLink href="/real-estate">Review real-asset underwriting</EditorialLink></div><div className="preview-stack">{realEstateDeals.slice(0,2).map(deal=><LuxuryCard variant="real-estate" key={deal.id}><span>{deal.status} · Sample</span><h3>{deal.name}</h3><p>{deal.strategy}</p><dl><div><dt>DSCR</dt><dd>{deal.dscr.toFixed(2)}x</dd></div><div><dt>Decision</dt><dd>{deal.decision}</dd></div></dl></LuxuryCard>)}</div></section>
-
-    <section className="preview-section"><div><span className="eyebrow">Python Lab Preview</span><h2>Repeatable tools for better financial work.</h2><p>Small, auditable projects that improve screening, document quality, calculation checks, and the consistency of investment workflows.</p><EditorialLink href="/python-lab">View the analytical toolkit</EditorialLink></div><div className="preview-stack">{pythonProjects.slice(0,2).map(project=><LuxuryCard variant="portfolio" key={project.slug}><span>{project.status}</span><h3>{project.name}</h3><p>{project.description}</p><small>{project.stack.join(" · ")}</small></LuxuryCard>)}</div></section>
-
-    <section className="career-proof"><div><span className="eyebrow">Career and Credentials</span><h2>Financial analysis grounded in accountable operations.</h2><p>Army financial-management experience, mission-critical data-center operations, nonprofit finance, and undergraduate investment research shape the work behind Luna1.</p><EditorialLink href="/recruiter">Open Recruiter View</EditorialLink></div><div className="career-ledger"><div><span>01</span><b>U.S. Army veteran</b><p>Accountability, logistics, and financial management.</p></div><div><span>02</span><b>Finance assistant</b><p>Reporting, reconciliations, and decision support.</p></div><div><span>03</span><b>Data-center operations</b><p>Firsthand infrastructure and constraint perspective.</p></div><div><span>04</span><b>SDSU Finance</b><p>Equity research, valuation, and portfolio analysis.</p></div></div></section>
-
-    <section className="contact-proof"><span className="eyebrow">Professional Contact</span><h2>Thoughtful work begins with a clear conversation.</h2><p>For recruiting, investment research, finance, or professional collaboration, use the secure contact form.</p><Link className="button primary" href="/contact">Request a connection <span>↗</span></Link></section>
-  </>;
+      <section className="contact-proof">
+        <span className="eyebrow">Professional Contact</span>
+        <h2>Thoughtful work begins with a clear conversation.</h2>
+        <p>
+          For recruiting, investment research, finance, or professional
+          collaboration, use the secure contact form.
+        </p>
+        <Link className="button primary" href="/contact">
+          Request a connection <span>↗</span>
+        </Link>
+      </section>
+    </>
+  );
 }
