@@ -5,7 +5,7 @@ import { MistakeJournal } from "@/components/mistake-journal";
 import { PageHeader, SectionHeading } from "@/components/site";
 
 type ActivePosition = { ticker: string; company: string; entryPrice: number; thesis: string; risk: string; exitRule: string; status: string };
-type Holding = { ticker: string; company: string; allocation: string; type: string; horizon: string };
+type Holding = { ticker: string; company: string; thesis: string; allocation: string; type: string; horizon: string };
 type WatchItem = { ticker: string; company: string; status: string; setup: string };
 
 const activePositions: ActivePosition[] = [
@@ -15,19 +15,19 @@ const activePositions: ActivePosition[] = [
 ];
 
 const coreAllocation: Holding[] = [
-  {ticker:"VOO",company:"Vanguard S&P 500 ETF",allocation:"30%",type:"Core equity ETF",horizon:"Long term"},
-  {ticker:"QQQM",company:"Invesco NASDAQ-100 ETF",allocation:"50%",type:"Growth equity ETF",horizon:"Long term"},
-  {ticker:"IAU",company:"iShares Gold Trust",allocation:"10%",type:"Real asset",horizon:"Strategic allocation"},
-  {ticker:"SLV",company:"iShares Silver Trust",allocation:"9%",type:"Real asset",horizon:"Strategic allocation"},
-  {ticker:"SGOV",company:"iShares 0-3 Month Treasury Bond ETF",allocation:"1%",type:"Treasury ETF",horizon:"Capital reserve"},
+  {ticker:"VOO",company:"Vanguard S&P 500 ETF",thesis:"Provides broad exposure to large U.S. companies and serves as the portfolio’s core equity foundation. The position is designed to capture long-term economic growth while reducing single-stock risk.",allocation:"30%",type:"Core equity ETF",horizon:"Long term"},
+  {ticker:"QQQM",company:"Invesco NASDAQ-100 ETF",thesis:"Provides concentrated exposure to large-cap growth and technology leaders with strong earnings and innovation potential. It complements VOO by increasing participation in secular growth themes such as AI, cloud computing, and digital services.",allocation:"50%",type:"Growth equity ETF",horizon:"Long term"},
+  {ticker:"IAU",company:"iShares Gold Trust",thesis:"Provides a strategic allocation to gold as a hedge against inflation, currency weakness, geopolitical uncertainty, and financial-system stress. It is intended to improve diversification because gold may behave differently from stocks and bonds during periods of market instability.",allocation:"10%",type:"Real asset",horizon:"Strategic allocation"},
+  {ticker:"SLV",company:"iShares Silver Trust",thesis:"Provides exposure to silver’s dual role as both a precious metal and an industrial commodity. The thesis is supported by potential demand from electrification, solar energy, electronics, and monetary-hedge buying, while recognizing silver’s higher volatility.",allocation:"9%",type:"Real asset",horizon:"Strategic allocation"},
+  {ticker:"SGOV",company:"iShares 0-3 Month Treasury Bond ETF",thesis:"Provides short-duration Treasury exposure, capital preservation, and liquidity for future opportunities. It serves as a cash-reserve position that may generate income while limiting interest-rate and credit risk.",allocation:"1%",type:"Treasury ETF",horizon:"Capital reserve"},
 ];
 
 const compounders: Holding[] = [
-  {ticker:"LLY",company:"Eli Lilly and Company",allocation:"25%",type:"Long-term compounder",horizon:"5+ years"},
-  {ticker:"AAPL",company:"Apple Inc.",allocation:"20%",type:"Long-term compounder",horizon:"5+ years"},
-  {ticker:"COST",company:"Costco Wholesale Corporation",allocation:"20%",type:"Long-term compounder",horizon:"5+ years"},
-  {ticker:"PG",company:"The Procter & Gamble Company",allocation:"15%",type:"Long-term compounder",horizon:"5+ years"},
-  {ticker:"AMZN",company:"Amazon.com Inc.",allocation:"20%",type:"Long-term compounder",horizon:"5+ years"},
+  {ticker:"LLY",company:"Eli Lilly and Company",thesis:"Eli Lilly combines a strong pharmaceutical pipeline with leadership in diabetes, obesity, and other high-growth therapeutic markets. The long-term thesis depends on continued innovation, successful drug launches, manufacturing expansion, and durable demand for its major treatments.",allocation:"25%",type:"Long-term compounder",horizon:"5+ years"},
+  {ticker:"AAPL",company:"Apple Inc.",thesis:"Apple benefits from a powerful global brand, a loyal installed base, recurring services revenue, and a tightly integrated hardware and software ecosystem. Its long-term value creation is supported by pricing power, strong free cash flow, share repurchases, and continued expansion into services and new product categories.",allocation:"20%",type:"Long-term compounder",horizon:"5+ years"},
+  {ticker:"COST",company:"Costco Wholesale Corporation",thesis:"Costco’s membership model creates recurring revenue, customer loyalty, and a durable cost advantage built on high sales volume and limited product markups. Long-term growth can come from new warehouses, membership-fee increases, international expansion, and continued gains in traffic and renewal rates.",allocation:"20%",type:"Long-term compounder",horizon:"5+ years"},
+  {ticker:"PG",company:"The Procter & Gamble Company",thesis:"Procter & Gamble owns a diversified portfolio of essential consumer brands with recurring demand, global distribution, and significant pricing power. The company is positioned as a defensive compounder supported by steady cash flow, productivity improvements, dividends, and consistent capital returns.",allocation:"15%",type:"Long-term compounder",horizon:"5+ years"},
+  {ticker:"AMZN",company:"Amazon.com Inc.",thesis:"Amazon combines leadership in e-commerce, cloud computing, digital advertising, logistics, and subscription services. The long-term thesis is driven by AWS growth, expanding operating margins, greater efficiency in fulfillment, and continued monetization of its large customer ecosystem.",allocation:"20%",type:"Long-term compounder",horizon:"5+ years"},
 ];
 
 const watchlist: WatchItem[] = [
@@ -38,7 +38,7 @@ const tabs = ["Overview", "Active Positions", "Watchlist", "Long-Term Compounder
 type PortfolioTab = typeof tabs[number];
 
 function HoldingsTable({ title, items }: { title: string; items: Holding[] }) {
-  return <div className="holding-group"><span className="eyebrow">{title}</span><div className="table-wrap"><table><caption>Illustrative model allocation · educational use only</caption><thead><tr><th>Ticker</th><th>Fund / company</th><th>Investment thesis</th><th>Current allocation</th><th>Holding type</th><th>Time horizon</th></tr></thead><tbody>{items.map((item) => <tr key={item.ticker}><td><b>{item.ticker}</b></td><td>{item.company}</td><td className="placeholder-cell">Thesis placeholder</td><td><b>{item.allocation}</b></td><td>{item.type}</td><td>{item.horizon}</td></tr>)}</tbody></table></div></div>;
+  return <div className="holding-group"><span className="eyebrow">{title}</span><div className="table-wrap"><table><caption>Illustrative model allocation · educational use only</caption><thead><tr><th>Ticker</th><th>Fund / company</th><th>Investment thesis</th><th>Current allocation</th><th>Holding type</th><th>Time horizon</th></tr></thead><tbody>{items.map((item) => <tr key={item.ticker}><td><b>{item.ticker}</b></td><td>{item.company}</td><td className="portfolio-copy">{item.thesis}</td><td><b>{item.allocation}</b></td><td>{item.type}</td><td>{item.horizon}</td></tr>)}</tbody></table></div></div>;
 }
 
 function Overview() {
