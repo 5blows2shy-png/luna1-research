@@ -13,7 +13,7 @@ export function CommandCenterFrame({ active }: { active: boolean }) {
       <section className="command-layout">
         <div className="command-chart"><small>Risk-adjusted trajectory</small><svg viewBox="0 0 620 220" preserveAspectRatio="none"><motion.path d="M0 186 C70 172 82 142 148 151 S238 116 290 126 S380 72 430 94 S520 36 620 48" fill="none" stroke="#6da6d0" strokeWidth="3" initial={{ pathLength: 0 }} animate={{ pathLength: active ? 1 : 0 }} transition={{ duration: 2.4, ease: cinematicEase }}/><path d="M0 205H620M0 155H620M0 105H620M0 55H620" stroke="#53606a" strokeOpacity=".22"/></svg></div>
         <div className="heatmap"><small>Sector map</small>{["TECH","FIN","HC","IND","RE","CASH"].map((sector,index)=><i key={sector} style={{"--heat":`${22 + index * 11}%`} as React.CSSProperties}>{sector}</i>)}</div>
-        <div className="python-stream"><small>PYTHON SCREENER</small><code>universe.filter(quality &amp; momentum)</code><code>risk.score_portfolio()</code><b>184 securities → 12 candidates</b></div>
+        <div className="research-stream"><small>RESEARCH SCREENER</small><code>universe.filter(quality &amp; momentum)</code><code>risk.score_portfolio()</code><b>184 securities → 12 candidates</b></div>
         <div className="command-metrics">{metrics.map(([label,value])=><div key={label}><small>{label}</small><b>{value}</b></div>)}</div>
       </section>
     </motion.div>

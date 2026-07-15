@@ -2,6 +2,12 @@
 
 Luna1 Research is Shyheim Lee's institutional-quality educational investment research website. It separates a stock price into the business, institutional, technical, valuation, and risk forces producing it.
 
+## Product scope
+
+The permanent public platform consists of Home, Research, Portfolio, About, Recruiter View, and Contact. Portfolio contains Overview, Active Positions, Watchlist, Long-Term Compounders, Conviction Dashboard, Mistake Journal, and Performance. Mistake Journal is a Portfolio capability, not a separate top-level product.
+
+Deal Lab, Python Lab, and Real Estate are intentionally outside the product scope and must not be reintroduced unless explicitly requested by the user in a future instruction.
+
 ## Local development
 
 ```bash

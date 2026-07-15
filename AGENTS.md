@@ -16,3 +16,4 @@
 - Add source fields to research content before publishing sourced analysis.
 - Preserve the financial disclaimer across the site.
 - Do not publish investment recommendations as personalized financial advice.
+- Do not add Deal Lab, Python Lab, or Real Estate sections, routes, navigation items, homepage previews, or promotional modules unless the user explicitly requests one of them in a future instruction. Mistake Journal belongs under Portfolio and must not be promoted as a separate top-level product section.
