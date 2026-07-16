@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { PrismSignature } from "@/components/luxury";
-import { Score, SectionHeading } from "@/components/site";
-import { research } from "@/lib/data";
 
 export default function Home() {
   return (
@@ -33,39 +31,6 @@ export default function Home() {
           </div>
         </div>
         <PrismSignature />
-      </section>
-
-      <section>
-        <SectionHeading
-          eyebrow="Featured Research"
-          title="Evidence before opinion."
-          copy="A focused research library organized around business quality, change, valuation, institutional behavior, and explicit risk."
-        />
-        <div className="research-grid luxury-grid">
-          {research.slice(0, 3).map((item, index) => (
-            <Link
-              href={`/research/${item.ticker.toLowerCase()}`}
-              className="research-card luxury-card luxury-card--research"
-              key={item.ticker}
-            >
-              <div className="card-top">
-                <div>
-                  <span className="ticker">{item.ticker}</span>
-                  <small>
-                    {String(index + 1).padStart(2, "0")} · {item.industry}
-                  </small>
-                </div>
-                <Score score={item.score} />
-              </div>
-              <h3>{item.company}</h3>
-              <p>{item.summary}</p>
-              <div className="card-meta">
-                <span>{item.classification}</span>
-                <span>{item.date}</span>
-              </div>
-            </Link>
-          ))}
-        </div>
       </section>
 
       <section className="contact-proof">
