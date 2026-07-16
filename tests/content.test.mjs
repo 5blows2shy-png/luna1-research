@@ -263,19 +263,30 @@ test("equity research navigation alias is removed", () => {
   assert.ok(!fs.existsSync("src/app/equity-research"));
 });
 
-test("portfolio dashboard reuses tested performance calculations without modifying them", () => {
+test("portfolio hides performance while preserving tested calculations", () => {
   const page = fs.readFileSync("src/app/portfolios/page.tsx", "utf8");
   const component = fs.readFileSync(
     "src/components/portfolio-dashboard.tsx",
     "utf8",
   );
-  assert.ok(page.includes('"Performance"'));
-  assert.ok(page.includes("<PortfolioPerformance"));
+  assert.ok(!page.includes('"Performance"'));
+  assert.ok(!page.includes("<PortfolioPerformance"));
   assert.match(component, /export function PortfolioPerformance/);
   assert.match(
     component,
     /annualizedSharpe, cumulativeReturn, maxDrawdown, sortinoRatio/,
   );
+});
+
+test("homepage omits the retired overview modules", () => {
+  const page = fs.readFileSync("src/app/page.tsx", "utf8");
+  for (const section of [
+    "Career and Credentials",
+    "Portfolio · Latest Decision Review",
+    "Portfolio Snapshot",
+    "Current Areas of Focus",
+  ])
+    assert.ok(!page.includes(section), `homepage still includes: ${section}`);
 });
 
 test("temporarily hidden navigation pages remain available", () => {
