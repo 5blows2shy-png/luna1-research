@@ -106,6 +106,8 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
 test("homepage omits retired overview modules", async ({ page }) => {
   await page.goto("/");
   for (const section of [
+    "Featured Research",
+    "Evidence before opinion.",
     "Career and Credentials",
     "Portfolio · Latest Decision Review",
     "Portfolio Snapshot",

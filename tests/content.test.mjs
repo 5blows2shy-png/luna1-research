@@ -281,6 +281,8 @@ test("portfolio hides performance while preserving tested calculations", () => {
 test("homepage omits the retired overview modules", () => {
   const page = fs.readFileSync("src/app/page.tsx", "utf8");
   for (const section of [
+    "Featured Research",
+    "Evidence before opinion.",
     "Career and Credentials",
     "Portfolio · Latest Decision Review",
     "Portfolio Snapshot",
