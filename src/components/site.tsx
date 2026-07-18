@@ -173,7 +173,6 @@ export function Footer() {
         <div>
           <span className="eyebrow">Research platform</span>
           <p>
-            <Link href="/research">Research</Link>
             <Link href="/portfolio">Portfolio</Link>
             <Link href="/portfolio/mistake-journal">
               Portfolio Decision Reviews

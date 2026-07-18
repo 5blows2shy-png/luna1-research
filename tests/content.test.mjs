@@ -338,7 +338,6 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
   const styles = fs.readFileSync("src/app/luxury.css", "utf8");
   for (const label of [
     "Home",
-    "Research",
     "Portfolio",
     "About",
     "Recruiter View",
@@ -349,6 +348,7 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
       `missing navigation item: ${label}`,
     );
   for (const retired of [
+    "Research",
     "Deal Lab",
     "Real Estate",
     "Python Lab",
@@ -358,6 +358,10 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
       !data.includes(`label: "${retired}"`),
       `retired top-level navigation remains: ${retired}`,
     );
+  assert.ok(fs.existsSync("src/app/research/page.tsx"));
+  assert.ok(
+    !fs.readFileSync("src/app/page.tsx", "utf8").includes("Explore Research"),
+  );
   for (const token of [
     "--charcoal:",
     "--graphite:",

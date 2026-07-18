@@ -17,10 +17,7 @@ export default function Home() {
             thesis.
           </p>
           <div className="button-row">
-            <Link className="button primary" href="/research">
-              Explore Research <span>↗</span>
-            </Link>
-            <Link className="button" href="/portfolio">
+            <Link className="button primary" href="/portfolio">
               View Portfolio <span>→</span>
             </Link>
           </div>

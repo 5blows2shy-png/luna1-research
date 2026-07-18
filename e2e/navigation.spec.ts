@@ -49,7 +49,6 @@ test("desktop and mobile navigation expose only the permanent product scope", as
   });
   for (const label of [
     "Home",
-    "Research",
     "Portfolio",
     "About",
     "Recruiter View",
@@ -59,6 +58,7 @@ test("desktop and mobile navigation expose only the permanent product scope", as
       navigation.getByRole("link", { name: new RegExp(`${label}$`) }),
     ).toBeVisible();
   for (const retired of [
+    "Research",
     "Deal Lab",
     "Python Lab",
     "Real Estate",
@@ -67,6 +67,16 @@ test("desktop and mobile navigation expose only the permanent product scope", as
     await expect(
       navigation.getByRole("link", { name: retired, exact: true }),
     ).toHaveCount(0);
+  await expect(
+    page.getByRole("link", { name: "Explore Research" }),
+  ).toHaveCount(0);
+});
+
+test("archived research remains available without public navigation", async ({
+  page,
+}) => {
+  await page.goto("/research");
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 });
 
 test("retired routes are removed and the old journal route redirects", async ({
