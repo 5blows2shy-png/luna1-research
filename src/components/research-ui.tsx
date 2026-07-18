@@ -40,7 +40,6 @@ export function ResearchSectionNav() {
       <Link href="/research">Research Hub</Link>
       <Link href="/research/themes">Investment Themes</Link>
       <Link href="/research/notes">Research Notes</Link>
-      <Link href="/research/library">Reading Library</Link>
     </nav>
   );
 }

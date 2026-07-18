@@ -16,7 +16,6 @@ const routes = [
   "/portfolio/mistake-journal",
   "/recruiter",
   "/research",
-  "/research/library",
   "/research/notes",
   "/research/themes",
   "/resume",

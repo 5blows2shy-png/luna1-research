@@ -8,7 +8,6 @@ const routes = [
   "src/app/research/themes/page.tsx",
   "src/app/research/themes/[slug]/page.tsx",
   "src/app/research/notes/page.tsx",
-  "src/app/research/library/page.tsx",
 ];
 
 test("development log and research routes are present", () => {
@@ -33,8 +32,10 @@ test("research content uses typed centralized records", () => {
     "Robotics",
   ])
     assert.ok(source.includes(`title: "${theme}"`), `missing theme: ${theme}`);
-  assert.match(source, /title: "One Up On Wall Street"/);
-  assert.match(source, /author: "Peter Lynch"/);
+  assert.doesNotMatch(
+    source,
+    /ReadingItem|readingLibrary|One Up On Wall Street/,
+  );
   assert.equal((source.match(/status: "Draft" as const/g) ?? []).length, 1);
 });
 
@@ -77,4 +78,17 @@ test("development dates distinguish repository evidence from unknown history", (
       source.includes(`status: "${status}"`),
       `missing status: ${status}`,
     );
+});
+
+test("books and the Reading Library are removed from the research product", () => {
+  assert.ok(!fs.existsSync("src/app/research/library/page.tsx"));
+  const researchPage = fs.readFileSync("src/app/research/page.tsx", "utf8");
+  const researchNav = fs.readFileSync("src/components/research-ui.tsx", "utf8");
+  const sitemap = fs.readFileSync("src/app/sitemap.ts", "utf8");
+  for (const source of [researchPage, researchNav, sitemap]) {
+    assert.doesNotMatch(
+      source,
+      /Reading Library|research\/library|readingLibrary/,
+    );
+  }
 });

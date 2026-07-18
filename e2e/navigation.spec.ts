@@ -19,7 +19,6 @@ test("primary pages load without horizontal overflow", async ({ page }) => {
     "/research/themes",
     "/research/themes/ai-data-center-buildout",
     "/research/notes",
-    "/research/library",
     "/portfolio",
     "/portfolio/mistake-journal",
     "/about",
@@ -110,10 +109,9 @@ test("research hub exposes structured routes and transparent placeholders", asyn
   ).toBeVisible();
   await page.goto("/research/themes");
   await expect(page.getByRole("link", { name: "View theme" })).toHaveCount(5);
-  await page.goto("/research/library");
-  await expect(
-    page.getByRole("heading", { name: "One Up On Wall Street" }),
-  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "Reading Library" })).toHaveCount(
+    0,
+  );
 });
 
 test("research note and development log filters work", async ({ page }) => {
@@ -137,7 +135,12 @@ test("retired routes are removed and the old journal route redirects", async ({
   page,
   request,
 }) => {
-  for (const route of ["/deal-lab", "/python-lab", "/real-estate"])
+  for (const route of [
+    "/deal-lab",
+    "/python-lab",
+    "/real-estate",
+    "/research/library",
+  ])
     expect((await request.get(route, { maxRedirects: 0 })).status()).toBe(404);
   const legacy = await request.get("/mistake-journal", { maxRedirects: 0 });
   expect([301, 308]).toContain(legacy.status());

@@ -13,14 +13,13 @@ import {
   companyResearch,
   investmentThemes,
   macroContext,
-  readingLibrary,
   researchNotes,
 } from "@/lib/research-content";
 
 export const metadata: Metadata = {
   title: "Research Hub",
   description:
-    "Structured company research, investment themes, macro context, working notes, and reading records from Luna1 Research.",
+    "Structured company research, investment themes, macro context, and working notes from Luna1 Research.",
 };
 
 export default function ResearchPage() {
@@ -29,7 +28,7 @@ export default function ResearchPage() {
       <PageHeader
         kicker="Research hub"
         title="Evidence organized from question to conclusion."
-        description="Company dossiers, industry themes, macro context, working notes, and reading records—separated by research status so unfinished work is never presented as complete."
+        description="Company dossiers, industry themes, macro context, and working notes—separated by research status so unfinished work is never presented as complete."
       />
       <section className="research-hub-intro">
         <ResearchSectionNav />
@@ -104,17 +103,6 @@ export default function ResearchPage() {
           </p>
           <EditorialLink href="/research/notes">
             Open research notes
-          </EditorialLink>
-        </LuxuryCard>
-        <LuxuryCard variant="research">
-          <span className="eyebrow">05 · Reading library</span>
-          <h2>{readingLibrary.length} recorded title</h2>
-          <p>
-            Original summaries of lessons that have influenced the investment
-            process.
-          </p>
-          <EditorialLink href="/research/library">
-            Open reading library
           </EditorialLink>
         </LuxuryCard>
         <LuxuryCard variant="research">

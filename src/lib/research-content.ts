@@ -62,17 +62,6 @@ export type ResearchNote = {
   sourceLinks: Array<{ label: string; href: string }>;
 };
 
-export type ReadingItem = {
-  slug: string;
-  title: string;
-  author: string;
-  category: string;
-  status: "Completed" | "Reading" | "Planned";
-  dateCompleted: string;
-  keyLessons: string[];
-  processInfluence: string;
-};
-
 const pendingMetrics = [
   "Revenue growth",
   "Earnings growth",
@@ -495,21 +484,3 @@ export const researchNotes: ResearchNote[] = researchNoteSeeds.map(
     sourceLinks: [],
   }),
 );
-
-export const readingLibrary: ReadingItem[] = [
-  {
-    slug: "one-up-on-wall-street",
-    title: "One Up On Wall Street",
-    author: "Peter Lynch",
-    category: "Investment Process",
-    status: "Completed",
-    dateCompleted: "Date to be confirmed",
-    keyLessons: [
-      "Understand the business and the reason it can improve before relying on a market narrative.",
-      "Different company types require different expectations, evidence, and risk controls.",
-      "Independent observation can generate questions, but financial statements must validate the idea.",
-    ],
-    processInfluence:
-      "The book reinforced the practice of writing a plain-language thesis, classifying the opportunity correctly, and defining what evidence would invalidate it.",
-  },
-];
