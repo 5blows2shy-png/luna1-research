@@ -207,7 +207,7 @@ export function MistakeJournal() {
                 <td data-label="Entry date">{formatDate(entry.entryDate)}</td>
                 <td data-label="Exit date">{formatDate(entry.exitDate)}</td>
                 <td data-label="Classification">{[entry.classification, ...(entry.secondaryClassifications ?? [])].join(" · ")}</td>
-                <td data-label="Outcome"><span className="status">{entry.outcome}</span></td>
+                <td data-label="Outcome"><span className="status" data-status={entry.outcome?.toLowerCase().replaceAll(" ", "-")}>{entry.outcome}</span></td>
                 <td data-label="Thesis status">{entry.thesisStatus}</td>
                 <td data-label="Entry quality">{entry.entryQuality}</td>
                 <td data-label="Exit quality">{entry.exitQuality}</td>

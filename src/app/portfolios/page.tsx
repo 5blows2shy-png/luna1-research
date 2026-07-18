@@ -430,7 +430,14 @@ export default function Portfolios() {
                         {position.exitRule}
                       </td>
                       <td data-label="Status">
-                        <span className="status">{position.status}</span>
+                        <span
+                          className="status"
+                          data-status={position.status
+                            .toLowerCase()
+                            .replaceAll(" ", "-")}
+                        >
+                          {position.status}
+                        </span>
                       </td>
                     </tr>
                   ))}
@@ -485,7 +492,14 @@ export default function Portfolios() {
                         </b>
                       </td>
                       <td data-label="Research status">
-                        <span className="status">{item.researchStatus}</span>
+                        <span
+                          className="status"
+                          data-status={item.researchStatus
+                            .toLowerCase()
+                            .replaceAll(" ", "-")}
+                        >
+                          {item.researchStatus}
+                        </span>
                       </td>
                       <td
                         data-label="Watchlist note"

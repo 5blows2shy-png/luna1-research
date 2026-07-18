@@ -39,6 +39,35 @@ test("primary pages load without horizontal overflow", async ({ page }) => {
   }
 });
 
+test("Bloomberg-inspired semantic palette renders at every viewport", async ({
+  page,
+}) => {
+  await page.goto("/contact");
+  const palette = await page.evaluate(() => {
+    const root = getComputedStyle(document.documentElement);
+    const body = getComputedStyle(document.body);
+    const input = getComputedStyle(document.querySelector("input")!);
+    return {
+      background: body.backgroundColor,
+      inputBackground: input.backgroundColor,
+      primaryText: root.getPropertyValue("--text-primary").trim(),
+      secondaryText: root.getPropertyValue("--text-secondary").trim(),
+      blue: root.getPropertyValue("--accent-blue").trim(),
+      orange: root.getPropertyValue("--accent-orange").trim(),
+      cyan: root.getPropertyValue("--accent-cyan").trim(),
+    };
+  });
+  expect(palette).toEqual({
+    background: "rgb(9, 11, 16)",
+    inputBackground: "rgb(17, 21, 29)",
+    primaryText: "#e5e7eb",
+    secondaryText: "#9ca3af",
+    blue: "#3b82f6",
+    orange: "#f59e0b",
+    cyan: "#22d3ee",
+  });
+});
+
 test("desktop and mobile navigation expose only the permanent product scope", async ({
   page,
 }, testInfo) => {
