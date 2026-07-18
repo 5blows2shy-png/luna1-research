@@ -342,6 +342,7 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
     "About",
     "Recruiter View",
     "Contact",
+    "Development Log",
   ])
     assert.ok(
       data.includes(`label: "${label}"`),

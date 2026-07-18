@@ -12,6 +12,14 @@ test("primary pages load without horizontal overflow", async ({ page }) => {
   for (const route of [
     "/",
     "/research",
+    "/development-log",
+    "/research/companies/ry",
+    "/research/companies/glw",
+    "/research/companies/be",
+    "/research/themes",
+    "/research/themes/ai-data-center-buildout",
+    "/research/notes",
+    "/research/library",
     "/portfolio",
     "/portfolio/mistake-journal",
     "/about",
@@ -53,6 +61,7 @@ test("desktop and mobile navigation expose only the permanent product scope", as
     "About",
     "Recruiter View",
     "Contact",
+    "Development Log",
   ])
     await expect(
       navigation.getByRole("link", { name: new RegExp(`${label}$`) }),
@@ -77,6 +86,51 @@ test("archived research remains available without public navigation", async ({
 }) => {
   await page.goto("/research");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Developing company dossiers" }),
+  ).toBeVisible();
+  await expect(page.getByText("Original Luna1 research library")).toBeVisible();
+});
+
+test("research hub exposes structured routes and transparent placeholders", async ({
+  page,
+}) => {
+  await page.goto("/research/companies/ry");
+  await expect(
+    page.getByRole("heading", { name: "Royal Bank of Canada", level: 1 }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Full research report in development."),
+  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "Download PDF" })).toHaveCount(0);
+  await expect(
+    page.getByText(
+      /Nothing presented on this website constitutes investment advice/,
+    ),
+  ).toBeVisible();
+  await page.goto("/research/themes");
+  await expect(page.getByRole("link", { name: "View theme" })).toHaveCount(5);
+  await page.goto("/research/library");
+  await expect(
+    page.getByRole("heading", { name: "One Up On Wall Street" }),
+  ).toBeVisible();
+});
+
+test("research note and development log filters work", async ({ page }) => {
+  await page.goto("/research/notes");
+  await page.getByLabel("Ticker").selectOption("RY");
+  await expect(
+    page.getByRole("heading", { name: "RY: framing credit-cycle questions" }),
+  ).toBeVisible();
+  await expect(page.getByText("5 notes")).toHaveCount(0);
+  await page.goto("/development-log");
+  await page.getByLabel("Status").selectOption("Planned");
+  await expect(
+    page.getByRole("heading", {
+      name: "Complete the first source-grounded company dossiers",
+    }),
+  ).toBeVisible();
+  await expect(page.getByText("1 entries")).toBeVisible();
 });
 
 test("retired routes are removed and the old journal route redirects", async ({

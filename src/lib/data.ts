@@ -3,6 +3,7 @@ export const navigationItems: NavigationItem[] = [
   { label: "Home", href: "/" },
   { label: "Portfolio", href: "/portfolio" },
   { label: "About", href: "/about" },
+  { label: "Development Log", href: "/development-log" },
   { label: "Recruiter View", href: "/recruiter" },
   { label: "Contact", href: "/contact" },
 ];

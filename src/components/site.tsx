@@ -178,6 +178,7 @@ export function Footer() {
               Portfolio Decision Reviews
             </Link>
             <Link href="/about">About</Link>
+            <Link href="/development-log">Development Log</Link>
           </p>
         </div>
         <div>
