@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { commentary, research } from "@/lib/data";
 import { companyResearch, investmentThemes } from "@/lib/research-content";
+import { researchCompanies } from "@/data/research/research-companies";
 const routes = [
   "",
   "/about",
@@ -39,6 +40,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${base}/research/companies/${item.slug}`,
       changeFrequency: "monthly" as const,
       priority: 0.6,
+    })),
+    ...researchCompanies.map((item) => ({
+      url: `${base}/watchlist/${item.slug}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
     })),
     ...investmentThemes.map((item) => ({
       url: `${base}/research/themes/${item.slug}`,

@@ -21,6 +21,19 @@ test("primary pages load without horizontal overflow", async ({ page }) => {
     "/research/notes",
     "/portfolio",
     "/portfolio/mistake-journal",
+    "/watchlist/glw",
+    "/watchlist/aipo",
+    "/watchlist/jbl",
+    "/watchlist/alab",
+    "/watchlist/ry",
+    "/watchlist/panw",
+    "/watchlist/pdfs",
+    "/watchlist/anet",
+    "/watchlist/wwd",
+    "/watchlist/amat",
+    "/watchlist/gs",
+    "/watchlist/dlr",
+    "/watchlist/strl",
     "/about",
     "/recruiter",
     "/contact",
@@ -197,6 +210,53 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
   );
   await expect(page.getByText("JBL", { exact: true }).first()).toBeVisible();
   await expect(page.getByRole("tab", { name: "Performance" })).toHaveCount(0);
+  await expect(
+    page.getByRole("link", { name: "View Full Research" }),
+  ).toHaveCount(26);
+  await expect(page.getByText("Digital Realty Trust Inc.")).toBeVisible();
+  await expect(page.getByText("Data pending", { exact: true })).toBeVisible();
+});
+
+test("Watchlist research pages expose structured, non-fabricated coverage", async ({
+  page,
+}) => {
+  await page.goto("/watchlist/glw");
+  await expect(
+    page.getByRole("heading", { name: "Corning Incorporated", level: 1 }),
+  ).toBeVisible();
+  for (const heading of [
+    "Scenarios before conviction.",
+    "Build from operating components.",
+    "Five years of evidence—not invented precision.",
+    "Make every assumption visible.",
+    "Branded documents—published only when complete.",
+  ])
+    await expect(page.getByRole("heading", { name: heading })).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Report in Progress" }),
+  ).toBeDisabled();
+  await expect(
+    page.getByRole("button", { name: "Model in Progress" }),
+  ).toBeDisabled();
+  await expect(page.getByText("Data pending").first()).toBeVisible();
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    "https://luna1research.com/watchlist/glw",
+  );
+  await page.goto("/watchlist/dlr");
+  await expect(
+    page.getByRole("heading", { name: "Why I Follow Digital Realty" }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/facility associated with Digital Realty/),
+  ).toBeVisible();
+  await page.goto("/watchlist/aipo");
+  await expect(
+    page.getByRole("heading", {
+      name: "Understand the portfolio before the theme.",
+    }),
+  ).toBeVisible();
+  await expect(page.getByText("Weighted underlying valuation")).toBeVisible();
 });
 
 test("homepage omits retired overview modules", async ({ page }) => {

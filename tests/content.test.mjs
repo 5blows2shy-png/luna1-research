@@ -188,19 +188,19 @@ test("watchlist matches the approved research records", () => {
     ["GS", 84],
   ]) {
     assert.ok(
-      source.includes(`ticker:\"${ticker}\"`),
+      new RegExp(`ticker:\\s*\"${ticker}\"`).test(source),
       `${ticker} is missing from the watchlist`,
     );
     assert.match(
       source,
-      new RegExp(`ticker:\"${ticker}\"[^\\n]+score:${score}`),
+      new RegExp(`ticker:\\s*\"${ticker}\"[\\s\\S]{0,180}?score:\\s*${score}`),
       `${ticker} score is missing`,
     );
   }
   for (const field of ["note:", "catalyst:", "risk:"])
     assert.equal(
       source.match(new RegExp(field, "g"))?.length,
-      13,
+      14,
       `each record should include ${field}`,
     );
   for (const ticker of [

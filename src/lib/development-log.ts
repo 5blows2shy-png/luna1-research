@@ -234,4 +234,50 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
       "Will convert the initial dossiers from research scaffolds into publishable educational reports.",
     status: "Planned",
   },
+  {
+    id: "watchlist-research-coverage",
+    date: "Date to be confirmed",
+    phase: "Research Platform Expansion",
+    category: "Research",
+    title: "Expanded Watchlist into Research Coverage Platform",
+    summary:
+      "Converted the existing watchlist into a structured company-research platform with dedicated pages for investment theses, business analysis, historical financial performance, revenue drivers, valuation frameworks, catalysts, risks, earnings history, and downloadable research models.",
+    reason:
+      "A professional watchlist should expose the questions, evidence requirements, valuation methods, and monitoring process behind each security.",
+    lessons: [
+      "Neutral placeholders preserve trust when source-backed figures are incomplete.",
+      "One typed template can support consistent diligence without forcing every industry into the same model.",
+    ],
+    skills: [
+      "Equity research architecture",
+      "TypeScript data modeling",
+      "Financial analysis",
+    ],
+    impact:
+      "Creates a recruiter-visible research workflow while keeping incomplete reports and models unpublished.",
+    status: "Completed",
+  },
+  {
+    id: "industry-specific-valuation",
+    date: "Date to be confirmed",
+    phase: "Research Platform Expansion",
+    category: "Research",
+    title: "Introduced Industry-Specific Valuation Frameworks",
+    summary:
+      "Added specialized research structures for banks, investment banks, REITs, ETFs, semiconductor companies, cybersecurity companies, industrial businesses, and data-center infrastructure companies rather than applying one generic valuation method across every security.",
+    reason:
+      "Valuation should reflect the economics, capital structure, and reported operating drivers of the security being studied.",
+    lessons: [
+      "Banks and investment banks require capital and book-value frameworks.",
+      "REITs and ETFs require different operating and valuation evidence than industrial companies.",
+    ],
+    skills: [
+      "Industry analysis",
+      "Valuation framework design",
+      "Research governance",
+    ],
+    impact:
+      "Improves analytical fit while clearly separating sourced inputs from illustrative scenarios.",
+    status: "Completed",
+  },
 ];

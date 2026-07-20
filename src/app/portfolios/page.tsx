@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useState, type KeyboardEvent } from "react";
 import { MistakeJournal } from "@/components/mistake-journal";
+import { ResearchCoverageGrid } from "@/components/research/research-coverage-grid";
 import { PageHeader, SectionHeading } from "@/components/site";
 import { watchlist } from "@/lib/watchlist-data";
 
@@ -458,69 +460,89 @@ export default function Portfolios() {
             </div>
           )}
           {activeTab === "Watchlist" && (
-            <div className="table-wrap watchlist-table-wrap">
-              <table className="watchlist-table">
-                <caption>
-                  Research watchlist · LUNA Scores represent research priority,
-                  not recommendations
-                </caption>
-                <thead>
-                  <tr>
-                    <th>Ticker</th>
-                    <th>Company name</th>
-                    <th>LUNA Score</th>
-                    <th>Research status</th>
-                    <th>Watchlist note</th>
-                    <th>Setup status</th>
-                    <th>Primary catalyst</th>
-                    <th>Primary risk</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {watchlist.map((item) => (
-                    <tr key={item.ticker}>
-                      <td data-label="Ticker">
-                        <b>{item.ticker}</b>
-                      </td>
-                      <td data-label="Company name">{item.company}</td>
-                      <td data-label="LUNA Score">
-                        <b
-                          className="watchlist-score"
-                          aria-label={`LUNA Score ${item.score} out of 100`}
-                        >
-                          {item.score}/100
-                        </b>
-                      </td>
-                      <td data-label="Research status">
-                        <span
-                          className="status"
-                          data-status={item.researchStatus
-                            .toLowerCase()
-                            .replaceAll(" ", "-")}
-                        >
-                          {item.researchStatus}
-                        </span>
-                      </td>
-                      <td
-                        data-label="Watchlist note"
-                        className="portfolio-copy"
-                      >
-                        {item.note}
-                      </td>
-                      <td data-label="Setup status">{item.setupStatus}</td>
-                      <td
-                        data-label="Primary catalyst"
-                        className="portfolio-copy"
-                      >
-                        {item.catalyst}
-                      </td>
-                      <td data-label="Primary risk" className="portfolio-copy">
-                        {item.risk}
-                      </td>
+            <div className="watchlist-research-stack">
+              <div className="table-wrap watchlist-table-wrap">
+                <table className="watchlist-table">
+                  <caption>
+                    Research watchlist · LUNA Scores represent research
+                    priority, not recommendations
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th>Ticker</th>
+                      <th>Company name</th>
+                      <th>LUNA Score</th>
+                      <th>Research status</th>
+                      <th>Watchlist note</th>
+                      <th>Setup status</th>
+                      <th>Primary catalyst</th>
+                      <th>Primary risk</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {watchlist.map((item) => (
+                      <tr key={item.ticker}>
+                        <td data-label="Ticker">
+                          <b>{item.ticker}</b>
+                        </td>
+                        <td data-label="Company name">
+                          {item.company}
+                          <Link
+                            className="watchlist-research-link"
+                            href={`/watchlist/${item.ticker.toLowerCase()}`}
+                          >
+                            View Full Research
+                          </Link>
+                        </td>
+                        <td data-label="LUNA Score">
+                          <b
+                            className="watchlist-score"
+                            aria-label={
+                              item.score === null
+                                ? "LUNA Score data pending"
+                                : `LUNA Score ${item.score} out of 100`
+                            }
+                          >
+                            {item.score === null
+                              ? "Data pending"
+                              : `${item.score}/100`}
+                          </b>
+                        </td>
+                        <td data-label="Research status">
+                          <span
+                            className="status"
+                            data-status={item.researchStatus
+                              .toLowerCase()
+                              .replaceAll(" ", "-")}
+                          >
+                            {item.researchStatus}
+                          </span>
+                        </td>
+                        <td
+                          data-label="Watchlist note"
+                          className="portfolio-copy"
+                        >
+                          {item.note}
+                        </td>
+                        <td data-label="Setup status">{item.setupStatus}</td>
+                        <td
+                          data-label="Primary catalyst"
+                          className="portfolio-copy"
+                        >
+                          {item.catalyst}
+                        </td>
+                        <td
+                          data-label="Primary risk"
+                          className="portfolio-copy"
+                        >
+                          {item.risk}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <ResearchCoverageGrid />
             </div>
           )}
           {activeTab === "Conviction Dashboard" && <ConvictionDashboard />}
