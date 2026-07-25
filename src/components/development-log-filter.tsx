@@ -1,12 +1,20 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { formatResearchDate } from "@/lib/date";
 import {
   type DevelopmentCategory,
+  type DevelopmentFeatureStatus,
   type DevelopmentLogEntry,
   type DevelopmentStatus,
 } from "@/lib/development-log";
+
+const featureStatusClass: Record<DevelopmentFeatureStatus, string> = {
+  Planned: "planned",
+  Preview: "draft",
+  "In Development": "in-progress",
+};
 
 export function DevelopmentLogFilter({
   entries,
@@ -109,6 +117,106 @@ export function DevelopmentLogFilter({
                   <p>{entry.skills.join(" · ")}</p>
                 </div>
               </div>
+              {entry.overview && (
+                <div className="development-extension">
+                  <section
+                    className="development-overview"
+                    aria-labelledby={`${entry.id}-overview`}
+                  >
+                    <h3 id={`${entry.id}-overview`}>Overview</h3>
+                    {entry.overview.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </section>
+                  {entry.evolutionStatement && (
+                    <blockquote className="development-evolution">
+                      <p>{entry.evolutionStatement}</p>
+                    </blockquote>
+                  )}
+                  {entry.featurePreview && (
+                    <section
+                      className="development-preview"
+                      aria-labelledby={`${entry.id}-features`}
+                    >
+                      <header>
+                        <div>
+                          <span className="eyebrow">Feature preview</span>
+                          <h3 id={`${entry.id}-features`}>
+                            Transaction Intelligence roadmap
+                          </h3>
+                        </div>
+                        <span className="research-status research-status--in-progress">
+                          In Development
+                        </span>
+                      </header>
+                      <ul>
+                        {entry.featurePreview.map((feature) => (
+                          <li key={feature.label}>
+                            <strong>{feature.label}</strong>
+                            <span
+                              className={`research-status research-status--${featureStatusClass[feature.status]}`}
+                            >
+                              {feature.status}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="development-preview-action">
+                        {entry.route ? (
+                          <Link className="button" href={entry.route}>
+                            View Transaction Intelligence Preview
+                          </Link>
+                        ) : (
+                          <>
+                            <button className="button" type="button" disabled>
+                              Preview Coming Soon
+                            </button>
+                            <span className="research-status research-status--in-progress">
+                              In Development
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </section>
+                  )}
+                  <div className="development-plan">
+                    {entry.milestones && (
+                      <section aria-labelledby={`${entry.id}-milestones`}>
+                        <h3 id={`${entry.id}-milestones`}>Key Milestones</h3>
+                        <ul>
+                          {entry.milestones.map((milestone) => (
+                            <li key={milestone}>{milestone}</li>
+                          ))}
+                        </ul>
+                      </section>
+                    )}
+                    {entry.nextSteps && (
+                      <section aria-labelledby={`${entry.id}-next-steps`}>
+                        <h3 id={`${entry.id}-next-steps`}>Next Steps</h3>
+                        <ul>
+                          {entry.nextSteps.map((step) => (
+                            <li key={step}>{step}</li>
+                          ))}
+                        </ul>
+                      </section>
+                    )}
+                  </div>
+                  {entry.projectOrigin && (
+                    <section
+                      className="development-origin"
+                      aria-labelledby={`${entry.id}-origin`}
+                    >
+                      <h3 id={`${entry.id}-origin`}>Project Origin</h3>
+                      <p>{entry.projectOrigin}</p>
+                    </section>
+                  )}
+                  {entry.disclosure && (
+                    <small className="development-disclosure">
+                      {entry.disclosure}
+                    </small>
+                  )}
+                </div>
+              )}
             </div>
           </article>
         ))}

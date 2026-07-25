@@ -9,6 +9,8 @@ async function activate(locator: Locator, projectName: string) {
 }
 
 test("primary pages load without horizontal overflow", async ({ page }) => {
+  test.setTimeout(60_000);
+
   for (const route of [
     "/",
     "/research",
@@ -171,6 +173,39 @@ test("research note and development log filters work", async ({ page }) => {
     }),
   ).toBeVisible();
   await expect(page.getByText("1 entries")).toBeVisible();
+});
+
+test("Transaction Intelligence log preview remains transparent", async ({
+  page,
+  request,
+}) => {
+  await page.goto("/development-log");
+  const entry = page.locator("article").filter({
+    has: page.getByRole("heading", {
+      name: "Integrated Transaction Intelligence Preview",
+    }),
+  });
+
+  await expect(entry).toHaveCount(1);
+  await expect(
+    entry.getByText(
+      /Luna1 is evolving from an independent equity-research platform/,
+    ),
+  ).toBeVisible();
+  await expect(entry.locator(".development-preview li")).toHaveCount(9);
+  await expect(
+    entry.getByRole("button", { name: "Preview Coming Soon" }),
+  ).toBeDisabled();
+  await expect(
+    entry.getByRole("link", {
+      name: "View Transaction Intelligence Preview",
+    }),
+  ).toHaveCount(0);
+
+  expect(
+    (await request.get("/transaction-intelligence", { maxRedirects: 0 }))
+      .status(),
+  ).toBe(404);
 });
 
 test("retired routes are removed and the old journal route redirects", async ({
