@@ -20,6 +20,7 @@ const routes = [
   "/research/notes",
   "/research/themes",
   "/resume",
+  "/transaction-intelligence",
   "/valuation-models",
 ];
 export default function sitemap(): MetadataRoute.Sitemap {

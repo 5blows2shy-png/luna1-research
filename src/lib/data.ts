@@ -2,6 +2,10 @@ export type NavigationItem = { label: string; href: string };
 export const navigationItems: NavigationItem[] = [
   { label: "Home", href: "/" },
   { label: "Portfolio", href: "/portfolio" },
+  {
+    label: "Transaction Intelligence",
+    href: "/transaction-intelligence",
+  },
   { label: "About", href: "/about" },
   { label: "Development Log", href: "/development-log" },
   { label: "Recruiter View", href: "/recruiter" },

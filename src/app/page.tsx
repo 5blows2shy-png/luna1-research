@@ -30,6 +30,25 @@ export default function Home() {
         <PrismSignature />
       </section>
 
+      <section className="transaction-home-feature">
+        <div>
+          <span className="eyebrow">Primary Feature · In Development</span>
+          <h2>Transaction Intelligence</h2>
+          <p>
+            Import, classify, reconcile, review, and export financial
+            transaction data through a structured accounting-control workflow.
+          </p>
+        </div>
+        <div className="transaction-home-actions">
+          <span className="research-status research-status--in-progress">
+            In Development
+          </span>
+          <Link className="button primary" href="/transaction-intelligence">
+            Explore the Preview <span>→</span>
+          </Link>
+        </div>
+      </section>
+
       <section className="contact-proof">
         <span className="eyebrow">Professional Contact</span>
         <h2>Thoughtful work begins with a clear conversation.</h2>

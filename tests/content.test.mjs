@@ -4,6 +4,7 @@ import fs from "node:fs";
 
 const routes = [
   "src/app/page.tsx",
+  "src/app/transaction-intelligence/page.tsx",
   "src/app/about/page.tsx",
   "src/app/investment-philosophy/page.tsx",
   "src/app/luna1-framework/page.tsx",
