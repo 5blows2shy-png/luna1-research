@@ -51,7 +51,7 @@ test("existing Development Log entries retain their order", () => {
   );
 });
 
-test("preview capabilities remain visibly unfinished and unlinked", () => {
+test("preview capabilities remain visibly unfinished and link to the promoted page", () => {
   for (const feature of [
     "Transaction Import",
     "Data Normalization",
@@ -68,10 +68,9 @@ test("preview capabilities remain visibly unfinished and unlinked", () => {
   for (const status of ["Planned", "Preview", "In Development"])
     assert.ok(dataSource.includes(`status: "${status}"`), status);
 
-  assert.match(dataSource, /route: null/);
-  assert.ok(!fs.existsSync("src/app/transaction-intelligence/page.tsx"));
-  assert.match(componentSource, /Preview Coming Soon/);
-  assert.match(componentSource, /<button[\s\S]*?disabled>/);
+  assert.match(dataSource, /route: "\/transaction-intelligence"/);
+  assert.ok(fs.existsSync("src/app/transaction-intelligence/page.tsx"));
+  assert.match(componentSource, /View Transaction Intelligence Preview/);
 });
 
 test("public entry preserves project-origin privacy and educational scope", () => {

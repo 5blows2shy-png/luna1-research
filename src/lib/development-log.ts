@@ -369,7 +369,7 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
       "Luna1 is evolving from an independent equity-research platform into a broader financial intelligence ecosystem that connects investment analysis, valuation, accounting controls, and transaction analytics.",
     disclosure:
       "Luna1 Transaction Intelligence is a portfolio and educational project. It is not a substitute for professional accounting, audit, tax, legal, or financial advice.",
-    route: null,
+    route: "/transaction-intelligence",
     visibility: "Public",
   },
 ];

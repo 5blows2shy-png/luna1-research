@@ -13,6 +13,7 @@ test("primary pages load without horizontal overflow", async ({ page }) => {
 
   for (const route of [
     "/",
+    "/transaction-intelligence",
     "/research",
     "/development-log",
     "/research/companies/ry",
@@ -101,6 +102,7 @@ test("desktop and mobile navigation expose only the permanent product scope", as
   for (const label of [
     "Home",
     "Portfolio",
+    "Transaction Intelligence",
     "About",
     "Recruiter View",
     "Contact",
@@ -175,9 +177,8 @@ test("research note and development log filters work", async ({ page }) => {
   await expect(page.getByText("1 entries")).toBeVisible();
 });
 
-test("Transaction Intelligence log preview remains transparent", async ({
+test("Transaction Intelligence preview is promoted without overstating readiness", async ({
   page,
-  request,
 }) => {
   await page.goto("/development-log");
   const entry = page.locator("article").filter({
@@ -194,18 +195,48 @@ test("Transaction Intelligence log preview remains transparent", async ({
   ).toBeVisible();
   await expect(entry.locator(".development-preview li")).toHaveCount(9);
   await expect(
-    entry.getByRole("button", { name: "Preview Coming Soon" }),
-  ).toBeDisabled();
-  await expect(
     entry.getByRole("link", {
       name: "View Transaction Intelligence Preview",
     }),
-  ).toHaveCount(0);
+  ).toHaveAttribute("href", "/transaction-intelligence");
 
-  expect(
-    (await request.get("/transaction-intelligence", { maxRedirects: 0 }))
-      .status(),
-  ).toBe(404);
+  await page.goto("/transaction-intelligence");
+  await expect(
+    page.getByRole("heading", {
+      name: "Luna1 Transaction Intelligence",
+      level: 1,
+    }),
+  ).toBeVisible();
+  await expect(page.getByText("In Development").first()).toBeVisible();
+  const workspace = page.getByRole("navigation", {
+    name: "Transaction Intelligence workspace",
+  });
+  for (const tab of [
+    "Home",
+    "Client Request Portal",
+    "Nonprofit Back Office",
+    "Upload & Clean Transactions",
+    "Bank Statement PDF Parser",
+    "Bank-to-QuickBooks Reconciliation",
+    "Journal Entry Assistant",
+    "Monthly Close Board Packet",
+  ])
+    await expect(workspace.getByRole("button", { name: tab })).toBeVisible();
+
+  await page.getByRole("button", { name: "Upload & Clean Transactions" }).click();
+  await page.getByRole("button", { name: "Use sample data" }).click();
+  await expect(page.getByText("10", { exact: true }).first()).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Flagged Transactions" }),
+  ).toBeVisible();
+
+  await page
+    .getByRole("button", { name: "Bank-to-QuickBooks Reconciliation" })
+    .click();
+  await page.getByRole("button", { name: "Use paired sample data" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Matched Transactions" }),
+  ).toBeVisible();
 });
 
 test("retired routes are removed and the old journal route redirects", async ({
