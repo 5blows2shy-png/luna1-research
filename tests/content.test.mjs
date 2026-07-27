@@ -99,7 +99,7 @@ test("founder card and portrait appear on the resume", () => {
   const about = fs.readFileSync("src/app/about/page.tsx", "utf8");
   const resume = fs.readFileSync("src/app/resume/page.tsx", "utf8");
   assert.doesNotMatch(about, /shyheim-lee-founder.jpeg/);
-  assert.match(resume, /src="\/shyheim-lee-founder.jpeg"/);
+  assert.match(resume, /portraitSrc = "\/shyheim-lee-founder.jpeg"/);
   assert.match(resume, /alt="Portrait of Shy Lee, founder of Luna1 Research"/);
   assert.match(
     resume,
@@ -323,7 +323,9 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
   ])
     assert.ok(source.includes(section), `missing resume section: ${section}`);
   assert.match(recruiter, /RecruiterView/);
-  assert.match(recruiter, /Resume/);
+  assert.match(recruiter, /ResumeContent/);
+  assert.match(recruiter, /portraitSrc="\/shyheim-lee-recruiter.jpeg"/);
+  assert.ok(fs.existsSync("public/shyheim-lee-recruiter.jpeg"));
   assert.match(actions, /Download Profile/);
   assert.ok(!source.includes("FMVA"));
   assert.match(source, /Microsoft Excel<\/b>\s*<span>\s*Completed/);

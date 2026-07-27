@@ -69,7 +69,13 @@ const models = [
   ],
 ] as const;
 
-export default function Resume() {
+type ResumeContentProps = {
+  portraitSrc?: string;
+};
+
+export function ResumeContent({
+  portraitSrc = "/shyheim-lee-founder.jpeg",
+}: ResumeContentProps) {
   return (
     <>
       <section className="recruiter-hero">
@@ -95,7 +101,7 @@ export default function Resume() {
           <span className="eyebrow">Shy Lee · Founder</span>
           <Image
             className="profile-photo"
-            src="/shyheim-lee-founder.jpeg"
+            src={portraitSrc}
             alt="Portrait of Shy Lee, founder of Luna1 Research"
             width={400}
             height={400}
@@ -429,4 +435,8 @@ export default function Resume() {
       </section>
     </>
   );
+}
+
+export default function Resume() {
+  return <ResumeContent />;
 }
