@@ -1,4 +1,5 @@
 import { test, expect, type Locator } from "@playwright/test";
+import * as XLSX from "@e965/xlsx";
 
 async function activate(locator: Locator, projectName: string) {
   if (projectName === "mobile") {
@@ -224,6 +225,29 @@ test("Transaction Intelligence preview is promoted without overstating readiness
     await expect(workspace.getByRole("button", { name: tab })).toBeVisible();
 
   await page.getByRole("button", { name: "Upload & Clean Transactions" }).click();
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(
+    workbook,
+    XLSX.utils.aoa_to_sheet([
+      ["Date", "Description", "Amount", "Category"],
+      ["2026-07-01", "Sample deposit", 1250, "Revenue"],
+      ["2026-07-02", "Office supplies", -84.5, "Operations"],
+    ]),
+    "Transactions",
+  );
+  await page.locator(".ti-panel input[type='file']").setInputFiles({
+    name: "sample-transactions.xlsx",
+    mimeType:
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    buffer: XLSX.write(workbook, { bookType: "xlsx", type: "buffer" }),
+  });
+  await expect(
+    page.getByText(
+      'Loaded sample-transactions.xlsx from worksheet “Transactions”.',
+    ),
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Cleaned Data" })).toBeVisible();
+
   await page.getByRole("button", { name: "Use sample data" }).click();
   await expect(page.getByText("10", { exact: true }).first()).toBeVisible();
   await expect(

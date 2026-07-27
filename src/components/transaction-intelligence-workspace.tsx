@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import {
   cleanTransactions,
   downloadFile,
+  excelSheetToRows,
   journalAccounts,
   parseCsv,
   reconcile,
@@ -88,6 +89,26 @@ function Section({ title, caption, children }: { title: string; caption?: string
 
 async function loadFile(file: File): Promise<{ rows: TransactionRow[]; note: string }> {
   if (file.name.toLowerCase().endsWith(".csv")) return { rows: parseCsv(await file.text()), note: `Loaded ${file.name} as CSV.` };
+  if (/\.(xlsx|xls)$/i.test(file.name)) {
+    const XLSX = await import("@e965/xlsx");
+    const workbook = XLSX.read(await file.arrayBuffer(), {
+      cellDates: true,
+      type: "array",
+    });
+    const firstSheetName = workbook.SheetNames[0];
+    const firstSheet = firstSheetName
+      ? workbook.Sheets[firstSheetName]
+      : undefined;
+    if (!firstSheet)
+      throw new Error("The Excel workbook does not contain a readable worksheet.");
+    const sheetData = XLSX.utils.sheet_to_json<
+      Array<string | number | boolean | Date | null>
+    >(firstSheet, { defval: null, header: 1, raw: true });
+    return {
+      rows: excelSheetToRows(sheetData),
+      note: `Loaded ${file.name} from worksheet “${firstSheetName}”.`,
+    };
+  }
   if (file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")) {
     const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
     const pdf = await pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
@@ -112,7 +133,9 @@ async function loadFile(file: File): Promise<{ rows: TransactionRow[]; note: str
     });
     return { rows: transactions, note: `Best-effort PDF text extraction completed across ${pdf.numPages} page(s). Manual review is required.` };
   }
-  throw new Error("Excel imports are temporarily unavailable in the browser migration. Export the source workbook as CSV and upload it here.");
+  throw new Error(
+    "This file type is not supported. Upload CSV, PDF, Excel .xlsx, or legacy .xls.",
+  );
 }
 
 function UploadControl({ label, onRows, accept = ".csv,.pdf,.xlsx,.xls" }: {
@@ -134,7 +157,7 @@ function UploadControl({ label, onRows, accept = ".csv,.pdf,.xlsx,.xls" }: {
           setError(caught instanceof Error ? caught.message : "This file could not be processed.");
         }
       }} /></label>
-      <small>CSV and PDF supported · Excel import migration temporarily unavailable</small>
+      <small>CSV, PDF, Excel .xlsx, and legacy .xls supported</small>
       {error && <Alert kind="warning">{error}</Alert>}
     </div>
   );
