@@ -1,5 +1,6 @@
 import { test, expect, type Locator } from "@playwright/test";
 import * as XLSX from "@e965/xlsx";
+import { readFileSync } from "node:fs";
 
 async function activate(locator: Locator, projectName: string) {
   if (projectName === "mobile") {
@@ -288,6 +289,17 @@ test("Transaction Intelligence preview is promoted without overstating readiness
     ),
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Cleaned Data" })).toBeVisible();
+
+  await page.locator(".ti-panel input[type='file']").setInputFiles({
+    name: "sample-statement.pdf",
+    mimeType: "application/pdf",
+    buffer: readFileSync("public/downloads/shy-lee-one-page-profile.pdf"),
+  });
+  await expect(
+    page.getByText(
+      "Best-effort PDF text extraction completed across 1 page(s). Manual review is required.",
+    ),
+  ).toBeVisible();
 
   await page.getByRole("button", { name: "Use sample data" }).click();
   await expect(page.getByText("10", { exact: true }).first()).toBeVisible();

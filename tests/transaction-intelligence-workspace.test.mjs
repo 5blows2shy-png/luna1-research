@@ -94,6 +94,11 @@ test("upload control accepts every supported transaction file format", () => {
     assert.ok(component.includes(extension), extension);
 });
 
+test("PDF imports configure the bundled PDF.js worker", () => {
+  assert.match(component, /GlobalWorkerOptions\.workerSrc/);
+  assert.match(component, /pdf\.worker\.min\.mjs/);
+});
+
 test("workspace remains review-first and hides the internal legacy name", () => {
   assert.match(component, /review only/i);
   assert.match(component, /do not approve, post, or modify accounting records/i);

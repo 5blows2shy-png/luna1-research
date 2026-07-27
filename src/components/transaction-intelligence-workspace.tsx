@@ -111,6 +111,10 @@ async function loadFile(file: File): Promise<{ rows: TransactionRow[]; note: str
   }
   if (file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")) {
     const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
+    pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+      "pdfjs-dist/legacy/build/pdf.worker.min.mjs",
+      import.meta.url,
+    ).toString();
     const pdf = await pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
     const lines: string[] = [];
     for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
@@ -246,9 +250,9 @@ function CleanTab({ parser = false, onCleaned }: { parser?: boolean; onCleaned: 
         <UploadControl label={parser ? "Upload bank statement PDF, CSV, or Excel" : "Upload PDF, CSV, or Excel"} onRows={process} />
         <button className="ti-button" onClick={() => process(sampleTransactions, "Loaded Luna1 sample_transactions.csv demonstration data.")}>Use sample data</button>
       </div>
+      {note && <Alert kind="success">{note}</Alert>}
       {!cleaned.length ? <Alert>{parser ? "Upload a PDF bank statement to begin." : "Upload a CSV or PDF file to begin, or use sample data."}</Alert> : (
         <>
-          <Alert kind="success">{note}</Alert>
           {parser && <Section title="Raw Extraction Preview"><DataTable rows={raw} /></Section>}
           <Section title="Detected Columns"><DataTable rows={[{ date: "date", description: "description", amount: "amount", category: "category", memo: "memo" }]} /></Section>
           <div className="ti-metrics">
