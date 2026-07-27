@@ -22,6 +22,12 @@ function enforceRateLimit(identifier:string,now=Date.now()){
   return null;
 }
 
+function sanitizeProviderError(message:string){
+  return message
+    .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,"[email]")
+    .replace(/\bre_[A-Z0-9_-]+\b/gi,"[key]");
+}
+
 export async function POST(request:Request){
   if(!request.headers.get("content-type")?.toLowerCase().startsWith("application/json"))return Response.json({error:"Content-Type must be application/json."},{status:415});
   const parsed=contactSchema.safeParse(await request.json().catch(()=>null));
@@ -53,7 +59,7 @@ export async function POST(request:Request){
             :error.message.includes("domain is not verified")
               ?"unverified_domain"
               :error.name;
-      console.error(`Contact email delivery rejected: ${reason}.`);
+      console.error(`Contact email delivery rejected: ${reason}. ${sanitizeProviderError(error.message)}`);
       return Response.json({error:"Your message could not be sent right now. Please try again later."},{status:502});
     }
     return Response.json({ok:true,message:"Thank you. Your message has been sent."});
