@@ -52,7 +52,7 @@ export async function POST(request:Request){
             ?"testing_domain_restriction"
             :error.message.includes("domain is not verified")
               ?"unverified_domain"
-              :"provider_rejection";
+              :error.name;
       console.error(`Contact email delivery rejected: ${reason}.`);
       return Response.json({error:"Your message could not be sent right now. Please try again later."},{status:502});
     }
