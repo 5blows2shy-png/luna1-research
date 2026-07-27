@@ -348,6 +348,45 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
   await expect(page.getByText("Data pending", { exact: true })).toBeVisible();
 });
 
+test("Portfolio table headers do not cover the first data row", async ({
+  page,
+}, testInfo) => {
+  test.skip(
+    testInfo.project.name === "mobile",
+    "Portfolio tables use the existing card layout on mobile.",
+  );
+
+  await page.goto("/portfolio");
+
+  for (const tab of [
+    "Active Positions",
+    "Watchlist",
+    "Long-Term Compounders",
+    "Mistake Journal",
+  ]) {
+    await activate(
+      page.getByRole("tab", { name: tab, exact: true }),
+      testInfo.project.name,
+    );
+
+    const visibleTable = page.locator("table:visible").first();
+    const header = visibleTable.locator("thead").first();
+    const firstRow = visibleTable.locator("tbody tr").first();
+    await expect(header).toBeVisible();
+    await expect(firstRow).toBeVisible();
+
+    const [headerBox, firstRowBox] = await Promise.all([
+      header.boundingBox(),
+      firstRow.boundingBox(),
+    ]);
+    expect(headerBox).not.toBeNull();
+    expect(firstRowBox).not.toBeNull();
+    expect(headerBox!.y + headerBox!.height).toBeLessThanOrEqual(
+      firstRowBox!.y + 1,
+    );
+  }
+});
+
 test("Watchlist research pages expose structured, non-fabricated coverage", async ({
   page,
 }) => {
