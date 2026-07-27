@@ -89,7 +89,7 @@ function Section({ title, caption, children }: { title: string; caption?: string
 
 async function loadFile(file: File): Promise<{ rows: TransactionRow[]; note: string }> {
   if (file.name.toLowerCase().endsWith(".csv")) return { rows: parseCsv(await file.text()), note: `Loaded ${file.name} as CSV.` };
-  if (/\.(xlsx|xls)$/i.test(file.name)) {
+  if (/\.(xlsx|xls|xlsm|xlsb|ods)$/i.test(file.name)) {
     const XLSX = await import("@e965/xlsx");
     const workbook = XLSX.read(await file.arrayBuffer(), {
       cellDates: true,
@@ -134,11 +134,15 @@ async function loadFile(file: File): Promise<{ rows: TransactionRow[]; note: str
     return { rows: transactions, note: `Best-effort PDF text extraction completed across ${pdf.numPages} page(s). Manual review is required.` };
   }
   throw new Error(
-    "This file type is not supported. Upload CSV, PDF, Excel .xlsx, or legacy .xls.",
+    "This file type is not supported. Upload CSV, PDF, XLSX, XLS, XLSM, XLSB, or ODS.",
   );
 }
 
-function UploadControl({ label, onRows, accept = ".csv,.pdf,.xlsx,.xls" }: {
+function UploadControl({
+  label,
+  onRows,
+  accept = ".csv,.pdf,.xlsx,.xls,.xlsm,.xlsb,.ods",
+}: {
   label: string;
   onRows: (rows: TransactionRow[], note: string) => void;
   accept?: string;
@@ -157,7 +161,7 @@ function UploadControl({ label, onRows, accept = ".csv,.pdf,.xlsx,.xls" }: {
           setError(caught instanceof Error ? caught.message : "This file could not be processed.");
         }
       }} /></label>
-      <small>CSV, PDF, Excel .xlsx, and legacy .xls supported</small>
+      <small>CSV, PDF, XLSX, XLS, XLSM, XLSB, and ODS supported</small>
       {error && <Alert kind="warning">{error}</Alert>}
     </div>
   );

@@ -56,7 +56,7 @@ test("transaction workflow keeps sample processing, review, and exports", () => 
 });
 
 test("Excel workbooks can be read from modern and legacy formats", () => {
-  for (const bookType of ["xlsx", "xls"]) {
+  for (const bookType of ["xlsx", "xls", "xlsm", "xlsb", "ods"]) {
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(
       workbook,
@@ -79,6 +79,19 @@ test("Excel workbooks can be read from modern and legacy formats", () => {
       ["2026-07-01", "Sample deposit", 1250],
     ]);
   }
+});
+
+test("upload control accepts every supported transaction file format", () => {
+  for (const extension of [
+    ".csv",
+    ".pdf",
+    ".xlsx",
+    ".xls",
+    ".xlsm",
+    ".xlsb",
+    ".ods",
+  ])
+    assert.ok(component.includes(extension), extension);
 });
 
 test("workspace remains review-first and hides the internal legacy name", () => {
