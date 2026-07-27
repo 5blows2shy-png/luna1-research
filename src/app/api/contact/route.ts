@@ -44,7 +44,18 @@ export async function POST(request:Request){
       subject:`Luna1 Research inquiry: ${parsed.data.subject}`,
       text:`Name: ${parsed.data.name}\nEmail: ${parsed.data.email}\nOrganization: ${parsed.data.organization||"Not provided"}\nSubject: ${parsed.data.subject}\n\n${parsed.data.message}`,
     });
-    if(error)throw new Error("Provider rejected contact email");
+    if(error){
+      const reason=
+        error.name==="invalid_api_key"
+          ?"invalid_api_key"
+          :error.message.includes("own email address")
+            ?"testing_domain_restriction"
+            :error.message.includes("domain is not verified")
+              ?"unverified_domain"
+              :"provider_rejection";
+      console.error(`Contact email delivery rejected: ${reason}.`);
+      return Response.json({error:"Your message could not be sent right now. Please try again later."},{status:502});
+    }
     return Response.json({ok:true,message:"Thank you. Your message has been sent."});
   }catch{
     console.error("Contact email delivery failed.");
