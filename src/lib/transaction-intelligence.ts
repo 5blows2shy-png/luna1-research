@@ -84,6 +84,38 @@ export function parseCsv(text: string): TransactionRow[] {
   );
 }
 
+export function excelSheetToRows(
+  sheet: unknown[][],
+): TransactionRow[] {
+  const [headerRow = [], ...dataRows] = sheet;
+  const headers = headerRow.map((value, index) => {
+    const header = normalizeColumn(String(value ?? ""));
+    return header || `column_${index + 1}`;
+  });
+
+  return dataRows
+    .filter((row) => row.some((value) => value !== null && String(value).trim()))
+    .map((row) =>
+      Object.fromEntries(
+        headers.map((header, index) => {
+          const value = row[index];
+          return [
+            header,
+            value instanceof Date
+              ? value.toISOString().slice(0, 10)
+              : typeof value === "string" ||
+                  typeof value === "number" ||
+                  typeof value === "boolean"
+                ? value
+                : value == null
+                  ? ""
+                  : String(value),
+          ];
+        }),
+      ),
+    );
+}
+
 function pick(row: TransactionRow, names: string[]) {
   const key = names.find((name) => Object.hasOwn(row, name));
   return key ? row[key] : "";

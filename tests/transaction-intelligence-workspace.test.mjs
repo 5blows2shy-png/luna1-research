@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
+import * as XLSX from "@e965/xlsx";
 
 const component = fs.readFileSync(
   "src/components/transaction-intelligence-workspace.tsx",
@@ -32,6 +33,7 @@ test("workspace preserves the prototype tab order", () => {
 test("transaction workflow keeps sample processing, review, and exports", () => {
   for (const capability of [
     "parseCsv",
+    "excelSheetToRows",
     "cleanTransactions",
     "suggested_category",
     "Possible duplicate",
@@ -51,6 +53,32 @@ test("transaction workflow keeps sample processing, review, and exports", () => 
     "Download Monthly Close Board Packet",
   ])
     assert.ok(component.includes(control), control);
+});
+
+test("Excel workbooks can be read from modern and legacy formats", () => {
+  for (const bookType of ["xlsx", "xls"]) {
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(
+      workbook,
+      XLSX.utils.aoa_to_sheet([
+        ["Date", "Description", "Amount"],
+        ["2026-07-01", "Sample deposit", 1250],
+      ]),
+      "Transactions",
+    );
+
+    const file = XLSX.write(workbook, { bookType, type: "buffer" });
+    const imported = XLSX.read(file, { type: "buffer" });
+    const rows = XLSX.utils.sheet_to_json(
+      imported.Sheets[imported.SheetNames[0]],
+      { header: 1 },
+    );
+
+    assert.deepEqual(rows, [
+      ["Date", "Description", "Amount"],
+      ["2026-07-01", "Sample deposit", 1250],
+    ]);
+  }
 });
 
 test("workspace remains review-first and hides the internal legacy name", () => {
