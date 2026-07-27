@@ -59,6 +59,7 @@ test("primary pages load without horizontal overflow", async ({ page }) => {
 test("Bloomberg-inspired semantic palette renders at every viewport", async ({
   page,
 }) => {
+  await page.addInitScript(() => window.localStorage.setItem("theme", "dark"));
   await page.goto("/contact");
   const palette = await page.evaluate(() => {
     const root = getComputedStyle(document.documentElement);
@@ -83,6 +84,46 @@ test("Bloomberg-inspired semantic palette renders at every viewport", async ({
     orange: "#f59e0b",
     cyan: "#22d3ee",
   });
+});
+
+test("light and dark modes toggle and persist", async ({ page }, testInfo) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto("/");
+  await page.evaluate(() => window.localStorage.removeItem("theme"));
+  await page.reload();
+  const toggle = page.locator("[data-theme-toggle]");
+
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(toggle).toHaveAccessibleName("Switch to light theme");
+  await activate(toggle, testInfo.project.name);
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(toggle).toHaveAccessibleName("Switch to dark theme");
+
+  const lightPalette = await page.evaluate(() => {
+    const root = getComputedStyle(document.documentElement);
+    return {
+      background: root.getPropertyValue("--bg-main").trim(),
+      text: root.getPropertyValue("--text-primary").trim(),
+      stored: window.localStorage.getItem("theme"),
+    };
+  });
+  expect(lightPalette).toEqual({
+    background: "#f4f1e9",
+    text: "#181b20",
+    stored: "light",
+  });
+
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(page.locator("[data-theme-toggle]")).toHaveAccessibleName(
+    "Switch to dark theme",
+  );
+
+  await activate(page.locator("[data-theme-toggle]"), testInfo.project.name);
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect
+    .poll(() => page.evaluate(() => window.localStorage.getItem("theme")))
+    .toBe("dark");
 });
 
 test("desktop and mobile navigation expose only the permanent product scope", async ({

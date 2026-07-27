@@ -49,6 +49,27 @@ test("legacy component tokens map to the centralized palette", () => {
   }
 });
 
+test("light mode provides a complete accessible semantic palette", () => {
+  assert.ok(theme.includes('html[data-theme="light"]'));
+  for (const [token, value] of [
+    ["--bg-main", "#f4f1e9"],
+    ["--bg-card", "#fbfaf6"],
+    ["--bg-input", "#f0ece3"],
+    ["--border-primary", "#d4cdbf"],
+    ["--text-primary", "#181b20"],
+    ["--text-secondary", "#4f5863"],
+    ["--accent-blue", "#245f8c"],
+    ["--status-positive", "#177457"],
+    ["--status-negative", "#a43b43"],
+  ]) {
+    assert.ok(
+      theme.includes(`${token}:${value}`),
+      `missing light-mode ${token}: ${value}`,
+    );
+  }
+  assert.ok(theme.includes("color-scheme:light"));
+});
+
 test("status, table, navigation, form, and chart states use semantic colors", () => {
   for (const selector of [
     ".desktop-nav a.active",
@@ -77,13 +98,16 @@ test("dynamic status labels expose a non-color text value and color hook", () =>
   }
 });
 
-test("metadata and social artwork use the new dark palette", () => {
+test("metadata, theme initialization, and social artwork use the approved palette", () => {
   const layout = fs.readFileSync("src/app/layout.tsx", "utf8").toLowerCase();
   const social = fs
     .readFileSync("src/app/opengraph-image.tsx", "utf8")
     .toLowerCase();
-  assert.match(layout, /colorscheme:"dark"/);
-  assert.match(layout, /themecolor:"#090b10"/);
+  assert.match(layout, /colorscheme:"dark light"/);
+  assert.match(layout, /color:"#090b10"/);
+  assert.match(layout, /color:"#f4f1e9"/);
+  assert.match(layout, /localstorage\.getitem\("theme"\)/);
+  assert.match(layout, /prefers-color-scheme: dark/);
   for (const color of ["#090b10", "#e5e7eb", "#3b82f6", "#f59e0b", "#22d3ee"])
     assert.ok(social.includes(color), `social card missing ${color}`);
 });
