@@ -49,6 +49,10 @@ export function Navbar() {
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const legacyMedia = media as MediaQueryList & {
+      addListener(listener: (event: MediaQueryListEvent) => void): void;
+      removeListener(listener: (event: MediaQueryListEvent) => void): void;
+    };
     const currentTheme: ColorTheme =
       document.documentElement.dataset.theme === "light" ? "light" : "dark";
     applyTheme(currentTheme);
@@ -61,10 +65,18 @@ export function Navbar() {
       setTheme(nextTheme);
     };
 
-    media.addEventListener("change", followSystemTheme);
+    if ("addEventListener" in media) {
+      media.addEventListener("change", followSystemTheme);
+    } else {
+      legacyMedia.addListener(followSystemTheme);
+    }
     return () => {
       cancelAnimationFrame(frame);
-      media.removeEventListener("change", followSystemTheme);
+      if ("removeEventListener" in media) {
+        media.removeEventListener("change", followSystemTheme);
+      } else {
+        legacyMedia.removeListener(followSystemTheme);
+      }
     };
   }, []);
 
@@ -90,13 +102,13 @@ export function Navbar() {
         return;
       }
       if (event.key !== "Tab" || !drawer.current) return;
-      const focusable = [
-        ...drawer.current.querySelectorAll<HTMLElement>(
+      const focusable = Array.from(
+        drawer.current.querySelectorAll<HTMLElement>(
           "a[href],button:not([disabled])",
         ),
-      ];
+      );
       const first = focusable[0],
-        last = focusable.at(-1);
+        last = focusable[focusable.length - 1];
       if (event.shiftKey && document.activeElement === first) {
         event.preventDefault();
         last?.focus();
