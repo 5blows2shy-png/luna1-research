@@ -216,12 +216,8 @@ export function ResumeContent({
             <p>Associate of Science in Business Administration · 2024</p>
           </div>
           <div className="credential">
-            <b>Aztec Investment Fund (AIF)</b>
-            <p>
-              Fundamental equity research and investment-thesis development,
-              including an AI infrastructure thesis informed by data center
-              operating experience.
-            </p>
+            <b>Advanced Finance Coursework</b>
+            <p>Aztec Investment Fund – Equity Research &amp; Portfolio Management</p>
           </div>
         </div>
         <div id="certifications">
