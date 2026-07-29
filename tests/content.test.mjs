@@ -312,16 +312,28 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
     "Experience",
     "Education",
     "Certifications",
-    "Featured research",
-    "Financial models",
     "Investment philosophy",
-    "LUNA Framework",
-    "Portfolio",
-    "Portfolio · Mistake Journal",
-    "Timeline",
-    "Contact",
   ])
     assert.ok(source.includes(section), `missing resume section: ${section}`);
+  for (const removed of [
+    "Businesses worth understanding.",
+    "Valuation with visible assumptions.",
+    "LUNA Framework",
+    "Conviction made accountable.",
+    "Portfolio · Mistake Journal",
+    "A career built across finance and operations.",
+    "Start a professional conversation.",
+    "Transaction Intelligence",
+  ])
+    assert.ok(!source.includes(removed), `removed resume content remains: ${removed}`);
+  assert.match(
+    source,
+    /A thesis is not a story to defend\. It is a hypothesis to update as\s+evidence changes\./,
+  );
+  assert.match(
+    source,
+    /Start with business change\. Test it through earnings, competitive\s+position, institutional recognition, valuation, technical structure,\s+and explicit risk rules\./,
+  );
   assert.match(recruiter, /RecruiterView/);
   assert.match(recruiter, /ResumeContent/);
   assert.match(recruiter, /portraitSrc="\/shyheim-lee-recruiter.jpeg"/);

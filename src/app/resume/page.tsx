@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { RecruiterActions } from "@/components/recruiter-actions";
-import { research } from "@/lib/data";
 import {
   careerProgression,
   coreStrengths,
@@ -60,21 +59,6 @@ const experience = [
   },
 ] as const;
 
-const models = [
-  [
-    "Discounted cash flow",
-    "Revenue, margin, tax, discount-rate, and terminal-growth sensitivities.",
-  ],
-  [
-    "Comparable companies",
-    "Peer multiples organized around growth, profitability, cash conversion, and expectations.",
-  ],
-  [
-    "Scenario analysis",
-    "Base, upside, and downside cases with explicit catalysts, risks, and invalidation points.",
-  ],
-] as const;
-
 type ResumeContentProps = {
   portraitSrc?: string;
   recruiterView?: boolean;
@@ -92,26 +76,15 @@ export function ResumeContent({
         "Projects",
         "Experience",
         "Education",
-        "Research",
-        "Models",
-        "Transaction",
-        "Portfolio",
-        "Journal",
-        "Contact",
+        "Certifications",
+        "Philosophy",
       ]
     : [
         "Summary",
         "Experience",
         "Education",
         "Certifications",
-        "Research",
-        "Models",
         "Philosophy",
-        "Framework",
-        "Portfolio",
-        "Journal",
-        "Timeline",
-        "Contact",
       ];
 
   return (
@@ -251,21 +224,23 @@ export function ResumeContent({
           <section id="projects">
             <header className="recruiter-section-head">
               <span className="eyebrow">Projects · Luna1 capabilities</span>
-              <h2>One platform. Six forms of analytical evidence.</h2>
+              <h2>One platform. Five forms of analytical evidence.</h2>
               <p>
                 Luna1 is a professional research portfolio—not a startup or a
                 commercial software claim.
               </p>
             </header>
             <div className="recruiter-capability-grid">
-              {platformPillars.map((pillar) => (
-                <Link href={pillar.href} key={pillar.title}>
-                  <span>{pillar.number}</span>
-                  <h3>{pillar.title}</h3>
-                  <p>{pillar.purpose}</p>
-                  <b>Review evidence →</b>
-                </Link>
-              ))}
+              {platformPillars
+                .filter(({ href }) => href !== "/transaction-intelligence")
+                .map((pillar) => (
+                  <Link href={pillar.href} key={pillar.title}>
+                    <span>{pillar.number}</span>
+                    <h3>{pillar.title}</h3>
+                    <p>{pillar.purpose}</p>
+                    <b>Review evidence →</b>
+                  </Link>
+                ))}
             </div>
           </section>
         </>
@@ -337,76 +312,6 @@ export function ResumeContent({
           </Link>
         </div>
       </section>
-      <section id="research">
-        <header className="recruiter-section-head">
-          <span className="eyebrow">Featured research</span>
-          <h2>Businesses worth understanding.</h2>
-          <p>
-            Illustrative research records demonstrate the structure of the Luna1
-            process; values are not real-time market data.
-          </p>
-        </header>
-        <div className="recruiter-research">
-          {research.slice(0, 3).map((item, i) => (
-            <Link
-              href={`/research/${item.ticker.toLowerCase()}`}
-              key={item.ticker}
-            >
-              <span>
-                0{i + 1} · {item.industry}
-              </span>
-              <h3>
-                {item.ticker} / {item.company}
-              </h3>
-              <p>{item.catalyst}</p>
-              <b>{item.classification} →</b>
-            </Link>
-          ))}
-        </div>
-      </section>
-      <section id="models">
-        <header className="recruiter-section-head">
-          <span className="eyebrow">Financial models</span>
-          <h2>Valuation with visible assumptions.</h2>
-        </header>
-        <div className="model-list">
-          {models.map(([title, copy], i) => (
-            <div className="model-line" key={title}>
-              <span>0{i + 1}</span>
-              <div>
-                <b>{title}</b>
-                <p>{copy}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <Link className="text-link" href="/financial-models">
-          Explore financial models →
-        </Link>
-      </section>
-      {recruiterView && (
-        <section id="transaction" className="recruiter-split">
-          <div>
-            <span className="eyebrow">Transaction Intelligence</span>
-            <h2>Accounting controls applied to transaction-level data.</h2>
-          </div>
-          <div>
-            <p className="recruiter-pull">
-              The workspace demonstrates import, normalization, categorization,
-              duplicate review, reconciliation concepts, exception handling,
-              and controlled exports.
-            </p>
-            <p>
-              Preview and planned functions remain explicitly labeled. The
-              project does not claim to perform certified audits, tax work, or
-              regulated financial services.
-            </p>
-            <Link className="button" href="/transaction-intelligence">
-              Review Transaction Intelligence <span>→</span>
-            </Link>
-          </div>
-        </section>
-      )}
       <section id="philosophy" className="recruiter-quote">
         <span className="eyebrow">Investment philosophy</span>
         <blockquote>
@@ -418,130 +323,6 @@ export function ResumeContent({
           position, institutional recognition, valuation, technical structure,
           and explicit risk rules.
         </p>
-        <Link className="text-link" href="/investment-philosophy">
-          Read the full philosophy →
-        </Link>
-      </section>
-      <section id="framework" className="recruiter-split">
-        <div>
-          <span className="eyebrow">LUNA Framework</span>
-          <h2>A repeatable structure for evidence and risk.</h2>
-        </div>
-        <div>
-          <p className="recruiter-pull">
-            Layered Understanding of Narrative Acceleration organizes business
-            fundamentals, competitive position, institutional sponsorship,
-            valuation, technical structure, and risk into one documented
-            research process.
-          </p>
-          <p>
-            The framework is educational and supports research prioritization;
-            it is not a personalized investment recommendation.
-          </p>
-          <Link className="button" href="/luna1-framework">
-            Explore the LUNA Framework <span>→</span>
-          </Link>
-        </div>
-      </section>
-      <section id="portfolio" className="recruiter-split">
-        <div>
-          <span className="eyebrow">Portfolio</span>
-          <h2>Conviction made accountable.</h2>
-        </div>
-        <div>
-          <p className="recruiter-pull">
-            Every position begins with a written thesis, an evidence checklist,
-            a defined add level, and a clear invalidation rule.
-          </p>
-          <p>
-            Public portfolio examples are manually updated and educational only.
-            They do not represent real-time brokerage data or personalized
-            investment advice.
-          </p>
-          <Link className="button" href="/portfolios">
-            View portfolio methodology <span>→</span>
-          </Link>
-        </div>
-      </section>
-      <section id="journal">
-        <header className="recruiter-section-head">
-          <span className="eyebrow">Portfolio · Mistake Journal</span>
-          <h2>Process improves when errors become data.</h2>
-        </header>
-        <div className="journal-method">
-          <div>
-            <span>01</span>
-            <b>Record</b>
-            <p>
-              Capture the decision, evidence available, and emotional context
-              without rewriting history.
-            </p>
-          </div>
-          <div>
-            <span>02</span>
-            <b>Classify</b>
-            <p>
-              Separate analytical, sizing, timing, execution, and process
-              errors.
-            </p>
-          </div>
-          <div>
-            <span>03</span>
-            <b>Correct</b>
-            <p>
-              Translate the lesson into a checklist, threshold, or repeatable
-              portfolio rule.
-            </p>
-          </div>
-        </div>
-        <Link className="text-link" href="/portfolio/mistake-journal">
-          Open portfolio decision reviews →
-        </Link>
-      </section>
-      <section id="timeline">
-        <header className="recruiter-section-head">
-          <span className="eyebrow">Timeline</span>
-          <h2>A career built across finance and operations.</h2>
-        </header>
-        <div className="career-line">
-          <div>
-            <time>2014</time>
-            <b>Accounting</b>
-          </div>
-          <div>
-            <time>2015</time>
-            <b>U.S. Army</b>
-          </div>
-          <div>
-            <time>2020</time>
-            <b>Data centers</b>
-          </div>
-          <div>
-            <time>2024</time>
-            <b>Business degree</b>
-          </div>
-          <div>
-            <time>2026</time>
-            <b>Finance &amp; research</b>
-          </div>
-          <div>
-            <time>2027</time>
-            <b>B.S. Finance</b>
-          </div>
-        </div>
-      </section>
-      <section id="contact" className="recruiter-contact">
-        <div>
-          <span className="eyebrow">Contact</span>
-          <h2>Start a professional conversation.</h2>
-          <p>
-            Recruiting inquiries are welcome through the secure site contact
-            form. Private contact details are intentionally not published.
-          </p>
-        </div>
-        <Link className="button primary" href="/contact">
-          Contact Shy <span>↗</span>
-        </Link>
       </section>
     </>
   );
