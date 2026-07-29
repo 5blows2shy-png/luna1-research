@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import {
   cleanTransactions,
   downloadFile,
+  downloadPdfReport,
   excelSheetToRows,
   journalAccounts,
   parseCsv,
@@ -175,9 +176,9 @@ function HomeTab() {
   return (
     <>
       <div className="ti-home-hero">
-        <span>Luna1 Transaction Intelligence</span>
+        <span>Luna1 Accounting &amp; Transaction Intelligence</span>
         <h2>Clean messy books before they slow the business down.</h2>
-        <p>Luna1 Transaction Intelligence helps small businesses, nonprofits, churches, ministries, and creative teams clean up disorganized transactions, missing documents, unreconciled bank activity, and board reporting gaps.</p>
+        <p>Luna1 Accounting &amp; Transaction Intelligence helps small businesses, nonprofits, churches, ministries, and creative teams clean up disorganized transactions, missing documents, unreconciled bank activity, and board reporting gaps.</p>
         <p>The client-facing promise is simple: send the files, see what is missing, clean the books, and leave every review item organized for follow-up.</p>
       </div>
       <div className="ti-service-grid">
@@ -262,7 +263,17 @@ function CleanTab({ parser = false, onCleaned }: { parser?: boolean; onCleaned: 
           </div>
           <Section title="Cleaned Data"><DataTable rows={cleaned} /></Section>
           <Section title="Flagged Transactions"><DataTable rows={flagged} /></Section>
-          <button className="ti-button" onClick={() => downloadFile("qbo_cleanup_review.xml", workbookXml({ "Cleaned Transactions": cleaned, "Flagged Transactions": flagged }), "application/vnd.ms-excel")}>Download Excel Review File</button>
+          <div className="ti-action-row">
+            <button className="ti-button" onClick={() => downloadFile("qbo_cleanup_review.xml", workbookXml({ "Cleaned Transactions": cleaned, "Flagged Transactions": flagged }), "application/vnd.ms-excel")}>Download Excel Review File</button>
+            <button className="ti-button" onClick={() => void downloadPdfReport("qbo_cleanup_review.pdf", {
+              title: "Transaction Cleanup Review",
+              subtitle: `${cleaned.length} transactions processed; ${flagged.length} items require review.`,
+              sections: [
+                { title: "Cleaned Transactions", rows: cleaned, columns: ["date", "description", "amount", "suggested_category", "review_flag"] },
+                { title: "Flagged Transactions", rows: flagged, columns: ["date", "description", "amount", "suggested_category", "review_flag"] },
+              ],
+            })}>Download PDF Review</button>
+          </div>
         </>
       )}
     </>
@@ -295,7 +306,20 @@ function ReconciliationTab() {
           <Section title="QuickBooks Only / Missing from Bank"><DataTable rows={results.qboOnly} /></Section>
           <Section title="Possible Duplicates"><DataTable rows={results.possibleDuplicates} /></Section>
           <Section title="Needs Review"><DataTable rows={results.needsReview} /></Section>
-          <button className="ti-button" onClick={() => downloadFile("bank_to_qbo_reconciliation.xml", workbookXml({ "Matched Transactions": results.matched, "Bank Only": results.bankOnly, "QuickBooks Only": results.qboOnly, "Possible Duplicates": results.possibleDuplicates, "Needs Review": results.needsReview }), "application/vnd.ms-excel")}>Download Reconciliation Workbook</button>
+          <div className="ti-action-row">
+            <button className="ti-button" onClick={() => downloadFile("bank_to_qbo_reconciliation.xml", workbookXml({ "Matched Transactions": results.matched, "Bank Only": results.bankOnly, "QuickBooks Only": results.qboOnly, "Possible Duplicates": results.possibleDuplicates, "Needs Review": results.needsReview }), "application/vnd.ms-excel")}>Download Reconciliation Workbook</button>
+            <button className="ti-button" onClick={() => void downloadPdfReport("bank_to_qbo_reconciliation.pdf", {
+              title: "Bank-to-QuickBooks Reconciliation Review",
+              subtitle: "Suggested matches only. Accounting review is required before use.",
+              sections: [
+                { title: "Matched Transactions", rows: results.matched, columns: ["bank_date", "bank_description", "bank_amount", "qbo_date", "qbo_description", "match_confidence"] },
+                { title: "Bank Only", rows: results.bankOnly, columns: ["date", "description", "amount", "suggested_category", "review_flag"] },
+                { title: "QuickBooks Only", rows: results.qboOnly, columns: ["date", "description", "amount", "suggested_category", "review_flag"] },
+                { title: "Possible Duplicates", rows: results.possibleDuplicates, columns: ["date", "description", "amount", "review_flag"] },
+                { title: "Needs Review", rows: results.needsReview, columns: ["bank_date", "bank_description", "bank_amount", "qbo_date", "qbo_description", "match_confidence"] },
+              ],
+            })}>Download Reconciliation PDF</button>
+          </div>
         </>
       )}
     </>
@@ -323,7 +347,7 @@ function JournalTab({ cleaned }: { cleaned: TransactionRow[] }) {
             <label>memo<textarea value={String(manual.memo)} onChange={(event) => setManual({ ...manual, memo: event.target.value })} /></label>
           </div>
           <button className="ti-button" onClick={() => setEntry([suggestJournalEntry(manual, String(manual.bank_account_name))])}>Suggest Draft Journal Entry</button>
-          {entry.length > 0 && <><Section title="Draft Journal Entry Suggestion"><DataTable rows={entry} /></Section><Alert>Review required before posting. This app does not post to QuickBooks.</Alert><button className="ti-button" onClick={() => downloadFile("draft_journal_entry.xml", workbookXml({ "Draft Journal Entry": entry }), "application/vnd.ms-excel")}>Download Draft Journal Entry</button></>}
+          {entry.length > 0 && <><Section title="Draft Journal Entry Suggestion"><DataTable rows={entry} /></Section><Alert>Review required before posting. This app does not post to QuickBooks.</Alert><div className="ti-action-row"><button className="ti-button" onClick={() => downloadFile("draft_journal_entry.xml", workbookXml({ "Draft Journal Entry": entry }), "application/vnd.ms-excel")}>Download Draft Journal Entry</button><button className="ti-button" onClick={() => void downloadPdfReport("draft_journal_entry.pdf", { title: "Draft Journal Entry Review", subtitle: "Draft suggestion only. Review and approval are required before posting.", sections: [{ title: "Draft Journal Entry", rows: entry, columns: ["transaction_date", "description", "debit_account", "credit_account", "debit_amount", "credit_amount", "review_required"] }] })}>Download Journal Entry PDF</button></div></>}
         </>
       ) : (
         <>
@@ -332,7 +356,7 @@ function JournalTab({ cleaned }: { cleaned: TransactionRow[] }) {
             <>
               <Section title="Select Rows That Need Draft Journal Entry Suggestions"><DataTable rows={rows} /></Section>
               <button className="ti-button" onClick={() => setEntry(rows.map((row) => suggestJournalEntry(row)))}>Suggest All Draft Journal Entries</button>
-              {entry.length > 0 && <><Section title="Draft Journal Entry Suggestions"><DataTable rows={entry} /></Section><div className="ti-metrics"><div><span>Total debits</span><strong>{entry.reduce((sum, row) => sum + Number(row.debit_amount), 0).toFixed(2)}</strong></div><div><span>Total credits</span><strong>{entry.reduce((sum, row) => sum + Number(row.credit_amount), 0).toFixed(2)}</strong></div></div><button className="ti-button" onClick={() => downloadFile("draft_journal_entries.xml", workbookXml({ "Draft Journal Entries": entry }), "application/vnd.ms-excel")}>Download Draft Journal Entries</button></>}
+              {entry.length > 0 && <><Section title="Draft Journal Entry Suggestions"><DataTable rows={entry} /></Section><div className="ti-metrics"><div><span>Total debits</span><strong>{entry.reduce((sum, row) => sum + Number(row.debit_amount), 0).toFixed(2)}</strong></div><div><span>Total credits</span><strong>{entry.reduce((sum, row) => sum + Number(row.credit_amount), 0).toFixed(2)}</strong></div></div><div className="ti-action-row"><button className="ti-button" onClick={() => downloadFile("draft_journal_entries.xml", workbookXml({ "Draft Journal Entries": entry }), "application/vnd.ms-excel")}>Download Draft Journal Entries</button><button className="ti-button" onClick={() => void downloadPdfReport("draft_journal_entries.pdf", { title: "Draft Journal Entry Review", subtitle: "Draft suggestions only. Review and approval are required before posting.", sections: [{ title: "Draft Journal Entries", rows: entry, columns: ["transaction_date", "description", "debit_account", "credit_account", "debit_amount", "credit_amount", "review_required"] }] })}>Download Journal Entries PDF</button></div></>}
             </>
           )}
         </>
@@ -370,7 +394,18 @@ function BoardPacketTab({ cleaned }: { cleaned: TransactionRow[] }) {
       {subtab === "Summary" && <><Section title="Summary" caption="A high-level board packet view using every file currently uploaded.">{!boardRows.length && <Alert kind="warning">Cleaned Transactions is required for the Summary tab.</Alert>}<div className="ti-metrics"><div><span>Board Packet Readiness</span><strong>{readiness}%</strong></div><div><span>Money coming in</span><strong>{incoming.toFixed(2)}</strong></div><div><span>Money going out</span><strong>{outgoing.toFixed(2)}</strong></div><div><span>Net change</span><strong>{(incoming - outgoing).toFixed(2)}</strong></div><div><span>Transactions</span><strong>{boardRows.length}</strong></div><div><span>Needs review</span><strong>{flagged.length}</strong></div><div><span>Uncategorized</span><strong>{uncategorized.length}</strong></div><div><span>Possible duplicates</span><strong>{duplicates.length}</strong></div></div></Section><Section title="Plain-English Summary"><p>{boardRows.length ? `${metadata.organization} recorded ${boardRows.length} transactions in ${metadata.month} ${metadata.year}, with ${flagged.length} item(s) requiring review before board use.` : "Upload Cleaned Transactions to prepare the summary."}</p></Section><Section title="Key Highlights"><p>Money coming in: ${incoming.toFixed(2)} · Money going out: ${outgoing.toFixed(2)} · Net change: ${(incoming - outgoing).toFixed(2)}</p></Section><Section title="Things That Need Review"><p>{flagged.length} flagged · {uncategorized.length} uncategorized · {duplicates.length} possible duplicate(s).</p></Section><Section title="Missing Files"><p>Budget vs Actual, Profit and Loss, Balance Sheet, Reconciliation Exceptions, Suggested Journal Entries</p></Section><Section title="Data Loaded Checklist"><DataTable rows={[{ File: "Cleaned Transactions", Status: boardRows.length ? "Loaded" : "Missing" }, { File: "Budget vs Actual", Status: "Optional / not loaded" }, { File: "Profit and Loss", Status: "Optional / not loaded" }, { File: "Balance Sheet", Status: "Optional / not loaded" }]} /></Section></>}
       {subtab === "Board Narrative" && <Section title="Board Narrative" caption="Simple, cautious language for non-finance board members.">{!boardRows.length ? <Alert kind="warning">Upload Cleaned Transactions before creating the board narrative.</Alert> : <><h3>What happened this month?</h3><p>{metadata.organization} had ${incoming.toFixed(2)} coming in and ${outgoing.toFixed(2)} going out, producing a net change of ${(incoming - outgoing).toFixed(2)}.</p><h3>Why it matters</h3><DataTable rows={[{ Topic: "Cash activity", Explanation: "Incoming and outgoing activity should be compared with the approved budget and expected operating cycle." }, { Topic: "Review items", Explanation: `${flagged.length} transaction(s) need follow-up before the close is considered complete.` }]} /><h3>Questions for management</h3><DataTable rows={[{ Question: "Are the large and uncategorized transactions supported and approved?" }, { Question: "Are all required monthly close files available?" }]} /><h3>Simple finance glossary</h3><DataTable rows={[{ Term: "Net change", Meaning: "Money coming in minus money going out." }, { Term: "Reconciliation", Meaning: "Comparing two records and resolving differences." }]} /></>}</Section>}
       {subtab === "Review Items" && <>{!boardRows.length ? <Alert kind="warning">Upload Cleaned Transactions before reviewing detailed tables.</Alert> : <><Section title="Flagged Transactions"><DataTable rows={flagged} /></Section><Section title="Uncategorized Transactions"><DataTable rows={uncategorized} /></Section><Section title="Possible Duplicates"><DataTable rows={duplicates} /></Section><Section title="Large Transactions"><DataTable rows={large} /></Section></>}</>}
-      {subtab === "Export Packet" && <Section title="Export Packet" caption="Download the board packet workbook for review.">{!boardRows.length ? <Alert kind="warning">Upload Cleaned Transactions before exporting the board packet.</Alert> : <><Alert>PDF export is temporarily unavailable in the Luna migration. The workbook contains the working review tables; PDF generation requires the original report-layout engine to be ported server-side.</Alert><button className="ti-button" onClick={() => downloadFile("monthly_close_board_packet.xml", workbookXml({ Summary: [{ organization: metadata.organization, period: `${metadata.month} ${metadata.year}`, readiness, money_in: incoming, money_out: outgoing, net_change: incoming - outgoing }], "Cleaned Transactions": boardRows, "Flagged Transactions": flagged, "Uncategorized Review": uncategorized, "Possible Duplicates": duplicates, "Large Transactions": large }), "application/vnd.ms-excel")}>Download Monthly Close Board Packet</button></>}</Section>}
+      {subtab === "Export Packet" && <Section title="Export Packet" caption="Download the monthly close packet in Excel or PDF format for review.">{!boardRows.length ? <Alert kind="warning">Upload Cleaned Transactions before exporting the board packet.</Alert> : <><Alert>PDF and Excel exports are review files only and require accounting and management approval before board use.</Alert><div className="ti-action-row"><button className="ti-button" onClick={() => downloadFile("monthly_close_board_packet.xml", workbookXml({ Summary: [{ organization: metadata.organization, period: `${metadata.month} ${metadata.year}`, readiness, money_in: incoming, money_out: outgoing, net_change: incoming - outgoing }], "Cleaned Transactions": boardRows, "Flagged Transactions": flagged, "Uncategorized Review": uncategorized, "Possible Duplicates": duplicates, "Large Transactions": large }), "application/vnd.ms-excel")}>Download Monthly Close Board Packet</button><button className="ti-button" onClick={() => void downloadPdfReport("monthly_close_board_packet.pdf", {
+        title: "Monthly Close Board Packet",
+        subtitle: `${metadata.organization} - ${metadata.month} ${metadata.year} - Prepared by ${metadata.preparedBy}`,
+        sections: [
+          { title: "Close Summary", rows: [{ organization: metadata.organization, period: `${metadata.month} ${metadata.year}`, readiness: `${readiness}%`, money_in: incoming.toFixed(2), money_out: outgoing.toFixed(2), net_change: (incoming - outgoing).toFixed(2), needs_review: flagged.length }] },
+          { title: "Cleaned Transactions", rows: boardRows, columns: ["date", "description", "amount", "suggested_category", "review_flag"] },
+          { title: "Flagged Transactions", rows: flagged, columns: ["date", "description", "amount", "suggested_category", "review_flag"] },
+          { title: "Uncategorized Review", rows: uncategorized, columns: ["date", "description", "amount", "suggested_category", "review_flag"] },
+          { title: "Possible Duplicates", rows: duplicates, columns: ["date", "description", "amount", "review_flag"] },
+          { title: "Large Transactions", rows: large, columns: ["date", "description", "amount", "suggested_category", "review_flag"] },
+        ],
+      })}>Download Board Packet PDF</button></div></>}</Section>}
     </>
   );
 }
@@ -381,8 +416,8 @@ export function TransactionIntelligenceWorkspace() {
   return (
     <div className="ti-workspace">
       <header className="ti-banner">
-        <div><span>In Development · Review Workspace</span><h1>Luna1 Transaction Intelligence</h1></div>
-        <p>Import, organize, classify, reconcile, and export transaction records through structured accounting controls.</p>
+        <div><span>In Development · Review Workspace</span><h1>Luna1 Accounting &amp; Transaction Intelligence</h1></div>
+        <p>Upload, organize, reconcile, analyze, and export financial transaction data through structured accounting controls.</p>
       </header>
       <div className="ti-review-banner">Clean messy books, organize client requests, and prepare finance review files. Tools are for review only and do not approve, post, or modify accounting records.</div>
       <Alert kind="warning">PDF extraction is best-effort and may require manual review. This workspace prepares review files only and does not replace accounting approval.</Alert>

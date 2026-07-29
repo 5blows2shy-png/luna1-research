@@ -37,7 +37,7 @@ export function Footer() {
           <span className="eyebrow">Process and profile</span>
           <p>
             <Link href="/transaction-intelligence">
-              Transaction Intelligence
+              Accounting Intelligence
             </Link>
             <Link href="/analyst-journal">Analyst Journal</Link>
             <Link href="/development-log">Development Log</Link>

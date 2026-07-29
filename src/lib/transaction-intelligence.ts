@@ -254,6 +254,243 @@ export function workbookXml(sheets: Record<string, TransactionRow[]>) {
   return `<?xml version="1.0"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">${worksheets}</Workbook>`;
 }
 
+export type PdfReportSection = {
+  title: string;
+  rows: TransactionRow[];
+  columns?: string[];
+};
+
+const pdfText = (value: unknown) =>
+  String(value ?? "")
+    .replaceAll(/[^\x20-\x7E]/g, " ")
+    .replaceAll(/\s+/g, " ")
+    .trim();
+
+export async function buildPdfReport({
+  title,
+  subtitle,
+  sections,
+}: {
+  title: string;
+  subtitle?: string;
+  sections: PdfReportSection[];
+}) {
+  const { PDFDocument, StandardFonts, rgb } = await import("pdf-lib");
+  const document = await PDFDocument.create();
+  const regular = await document.embedFont(StandardFonts.Helvetica);
+  const bold = await document.embedFont(StandardFonts.HelveticaBold);
+  const pageWidth = 792;
+  const pageHeight = 612;
+  const margin = 36;
+  const contentWidth = pageWidth - margin * 2;
+  const colors = {
+    ink: rgb(0.09, 0.12, 0.17),
+    muted: rgb(0.38, 0.43, 0.5),
+    line: rgb(0.78, 0.81, 0.85),
+    paper: rgb(1, 1, 1),
+    accent: rgb(0.84, 0.63, 0.2),
+    header: rgb(0.055, 0.075, 0.11),
+    headerText: rgb(0.94, 0.96, 0.98),
+    rowAlt: rgb(0.965, 0.972, 0.98),
+  };
+  let page = document.addPage([pageWidth, pageHeight]);
+  let y = pageHeight - 92;
+
+  const drawFrame = () => {
+    page.drawRectangle({
+      x: 0,
+      y: pageHeight - 64,
+      width: pageWidth,
+      height: 64,
+      color: colors.header,
+    });
+    page.drawText("LUNA1 ACCOUNTING & TRANSACTION INTELLIGENCE", {
+      x: margin,
+      y: pageHeight - 34,
+      size: 10,
+      font: bold,
+      color: colors.accent,
+    });
+    page.drawText("IN DEVELOPMENT - REVIEW WORKSPACE", {
+      x: pageWidth - margin - 193,
+      y: pageHeight - 34,
+      size: 8,
+      font: bold,
+      color: colors.headerText,
+    });
+    page.drawLine({
+      start: { x: margin, y: 25 },
+      end: { x: pageWidth - margin, y: 25 },
+      thickness: 0.5,
+      color: colors.line,
+    });
+    page.drawText(
+      "For accounting review only. This report does not approve or post accounting records.",
+      { x: margin, y: 12, size: 7, font: regular, color: colors.muted },
+    );
+  };
+
+  const nextPage = () => {
+    page = document.addPage([pageWidth, pageHeight]);
+    drawFrame();
+    y = pageHeight - 92;
+  };
+
+  const clipped = (value: unknown, width: number, size = 7.5) => {
+    const text = pdfText(value);
+    if (regular.widthOfTextAtSize(text, size) <= width) return text;
+    let output = text;
+    while (
+      output.length > 1 &&
+      regular.widthOfTextAtSize(`${output}...`, size) > width
+    )
+      output = output.slice(0, -1);
+    return `${output}...`;
+  };
+
+  const drawTableHeader = (columns: string[], widths: number[]) => {
+    page.drawRectangle({
+      x: margin,
+      y: y - 18,
+      width: contentWidth,
+      height: 18,
+      color: colors.header,
+    });
+    let x = margin;
+    columns.forEach((column, index) => {
+      page.drawText(clipped(column.replaceAll("_", " ").toUpperCase(), widths[index] - 8, 6.5), {
+        x: x + 4,
+        y: y - 12,
+        size: 6.5,
+        font: bold,
+        color: colors.headerText,
+      });
+      x += widths[index];
+    });
+    y -= 18;
+  };
+
+  drawFrame();
+  page.drawText(pdfText(title), {
+    x: margin,
+    y,
+    size: 20,
+    font: bold,
+    color: colors.ink,
+  });
+  y -= 24;
+  if (subtitle) {
+    page.drawText(clipped(subtitle, contentWidth, 9), {
+      x: margin,
+      y,
+      size: 9,
+      font: regular,
+      color: colors.muted,
+    });
+    y -= 24;
+  }
+
+  for (const section of sections) {
+    if (y < 90) nextPage();
+    page.drawText(pdfText(section.title), {
+      x: margin,
+      y,
+      size: 12,
+      font: bold,
+      color: colors.ink,
+    });
+    y -= 17;
+    if (!section.rows.length) {
+      page.drawText("No items in this section.", {
+        x: margin,
+        y,
+        size: 8,
+        font: regular,
+        color: colors.muted,
+      });
+      y -= 22;
+      continue;
+    }
+    const columns =
+      section.columns?.filter((column) =>
+        section.rows.some((row) => Object.hasOwn(row, column)),
+      ) ?? [...new Set(section.rows.flatMap((row) => Object.keys(row)))].slice(0, 7);
+    const width = contentWidth / Math.max(columns.length, 1);
+    const widths = columns.map(() => width);
+    drawTableHeader(columns, widths);
+    section.rows.forEach((row, rowIndex) => {
+      if (y < 52) {
+        nextPage();
+        page.drawText(pdfText(section.title), {
+          x: margin,
+          y,
+          size: 10,
+          font: bold,
+          color: colors.ink,
+        });
+        y -= 15;
+        drawTableHeader(columns, widths);
+      }
+      if (rowIndex % 2 === 1)
+        page.drawRectangle({
+          x: margin,
+          y: y - 19,
+          width: contentWidth,
+          height: 19,
+          color: colors.rowAlt,
+        });
+      let x = margin;
+      columns.forEach((column, index) => {
+        page.drawText(clipped(row[column], widths[index] - 8), {
+          x: x + 4,
+          y: y - 13,
+          size: 7.5,
+          font: regular,
+          color: colors.ink,
+        });
+        x += widths[index];
+      });
+      page.drawLine({
+        start: { x: margin, y: y - 19 },
+        end: { x: pageWidth - margin, y: y - 19 },
+        thickness: 0.35,
+        color: colors.line,
+      });
+      y -= 19;
+    });
+    y -= 18;
+  }
+
+  const pages = document.getPages();
+  pages.forEach((reportPage, index) => {
+    reportPage.drawText(`Page ${index + 1} of ${pages.length}`, {
+      x: pageWidth - margin - 50,
+      y: 12,
+      size: 7,
+      font: regular,
+      color: colors.muted,
+    });
+  });
+  document.setTitle(pdfText(title));
+  document.setAuthor("Luna1 Research");
+  document.setSubject("Accounting and Transaction Intelligence review report");
+  return document.save();
+}
+
+export async function downloadPdfReport(
+  name: string,
+  report: Parameters<typeof buildPdfReport>[0],
+) {
+  const bytes = await buildPdfReport(report);
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(
+    new Blob([bytes as BlobPart], { type: "application/pdf" }),
+  );
+  link.download = name;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
 export function downloadFile(name: string, content: string, type = "text/csv") {
   const link = document.createElement("a");
   link.href = URL.createObjectURL(new Blob([content], { type }));

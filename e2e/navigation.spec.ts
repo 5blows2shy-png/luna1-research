@@ -1,6 +1,7 @@
 import { test, expect, type Locator } from "@playwright/test";
 import * as XLSX from "@e965/xlsx";
-import { readFileSync } from "node:fs";
+import { mkdirSync, readFileSync } from "node:fs";
+import { PDFDocument } from "pdf-lib";
 
 async function activate(locator: Locator, projectName: string) {
   if (projectName === "mobile") {
@@ -147,7 +148,7 @@ test("desktop and mobile navigation expose only the permanent product scope", as
     "Home",
     "Equity Research",
     "Valuation Lab",
-    "Transaction Intelligence",
+    "Accounting Intelligence",
     "Portfolio Lab",
     "Analyst Journal",
     "Recruiter View",
@@ -224,11 +225,11 @@ test("research note and development log filters work", async ({ page }) => {
 
 test("Transaction Intelligence preview is promoted without overstating readiness", async ({
   page,
-}) => {
+}, testInfo) => {
   await page.goto("/development-log");
   const entry = page.locator("article").filter({
     has: page.getByRole("heading", {
-      name: "Integrated Transaction Intelligence Preview",
+      name: "Integrated Accounting & Transaction Intelligence Preview",
     }),
   });
 
@@ -241,14 +242,14 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   await expect(entry.locator(".development-preview li")).toHaveCount(9);
   await expect(
     entry.getByRole("link", {
-      name: "View Transaction Intelligence Preview",
+      name: "View Accounting Intelligence Preview",
     }),
   ).toHaveAttribute("href", "/transaction-intelligence");
 
   await page.goto("/transaction-intelligence");
   await expect(
     page.getByRole("heading", {
-      name: "Luna1 Transaction Intelligence",
+      name: "Luna1 Accounting & Transaction Intelligence",
       level: 1,
     }),
   ).toBeVisible();
@@ -308,6 +309,17 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   await expect(
     page.getByRole("heading", { name: "Flagged Transactions" }),
   ).toBeVisible();
+  const pdfDownloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Download PDF Review" }).click();
+  const pdfDownload = await pdfDownloadPromise;
+  expect(pdfDownload.suggestedFilename()).toBe("qbo_cleanup_review.pdf");
+  mkdirSync("tmp/pdfs", { recursive: true });
+  const pdfPath = `tmp/pdfs/qbo_cleanup_review-${testInfo.project.name}.pdf`;
+  await pdfDownload.saveAs(pdfPath);
+  const pdfBytes = readFileSync(pdfPath);
+  expect(pdfBytes.subarray(0, 5).toString()).toBe("%PDF-");
+  const pdfReport = await PDFDocument.load(pdfBytes);
+  expect(pdfReport.getPageCount()).toBeGreaterThan(0);
 
   await page
     .getByRole("button", { name: "Bank-to-QuickBooks Reconciliation" })

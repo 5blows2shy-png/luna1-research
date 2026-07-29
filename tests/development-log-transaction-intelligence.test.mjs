@@ -13,8 +13,9 @@ test("Transaction Intelligence preview appears once in the centralized log", () 
     1,
   );
   assert.equal(
-    dataSource.match(/title: "Integrated Transaction Intelligence Preview"/g)
-      ?.length,
+    dataSource.match(
+      /title: "Integrated Accounting & Transaction Intelligence Preview"/g,
+    )?.length,
     1,
   );
   assert.match(dataSource, /date: "2026-07-24"/);
@@ -70,7 +71,7 @@ test("preview capabilities remain visibly unfinished and link to the promoted pa
 
   assert.match(dataSource, /route: "\/transaction-intelligence"/);
   assert.ok(fs.existsSync("src/app/transaction-intelligence/page.tsx"));
-  assert.match(componentSource, /View Transaction Intelligence Preview/);
+  assert.match(componentSource, /View Accounting Intelligence Preview/);
 });
 
 test("public entry preserves project-origin privacy and educational scope", () => {

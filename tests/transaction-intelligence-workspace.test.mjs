@@ -40,6 +40,8 @@ test("transaction workflow keeps sample processing, review, and exports", () => 
     "reconcile",
     "suggestJournalEntry",
     "workbookXml",
+    "buildPdfReport",
+    "downloadPdfReport",
     "sampleTransactions",
   ])
     assert.ok(logic.includes(capability), capability);
@@ -48,9 +50,12 @@ test("transaction workflow keeps sample processing, review, and exports", () => 
     "Use sample data",
     "Use paired sample data",
     "Download Excel Review File",
+    "Download PDF Review",
     "Download Reconciliation Workbook",
+    "Download Reconciliation PDF",
     "Suggest Draft Journal Entry",
     "Download Monthly Close Board Packet",
+    "Download Board Packet PDF",
   ])
     assert.ok(component.includes(control), control);
 });
@@ -97,6 +102,16 @@ test("upload control accepts every supported transaction file format", () => {
 test("PDF imports configure the bundled PDF.js worker", () => {
   assert.match(component, /GlobalWorkerOptions\.workerSrc/);
   assert.match(component, /pdf\.worker\.min\.mjs/);
+});
+
+test("PDF exports preserve review-only labeling and page furniture", () => {
+  for (const marker of [
+    "LUNA1 ACCOUNTING & TRANSACTION INTELLIGENCE",
+    "IN DEVELOPMENT - REVIEW WORKSPACE",
+    "For accounting review only",
+    "Page ${index + 1} of ${pages.length}",
+  ])
+    assert.ok(logic.includes(marker), marker);
 });
 
 test("workspace remains review-first and hides the internal legacy name", () => {

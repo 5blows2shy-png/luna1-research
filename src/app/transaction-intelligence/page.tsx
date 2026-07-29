@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { TransactionIntelligenceWorkspace } from "@/components/transaction-intelligence-workspace";
 
 export const metadata: Metadata = {
-  title: "Transaction Intelligence",
+  title: "Luna1 Accounting & Transaction Intelligence",
   description:
-    "A financial-data review workspace for importing, cleaning, classifying, reconciling, reviewing, and exporting transaction records.",
+    "Upload, organize, reconcile, analyze, and export financial transaction data through structured accounting controls.",
 };
 
 export default function TransactionIntelligencePage() {
