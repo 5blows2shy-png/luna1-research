@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, type KeyboardEvent } from "react";
 import { MistakeJournal } from "@/components/mistake-journal";
+import { PortfolioMarketBoard } from "@/components/portfolio-market-board";
 import { ResearchCoverageGrid } from "@/components/research/research-coverage-grid";
 import { PageHeader, SectionHeading } from "@/components/site";
 import { watchlist } from "@/lib/watchlist-data";
@@ -389,7 +390,9 @@ export default function Portfolios() {
         kicker="Portfolio Lab"
         title="Conviction made accountable."
         description="Positions and decision reviews are organized around the initial thesis, valuation work, position role, explicit risk, exit criteria, current thesis status, and what changed."
-      />
+      >
+        <PortfolioMarketBoard />
+      </PageHeader>
       <section>
         <div
           className="tabs portfolio-tabs"

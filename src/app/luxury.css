@@ -1537,3 +1537,6 @@ main:has(.ti-workspace) {
     flex-direction: column;
   }
 }
+.page-header.page-header-with-aside{grid-template-columns:minmax(0,1fr) minmax(460px,560px)}
+.page-header.page-header-with-aside>.page-header-rule{grid-column:1/-1}
+@media(max-width:1000px){.page-header.page-header-with-aside{grid-template-columns:1fr}.page-header.page-header-with-aside>.page-header-rule{grid-column:auto}}

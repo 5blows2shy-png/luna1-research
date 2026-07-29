@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { navigationItems } from "@/lib/data";
 
 type ColorTheme = "dark" | "light";
@@ -284,19 +284,22 @@ export function PageHeader({
   kicker,
   title,
   description,
+  children,
 }: {
   kicker: string;
   title: string;
   description: string;
+  children?: ReactNode;
 }) {
   return (
-    <section className="page-header">
+    <section className={`page-header${children ? " page-header-with-aside" : ""}`}>
       <div className="page-header-rule" />
       <div>
         <span className="eyebrow">{kicker}</span>
         <h1>{title}</h1>
         <p>{description}</p>
       </div>
+      {children}
     </section>
   );
 }
