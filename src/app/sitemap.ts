@@ -4,6 +4,7 @@ import { companyResearch, investmentThemes } from "@/lib/research-content";
 import { researchCompanies } from "@/data/research/research-companies";
 const routes = [
   "",
+  "/analyst-journal",
   "/about",
   "/brand",
   "/certifications",

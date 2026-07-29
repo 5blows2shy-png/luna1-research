@@ -13,6 +13,10 @@ import {
 const classificationOptions = [
   "All",
   "Failed Thesis",
+  "Valuation",
+  "Behavior",
+  "Timing",
+  "Incomplete Research",
   "Early Exit",
   "Poor Entry",
   "Position Sizing",
@@ -117,7 +121,7 @@ function ReviewDrawer({ entry, onClose }: { entry: MistakeJournalEntry; onClose:
           <article><span>03</span><div><h3>What Mistakes Did I Make?</h3><ReviewList items={entry.mistakes}/></div></article>
           <article><span>04</span><div><h3>What Did I Learn?</h3><ReviewList items={entry.lessons}/></div></article>
           <article><span>05</span><div><h3>What Opportunities Did I Miss?</h3><ReviewList items={entry.missedOpportunities}/></div></article>
-          <article><span>06</span><div><h3>Process Changes</h3><ReviewList items={entry.processChanges}/></div></article>
+          <article><span>06</span><div><h3>What Changed Going Forward</h3><ReviewList items={entry.processChanges}/></div></article>
           <article><span>07</span><div><h3>Final Assessment</h3><p>{entry.finalAssessment}</p></div></article>
         </div>
 

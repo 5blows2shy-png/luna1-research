@@ -15,20 +15,25 @@ import {
   macroContext,
   researchNotes,
 } from "@/lib/research-content";
+import {
+  primaryCoverage,
+  researchReportStandard,
+  secondaryCoverage,
+} from "@/lib/professional-profile";
 
 export const metadata: Metadata = {
-  title: "Research Hub",
+  title: "Equity Research",
   description:
-    "Structured company research, investment themes, macro context, and working notes from Luna1 Research.",
+    "Institutional-style company research, industry analysis, valuation, risks, catalysts, sources, and ongoing updates from Luna1 Research.",
 };
 
 export default function ResearchPage() {
   return (
     <>
       <PageHeader
-        kicker="Research hub"
+        kicker="Equity Research"
         title="Evidence organized from question to conclusion."
-        description="Company dossiers, industry themes, macro context, and working notes—separated by research status so unfinished work is never presented as complete."
+        description="Institutional-style company dossiers connect the investment thesis, business and industry structure, financial evidence, valuation, risks, catalysts, sources, and subsequent updates."
       />
       <section className="research-hub-intro">
         <ResearchSectionNav />
@@ -45,6 +50,46 @@ export default function ResearchPage() {
             evidence remains clearly labeled until it is verified from primary
             sources.
           </p>
+        </div>
+      </section>
+      <section>
+        <SectionHeading
+          eyebrow="Research architecture"
+          title="A consistent standard across every company"
+          copy="A section appears as complete only when its evidence has been reviewed. Missing financials or source support remain visibly pending."
+        />
+        <div className="research-standard-grid">
+          {researchReportStandard.map((item, index) => (
+            <div key={item}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <b>{item}</b>
+            </div>
+          ))}
+        </div>
+      </section>
+      <section>
+        <SectionHeading
+          eyebrow="Industry specialization"
+          title="Coverage grounded in operating context"
+          copy="Primary coverage emphasizes infrastructure and financial systems where operations, capacity, accounting, and capital allocation intersect."
+        />
+        <div className="coverage-specialization">
+          <div>
+            <span className="eyebrow">Primary coverage</span>
+            <ul>
+              {primaryCoverage.map((industry) => (
+                <li key={industry}>{industry}</li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <span className="eyebrow">Secondary coverage</span>
+            <ul>
+              {secondaryCoverage.map((industry) => (
+                <li key={industry}>{industry}</li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
       <section>

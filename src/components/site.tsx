@@ -227,26 +227,30 @@ export function Footer() {
             </span>
           </Link>
           <p>
-            Disciplined public-markets research, portfolio accountability, and
-            transparent decision reviews.
+            A professional financial research platform connecting operational
+            experience, accounting knowledge, and investment analysis.
           </p>
         </div>
         <div>
-          <span className="eyebrow">Research platform</span>
+          <span className="eyebrow">Research and valuation</span>
           <p>
-            <Link href="/portfolio">Portfolio</Link>
+            <Link href="/research">Equity Research</Link>
+            <Link href="/valuation-models">Valuation Lab</Link>
+            <Link href="/portfolio">Portfolio Lab</Link>
             <Link href="/portfolio/mistake-journal">
-              Portfolio Decision Reviews
+              Mistake Journal
             </Link>
-            <Link href="/about">About</Link>
-            <Link href="/development-log">Development Log</Link>
           </p>
         </div>
         <div>
-          <span className="eyebrow">Professional profile</span>
+          <span className="eyebrow">Process and profile</span>
           <p>
+            <Link href="/transaction-intelligence">
+              Transaction Intelligence
+            </Link>
+            <Link href="/analyst-journal">Analyst Journal</Link>
+            <Link href="/development-log">Development Log</Link>
             <Link href="/recruiter">Recruiter View</Link>
-            <Link href="/contact">Contact</Link>
           </p>
         </div>
         <div>

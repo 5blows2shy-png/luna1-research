@@ -4,6 +4,7 @@ import fs from "node:fs";
 
 const routes = [
   "src/app/page.tsx",
+  "src/app/analyst-journal/page.tsx",
   "src/app/transaction-intelligence/page.tsx",
   "src/app/about/page.tsx",
   "src/app/investment-philosophy/page.tsx",
@@ -258,9 +259,9 @@ test("long-term portfolio allocations are complete", () => {
   assert.ok(!source.includes("Average cost"));
 });
 
-test("equity research navigation alias is removed", () => {
+test("equity research uses the canonical research route", () => {
   const data = fs.readFileSync("src/lib/data.ts", "utf8");
-  assert.ok(!data.includes("Equity Research"));
+  assert.match(data, /label: "Equity Research", href: "\/research"/);
   assert.ok(!data.includes("/equity-research"));
   assert.ok(!fs.existsSync("src/app/equity-research"));
 });
@@ -342,8 +343,11 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
   const styles = fs.readFileSync("src/app/luxury.css", "utf8");
   for (const label of [
     "Home",
-    "Portfolio",
-    "About",
+    "Equity Research",
+    "Valuation Lab",
+    "Transaction Intelligence",
+    "Portfolio Lab",
+    "Analyst Journal",
     "Recruiter View",
     "Contact",
     "Development Log",
@@ -353,7 +357,6 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
       `missing navigation item: ${label}`,
     );
   for (const retired of [
-    "Research",
     "Deal Lab",
     "Real Estate",
     "Python Lab",
@@ -364,9 +367,7 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
       `retired top-level navigation remains: ${retired}`,
     );
   assert.ok(fs.existsSync("src/app/research/page.tsx"));
-  assert.ok(
-    !fs.readFileSync("src/app/page.tsx", "utf8").includes("Explore Research"),
-  );
+  assert.ok(fs.existsSync("src/app/analyst-journal/page.tsx"));
   for (const token of [
     "--charcoal:",
     "--graphite:",
@@ -378,6 +379,52 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
     "--font-serif",
   ])
     assert.ok(styles.includes(token), `missing luxury token: ${token}`);
+});
+
+test("recruiter-facing architecture documents analyst process without fabricated precision", () => {
+  const profile = fs.readFileSync(
+    "src/lib/professional-profile.ts",
+    "utf8",
+  );
+  const home = fs.readFileSync("src/app/page.tsx", "utf8");
+  const recruiter = fs.readFileSync("src/app/resume/page.tsx", "utf8");
+  const portfolio = fs.readFileSync(
+    "src/app/portfolios/page.tsx",
+    "utf8",
+  );
+  for (const pillar of [
+    "Equity Research",
+    "Valuation Lab",
+    "Transaction Intelligence",
+    "Portfolio Lab",
+    "Analyst Journal",
+    "Development Log",
+  ])
+    assert.ok(profile.includes(`title: "${pillar}"`), `missing pillar: ${pillar}`);
+  for (const stage of [
+    "Military",
+    "Supply Chain",
+    "Financial Accountability",
+    "Accounting",
+    "Data Center Operations",
+    "Finance",
+    "Investment Research",
+    "Investment & Strategy",
+  ])
+    assert.ok(profile.includes(`stage: "${stage}"`), `missing stage: ${stage}`);
+  assert.match(home, /professionalPositioning/);
+  assert.match(recruiter, /Why hire me\?/);
+  assert.match(recruiter, /Luna1 is a professional research portfolio/);
+  for (const field of [
+    "purchaseDate",
+    "valuation",
+    "positionSize",
+    "thesisStatus",
+    "whatChanged",
+  ])
+    assert.ok(portfolio.includes(field), `missing portfolio field: ${field}`);
+  assert.match(portfolio, /Date pending verification/);
+  assert.match(portfolio, /Not publicly disclosed/);
 });
 
 test("retired expanded sections are absent and Mistake Journal belongs to Portfolio", () => {

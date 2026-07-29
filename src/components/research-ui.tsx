@@ -37,9 +37,10 @@ export function LastUpdated({ date }: { date: string }) {
 export function ResearchSectionNav() {
   return (
     <nav className="research-section-nav" aria-label="Research sections">
-      <Link href="/research">Research Hub</Link>
+      <Link href="/research">Equity Research</Link>
       <Link href="/research/themes">Investment Themes</Link>
       <Link href="/research/notes">Research Notes</Link>
+      <Link href="/analyst-journal">Analyst Journal</Link>
     </nav>
   );
 }

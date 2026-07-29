@@ -1,2 +1,54 @@
 import { PageHeader, SectionHeading } from "@/components/site";
-export default function About(){return <><PageHeader kicker="About Luna1" title="Research built from curiosity, discipline, and lived operations." description="Luna1 is an independent investment research platform created by Shy Lee to understand the businesses, systems, and expectations behind a stock price."/><section className="prose"><SectionHeading eyebrow="The perspective" title="A practitioner’s lens on public markets."/><p className="lead">My path to investing has moved through military logistics, financial management, nonprofit accounting, and mission-critical data center operations. Each role reinforced the same idea: outcomes become understandable when you study the systems producing them.</p><p>Today, I study finance at SDSU’s Fowler College of Business and conduct fundamental equity research with particular interest in AI infrastructure, data centers, portfolio strategy, investment management, financial planning, and business analysis.</p></section><section><SectionHeading eyebrow="Experience in context" title="Different arenas. One analytical habit."/><div className="category-grid"><div className="category-card"><span>01</span><h3>U.S. Army</h3><p>Supply and financial management experience built a foundation in stewardship and process.</p></div><div className="category-card"><span>02</span><h3>Mission-critical operations</h3><p>Data center work made uptime, capacity, and infrastructure constraints tangible.</p></div><div className="category-card"><span>03</span><h3>Finance & accounting</h3><p>Reconciliation and nonprofit finance sharpened attention to evidence and controls.</p></div><div className="category-card"><span>04</span><h3>Equity research</h3><p>Business analysis connects operating reality to expectations, valuation, and price structure.</p></div></div></section></>}
+import {
+  careerProgression,
+  professionalPositioning,
+} from "@/lib/professional-profile";
+
+export default function About() {
+  return (
+    <>
+      <PageHeader
+        kicker="About Luna1"
+        title="Research shaped by accountable operations."
+        description="Luna1 is Shy Lee’s professional financial research platform: a record of analytical thinking across public companies, valuation, accounting controls, portfolio decisions, and continuous improvement."
+      />
+      <section className="prose">
+        <SectionHeading
+          eyebrow="The perspective"
+          title="A practitioner’s lens on long-term value"
+        />
+        <p className="lead">{professionalPositioning}</p>
+        <p>
+          The path to investment research moved through military logistics and
+          financial accountability, reconciliation accounting, mission-critical
+          data center operations, finance, and formal equity-research
+          coursework. Each step added context for how organizations allocate
+          resources, manage risk, produce financial results, and create value.
+        </p>
+        <p>
+          Luna1 does not represent a startup or commercial financial product. It
+          is a professional portfolio of research methods, documented decisions,
+          and developing analytical work.
+        </p>
+      </section>
+      <section>
+        <SectionHeading
+          eyebrow="Experience in context"
+          title="One progression. Eight layers of understanding."
+          copy="The sequence explains what each stage contributed without expanding the responsibilities beyond the documented experience."
+        />
+        <ol className="career-progression" aria-label="Career progression">
+          {careerProgression.map((item, index) => (
+            <li key={item.stage}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <div>
+                <h3>{item.stage}</h3>
+                <p>{item.contribution}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+    </>
+  );
+}

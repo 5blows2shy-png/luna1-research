@@ -372,4 +372,29 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     route: "/transaction-intelligence",
     visibility: "Public",
   },
+  {
+    id: "recruiter-analyst-positioning",
+    date: "2026-07-28",
+    phase: "Recruiter Portfolio Refinement",
+    category: "Strategy",
+    title: "Organized Luna1 around analyst evidence",
+    summary:
+      "Reframed the public information architecture around Equity Research, Valuation, Transaction Intelligence, Portfolio Process, the Analyst Journal, and the Development Log.",
+    reason:
+      "Recruiters and finance professionals need to see how operating experience, accounting knowledge, financial reasoning, investment decisions, and continuous improvement connect—not only a collection of finished projects.",
+    lessons: [
+      "A recruiter portfolio is stronger when every section demonstrates a part of the analytical process.",
+      "Transparent placeholders are more credible than unsupported financial precision.",
+      "Career progression should explain how judgment developed without exaggerating responsibility.",
+    ],
+    skills: [
+      "Information architecture",
+      "Financial communication",
+      "Recruiter-focused positioning",
+      "Content governance",
+    ],
+    impact:
+      "Makes the path from military accountability and infrastructure operations to accounting, finance, and investment research easier to evaluate while preserving the underlying work.",
+    status: "Completed",
+  },
 ];

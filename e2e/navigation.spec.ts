@@ -15,6 +15,7 @@ test("primary pages load without horizontal overflow", async ({ page }) => {
 
   for (const route of [
     "/",
+    "/analyst-journal",
     "/transaction-intelligence",
     "/research",
     "/development-log",
@@ -144,9 +145,11 @@ test("desktop and mobile navigation expose only the permanent product scope", as
   });
   for (const label of [
     "Home",
-    "Portfolio",
+    "Equity Research",
+    "Valuation Lab",
     "Transaction Intelligence",
-    "About",
+    "Portfolio Lab",
+    "Analyst Journal",
     "Recruiter View",
     "Contact",
     "Development Log",
@@ -155,7 +158,6 @@ test("desktop and mobile navigation expose only the permanent product scope", as
       navigation.getByRole("link", { name: new RegExp(`${label}$`) }),
     ).toBeVisible();
   for (const retired of [
-    "Research",
     "Deal Lab",
     "Python Lab",
     "Real Estate",
@@ -165,11 +167,11 @@ test("desktop and mobile navigation expose only the permanent product scope", as
       navigation.getByRole("link", { name: retired, exact: true }),
     ).toHaveCount(0);
   await expect(
-    page.getByRole("link", { name: "Explore Research" }),
-  ).toHaveCount(0);
+    page.locator('a.button.primary[href="/research"]'),
+  ).toBeVisible();
 });
 
-test("archived research remains available without public navigation", async ({
+test("equity research is available from the public navigation", async ({
   page,
 }) => {
   await page.goto("/research");
