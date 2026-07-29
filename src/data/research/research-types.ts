@@ -3,14 +3,35 @@ export type ResearchStatus =
   | "Initial Research"
   | "Monitoring"
   | "Model in Progress"
-  | "Updated After Earnings";
+  | "Updated After Earnings"
+  | "Watchlist"
+  | "Insufficient Evidence";
 
 export type ThesisStatus =
   | "Bullish"
   | "Constructive"
   | "Neutral"
   | "Watch"
-  | "Under Review";
+  | "Under Review"
+  | "Positive"
+  | "Cautious";
+
+export type EvidenceLabel =
+  | "Reported"
+  | "Calculated"
+  | "Estimated"
+  | "Forecast"
+  | "Scenario Assumption";
+
+export type ConfidenceLevel = "High" | "Moderate" | "Low";
+
+export type CompletenessStatus =
+  | "Complete"
+  | "Partial"
+  | "Missing"
+  | "Not Disclosed"
+  | "Not Applicable"
+  | "Requires Verification";
 
 export type DocumentStatus = "available" | "in-progress";
 export type ResearchKind =
@@ -123,6 +144,10 @@ export type ResearchNote = {
 
 export type ResearchSource = {
   label: string;
+  publisher?: string;
+  publicationDate?: string;
+  reportingPeriod?: string;
+  relevantSection?: string;
   type:
     | "SEC filing"
     | "Annual report"
@@ -134,6 +159,93 @@ export type ResearchSource = {
     | "Industry report";
   href: string;
   accessedDate: string | null;
+};
+
+export type OperatingComponent = {
+  name: string;
+  historicalEvidence: string;
+  reportedMetric: string;
+  unit: string;
+  sourceUrl: string | null;
+  revenueRelationship: string;
+  marginRelationship: string;
+  cashFlowRelationship: string;
+  uncertainty: string;
+  interpretation: string;
+  evidenceLabel: EvidenceLabel;
+};
+
+export type EstimateRecord = {
+  name: string;
+  value: string;
+  calculationMethod: string;
+  sourceInputs: string;
+  reportingPeriod: string;
+  confidence: ConfidenceLevel;
+  limitations: string;
+  managementGuidance: string;
+  evidenceLabel: "Estimated" | "Calculated";
+};
+
+export type ForecastScenario = {
+  period: string;
+  metric: string;
+  baseCase: string;
+  bullCase: string;
+  bearCase: string;
+  operatingDriverBuild: string;
+  managementGuidanceDifference: string;
+  mainSensitivity: string;
+  principalRisk: string;
+  sourceUrl: string | null;
+};
+
+export type ForecastAssumption = {
+  assumption: string;
+  historicalBasis: string;
+  managementEvidence: string;
+  interpretation: string;
+  baseCase: string;
+  bullCase: string;
+  bearCase: string;
+  sourceUrl: string | null;
+  lastUpdated: string;
+};
+
+export type ValuationFramework = {
+  method: string;
+  rationale: string;
+  valuationDate: string;
+  sharePriceDate: string;
+  shareCount: string;
+  netDebtOrCash: string;
+  forecastPeriod: string;
+  discountRate: string;
+  terminalAssumption: string;
+  scenarioRange: string;
+  majorSensitivities: string;
+  calculationSource: string;
+  limitations: string;
+};
+
+export type ThesisMonitoring = {
+  coreThesis: string;
+  supportingEvidence: string;
+  challengingEvidence: string;
+  keyQuarterlyMetric: string;
+  keyAnnualMetric: string;
+  primaryValuationDriver: string;
+  primaryDownsideRisk: string;
+  upcomingCatalyst: string;
+  nextEarningsDate: string;
+  status: "Strengthening" | "Stable" | "Weakening" | "Broken" | "Under Review";
+  lastReviewed: string;
+};
+
+export type CompletenessRecord = {
+  section: string;
+  status: CompletenessStatus;
+  note: string;
 };
 
 export type ResearchDocument = {
@@ -170,6 +282,13 @@ export type CompanyResearchCoverage = {
   segments: SegmentRecord[];
   historicalFinancials: HistoricalFinancialRecord[];
   forecasts: ForecastRecord[];
+  operatingComponents: OperatingComponent[];
+  estimates: EstimateRecord[];
+  forecastScenarios: ForecastScenario[];
+  forecastAssumptions: ForecastAssumption[];
+  valuationFramework: ValuationFramework;
+  thesisMonitoring: ThesisMonitoring;
+  completeness: CompletenessRecord[];
   valuationMethods: string[];
   valuationFocus: string[];
   comparableCompanies: ComparableCompany[];

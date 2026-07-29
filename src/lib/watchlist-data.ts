@@ -88,17 +88,6 @@ export const watchlist: WatchlistItem[] = [
     risk: "Premium valuation, intense competition, integration complexity, and slower billings growth.",
   },
   {
-    ticker: "PDFS",
-    company: "PDF Solutions Inc.",
-    score: 85,
-    researchStatus: "Watchlist",
-    setupStatus: "Monitoring",
-    note: "PDF Solutions is a smaller semiconductor data-and-analytics platform leveraged to manufacturing complexity and yield optimization.",
-    catalyst:
-      "Wider adoption of AI-driven semiconductor manufacturing analytics and data products.",
-    risk: "Smaller scale, customer concentration, dilution, and uneven contract timing.",
-  },
-  {
     ticker: "ANET",
     company: "Arista Networks Inc.",
     score: 95,
@@ -108,39 +97,6 @@ export const watchlist: WatchlistItem[] = [
     catalyst:
       "Accelerating Ethernet-based AI networking and adoption of next-generation high-speed products.",
     risk: "Hyperscaler concentration, competition, premium valuation, and growth deceleration.",
-  },
-  {
-    ticker: "WWD",
-    company: "Woodward Inc.",
-    score: 83,
-    researchStatus: "Watchlist",
-    setupStatus: "Monitoring",
-    note: "Woodward offers differentiated exposure to aerospace and industrial control systems supported by aftermarket and defense demand.",
-    catalyst:
-      "Commercial aerospace production, defense spending, and aftermarket growth.",
-    risk: "Aerospace-cycle disruption, supplier constraints, program execution, and customer concentration.",
-  },
-  {
-    ticker: "AMAT",
-    company: "Applied Materials Inc.",
-    score: 88,
-    researchStatus: "Watchlist",
-    setupStatus: "Monitoring",
-    note: "Applied Materials is a broad semiconductor-equipment leader positioned for advanced logic, memory, packaging, and AI-driven wafer-fab spending.",
-    catalyst:
-      "Semiconductor capital-spending recovery and accelerating advanced-packaging demand.",
-    risk: "China restrictions, cyclical equipment spending, customer concentration, and margin pressure.",
-  },
-  {
-    ticker: "GS",
-    company: "The Goldman Sachs Group Inc.",
-    score: 84,
-    researchStatus: "Watchlist",
-    setupStatus: "Monitoring",
-    note: "Goldman Sachs provides exposure to investment banking, trading, asset management, and a potential recovery in global deal activity.",
-    catalyst:
-      "Stronger M&A, underwriting, trading, and capital-markets volumes.",
-    risk: "Market volatility, regulation, credit exposure, and renewed weakness in transaction activity.",
   },
   {
     ticker: "DLR",

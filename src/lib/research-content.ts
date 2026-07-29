@@ -81,7 +81,7 @@ export const companyResearch: CompanyResearch[] = [
     sector: "Financials",
     industry: "Diversified Banks",
     status: "Watching",
-    lastUpdated: "Date to be confirmed",
+    lastUpdated: "Updated July 28, 2026",
     summary:
       "A diversified Canadian financial institution being studied for franchise durability, capital discipline, and sensitivity to the credit cycle.",
     businessOverview:
@@ -130,7 +130,7 @@ export const companyResearch: CompanyResearch[] = [
     sector: "Information Technology",
     industry: "Electronic Components",
     status: "Watching",
-    lastUpdated: "Date to be confirmed",
+    lastUpdated: "Updated July 28, 2026",
     summary:
       "A materials-science and specialty-glass company being studied as a potential bottleneck beneficiary across optical connectivity and advanced displays.",
     businessOverview:
@@ -179,7 +179,7 @@ export const companyResearch: CompanyResearch[] = [
     sector: "Industrials",
     industry: "Electrical Equipment",
     status: "Watching",
-    lastUpdated: "Date to be confirmed",
+    lastUpdated: "Updated July 28, 2026",
     summary:
       "A distributed-power company being studied for its potential role in serving power-constrained facilities and data-center demand.",
     businessOverview:
@@ -449,7 +449,7 @@ const researchNoteSeeds: Array<
   ],
   [
     "be-project-economics",
-    "BE: questions for project economics",
+    "Questions for Project Economics",
     "Company",
     "BE",
     "AI Data Center Buildout",
@@ -471,16 +471,35 @@ const researchNoteSeeds: Array<
 ];
 
 export const researchNotes: ResearchNote[] = researchNoteSeeds.map(
-  ([slug, title, category, ticker, theme]) => ({
-    slug,
-    title,
-    category: category as ResearchNote["category"],
-    ticker,
-    theme,
-    status: "Draft" as const,
-    date: "Date to be confirmed",
-    summary:
-      "Working note. Evidence, primary sources, and final conclusions are still being developed.",
-    sourceLinks: [],
-  }),
+  ([slug, title, category, ticker, theme]) =>
+    slug === "be-project-economics"
+      ? {
+          slug,
+          title,
+          category: category as ResearchNote["category"],
+          ticker,
+          theme,
+          status: "Published" as const,
+          date: "July 28, 2026",
+          summary:
+            "Active earnings research focused on customer economics, unit economics, contract quality, manufacturing capacity, cash conversion, and margin durability.",
+          sourceLinks: [
+            {
+              label: "Bloom Energy Q1 2026 financial results",
+              href: "https://investor.bloomenergy.com/press-releases/press-release-details/2026/Bloom-Energy-Reports-Record-First-Quarter-2026-Results-and-Raises-Full-Year-2026-Guidance/default.aspx",
+            },
+          ],
+        }
+      : {
+          slug,
+          title,
+          category: category as ResearchNote["category"],
+          ticker,
+          theme,
+          status: "Draft" as const,
+          date: "Date to be confirmed",
+          summary:
+            "Working note. Evidence, primary sources, and final conclusions are still being developed.",
+          sourceLinks: [],
+        },
 );

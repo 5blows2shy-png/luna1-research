@@ -198,6 +198,19 @@ export function CompanyResearchPage({
           <Action link={company.latestFiling} />
           <Action link={company.investorRelations} />
         </div>
+        <div className="research-evidence-legend" aria-label="Data labels">
+          {[
+            "Reported",
+            "Calculated",
+            "Estimated",
+            "Forecast",
+            "Scenario Assumption",
+          ].map((label) => (
+            <span className="research-data-label" key={label}>
+              {label}
+            </span>
+          ))}
+        </div>
       </section>
 
       <ResearchSection
@@ -276,7 +289,7 @@ export function CompanyResearchPage({
         title={
           isEtf
             ? "Map what the fund actually owns."
-            : "Build from operating components."
+            : "Review disclosed business segments."
         }
       >
         <div className="table-wrap research-table-wrap">
@@ -323,10 +336,71 @@ export function CompanyResearchPage({
         </div>
       </ResearchSection>
 
+      <ResearchSection
+        eyebrow="Operating components"
+        title="Build From Operating Components"
+      >
+        <div className="table-wrap research-table-wrap">
+          <table>
+            <caption>
+              Reported operating evidence, economic relationships, and open
+              uncertainties
+            </caption>
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Historical evidence</th>
+                <th>Unit</th>
+                <th>Revenue relationship</th>
+                <th>Margin relationship</th>
+                <th>Cash-flow relationship</th>
+                <th>Key uncertainty</th>
+                <th>Analyst interpretation</th>
+              </tr>
+            </thead>
+            <tbody>
+              {company.operatingComponents.map((record) => (
+                <tr key={record.name}>
+                  <td data-label="Component">
+                    <strong>{record.name}</strong>
+                    <small className="research-data-label">
+                      {record.evidenceLabel}
+                    </small>
+                  </td>
+                  <td data-label="Historical evidence">
+                    {record.sourceUrl ? (
+                      <a href={record.sourceUrl} rel="noreferrer" target="_blank">
+                        {record.historicalEvidence}
+                      </a>
+                    ) : (
+                      record.historicalEvidence
+                    )}
+                  </td>
+                  <td data-label="Unit">{record.unit}</td>
+                  <td data-label="Revenue relationship">
+                    {record.revenueRelationship}
+                  </td>
+                  <td data-label="Margin relationship">
+                    {record.marginRelationship}
+                  </td>
+                  <td data-label="Cash-flow relationship">
+                    {record.cashFlowRelationship}
+                  </td>
+                  <td data-label="Key uncertainty">{record.uncertainty}</td>
+                  <td data-label="Analyst interpretation">
+                    {record.interpretation}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </ResearchSection>
+
       {!isEtf && (
         <ResearchSection
           eyebrow="Historical financials"
-          title="Five years of evidence—not invented precision."
+          title="Five Years of Evidence — Not Invented Precision"
         >
           <div className="table-wrap research-table-wrap">
             <table>
@@ -417,68 +491,154 @@ export function CompanyResearchPage({
 
       {!isEtf && (
         <ResearchSection
-          eyebrow="Forecast model"
-          title="Separate estimates from forecasts."
+          eyebrow="Estimates"
+          title="Current-period calculations are not reported results."
         >
-          <div className="table-wrap research-table-wrap">
-            <table>
-              <caption>
-                Editable forecast framework · no estimates have been entered
-              </caption>
-              <thead>
-                <tr>
-                  <th>Period</th>
-                  <th>Type</th>
-                  <th>Revenue</th>
-                  <th>Growth</th>
-                  <th>Gross margin</th>
-                  <th>Operating margin</th>
-                  <th>EBITDA margin</th>
-                  <th>Tax rate</th>
-                  <th>EPS</th>
-                  <th>Capex</th>
-                  <th>FCF</th>
-                  <th>Share count</th>
-                  <th>Net debt</th>
-                </tr>
-              </thead>
-              <tbody>
-                {company.forecasts.map((record) => (
-                  <tr key={record.period}>
-                    <td data-label="Period">{record.period}</td>
-                    <td data-label="Type">
-                      Luna1 Research {record.periodType}
-                    </td>
-                    <td data-label="Revenue">{value(record.revenue)}</td>
-                    <td data-label="Growth">
-                      {value(record.revenueGrowth, "percent")}
-                    </td>
-                    <td data-label="Gross margin">
-                      {value(record.grossMargin, "percent")}
-                    </td>
-                    <td data-label="Operating margin">
-                      {value(record.operatingMargin, "percent")}
-                    </td>
-                    <td data-label="EBITDA margin">
-                      {value(record.ebitdaMargin, "percent")}
-                    </td>
-                    <td data-label="Tax rate">
-                      {value(record.taxRate, "percent")}
-                    </td>
-                    <td data-label="EPS">{value(record.eps)}</td>
-                    <td data-label="Capex">
-                      {value(record.capitalExpenditures)}
-                    </td>
-                    <td data-label="FCF">{value(record.freeCashFlow)}</td>
-                    <td data-label="Share count">{value(record.shareCount)}</td>
-                    <td data-label="Net debt">{value(record.netDebt)}</td>
+          {company.estimates.length ? (
+            <div className="table-wrap research-table-wrap">
+              <table>
+                <caption>
+                  Values inferred for an incomplete or recently completed period
+                </caption>
+                <thead>
+                  <tr>
+                    <th>Estimate</th>
+                    <th>Value</th>
+                    <th>Method</th>
+                    <th>Source inputs</th>
+                    <th>Period</th>
+                    <th>Confidence</th>
+                    <th>Limitations</th>
+                    <th>Management guidance</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {company.estimates.map((record) => (
+                    <tr key={record.name}>
+                      <td data-label="Estimate">
+                        {record.name}
+                        <small className="research-data-label">
+                          {record.evidenceLabel}
+                        </small>
+                      </td>
+                      <td data-label="Value">{record.value}</td>
+                      <td data-label="Method">{record.calculationMethod}</td>
+                      <td data-label="Source inputs">{record.sourceInputs}</td>
+                      <td data-label="Period">{record.reportingPeriod}</td>
+                      <td data-label="Confidence">{record.confidence}</td>
+                      <td data-label="Limitations">{record.limitations}</td>
+                      <td data-label="Management guidance">
+                        {record.managementGuidance}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <EmptyState>
+              No analyst estimate is published. Reported results and management
+              guidance remain labeled separately in the source record.
+            </EmptyState>
+          )}
         </ResearchSection>
       )}
+
+      <ResearchSection
+        eyebrow="Forecasts"
+        title="Forward expectations begin with operating drivers."
+      >
+        <div className="table-wrap research-table-wrap">
+          <table>
+            <caption>
+              Forward-looking analyst framework · unsupported point forecasts
+              are withheld
+            </caption>
+            <thead>
+              <tr>
+                <th>Period</th>
+                <th>Metric</th>
+                <th>Base case</th>
+                <th>Bull case</th>
+                <th>Bear case</th>
+                <th>Operating-driver build</th>
+                <th>Difference from guidance</th>
+                <th>Main sensitivity</th>
+                <th>Principal risk</th>
+              </tr>
+            </thead>
+            <tbody>
+              {company.forecastScenarios.map((record) => (
+                <tr key={`${record.period}-${record.metric}`}>
+                  <td data-label="Period">{record.period}</td>
+                  <td data-label="Metric">
+                    {record.metric}
+                    <small className="research-data-label">Forecast</small>
+                  </td>
+                  <td data-label="Base case">{record.baseCase}</td>
+                  <td data-label="Bull case">{record.bullCase}</td>
+                  <td data-label="Bear case">{record.bearCase}</td>
+                  <td data-label="Operating-driver build">
+                    {record.operatingDriverBuild}
+                  </td>
+                  <td data-label="Difference from guidance">
+                    {record.managementGuidanceDifference}
+                  </td>
+                  <td data-label="Main sensitivity">
+                    {record.mainSensitivity}
+                  </td>
+                  <td data-label="Principal risk">{record.principalRisk}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="table-wrap research-table-wrap">
+          <table>
+            <caption>Forecast assumption register</caption>
+            <thead>
+              <tr>
+                <th>Assumption</th>
+                <th>Historical basis</th>
+                <th>Management evidence</th>
+                <th>Luna1 interpretation</th>
+                <th>Base</th>
+                <th>Bull</th>
+                <th>Bear</th>
+                <th>Last updated</th>
+              </tr>
+            </thead>
+            <tbody>
+              {company.forecastAssumptions.map((record) => (
+                <tr key={record.assumption}>
+                  <td data-label="Assumption">
+                    {record.sourceUrl ? (
+                      <a href={record.sourceUrl} rel="noreferrer" target="_blank">
+                        {record.assumption}
+                      </a>
+                    ) : (
+                      record.assumption
+                    )}
+                  </td>
+                  <td data-label="Historical basis">
+                    {record.historicalBasis}
+                  </td>
+                  <td data-label="Management evidence">
+                    {record.managementEvidence}
+                  </td>
+                  <td data-label="Luna1 interpretation">
+                    {record.interpretation}
+                  </td>
+                  <td data-label="Base">{record.baseCase}</td>
+                  <td data-label="Bull">{record.bullCase}</td>
+                  <td data-label="Bear">{record.bearCase}</td>
+                  <td data-label="Last updated">{record.lastUpdated}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </ResearchSection>
 
       <ResearchSection
         eyebrow="Valuation"
@@ -522,11 +682,50 @@ export function CompanyResearchPage({
             </article>
           </div>
         )}
+        <div className="table-wrap research-table-wrap">
+          <table>
+            <caption>
+              Valuation framework · market data, reported data, forecasts, and
+              assumptions remain separate
+            </caption>
+            <tbody>
+              {[
+                ["Selected method", company.valuationFramework.method],
+                ["Why it fits", company.valuationFramework.rationale],
+                ["Valuation date", company.valuationFramework.valuationDate],
+                ["Share-price date", company.valuationFramework.sharePriceDate],
+                ["Share count", company.valuationFramework.shareCount],
+                ["Net debt or cash", company.valuationFramework.netDebtOrCash],
+                ["Forecast period", company.valuationFramework.forecastPeriod],
+                ["Discount rate", company.valuationFramework.discountRate],
+                [
+                  "Terminal assumption",
+                  company.valuationFramework.terminalAssumption,
+                ],
+                ["Scenario range", company.valuationFramework.scenarioRange],
+                [
+                  "Major sensitivities",
+                  company.valuationFramework.majorSensitivities,
+                ],
+                [
+                  "Calculation source",
+                  company.valuationFramework.calculationSource,
+                ],
+                ["Limitations", company.valuationFramework.limitations],
+              ].map(([label, detail]) => (
+                <tr key={label}>
+                  <th>{label}</th>
+                  <td data-label={label}>{detail}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </ResearchSection>
 
       <ResearchSection
         eyebrow="Comparable companies"
-        title="Peer evidence requires sourced inputs."
+        title="Comparable evidence remains separate from valuation output."
       >
         <div className="table-wrap research-table-wrap">
           <table>
@@ -584,8 +783,52 @@ export function CompanyResearchPage({
       </ResearchSection>
 
       <ResearchSection
+        eyebrow="Thesis monitoring"
+        title="Evidence that strengthens or challenges the case."
+      >
+        <div className="research-summary-grid">
+          {[
+            ["Core thesis", company.thesisMonitoring.coreThesis],
+            [
+              "Evidence supporting the thesis",
+              company.thesisMonitoring.supportingEvidence,
+            ],
+            [
+              "Evidence challenging the thesis",
+              company.thesisMonitoring.challengingEvidence,
+            ],
+            [
+              "Key quarterly metric",
+              company.thesisMonitoring.keyQuarterlyMetric,
+            ],
+            ["Key annual metric", company.thesisMonitoring.keyAnnualMetric],
+            [
+              "Primary valuation driver",
+              company.thesisMonitoring.primaryValuationDriver,
+            ],
+            [
+              "Primary downside risk",
+              company.thesisMonitoring.primaryDownsideRisk,
+            ],
+            ["Upcoming catalyst", company.thesisMonitoring.upcomingCatalyst],
+            [
+              "Next earnings date",
+              company.thesisMonitoring.nextEarningsDate,
+            ],
+            ["Thesis status", company.thesisMonitoring.status],
+            ["Last reviewed", company.thesisMonitoring.lastReviewed],
+          ].map(([title, detail]) => (
+            <article className="luxury-card" key={title}>
+              <span className="eyebrow">{title}</span>
+              <p>{detail}</p>
+            </article>
+          ))}
+        </div>
+      </ResearchSection>
+
+      <ResearchSection
         eyebrow="Earnings history"
-        title="Quarterly evidence will be added only when verified."
+        title="Verified quarterly evidence."
       >
         <div className="table-wrap research-table-wrap">
           <table>
@@ -616,7 +859,7 @@ export function CompanyResearchPage({
 
       <ResearchSection
         eyebrow="Research notes"
-        title="A dated record of what changes."
+        title="Research changes and open questions."
       >
         <EmptyState>
           No dated notes have been published. Earnings, investor-day, product,
@@ -647,17 +890,87 @@ export function CompanyResearchPage({
         eyebrow="Sources and disclosures"
         title="Evidence before publication."
       >
-        <EmptyState>
-          No source links have been published. SEC filings, annual and quarterly
-          reports, earnings releases, investor presentations, conference calls,
-          investor-relations materials, and industry reports must be added to
-          the coverage record first.
-        </EmptyState>
+        <div className="table-wrap research-table-wrap">
+          <table>
+            <caption>
+              Primary-source register · source publication dates are preserved
+            </caption>
+            <thead>
+              <tr>
+                <th>Document</th>
+                <th>Publisher</th>
+                <th>Publication date</th>
+                <th>Reporting period</th>
+                <th>Type</th>
+                <th>Relevant section</th>
+                <th>Date accessed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {company.sources.map((source) => (
+                <tr key={source.href}>
+                  <td data-label="Document">
+                    <a href={source.href} rel="noreferrer" target="_blank">
+                      {source.label}
+                    </a>
+                  </td>
+                  <td data-label="Publisher">
+                    {source.publisher ?? "Publisher identified by source"}
+                  </td>
+                  <td data-label="Publication date">
+                    {source.publicationDate ?? "See source"}
+                  </td>
+                  <td data-label="Reporting period">
+                    {source.reportingPeriod ?? "See source"}
+                  </td>
+                  <td data-label="Type">{source.type}</td>
+                  <td data-label="Relevant section">
+                    {source.relevantSection ?? "See source"}
+                  </td>
+                  <td data-label="Date accessed">
+                    {source.accessedDate ?? "Not recorded"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         <div className="research-source-note">
           <p>{RESEARCH_SOURCE_NOTE}</p>
           <p>
             <strong>Educational disclosure:</strong> {RESEARCH_DISCLOSURE}
           </p>
+        </div>
+      </ResearchSection>
+
+      <ResearchSection
+        eyebrow="Research completeness"
+        title="What is supported, partial, or still missing."
+      >
+        <div className="table-wrap research-table-wrap">
+          <table>
+            <caption>
+              A heading alone does not qualify a section as complete
+            </caption>
+            <thead>
+              <tr>
+                <th>Section</th>
+                <th>Status</th>
+                <th>Audit note</th>
+              </tr>
+            </thead>
+            <tbody>
+              {company.completeness.map((record) => (
+                <tr key={record.section}>
+                  <td data-label="Section">{record.section}</td>
+                  <td data-label="Status">
+                    <span className="research-data-label">{record.status}</span>
+                  </td>
+                  <td data-label="Audit note">{record.note}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </ResearchSection>
 

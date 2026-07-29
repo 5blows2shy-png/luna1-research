@@ -154,7 +154,7 @@ export default function ResearchPage() {
           <span className="eyebrow">Development record</span>
           <h2>How the platform evolved</h2>
           <p>
-            A dated record of product, research, portfolio, and
+            A chronological record of product, research, portfolio, and
             professional-development decisions.
           </p>
           <EditorialLink href="/development-log">

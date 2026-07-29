@@ -53,18 +53,6 @@ export const research: ResearchReport[] = [
     "Active",
   ],
   [
-    "PDFS",
-    "PDF Solutions",
-    "Semiconductor Software",
-    "Yield analytics",
-    81,
-    "LUNA-A",
-    "Analytics adoption",
-    "Revenue variability",
-    "2026-06-08",
-    "Watchlist",
-  ],
-  [
     "CASY",
     "Casey’s General Stores",
     "Consumer Staples",

@@ -184,11 +184,7 @@ test("watchlist matches the approved research records", () => {
     ["JBL", 87],
     ["RY", 84],
     ["PANW", 86],
-    ["PDFS", 85],
     ["ANET", 95],
-    ["WWD", 83],
-    ["AMAT", 88],
-    ["GS", 84],
   ]) {
     assert.ok(
       new RegExp(`ticker:\\s*\"${ticker}\"`).test(source),
@@ -203,9 +199,11 @@ test("watchlist matches the approved research records", () => {
   for (const field of ["note:", "catalyst:", "risk:"])
     assert.equal(
       source.match(new RegExp(field, "g"))?.length,
-      14,
+      10,
       `each record should include ${field}`,
     );
+  for (const removed of ["AMAT", "WWD", "PDFS", "GS"])
+    assert.ok(!source.includes(`ticker: "${removed}"`));
   for (const ticker of [
     "ROAD",
     "EVR",

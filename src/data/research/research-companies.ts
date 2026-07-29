@@ -6,6 +6,10 @@ import type {
   SegmentRecord,
 } from "./research-types";
 import { DATA_PENDING, RESEARCH_IN_PROGRESS } from "./research-disclosures";
+import {
+  RESEARCH_UPDATED_DATE,
+  researchEvidenceByTicker,
+} from "./research-evidence";
 
 type CoverageSeed = {
   ticker: string;
@@ -25,13 +29,7 @@ type CoverageSeed = {
   specialSection?: CompanyResearchCoverage["specialSection"];
 };
 
-const historicalPeriods = [
-  "Historical Year 1",
-  "Historical Year 2",
-  "Historical Year 3",
-  "Historical Year 4",
-  "Historical Year 5",
-];
+const historicalPeriods = ["FY2021", "FY2022", "FY2023", "FY2024", "FY2025"];
 
 function pendingHistorical(period: string): HistoricalFinancialRecord {
   return {
@@ -78,6 +76,10 @@ function diligenceCards(labels: string[]): ResearchSection[] {
 
 function createCoverage(seed: CoverageSeed): CompanyResearchCoverage {
   const ticker = seed.ticker.toUpperCase();
+  const evidence = researchEvidenceByTicker[ticker];
+  if (!evidence) {
+    throw new Error(`Missing research evidence profile for ${ticker}`);
+  }
   const kind = seed.kind ?? "operating-company";
   const isEtf = kind === "etf";
   const defaultValuation = [
@@ -93,7 +95,7 @@ function createCoverage(seed: CoverageSeed): CompanyResearchCoverage {
     slug: ticker.toLowerCase(),
     companyName: seed.companyName,
     kind,
-    exchange: "Exchange pending verification",
+    exchange: evidence.exchange,
     sector: seed.sector,
     industry: seed.industry,
     description: seed.description,
@@ -101,21 +103,22 @@ function createCoverage(seed: CoverageSeed): CompanyResearchCoverage {
     coreInvestmentQuestion: seed.investmentQuestion,
     primaryMonitoringReason: seed.monitoringReason,
     thesisSummary:
-      "The thesis is under review. A conclusion will not be published until primary-source evidence, valuation assumptions, and risks have been documented.",
+      "Under Review. Primary-source evidence is documented below, while the five-year model and valuation output remain incomplete.",
     keyValuationQuestion: seed.valuationQuestion,
     bullCase:
-      "Illustrative Scenario - assumptions and supporting evidence are pending.",
+      "Scenario Assumption — operating drivers exceed the verified base evidence without requiring materially weaker economics.",
     baseCase:
-      "Illustrative Scenario - assumptions and supporting evidence are pending.",
+      "Scenario Assumption — reported operating drivers develop within management's disclosed framework; no point valuation is published.",
     bearCase:
-      "Illustrative Scenario - assumptions and supporting evidence are pending.",
+      "Scenario Assumption — operating conversion, margins, or cash generation weaken relative to the cited evidence.",
     marketMayBeMissing:
       "Research in progress. No differentiated conclusion has been published.",
     thesisRequirements:
       "Required evidence will be defined after current filings and investor materials are reviewed.",
     thesisInvalidation:
       "Invalidation criteria are pending completion of the initial research record.",
-    businessOverview: diligenceCards(
+    businessOverview: [
+      ...diligenceCards(
       isEtf
         ? [
             "Fund objective",
@@ -137,7 +140,12 @@ function createCoverage(seed: CoverageSeed): CompanyResearchCoverage {
             "Capital intensity and cyclicality",
             "Industry structure",
           ],
-    ),
+      ),
+      {
+        title: "Latest verified evidence",
+        detail: evidence.latestEvidence,
+      },
+    ],
     revenueDrivers: seed.revenueDrivers,
     segments: seed.segments.map(pendingSegment),
     historicalFinancials: historicalPeriods.map(pendingHistorical),
@@ -163,6 +171,13 @@ function createCoverage(seed: CoverageSeed): CompanyResearchCoverage {
       shareCount: null,
       netDebt: null,
     })),
+    operatingComponents: evidence.operatingComponents,
+    estimates: evidence.estimates,
+    forecastScenarios: evidence.forecastScenarios,
+    forecastAssumptions: evidence.forecastAssumptions,
+    valuationFramework: evidence.valuationFramework,
+    thesisMonitoring: evidence.thesisMonitoring,
+    completeness: evidence.completeness,
     valuationMethods:
       seed.valuationMethods ??
       (isEtf
@@ -220,9 +235,9 @@ function createCoverage(seed: CoverageSeed): CompanyResearchCoverage {
     ]),
     earningsHistory: [],
     researchNotes: [],
-    sources: [],
-    lastUpdated: "Date to be confirmed",
-    researchStatus: "Initial Research",
+    sources: evidence.sources,
+    lastUpdated: RESEARCH_UPDATED_DATE,
+    researchStatus: "Watchlist",
     thesisStatus: "Under Review",
     valuationStatus: "Model in Progress",
     report: {
@@ -241,8 +256,14 @@ function createCoverage(seed: CoverageSeed): CompanyResearchCoverage {
       fileSize: null,
       version: "Draft - not published",
     },
-    latestFiling: { label: "View Latest Filing", href: null },
-    investorRelations: { label: "View Investor Relations", href: null },
+    latestFiling: {
+      label: "View Latest Filing",
+      href: evidence.latestFiling,
+    },
+    investorRelations: {
+      label: "View Investor Relations",
+      href: evidence.investorRelations,
+    },
     specialSection: seed.specialSection,
   };
 }
@@ -440,33 +461,6 @@ const coverageSeeds: CoverageSeed[] = [
     ],
   },
   {
-    ticker: "PDFS",
-    companyName: "PDF Solutions, Inc.",
-    sector: "Information Technology",
-    industry: "Semiconductor Software and Analytics",
-    description:
-      "PDF Solutions provides analytics, software, and services used to improve semiconductor manufacturing performance and yield.",
-    watchlistReason:
-      "The company is being studied for its role in semiconductor manufacturing analytics and the potential mix shift toward recurring software revenue.",
-    investmentQuestion:
-      "Can recurring analytics revenue scale while customer concentration and contract timing remain manageable?",
-    monitoringReason:
-      "Monitor recurring software mix, semiconductor demand, customer concentration, and gross-margin development.",
-    valuationQuestion:
-      "How should recurring software economics be separated from services and project-based revenue?",
-    segments: [
-      "Analytics",
-      "Integrated Yield Ramp",
-      "Characterization Services",
-    ],
-    revenueDrivers: [
-      "Recurring software revenue",
-      "Semiconductor end-market demand",
-      "Customer concentration",
-      "Gross-margin development",
-    ],
-  },
-  {
     ticker: "ANET",
     companyName: "Arista Networks, Inc.",
     sector: "Information Technology",
@@ -492,106 +486,6 @@ const coverageSeeds: CoverageSeed[] = [
       "Enterprise customers",
       "AI networking demand",
       "Product and service margins",
-    ],
-  },
-  {
-    ticker: "WWD",
-    companyName: "Woodward, Inc.",
-    sector: "Industrials",
-    industry: "Aerospace and Industrial Controls",
-    description:
-      "Woodward designs and manufactures control systems and components for aerospace and industrial applications.",
-    watchlistReason:
-      "The company is being studied for commercial aerospace, defense, industrial, and aftermarket exposure.",
-    investmentQuestion:
-      "Can backlog and aftermarket demand support durable organic growth and margin improvement?",
-    monitoringReason:
-      "Monitor backlog conversion, organic growth, segment margins, and aftermarket mix.",
-    valuationQuestion:
-      "What normalized aerospace and industrial earnings profile should anchor valuation?",
-    segments: ["Aerospace", "Industrial"],
-    revenueDrivers: [
-      "Defense exposure",
-      "Commercial aerospace exposure",
-      "Backlog",
-      "Organic growth",
-      "Segment margins",
-      "Aftermarket revenue",
-    ],
-  },
-  {
-    ticker: "AMAT",
-    companyName: "Applied Materials, Inc.",
-    sector: "Information Technology",
-    industry: "Semiconductor Equipment",
-    description:
-      "Applied Materials supplies manufacturing equipment, services, and related technology to semiconductor and display producers.",
-    watchlistReason:
-      "The company is being studied for broad exposure to semiconductor capital intensity, advanced logic, memory, and packaging.",
-    investmentQuestion:
-      "Can process complexity and service revenue support durable returns through equipment cycles?",
-    monitoringReason:
-      "Monitor wafer-fabrication spending, end-market mix, China exposure, installed base, and services.",
-    valuationQuestion:
-      "What normalized cycle assumptions and service mix should anchor cash-flow valuation?",
-    segments: [
-      "Semiconductor Systems",
-      "Applied Global Services",
-      "Display and Adjacent Markets",
-    ],
-    revenueDrivers: [
-      "Wafer-fabrication-equipment demand",
-      "Foundry and logic exposure",
-      "Memory exposure",
-      "China exposure",
-      "Service revenue and installed base",
-    ],
-  },
-  {
-    ticker: "GS",
-    companyName: "The Goldman Sachs Group, Inc.",
-    kind: "investment-bank",
-    sector: "Financials",
-    industry: "Capital Markets",
-    description:
-      "Goldman Sachs provides investment banking, markets, asset management, wealth management, and related financial services.",
-    watchlistReason:
-      "The firm is being studied for capital-markets operating leverage, franchise returns, capital generation, and asset-management economics.",
-    investmentQuestion:
-      "Can the franchise produce attractive through-cycle returns while managing regulatory capital and earnings volatility?",
-    monitoringReason:
-      "Monitor banking backlog, trading, assets under supervision, compensation, ROE, and capital return.",
-    valuationQuestion:
-      "What price-to-book and residual-income valuation is justified by sustainable return on tangible equity?",
-    segments: [
-      "Global Banking and Markets",
-      "Asset and Wealth Management",
-      "Platform Solutions",
-    ],
-    revenueDrivers: [
-      "Investment-banking fees",
-      "Trading revenue",
-      "Assets under supervision",
-      "Net interest income",
-      "Compensation ratio",
-      "Return on equity",
-      "Book value per share",
-    ],
-    valuationMethods: [
-      "Price-to-book",
-      "Price-to-tangible-book",
-      "Price-to-earnings",
-      "Residual income",
-    ],
-    valuationFocus: [
-      "Return on equity",
-      "Return on tangible equity",
-      "Assets under supervision",
-      "Investment-banking backlog",
-      "Trading revenue",
-      "Compensation ratio",
-      "Capital return",
-      "Stress-test and regulatory capital considerations",
     ],
   },
   {
@@ -699,10 +593,7 @@ export const requestedResearchTickers = [
   "ALAB",
   "RY",
   "PANW",
-  "PDFS",
   "ANET",
-  "WWD",
-  "AMAT",
-  "GS",
   "DLR",
+  "STRL",
 ] as const;
