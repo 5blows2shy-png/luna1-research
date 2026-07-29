@@ -357,7 +357,7 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
   await expect(page.getByRole("tab", { name: "Performance" })).toHaveCount(0);
   await expect(
     page.getByRole("link", { name: "View Full Research" }),
-  ).toHaveCount(26);
+  ).toHaveCount(18);
   await expect(page.getByText("Digital Realty Trust Inc.")).toBeVisible();
   await expect(page.getByText("Data pending", { exact: true })).toBeVisible();
 });
@@ -410,8 +410,8 @@ test("Watchlist research pages expose structured, non-fabricated coverage", asyn
   ).toBeVisible();
   for (const heading of [
     "Scenarios before conviction.",
-    "Build from operating components.",
-    "Five years of evidence—not invented precision.",
+    "Build From Operating Components",
+    "Five Years of Evidence — Not Invented Precision",
     "Make every assumption visible.",
     "Branded documents—published only when complete.",
   ])
@@ -440,7 +440,11 @@ test("Watchlist research pages expose structured, non-fabricated coverage", asyn
       name: "Understand the portfolio before the theme.",
     }),
   ).toBeVisible();
-  await expect(page.getByText("Weighted underlying valuation")).toBeVisible();
+  await expect(
+    page.getByRole("listitem").filter({
+      hasText: /^Weighted underlying valuation$/,
+    }),
+  ).toBeVisible();
 });
 
 test("homepage omits retired overview modules", async ({ page }) => {

@@ -542,6 +542,46 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   font-weight: 600;
   min-width: 170px;
 }
+.research-data-label {
+  display: block;
+  width: fit-content;
+  margin-top: 7px;
+  color: var(--accent-blue);
+  font: 600 8px var(--font-mono);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.research-evidence-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+.research-evidence-legend .research-data-label {
+  margin-top: 0;
+}
+.research-table-wrap a {
+  color: var(--text-primary);
+  text-decoration-color: color-mix(in srgb, var(--accent-blue) 55%, transparent);
+  text-underline-offset: 3px;
+}
+.research-table-wrap a:hover,
+.research-table-wrap a:focus-visible {
+  color: var(--accent-blue);
+}
+.journal-category-grid article > ul {
+  display: grid;
+  gap: 14px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.journal-category-grid article > ul li {
+  border-top: 1px solid var(--hairline);
+  padding-top: 12px;
+}
+.journal-category-grid article > ul p {
+  margin: 0;
+}
 .valuation-framework-grid,
 .sensitivity-placeholder-grid,
 .document-preview-grid {

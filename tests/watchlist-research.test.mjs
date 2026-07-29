@@ -10,12 +10,9 @@ const requiredTickers = [
   "ALAB",
   "RY",
   "PANW",
-  "PDFS",
   "ANET",
-  "WWD",
-  "AMAT",
-  "GS",
   "DLR",
+  "STRL",
 ];
 const coverageSource = fs.readFileSync(
   "src/data/research/research-companies.ts",
@@ -29,25 +26,22 @@ const pageSource = fs.readFileSync(
 test("every requested Watchlist ticker has a typed research record", () => {
   for (const ticker of requiredTickers)
     assert.match(coverageSource, new RegExp(`ticker: "${ticker}"`));
-  assert.match(
-    coverageSource,
-    /ticker: "STRL"/,
-    "the existing STRL Watchlist record should remain covered",
-  );
   assert.equal(
     new Set(
       [...coverageSource.matchAll(/ticker: "([A-Z]+)"/g)].map(
         (match) => match[1],
       ),
     ).size,
-    13,
+    9,
   );
+  for (const removed of ["AMAT", "WWD", "PDFS", "GS"])
+    assert.doesNotMatch(coverageSource, new RegExp(`ticker: "${removed}"`));
 });
 
-test("research pages use neutral placeholders and block unfinished downloads", () => {
-  assert.match(coverageSource, /researchStatus: "Initial Research"/);
+test("research pages identify incomplete work and block unfinished downloads", () => {
+  assert.match(coverageSource, /researchStatus: "Watchlist"/);
   assert.match(coverageSource, /thesisStatus: "Under Review"/);
-  assert.match(coverageSource, /lastUpdated: "Date to be confirmed"/);
+  assert.match(coverageSource, /lastUpdated: RESEARCH_UPDATED_DATE/);
   assert.match(coverageSource, /status: "in-progress"/);
   assert.match(coverageSource, /url: null/);
   assert.doesNotMatch(coverageSource, /priceTarget|currentPrice|analystRating/);
@@ -55,7 +49,7 @@ test("research pages use neutral placeholders and block unfinished downloads", (
   assert.match(pageSource, /DATA_PENDING/);
 });
 
-test("specialized ETF, bank, investment-bank, and REIT frameworks are present", () => {
+test("specialized ETF, bank, and REIT frameworks are present", () => {
   for (const phrase of [
     "Weighted underlying valuation",
     "Dividend discount model",
@@ -64,7 +58,7 @@ test("specialized ETF, bank, investment-bank, and REIT frameworks are present", 
     "Price/AFFO",
     "Net asset value",
     "Common Equity Tier 1 ratio",
-    "Return on tangible equity",
+    "Return on equity",
   ]) {
     assert.ok(coverageSource.includes(phrase), `missing ${phrase}`);
   }
@@ -83,7 +77,9 @@ test("the reusable page exposes the complete research workflow", () => {
     "Segment analysis",
     "Historical financials",
     "Revenue build",
-    "Forecast model",
+    "Operating components",
+    "Estimates",
+    "Forecasts",
     "Valuation",
     "Comparable companies",
     "Catalysts",
@@ -91,6 +87,7 @@ test("the reusable page exposes the complete research workflow", () => {
     "Earnings history",
     "Research notes",
     "Sources and disclosures",
+    "Research completeness",
   ]) {
     assert.ok(pageSource.includes(label), `missing section ${label}`);
   }
@@ -125,7 +122,48 @@ test("Watchlist links, sitemap entries, and development log are updated", () => 
   const log = fs.readFileSync("src/lib/development-log.ts", "utf8");
   assert.match(portfolio, /View Full Research/);
   assert.match(portfolio, /ResearchCoverageGrid/);
+  assert.ok(
+    portfolio.indexOf("<WatchlistTable") <
+      portfolio.indexOf("<ResearchCoverageGrid"),
+    "Research coverage must appear directly after the Watchlist",
+  );
   assert.match(sitemap, /\/watchlist\/\$\{item\.slug\}/);
   assert.match(log, /Expanded Watchlist into Research Coverage Platform/);
   assert.match(log, /Introduced Industry-Specific Valuation Frameworks/);
+});
+
+test("research language, dates, evidence labels, and Bloom journal are explicit", () => {
+  const evidence = fs.readFileSync(
+    "src/data/research/research-evidence.ts",
+    "utf8",
+  );
+  const journal = fs.readFileSync(
+    "src/lib/bloom-analyst-journal.ts",
+    "utf8",
+  );
+  const allResearchSource = `${coverageSource}\n${pageSource}\n${evidence}`;
+  assert.match(allResearchSource, /Updated July 28, 2026/);
+  assert.doesNotMatch(
+    allResearchSource,
+    /A dated record of what changes\. Quarterly evidence will be added only when verified\./,
+  );
+  assert.doesNotMatch(
+    allResearchSource,
+    /Peer evidence requires sourced inputs\./,
+  );
+  for (const label of [
+    "Reported",
+    "Calculated",
+    "Estimated",
+    "Forecast",
+    "Scenario Assumption",
+  ])
+    assert.ok(
+      `${pageSource}\n${evidence}`.includes(label),
+      `missing evidence label ${label}`,
+    );
+  assert.match(journal, /Questions for Project Economics/);
+  assert.match(journal, /Q2 2026 results pending official verification/);
+  assert.match(journal, /latestVerifiedPeriod: "Q1 2026"/);
+  assert.doesNotMatch(journal, /BE BE/);
 });
