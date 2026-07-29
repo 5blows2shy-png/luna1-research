@@ -1,5 +1,9 @@
 export type MistakeClassification =
   | "Failed Thesis"
+  | "Valuation"
+  | "Behavior"
+  | "Timing"
+  | "Incomplete Research"
   | "Early Exit"
   | "Poor Entry"
   | "Position Sizing"

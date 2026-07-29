@@ -3,6 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { RecruiterActions } from "@/components/recruiter-actions";
 import { research } from "@/lib/data";
+import {
+  careerProgression,
+  coreStrengths,
+  platformPillars,
+  professionalPositioning,
+} from "@/lib/professional-profile";
 
 export const metadata: Metadata = {
   title: "Resume",
@@ -69,25 +75,69 @@ const models = [
   ],
 ] as const;
 
-export default function Resume() {
+type ResumeContentProps = {
+  portraitSrc?: string;
+  recruiterView?: boolean;
+};
+
+export function ResumeContent({
+  portraitSrc = "/shyheim-lee-founder.jpeg",
+  recruiterView = false,
+}: ResumeContentProps) {
+  const sectionIndex = recruiterView
+    ? [
+        "Summary",
+        "Progression",
+        "Strengths",
+        "Projects",
+        "Experience",
+        "Education",
+        "Research",
+        "Models",
+        "Transaction",
+        "Portfolio",
+        "Journal",
+        "Contact",
+      ]
+    : [
+        "Summary",
+        "Experience",
+        "Education",
+        "Certifications",
+        "Research",
+        "Models",
+        "Philosophy",
+        "Framework",
+        "Portfolio",
+        "Journal",
+        "Timeline",
+        "Contact",
+      ];
+
   return (
     <>
       <section className="recruiter-hero">
         <div>
-          <span className="eyebrow">Resume · Shy Lee</span>
+          <span className="eyebrow">
+            {recruiterView ? "Recruiter View · Why hire me?" : "Resume · Shy Lee"}
+          </span>
           <p className="recruiter-status">
             <i /> Open to finance, investment research, and analyst
             opportunities
           </p>
           <h1>
-            Finance discipline.
+            {recruiterView ? "An analyst’s process." : "Finance discipline."}
             <br />
-            <em>Operational perspective.</em>
+            <em>
+              {recruiterView
+                ? "An operator’s perspective."
+                : "Operational perspective."}
+            </em>
           </h1>
           <p className="recruiter-lead">
-            U.S. Army veteran and finance professional combining equity
-            research, accounting, financial analysis, and five-plus years inside
-            mission-critical data center operations.
+            {recruiterView
+              ? professionalPositioning
+              : "U.S. Army veteran and finance professional combining equity research, accounting, financial analysis, and five-plus years inside mission-critical data center operations."}
           </p>
           <RecruiterActions />
         </div>
@@ -95,7 +145,7 @@ export default function Resume() {
           <span className="eyebrow">Shy Lee · Founder</span>
           <Image
             className="profile-photo"
-            src="/shyheim-lee-founder.jpeg"
+            src={portraitSrc}
             alt="Portrait of Shy Lee, founder of Luna1 Research"
             width={400}
             height={400}
@@ -131,20 +181,7 @@ export default function Resume() {
         </aside>
       </section>
       <nav className="recruiter-index" aria-label="Resume sections">
-        {[
-          "Summary",
-          "Experience",
-          "Education",
-          "Certifications",
-          "Research",
-          "Models",
-          "Philosophy",
-          "Framework",
-          "Portfolio",
-          "Journal",
-          "Timeline",
-          "Contact",
-        ].map((label) => (
+        {sectionIndex.map((label) => (
           <a key={label} href={`#${label.toLowerCase()}`}>
             {label}
           </a>
@@ -173,6 +210,66 @@ export default function Resume() {
           </p>
         </div>
       </section>
+      {recruiterView && (
+        <>
+          <section id="progression">
+            <header className="recruiter-section-head">
+              <span className="eyebrow">Career progression</span>
+              <h2>Experience that compounds into analytical judgment.</h2>
+              <p>
+                No role is overstated. Each stage contributed a distinct layer
+                of operating, accounting, financial, or investment context.
+              </p>
+            </header>
+            <ol className="career-progression recruiter-progression">
+              {careerProgression.map((item, index) => (
+                <li key={item.stage}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <div>
+                    <h3>{item.stage}</h3>
+                    <p>{item.contribution}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </section>
+          <section id="strengths">
+            <header className="recruiter-section-head">
+              <span className="eyebrow">Core strengths</span>
+              <h2>Capabilities demonstrated through the work.</h2>
+            </header>
+            <div className="recruiter-strength-grid">
+              {coreStrengths.map((strength, index) => (
+                <article key={strength.title}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <h3>{strength.title}</h3>
+                  <p>{strength.description}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+          <section id="projects">
+            <header className="recruiter-section-head">
+              <span className="eyebrow">Projects · Luna1 capabilities</span>
+              <h2>One platform. Six forms of analytical evidence.</h2>
+              <p>
+                Luna1 is a professional research portfolio—not a startup or a
+                commercial software claim.
+              </p>
+            </header>
+            <div className="recruiter-capability-grid">
+              {platformPillars.map((pillar) => (
+                <Link href={pillar.href} key={pillar.title}>
+                  <span>{pillar.number}</span>
+                  <h3>{pillar.title}</h3>
+                  <p>{pillar.purpose}</p>
+                  <b>Review evidence →</b>
+                </Link>
+              ))}
+            </div>
+          </section>
+        </>
+      )}
       <section id="experience">
         <header className="recruiter-section-head">
           <span className="eyebrow">Experience</span>
@@ -210,12 +307,8 @@ export default function Resume() {
             <p>Associate of Science in Business Administration · 2024</p>
           </div>
           <div className="credential">
-            <b>Aztec Investment Fund (AIF)</b>
-            <p>
-              Fundamental equity research and investment-thesis development,
-              including an AI infrastructure thesis informed by data center
-              operating experience.
-            </p>
+            <b>Advanced Finance Coursework</b>
+            <p>Aztec Investment Fund – Equity Research &amp; Portfolio Management</p>
           </div>
         </div>
         <div id="certifications">
@@ -291,6 +384,29 @@ export default function Resume() {
           Explore financial models →
         </Link>
       </section>
+      {recruiterView && (
+        <section id="transaction" className="recruiter-split">
+          <div>
+            <span className="eyebrow">Transaction Intelligence</span>
+            <h2>Accounting controls applied to transaction-level data.</h2>
+          </div>
+          <div>
+            <p className="recruiter-pull">
+              The workspace demonstrates import, normalization, categorization,
+              duplicate review, reconciliation concepts, exception handling,
+              and controlled exports.
+            </p>
+            <p>
+              Preview and planned functions remain explicitly labeled. The
+              project does not claim to perform certified audits, tax work, or
+              regulated financial services.
+            </p>
+            <Link className="button" href="/transaction-intelligence">
+              Review Transaction Intelligence <span>→</span>
+            </Link>
+          </div>
+        </section>
+      )}
       <section id="philosophy" className="recruiter-quote">
         <span className="eyebrow">Investment philosophy</span>
         <blockquote>
@@ -429,4 +545,8 @@ export default function Resume() {
       </section>
     </>
   );
+}
+
+export default function Resume() {
+  return <ResumeContent />;
 }

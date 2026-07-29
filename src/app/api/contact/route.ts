@@ -4,6 +4,7 @@ import {Resend} from "resend";
 const RATE_LIMIT=5;
 const RATE_WINDOW_MS=60_000;
 const MAX_TRACKED_CLIENTS=500;
+const CONTACT_FROM="Luna1 Research <contact@luna1research.com>";
 type RateLimitEntry={count:number;reset:number};
 const globalRateLimit=globalThis as typeof globalThis&{contactRateLimits?:Map<string,RateLimitEntry>};
 const attempts=globalRateLimit.contactRateLimits??=new Map<string,RateLimitEntry>();
@@ -19,6 +20,12 @@ function enforceRateLimit(identifier:string,now=Date.now()){
   if(current&&current.reset>now&&current.count>=RATE_LIMIT)return Math.ceil((current.reset-now)/1000);
   attempts.set(identifier,{count:current&&current.reset>now?current.count+1:1,reset:current&&current.reset>now?current.reset:now+RATE_WINDOW_MS});
   return null;
+}
+
+function sanitizeProviderError(message:string){
+  return message
+    .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,"[email]")
+    .replace(/\bre_[A-Z0-9_-]+\b/gi,"[key]");
 }
 
 export async function POST(request:Request){
@@ -37,13 +44,24 @@ export async function POST(request:Request){
   try{
     const resend=new Resend(key);
     const{error}=await resend.emails.send({
-      from:"Luna1 Research <onboarding@resend.dev>",
+      from:CONTACT_FROM,
       to:destination,
       replyTo:parsed.data.email,
       subject:`Luna1 Research inquiry: ${parsed.data.subject}`,
       text:`Name: ${parsed.data.name}\nEmail: ${parsed.data.email}\nOrganization: ${parsed.data.organization||"Not provided"}\nSubject: ${parsed.data.subject}\n\n${parsed.data.message}`,
     });
-    if(error)throw new Error("Provider rejected contact email");
+    if(error){
+      const reason=
+        error.name==="invalid_api_key"
+          ?"invalid_api_key"
+          :error.message.includes("own email address")
+            ?"testing_domain_restriction"
+            :error.message.includes("domain is not verified")
+              ?"unverified_domain"
+              :error.name;
+      console.error(`Contact email delivery rejected: ${reason}. ${sanitizeProviderError(error.message)}`);
+      return Response.json({error:"Your message could not be sent right now. Please try again later."},{status:502});
+    }
     return Response.json({ok:true,message:"Thank you. Your message has been sent."});
   }catch{
     console.error("Contact email delivery failed.");

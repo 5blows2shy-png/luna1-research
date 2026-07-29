@@ -1,0 +1,22 @@
+{
+  "name": "Luna1 Research",
+  "logoPath": "/brand/luna1-logo-horizontal.svg",
+  "logoRasterPath": "/brand/luna1-logo-horizontal.png",
+  "website": "https://luna1research.com",
+  "websiteLabel": "luna1research.com",
+  "analyst": "Shy Lee",
+  "analystTitle": "Founder, Luna1 Research",
+  "education": "Finance Student, San Diego State University",
+  "disclosure": "This research is for educational and informational purposes only and is not investment advice.",
+  "footer": "Independent Research | Educational Use Only",
+  "colors": {
+    "ink": "#090B10",
+    "surface": "#151922",
+    "text": "#E5E7EB",
+    "muted": "#6B7280",
+    "blue": "#3B82F6",
+    "orange": "#F59E0B",
+    "cyan": "#22D3EE",
+    "border": "#2A303B"
+  }
+}

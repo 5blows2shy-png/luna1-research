@@ -1,4 +1,6 @@
 import { test, expect, type Locator } from "@playwright/test";
+import * as XLSX from "@e965/xlsx";
+import { readFileSync } from "node:fs";
 
 async function activate(locator: Locator, projectName: string) {
   if (projectName === "mobile") {
@@ -9,11 +11,35 @@ async function activate(locator: Locator, projectName: string) {
 }
 
 test("primary pages load without horizontal overflow", async ({ page }) => {
+  test.setTimeout(60_000);
+
   for (const route of [
     "/",
+    "/analyst-journal",
+    "/transaction-intelligence",
     "/research",
+    "/development-log",
+    "/research/companies/ry",
+    "/research/companies/glw",
+    "/research/companies/be",
+    "/research/themes",
+    "/research/themes/ai-data-center-buildout",
+    "/research/notes",
     "/portfolio",
     "/portfolio/mistake-journal",
+    "/watchlist/glw",
+    "/watchlist/aipo",
+    "/watchlist/jbl",
+    "/watchlist/alab",
+    "/watchlist/ry",
+    "/watchlist/panw",
+    "/watchlist/pdfs",
+    "/watchlist/anet",
+    "/watchlist/wwd",
+    "/watchlist/amat",
+    "/watchlist/gs",
+    "/watchlist/dlr",
+    "/watchlist/strl",
     "/about",
     "/recruiter",
     "/contact",
@@ -30,6 +56,76 @@ test("primary pages load without horizontal overflow", async ({ page }) => {
       )
       .toBe(true);
   }
+});
+
+test("Bloomberg-inspired semantic palette renders at every viewport", async ({
+  page,
+}) => {
+  await page.addInitScript(() => window.localStorage.setItem("theme", "dark"));
+  await page.goto("/contact");
+  const palette = await page.evaluate(() => {
+    const root = getComputedStyle(document.documentElement);
+    const body = getComputedStyle(document.body);
+    const input = getComputedStyle(document.querySelector("input")!);
+    return {
+      background: body.backgroundColor,
+      inputBackground: input.backgroundColor,
+      primaryText: root.getPropertyValue("--text-primary").trim(),
+      secondaryText: root.getPropertyValue("--text-secondary").trim(),
+      blue: root.getPropertyValue("--accent-blue").trim(),
+      orange: root.getPropertyValue("--accent-orange").trim(),
+      cyan: root.getPropertyValue("--accent-cyan").trim(),
+    };
+  });
+  expect(palette).toEqual({
+    background: "rgb(9, 11, 16)",
+    inputBackground: "rgb(17, 21, 29)",
+    primaryText: "#e5e7eb",
+    secondaryText: "#9ca3af",
+    blue: "#3b82f6",
+    orange: "#f59e0b",
+    cyan: "#22d3ee",
+  });
+});
+
+test("light and dark modes toggle and persist", async ({ page }, testInfo) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto("/");
+  await page.evaluate(() => window.localStorage.removeItem("theme"));
+  await page.reload();
+  const toggle = page.locator("[data-theme-toggle]");
+
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(toggle).toHaveAccessibleName("Switch to light theme");
+  await activate(toggle, testInfo.project.name);
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(toggle).toHaveAccessibleName("Switch to dark theme");
+
+  const lightPalette = await page.evaluate(() => {
+    const root = getComputedStyle(document.documentElement);
+    return {
+      background: root.getPropertyValue("--bg-main").trim(),
+      text: root.getPropertyValue("--text-primary").trim(),
+      stored: window.localStorage.getItem("theme"),
+    };
+  });
+  expect(lightPalette).toEqual({
+    background: "#f4f1e9",
+    text: "#181b20",
+    stored: "light",
+  });
+
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(page.locator("[data-theme-toggle]")).toHaveAccessibleName(
+    "Switch to dark theme",
+  );
+
+  await activate(page.locator("[data-theme-toggle]"), testInfo.project.name);
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect
+    .poll(() => page.evaluate(() => window.localStorage.getItem("theme")))
+    .toBe("dark");
 });
 
 test("desktop and mobile navigation expose only the permanent product scope", async ({
@@ -49,11 +145,14 @@ test("desktop and mobile navigation expose only the permanent product scope", as
   });
   for (const label of [
     "Home",
-    "Research",
-    "Portfolio",
-    "About",
+    "Equity Research",
+    "Valuation Lab",
+    "Transaction Intelligence",
+    "Portfolio Lab",
+    "Analyst Journal",
     "Recruiter View",
     "Contact",
+    "Development Log",
   ])
     await expect(
       navigation.getByRole("link", { name: new RegExp(`${label}$`) }),
@@ -67,13 +166,168 @@ test("desktop and mobile navigation expose only the permanent product scope", as
     await expect(
       navigation.getByRole("link", { name: retired, exact: true }),
     ).toHaveCount(0);
+  await expect(
+    page.locator('a.button.primary[href="/research"]'),
+  ).toBeVisible();
+});
+
+test("equity research is available from the public navigation", async ({
+  page,
+}) => {
+  await page.goto("/research");
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Developing company dossiers" }),
+  ).toBeVisible();
+  await expect(page.getByText("Original Luna1 research library")).toBeVisible();
+});
+
+test("research hub exposes structured routes and transparent placeholders", async ({
+  page,
+}) => {
+  await page.goto("/research/companies/ry");
+  await expect(
+    page.getByRole("heading", { name: "Royal Bank of Canada", level: 1 }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Full research report in development."),
+  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "Download PDF" })).toHaveCount(0);
+  await expect(
+    page.getByText(
+      /Nothing presented on this website constitutes investment advice/,
+    ),
+  ).toBeVisible();
+  await page.goto("/research/themes");
+  await expect(page.getByRole("link", { name: "View theme" })).toHaveCount(5);
+  await expect(page.getByRole("link", { name: "Reading Library" })).toHaveCount(
+    0,
+  );
+});
+
+test("research note and development log filters work", async ({ page }) => {
+  await page.goto("/research/notes");
+  await page.getByLabel("Ticker").selectOption("RY");
+  await expect(
+    page.getByRole("heading", { name: "RY: framing credit-cycle questions" }),
+  ).toBeVisible();
+  await expect(page.getByText("5 notes")).toHaveCount(0);
+  await page.goto("/development-log");
+  await page.getByLabel("Status").selectOption("Planned");
+  await expect(
+    page.getByRole("heading", {
+      name: "Complete the first source-grounded company dossiers",
+    }),
+  ).toBeVisible();
+  await expect(page.getByText("1 entries")).toBeVisible();
+});
+
+test("Transaction Intelligence preview is promoted without overstating readiness", async ({
+  page,
+}) => {
+  await page.goto("/development-log");
+  const entry = page.locator("article").filter({
+    has: page.getByRole("heading", {
+      name: "Integrated Transaction Intelligence Preview",
+    }),
+  });
+
+  await expect(entry).toHaveCount(1);
+  await expect(
+    entry.getByText(
+      /Luna1 is evolving from an independent equity-research platform/,
+    ),
+  ).toBeVisible();
+  await expect(entry.locator(".development-preview li")).toHaveCount(9);
+  await expect(
+    entry.getByRole("link", {
+      name: "View Transaction Intelligence Preview",
+    }),
+  ).toHaveAttribute("href", "/transaction-intelligence");
+
+  await page.goto("/transaction-intelligence");
+  await expect(
+    page.getByRole("heading", {
+      name: "Luna1 Transaction Intelligence",
+      level: 1,
+    }),
+  ).toBeVisible();
+  await expect(page.getByText("In Development").first()).toBeVisible();
+  const workspace = page.getByRole("navigation", {
+    name: "Transaction Intelligence workspace",
+  });
+  for (const tab of [
+    "Home",
+    "Client Request Portal",
+    "Nonprofit Back Office",
+    "Upload & Clean Transactions",
+    "Bank Statement PDF Parser",
+    "Bank-to-QuickBooks Reconciliation",
+    "Journal Entry Assistant",
+    "Monthly Close Board Packet",
+  ])
+    await expect(workspace.getByRole("button", { name: tab })).toBeVisible();
+
+  await page.getByRole("button", { name: "Upload & Clean Transactions" }).click();
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(
+    workbook,
+    XLSX.utils.aoa_to_sheet([
+      ["Date", "Description", "Amount", "Category"],
+      ["2026-07-01", "Sample deposit", 1250, "Revenue"],
+      ["2026-07-02", "Office supplies", -84.5, "Operations"],
+    ]),
+    "Transactions",
+  );
+  await page.locator(".ti-panel input[type='file']").setInputFiles({
+    name: "sample-transactions.xlsx",
+    mimeType:
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    buffer: XLSX.write(workbook, { bookType: "xlsx", type: "buffer" }),
+  });
+  await expect(
+    page.getByText(
+      'Loaded sample-transactions.xlsx from worksheet “Transactions”.',
+    ),
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Cleaned Data" })).toBeVisible();
+
+  await page.locator(".ti-panel input[type='file']").setInputFiles({
+    name: "sample-statement.pdf",
+    mimeType: "application/pdf",
+    buffer: readFileSync("public/downloads/shy-lee-one-page-profile.pdf"),
+  });
+  await expect(
+    page.getByText(
+      "Best-effort PDF text extraction completed across 1 page(s). Manual review is required.",
+    ),
+  ).toBeVisible();
+
+  await page.getByRole("button", { name: "Use sample data" }).click();
+  await expect(page.getByText("10", { exact: true }).first()).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Flagged Transactions" }),
+  ).toBeVisible();
+
+  await page
+    .getByRole("button", { name: "Bank-to-QuickBooks Reconciliation" })
+    .click();
+  await page.getByRole("button", { name: "Use paired sample data" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Matched Transactions" }),
+  ).toBeVisible();
 });
 
 test("retired routes are removed and the old journal route redirects", async ({
   page,
   request,
 }) => {
-  for (const route of ["/deal-lab", "/python-lab", "/real-estate"])
+  for (const route of [
+    "/deal-lab",
+    "/python-lab",
+    "/real-estate",
+    "/research/library",
+  ])
     expect((await request.get(route, { maxRedirects: 0 })).status()).toBe(404);
   const legacy = await request.get("/mistake-journal", { maxRedirects: 0 });
   expect([301, 308]).toContain(legacy.status());
@@ -91,7 +345,6 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
     "Long-Term Compounders",
     "Conviction Dashboard",
     "Mistake Journal",
-    "Performance",
   ])
     await expect(
       page.getByRole("tab", { name: label, exact: true }),
@@ -101,13 +354,110 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
     testInfo.project.name,
   );
   await expect(page.getByText("JBL", { exact: true }).first()).toBeVisible();
-  await activate(
-    page.getByRole("tab", { name: "Performance" }),
-    testInfo.project.name,
-  );
+  await expect(page.getByRole("tab", { name: "Performance" })).toHaveCount(0);
   await expect(
-    page.getByRole("heading", { name: "Benchmark comparison" }),
+    page.getByRole("link", { name: "View Full Research" }),
+  ).toHaveCount(18);
+  await expect(page.getByText("Digital Realty Trust Inc.")).toBeVisible();
+  await expect(page.getByText("Data pending", { exact: true })).toBeVisible();
+});
+
+test("Portfolio table headers do not cover the first data row", async ({
+  page,
+}, testInfo) => {
+  test.skip(
+    testInfo.project.name === "mobile",
+    "Portfolio tables use the existing card layout on mobile.",
+  );
+
+  await page.goto("/portfolio");
+
+  for (const tab of [
+    "Active Positions",
+    "Watchlist",
+    "Long-Term Compounders",
+    "Mistake Journal",
+  ]) {
+    await activate(
+      page.getByRole("tab", { name: tab, exact: true }),
+      testInfo.project.name,
+    );
+
+    const visibleTable = page.locator("table:visible").first();
+    const header = visibleTable.locator("thead").first();
+    const firstRow = visibleTable.locator("tbody tr").first();
+    await expect(header).toBeVisible();
+    await expect(firstRow).toBeVisible();
+
+    const [headerBox, firstRowBox] = await Promise.all([
+      header.boundingBox(),
+      firstRow.boundingBox(),
+    ]);
+    expect(headerBox).not.toBeNull();
+    expect(firstRowBox).not.toBeNull();
+    expect(headerBox!.y + headerBox!.height).toBeLessThanOrEqual(
+      firstRowBox!.y + 1,
+    );
+  }
+});
+
+test("Watchlist research pages expose structured, non-fabricated coverage", async ({
+  page,
+}) => {
+  await page.goto("/watchlist/glw");
+  await expect(
+    page.getByRole("heading", { name: "Corning Incorporated", level: 1 }),
   ).toBeVisible();
+  for (const heading of [
+    "Scenarios before conviction.",
+    "Build From Operating Components",
+    "Five Years of Evidence — Not Invented Precision",
+    "Make every assumption visible.",
+    "Branded documents—published only when complete.",
+  ])
+    await expect(page.getByRole("heading", { name: heading })).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Report in Progress" }),
+  ).toBeDisabled();
+  await expect(
+    page.getByRole("button", { name: "Model in Progress" }),
+  ).toBeDisabled();
+  await expect(page.getByText("Data pending").first()).toBeVisible();
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    "https://luna1research.com/watchlist/glw",
+  );
+  await page.goto("/watchlist/dlr");
+  await expect(
+    page.getByRole("heading", { name: "Why I Follow Digital Realty" }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/facility associated with Digital Realty/),
+  ).toBeVisible();
+  await page.goto("/watchlist/aipo");
+  await expect(
+    page.getByRole("heading", {
+      name: "Understand the portfolio before the theme.",
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("listitem").filter({
+      hasText: /^Weighted underlying valuation$/,
+    }),
+  ).toBeVisible();
+});
+
+test("homepage omits retired overview modules", async ({ page }) => {
+  await page.goto("/");
+  for (const section of [
+    "Featured Research",
+    "Evidence before opinion.",
+    "Career and Credentials",
+    "Portfolio · Latest Decision Review",
+    "Portfolio Snapshot",
+    "Current Areas of Focus",
+  ])
+    await expect(page.getByText(section, { exact: true })).toHaveCount(0);
 });
 
 test("JBL decision review remains under Portfolio", async ({
@@ -179,7 +529,11 @@ test("recruiter view retains profile and downloads", async ({ page }) => {
   await expect(page.getByText("Shy Lee · Founder")).toBeVisible();
   await expect(
     page.getByAltText("Portrait of Shy Lee, founder of Luna1 Research"),
-  ).toBeVisible();
+  )
+    .toBeVisible();
+  await expect(
+    page.getByAltText("Portrait of Shy Lee, founder of Luna1 Research"),
+  ).toHaveAttribute("src", /shyheim-lee-recruiter\.jpeg/);
   await expect(
     page.getByRole("link", { name: /Download Profile/ }),
   ).toBeVisible();

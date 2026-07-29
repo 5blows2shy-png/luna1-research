@@ -1,19 +1,25 @@
 "use client";
 
+import Link from "next/link";
 import { useState, type KeyboardEvent } from "react";
 import { MistakeJournal } from "@/components/mistake-journal";
-import { PortfolioPerformance } from "@/components/portfolio-dashboard";
+import { ResearchCoverageGrid } from "@/components/research/research-coverage-grid";
 import { PageHeader, SectionHeading } from "@/components/site";
 import { watchlist } from "@/lib/watchlist-data";
 
 type ActivePosition = {
   ticker: string;
   company: string;
+  purchaseDate: string;
   entryPrice: number;
   thesis: string;
+  valuation: string;
+  positionSize: string;
   risk: string;
   exitRule: string;
   status: string;
+  thesisStatus: "Thesis confirmed" | "Thesis weakened" | "Thesis broken";
+  whatChanged: string;
 };
 type Holding = {
   ticker: string;
@@ -28,35 +34,56 @@ const activePositions: ActivePosition[] = [
   {
     ticker: "CASY",
     company: "Casey's General Stores Inc.",
+    purchaseDate: "Date pending verification",
     entryPrice: 824.0,
     thesis:
       "Casey’s is a high-quality retail compounder built around convenience stores, fuel, prepared food, and an efficient distribution network. Management plans to add at least 400 stores over fiscal 2027–2029 through acquisitions and new construction, expanding a system that already serves nearly 3,000 locations. The company can improve acquired stores by connecting them to Casey’s purchasing, distribution, prepared-food, and loyalty infrastructure, while the successful CEFCO integration demonstrates management’s ability to execute this strategy. My thesis remains intact while new locations produce profitable growth, prepared-food sales expand, and EBITDA and returns on invested capital continue improving.",
     risk: "Medium",
+    valuation:
+      "Formal valuation range is still being documented; no public estimate is presented.",
+    positionSize: "Not publicly disclosed",
     exitRule:
       "Exit if profitable store growth, prepared-food expansion, EBITDA, or returns on invested capital materially deteriorate.",
     status: "Monitoring",
+    thesisStatus: "Thesis confirmed",
+    whatChanged:
+      "No thesis-breaking change is documented. Store growth, prepared-food performance, EBITDA, and returns on invested capital remain the monitoring priorities.",
   },
   {
     ticker: "PANW",
     company: "Palo Alto Networks Inc.",
+    purchaseDate: "Date pending verification",
     entryPrice: 272.54,
     thesis:
       "Palo Alto Networks is a cybersecurity leader benefiting from enterprise demand for integrated security platforms and AI-related security products. Fiscal Q3 2026 revenue grew 31% to approximately $3.0 billion, while remaining performance obligations increased 36% to $18.4 billion, providing strong visibility into future contracted revenue. Its platformization strategy, recurring revenue base, and high customer switching costs support durable growth as companies consolidate multiple security tools onto fewer strategic vendors. My thesis remains intact while recurring security revenue, customer commitments, free cash flow, and the Stage 2 price trend continue advancing.",
     risk: "Medium",
+    valuation:
+      "Formal valuation range is still being documented; no public estimate is presented.",
+    positionSize: "Not publicly disclosed",
     exitRule:
       "Exit if recurring security revenue, customer commitments, free cash flow, or the Stage 2 price trend materially deteriorate.",
     status: "Monitoring",
+    thesisStatus: "Thesis confirmed",
+    whatChanged:
+      "No thesis-breaking change is documented. Recurring security revenue, customer commitments, free cash flow, and price structure remain the monitoring priorities.",
   },
   {
     ticker: "WELL",
     company: "Welltower Inc.",
+    purchaseDate: "Date pending verification",
     entryPrice: 237.21,
     thesis:
       "Welltower is a healthcare real estate compounder benefiting from rising senior-housing demand, limited new supply, and improving property-level economics. In Q1 2026, normalized FFO per share grew 23% year over year to $1.47, while its senior housing operating portfolio produced 22.1% same-store NOI growth and 370 basis points of occupancy improvement. Revenue per occupied room increased 5%, expenses per occupied room rose only 0.4%, and operating margins expanded by 320 basis points, demonstrating meaningful operating leverage. My thesis remains intact while occupancy, normalized FFO, same-store NOI, and returns from new investment activity continue growing.",
     risk: "Medium",
+    valuation:
+      "Formal valuation range is still being documented; no public estimate is presented.",
+    positionSize: "Not publicly disclosed",
     exitRule:
       "Exit if occupancy, normalized FFO, same-store NOI, or returns from new investment activity materially deteriorate.",
     status: "Monitoring",
+    thesisStatus: "Thesis confirmed",
+    whatChanged:
+      "No thesis-breaking change is documented. Occupancy, normalized FFO, same-store NOI, and returns on new investment activity remain the monitoring priorities.",
   },
 ];
 
@@ -163,7 +190,6 @@ const tabs = [
   "Long-Term Compounders",
   "Conviction Dashboard",
   "Mistake Journal",
-  "Performance",
 ] as const;
 type PortfolioTab = (typeof tabs)[number];
 
@@ -360,9 +386,9 @@ export default function Portfolios() {
   return (
     <>
       <PageHeader
-        kicker="Portfolio Dashboard"
+        kicker="Portfolio Lab"
         title="Conviction made accountable."
-        description="Positions, performance, and decision reviews are organized around evidence, explicit risk, and repeatable process."
+        description="Positions and decision reviews are organized around the initial thesis, valuation work, position role, explicit risk, exit criteria, current thesis status, and what changed."
       />
       <section>
         <div
@@ -397,16 +423,21 @@ export default function Portfolios() {
             <div className="table-wrap">
               <table className="active-positions-table">
                 <caption>
-                  Active positions and manually entered entry prices
+                  Active positions · process fields are manually maintained and
+                  incomplete values are explicitly labeled
                 </caption>
                 <thead>
                   <tr>
                     <th>Ticker / Company</th>
+                    <th>Purchase date</th>
                     <th>Entry price</th>
-                    <th>Position thesis</th>
-                    <th>Risk</th>
-                    <th>Exit rule</th>
-                    <th>Status</th>
+                    <th>Initial thesis</th>
+                    <th>Valuation</th>
+                    <th>Position size</th>
+                    <th>Risk factors</th>
+                    <th>Exit criteria</th>
+                    <th>Current status</th>
+                    <th>What changed?</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -418,21 +449,43 @@ export default function Portfolios() {
                           {position.company}
                         </small>
                       </td>
+                      <td data-label="Purchase date">
+                        {position.purchaseDate}
+                      </td>
                       <td data-label="Entry price">
                         ${position.entryPrice.toFixed(2)}
                       </td>
                       <td
-                        data-label="Position thesis"
+                        data-label="Initial thesis"
                         className="portfolio-copy"
                       >
                         {position.thesis}
                       </td>
-                      <td data-label="Risk">{position.risk}</td>
-                      <td data-label="Exit rule" className="portfolio-copy">
+                      <td data-label="Valuation" className="portfolio-copy">
+                        {position.valuation}
+                      </td>
+                      <td data-label="Position size">
+                        {position.positionSize}
+                      </td>
+                      <td data-label="Risk factors">{position.risk}</td>
+                      <td data-label="Exit criteria" className="portfolio-copy">
                         {position.exitRule}
                       </td>
-                      <td data-label="Status">
-                        <span className="status">{position.status}</span>
+                      <td data-label="Current status">
+                        <span
+                          className="status"
+                          data-status={position.status
+                            .toLowerCase()
+                            .replaceAll(" ", "-")}
+                        >
+                          {position.status}
+                        </span>
+                        <small className="thesis-status">
+                          {position.thesisStatus}
+                        </small>
+                      </td>
+                      <td data-label="What changed?" className="portfolio-copy">
+                        {position.whatChanged}
                       </td>
                     </tr>
                   ))}
@@ -453,67 +506,93 @@ export default function Portfolios() {
             </div>
           )}
           {activeTab === "Watchlist" && (
-            <div className="table-wrap watchlist-table-wrap">
-              <table className="watchlist-table">
-                <caption>
-                  Research watchlist · LUNA Scores represent research priority,
-                  not recommendations
-                </caption>
-                <thead>
-                  <tr>
-                    <th>Ticker</th>
-                    <th>Company name</th>
-                    <th>LUNA Score</th>
-                    <th>Research status</th>
-                    <th>Watchlist note</th>
-                    <th>Setup status</th>
-                    <th>Primary catalyst</th>
-                    <th>Primary risk</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {watchlist.map((item) => (
-                    <tr key={item.ticker}>
-                      <td data-label="Ticker">
-                        <b>{item.ticker}</b>
-                      </td>
-                      <td data-label="Company name">{item.company}</td>
-                      <td data-label="LUNA Score">
-                        <b
-                          className="watchlist-score"
-                          aria-label={`LUNA Score ${item.score} out of 100`}
-                        >
-                          {item.score}/100
-                        </b>
-                      </td>
-                      <td data-label="Research status">
-                        <span className="status">{item.researchStatus}</span>
-                      </td>
-                      <td
-                        data-label="Watchlist note"
-                        className="portfolio-copy"
-                      >
-                        {item.note}
-                      </td>
-                      <td data-label="Setup status">{item.setupStatus}</td>
-                      <td
-                        data-label="Primary catalyst"
-                        className="portfolio-copy"
-                      >
-                        {item.catalyst}
-                      </td>
-                      <td data-label="Primary risk" className="portfolio-copy">
-                        {item.risk}
-                      </td>
+            <div className="watchlist-research-stack">
+              <div className="table-wrap watchlist-table-wrap">
+                <table className="watchlist-table">
+                  <caption>
+                    Research watchlist · LUNA Scores represent research
+                    priority, not recommendations
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th>Ticker</th>
+                      <th>Company name</th>
+                      <th>LUNA Score</th>
+                      <th>Research status</th>
+                      <th>Watchlist note</th>
+                      <th>Setup status</th>
+                      <th>Primary catalyst</th>
+                      <th>Primary risk</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {watchlist.map((item) => (
+                      <tr key={item.ticker}>
+                        <td data-label="Ticker">
+                          <b>{item.ticker}</b>
+                        </td>
+                        <td data-label="Company name">
+                          {item.company}
+                          <Link
+                            className="watchlist-research-link"
+                            href={`/watchlist/${item.ticker.toLowerCase()}`}
+                          >
+                            View Full Research
+                          </Link>
+                        </td>
+                        <td data-label="LUNA Score">
+                          <b
+                            className="watchlist-score"
+                            aria-label={
+                              item.score === null
+                                ? "LUNA Score data pending"
+                                : `LUNA Score ${item.score} out of 100`
+                            }
+                          >
+                            {item.score === null
+                              ? "Data pending"
+                              : `${item.score}/100`}
+                          </b>
+                        </td>
+                        <td data-label="Research status">
+                          <span
+                            className="status"
+                            data-status={item.researchStatus
+                              .toLowerCase()
+                              .replaceAll(" ", "-")}
+                          >
+                            {item.researchStatus}
+                          </span>
+                        </td>
+                        <td
+                          data-label="Watchlist note"
+                          className="portfolio-copy"
+                        >
+                          {item.note}
+                        </td>
+                        <td data-label="Setup status">{item.setupStatus}</td>
+                        <td
+                          data-label="Primary catalyst"
+                          className="portfolio-copy"
+                        >
+                          {item.catalyst}
+                        </td>
+                        <td
+                          data-label="Primary risk"
+                          className="portfolio-copy"
+                        >
+                          {item.risk}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <ResearchCoverageGrid />
             </div>
           )}
           {activeTab === "Conviction Dashboard" && <ConvictionDashboard />}
           {activeTab === "Mistake Journal" && <MistakeJournal />}
-          {activeTab === "Performance" && <PortfolioPerformance />}
         </div>
       </section>
       <section>

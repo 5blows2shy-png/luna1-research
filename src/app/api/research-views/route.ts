@@ -48,7 +48,9 @@ export async function POST(request: Request) {
       { status: 503 },
     );
   }
-  const { website: _website, consent: _consent, ...submission } = parsed.data;
+  const { website, consent, ...submission } = parsed.data;
+  void website;
+  void consent;
   const { error } = await supabase.from("research_view_submissions").insert({
     ...submission,
     approval_status: "pending",

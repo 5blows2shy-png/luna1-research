@@ -5,6 +5,30 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { navigationItems } from "@/lib/data";
 
+type ColorTheme = "dark" | "light";
+
+const themeColors: Record<ColorTheme, string> = {
+  dark: "#090b10",
+  light: "#f4f1e9",
+};
+
+function applyTheme(theme: ColorTheme) {
+  document.documentElement.dataset.theme = theme;
+  document
+    .querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')
+    .forEach((meta) => {
+      meta.content = themeColors[theme];
+    });
+}
+
+function hasStoredTheme() {
+  try {
+    return window.localStorage.getItem("theme") !== null;
+  } catch {
+    return false;
+  }
+}
+
 export function LunaMark() {
   return (
     <span className="mark" aria-hidden="true">
@@ -18,24 +42,56 @@ export function LunaMark() {
 export function Navbar() {
   const path = usePathname();
   const [open, setOpen] = useState(false);
-  const [dark, setDark] = useState(true);
+  const [theme, setTheme] = useState<ColorTheme | null>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
   const drawer = useRef<HTMLDivElement>(null);
+  const activeTheme = theme ?? "dark";
+
   useEffect(() => {
-    const frame = requestAnimationFrame(() => {
-      const stored = window.localStorage.getItem("theme");
-      setDark(
-        stored
-          ? stored === "dark"
-          : window.matchMedia("(prefers-color-scheme: dark)").matches,
-      );
-    });
-    return () => cancelAnimationFrame(frame);
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const legacyMedia = media as MediaQueryList & {
+      addListener(listener: (event: MediaQueryListEvent) => void): void;
+      removeListener(listener: (event: MediaQueryListEvent) => void): void;
+    };
+    const currentTheme: ColorTheme =
+      document.documentElement.dataset.theme === "light" ? "light" : "dark";
+    applyTheme(currentTheme);
+    const frame = requestAnimationFrame(() => setTheme(currentTheme));
+
+    const followSystemTheme = (event: MediaQueryListEvent) => {
+      if (hasStoredTheme()) return;
+      const nextTheme: ColorTheme = event.matches ? "dark" : "light";
+      applyTheme(nextTheme);
+      setTheme(nextTheme);
+    };
+
+    if ("addEventListener" in media) {
+      media.addEventListener("change", followSystemTheme);
+    } else {
+      legacyMedia.addListener(followSystemTheme);
+    }
+    return () => {
+      cancelAnimationFrame(frame);
+      if ("removeEventListener" in media) {
+        media.removeEventListener("change", followSystemTheme);
+      } else {
+        legacyMedia.removeListener(followSystemTheme);
+      }
+    };
   }, []);
-  useEffect(() => {
-    document.documentElement.dataset.theme = dark ? "dark" : "light";
-    window.localStorage.setItem("theme", dark ? "dark" : "light");
-  }, [dark]);
+
+  const toggleTheme = () => {
+    const nextTheme: ColorTheme =
+      activeTheme === "dark" ? "light" : "dark";
+    applyTheme(nextTheme);
+    try {
+      window.localStorage.setItem("theme", nextTheme);
+    } catch {
+      // The selected theme still applies for this session if storage is blocked.
+    }
+    setTheme(nextTheme);
+  };
+
   useEffect(() => {
     if (!open) return;
     document.body.style.overflow = "hidden";
@@ -46,13 +102,13 @@ export function Navbar() {
         return;
       }
       if (event.key !== "Tab" || !drawer.current) return;
-      const focusable = [
-        ...drawer.current.querySelectorAll<HTMLElement>(
+      const focusable = Array.from(
+        drawer.current.querySelectorAll<HTMLElement>(
           "a[href],button:not([disabled])",
         ),
-      ];
+      );
       const first = focusable[0],
-        last = focusable.at(-1);
+        last = focusable[focusable.length - 1];
       if (event.shiftKey && document.activeElement === first) {
         event.preventDefault();
         last?.focus();
@@ -95,12 +151,17 @@ export function Navbar() {
         </nav>
         <div className="nav-actions">
           <button
+            type="button"
             className="icon-button"
-            onClick={() => setDark(!dark)}
-            aria-label={`Switch to ${dark ? "light" : "dark"} theme`}
-            aria-pressed={dark}
+            data-theme-toggle
+            onClick={toggleTheme}
+            aria-label={`Switch to ${activeTheme === "dark" ? "light" : "dark"} theme`}
+            aria-pressed={activeTheme === "dark"}
+            title={`Use ${activeTheme === "dark" ? "light" : "dark"} mode`}
           >
-            {dark ? "☼" : "◐"}
+            <span aria-hidden="true">
+              {activeTheme === "dark" ? "☼" : "☾"}
+            </span>
           </button>
           <button
             ref={menuButton}
@@ -166,26 +227,30 @@ export function Footer() {
             </span>
           </Link>
           <p>
-            Disciplined public-markets research, portfolio accountability, and
-            transparent decision reviews.
+            A professional financial research platform connecting operational
+            experience, accounting knowledge, and investment analysis.
           </p>
         </div>
         <div>
-          <span className="eyebrow">Research platform</span>
+          <span className="eyebrow">Research and valuation</span>
           <p>
-            <Link href="/research">Research</Link>
-            <Link href="/portfolio">Portfolio</Link>
+            <Link href="/research">Equity Research</Link>
+            <Link href="/valuation-models">Valuation Lab</Link>
+            <Link href="/portfolio">Portfolio Lab</Link>
             <Link href="/portfolio/mistake-journal">
-              Portfolio Decision Reviews
+              Mistake Journal
             </Link>
-            <Link href="/about">About</Link>
           </p>
         </div>
         <div>
-          <span className="eyebrow">Professional profile</span>
+          <span className="eyebrow">Process and profile</span>
           <p>
+            <Link href="/transaction-intelligence">
+              Transaction Intelligence
+            </Link>
+            <Link href="/analyst-journal">Analyst Journal</Link>
+            <Link href="/development-log">Development Log</Link>
             <Link href="/recruiter">Recruiter View</Link>
-            <Link href="/contact">Contact</Link>
           </p>
         </div>
         <div>

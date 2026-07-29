@@ -4,6 +4,8 @@ import fs from "node:fs";
 
 const routes = [
   "src/app/page.tsx",
+  "src/app/analyst-journal/page.tsx",
+  "src/app/transaction-intelligence/page.tsx",
   "src/app/about/page.tsx",
   "src/app/investment-philosophy/page.tsx",
   "src/app/luna1-framework/page.tsx",
@@ -98,7 +100,7 @@ test("founder card and portrait appear on the resume", () => {
   const about = fs.readFileSync("src/app/about/page.tsx", "utf8");
   const resume = fs.readFileSync("src/app/resume/page.tsx", "utf8");
   assert.doesNotMatch(about, /shyheim-lee-founder.jpeg/);
-  assert.match(resume, /src="\/shyheim-lee-founder.jpeg"/);
+  assert.match(resume, /portraitSrc = "\/shyheim-lee-founder.jpeg"/);
   assert.match(resume, /alt="Portrait of Shy Lee, founder of Luna1 Research"/);
   assert.match(
     resume,
@@ -113,7 +115,8 @@ test("resume reflects the current investment-focused source document", () => {
     "Data Center Operations Technician / NOC Technician",
     "VMware virtualized environments",
     "more than $10 million",
-    "Aztec Investment Fund (AIF)",
+    "Advanced Finance Coursework",
+    "Aztec Investment Fund – Equity Research &amp; Portfolio Management",
     "Financial statement analysis",
     "Budgeting and forecasting",
     "Account reconciliation",
@@ -181,28 +184,26 @@ test("watchlist matches the approved research records", () => {
     ["JBL", 87],
     ["RY", 84],
     ["PANW", 86],
-    ["PDFS", 85],
     ["ANET", 95],
-    ["WWD", 83],
-    ["AMAT", 88],
-    ["GS", 84],
   ]) {
     assert.ok(
-      source.includes(`ticker:\"${ticker}\"`),
+      new RegExp(`ticker:\\s*\"${ticker}\"`).test(source),
       `${ticker} is missing from the watchlist`,
     );
     assert.match(
       source,
-      new RegExp(`ticker:\"${ticker}\"[^\\n]+score:${score}`),
+      new RegExp(`ticker:\\s*\"${ticker}\"[\\s\\S]{0,180}?score:\\s*${score}`),
       `${ticker} score is missing`,
     );
   }
   for (const field of ["note:", "catalyst:", "risk:"])
     assert.equal(
       source.match(new RegExp(field, "g"))?.length,
-      13,
+      10,
       `each record should include ${field}`,
     );
+  for (const removed of ["AMAT", "WWD", "PDFS", "GS"])
+    assert.ok(!source.includes(`ticker: "${removed}"`));
   for (const ticker of [
     "ROAD",
     "EVR",
@@ -256,26 +257,39 @@ test("long-term portfolio allocations are complete", () => {
   assert.ok(!source.includes("Average cost"));
 });
 
-test("equity research navigation alias is removed", () => {
+test("equity research uses the canonical research route", () => {
   const data = fs.readFileSync("src/lib/data.ts", "utf8");
-  assert.ok(!data.includes("Equity Research"));
+  assert.match(data, /label: "Equity Research", href: "\/research"/);
   assert.ok(!data.includes("/equity-research"));
   assert.ok(!fs.existsSync("src/app/equity-research"));
 });
 
-test("portfolio dashboard reuses tested performance calculations without modifying them", () => {
+test("portfolio hides performance while preserving tested calculations", () => {
   const page = fs.readFileSync("src/app/portfolios/page.tsx", "utf8");
   const component = fs.readFileSync(
     "src/components/portfolio-dashboard.tsx",
     "utf8",
   );
-  assert.ok(page.includes('"Performance"'));
-  assert.ok(page.includes("<PortfolioPerformance"));
+  assert.ok(!page.includes('"Performance"'));
+  assert.ok(!page.includes("<PortfolioPerformance"));
   assert.match(component, /export function PortfolioPerformance/);
   assert.match(
     component,
     /annualizedSharpe, cumulativeReturn, maxDrawdown, sortinoRatio/,
   );
+});
+
+test("homepage omits the retired overview modules", () => {
+  const page = fs.readFileSync("src/app/page.tsx", "utf8");
+  for (const section of [
+    "Featured Research",
+    "Evidence before opinion.",
+    "Career and Credentials",
+    "Portfolio · Latest Decision Review",
+    "Portfolio Snapshot",
+    "Current Areas of Focus",
+  ])
+    assert.ok(!page.includes(section), `homepage still includes: ${section}`);
 });
 
 test("temporarily hidden navigation pages remain available", () => {
@@ -309,7 +323,9 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
   ])
     assert.ok(source.includes(section), `missing resume section: ${section}`);
   assert.match(recruiter, /RecruiterView/);
-  assert.match(recruiter, /Resume/);
+  assert.match(recruiter, /ResumeContent/);
+  assert.match(recruiter, /portraitSrc="\/shyheim-lee-recruiter.jpeg"/);
+  assert.ok(fs.existsSync("public/shyheim-lee-recruiter.jpeg"));
   assert.match(actions, /Download Profile/);
   assert.ok(!source.includes("FMVA"));
   assert.match(source, /Microsoft Excel<\/b>\s*<span>\s*Completed/);
@@ -325,11 +341,14 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
   const styles = fs.readFileSync("src/app/luxury.css", "utf8");
   for (const label of [
     "Home",
-    "Research",
-    "Portfolio",
-    "About",
+    "Equity Research",
+    "Valuation Lab",
+    "Transaction Intelligence",
+    "Portfolio Lab",
+    "Analyst Journal",
     "Recruiter View",
     "Contact",
+    "Development Log",
   ])
     assert.ok(
       data.includes(`label: "${label}"`),
@@ -345,6 +364,8 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
       !data.includes(`label: "${retired}"`),
       `retired top-level navigation remains: ${retired}`,
     );
+  assert.ok(fs.existsSync("src/app/research/page.tsx"));
+  assert.ok(fs.existsSync("src/app/analyst-journal/page.tsx"));
   for (const token of [
     "--charcoal:",
     "--graphite:",
@@ -356,6 +377,52 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
     "--font-serif",
   ])
     assert.ok(styles.includes(token), `missing luxury token: ${token}`);
+});
+
+test("recruiter-facing architecture documents analyst process without fabricated precision", () => {
+  const profile = fs.readFileSync(
+    "src/lib/professional-profile.ts",
+    "utf8",
+  );
+  const home = fs.readFileSync("src/app/page.tsx", "utf8");
+  const recruiter = fs.readFileSync("src/app/resume/page.tsx", "utf8");
+  const portfolio = fs.readFileSync(
+    "src/app/portfolios/page.tsx",
+    "utf8",
+  );
+  for (const pillar of [
+    "Equity Research",
+    "Valuation Lab",
+    "Transaction Intelligence",
+    "Portfolio Lab",
+    "Analyst Journal",
+    "Development Log",
+  ])
+    assert.ok(profile.includes(`title: "${pillar}"`), `missing pillar: ${pillar}`);
+  for (const stage of [
+    "Military",
+    "Supply Chain",
+    "Financial Accountability",
+    "Accounting",
+    "Data Center Operations",
+    "Finance",
+    "Investment Research",
+    "Investment & Strategy",
+  ])
+    assert.ok(profile.includes(`stage: "${stage}"`), `missing stage: ${stage}`);
+  assert.match(home, /professionalPositioning/);
+  assert.match(recruiter, /Why hire me\?/);
+  assert.match(recruiter, /Luna1 is a professional research portfolio/);
+  for (const field of [
+    "purchaseDate",
+    "valuation",
+    "positionSize",
+    "thesisStatus",
+    "whatChanged",
+  ])
+    assert.ok(portfolio.includes(field), `missing portfolio field: ${field}`);
+  assert.match(portfolio, /Date pending verification/);
+  assert.match(portfolio, /Not publicly disclosed/);
 });
 
 test("retired expanded sections are absent and Mistake Journal belongs to Portfolio", () => {

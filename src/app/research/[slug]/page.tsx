@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ResearchDisclaimer } from "@/components/research-ui";
 import { research } from "@/lib/data";
 import { PageHeader, Score, SectionHeading } from "@/components/site";
 
@@ -136,6 +137,9 @@ export default async function Report({
             </article>
           ))}
         </div>
+      </section>
+      <section className="research-disclaimer-section">
+        <ResearchDisclaimer />
       </section>
     </>
   );

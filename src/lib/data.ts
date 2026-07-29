@@ -1,9 +1,15 @@
 export type NavigationItem = { label: string; href: string };
 export const navigationItems: NavigationItem[] = [
   { label: "Home", href: "/" },
-  { label: "Research", href: "/research" },
-  { label: "Portfolio", href: "/portfolio" },
-  { label: "About", href: "/about" },
+  { label: "Equity Research", href: "/research" },
+  { label: "Valuation Lab", href: "/valuation-models" },
+  {
+    label: "Transaction Intelligence",
+    href: "/transaction-intelligence",
+  },
+  { label: "Portfolio Lab", href: "/portfolio" },
+  { label: "Analyst Journal", href: "/analyst-journal" },
+  { label: "Development Log", href: "/development-log" },
   { label: "Recruiter View", href: "/recruiter" },
   { label: "Contact", href: "/contact" },
 ];
@@ -45,18 +51,6 @@ export const research: ResearchReport[] = [
     "Project execution",
     "2026-06-19",
     "Active",
-  ],
-  [
-    "PDFS",
-    "PDF Solutions",
-    "Semiconductor Software",
-    "Yield analytics",
-    81,
-    "LUNA-A",
-    "Analytics adoption",
-    "Revenue variability",
-    "2026-06-08",
-    "Watchlist",
   ],
   [
     "CASY",

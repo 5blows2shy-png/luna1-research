@@ -13,6 +13,10 @@ import {
 const classificationOptions = [
   "All",
   "Failed Thesis",
+  "Valuation",
+  "Behavior",
+  "Timing",
+  "Incomplete Research",
   "Early Exit",
   "Poor Entry",
   "Position Sizing",
@@ -117,7 +121,7 @@ function ReviewDrawer({ entry, onClose }: { entry: MistakeJournalEntry; onClose:
           <article><span>03</span><div><h3>What Mistakes Did I Make?</h3><ReviewList items={entry.mistakes}/></div></article>
           <article><span>04</span><div><h3>What Did I Learn?</h3><ReviewList items={entry.lessons}/></div></article>
           <article><span>05</span><div><h3>What Opportunities Did I Miss?</h3><ReviewList items={entry.missedOpportunities}/></div></article>
-          <article><span>06</span><div><h3>Process Changes</h3><ReviewList items={entry.processChanges}/></div></article>
+          <article><span>06</span><div><h3>What Changed Going Forward</h3><ReviewList items={entry.processChanges}/></div></article>
           <article><span>07</span><div><h3>Final Assessment</h3><p>{entry.finalAssessment}</p></div></article>
         </div>
 
@@ -207,7 +211,7 @@ export function MistakeJournal() {
                 <td data-label="Entry date">{formatDate(entry.entryDate)}</td>
                 <td data-label="Exit date">{formatDate(entry.exitDate)}</td>
                 <td data-label="Classification">{[entry.classification, ...(entry.secondaryClassifications ?? [])].join(" · ")}</td>
-                <td data-label="Outcome"><span className="status">{entry.outcome}</span></td>
+                <td data-label="Outcome"><span className="status" data-status={entry.outcome?.toLowerCase().replaceAll(" ", "-")}>{entry.outcome}</span></td>
                 <td data-label="Thesis status">{entry.thesisStatus}</td>
                 <td data-label="Entry quality">{entry.entryQuality}</td>
                 <td data-label="Exit quality">{entry.exitQuality}</td>
