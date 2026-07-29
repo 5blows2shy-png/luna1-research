@@ -551,3 +551,61 @@ test("reduced motion disables the prism sweep", async ({ page }) => {
     )
     .toBe("none");
 });
+
+test("thesis stress test validates probabilities and generates a memo", async ({
+  page,
+}) => {
+  await page.goto("/research/anet");
+  await page.getByRole("link", { name: "Challenge the Thesis" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Luna1 Thesis Stress Test" }),
+  ).toBeVisible();
+  await page.getByLabel("Bull-case probability").fill("20");
+  await expect(page.locator(".validation-error")).toContainText("must equal 100%");
+  await expect(
+    page.getByRole("button", { name: /Generate deterministic analysis/ }),
+  ).toBeDisabled();
+  await page.getByLabel("Bull-case probability").fill("25");
+  await page
+    .getByRole("button", { name: /Generate deterministic analysis/ })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Your View vs. Luna1" }),
+  ).toBeVisible();
+  await expect(page.getByText("Luna1 Investment Committee Challenge")).toBeVisible();
+  await expect(page.getByText(/not investment advice/i).last()).toBeVisible();
+});
+
+test("stress test supports analyst, risk, project, and anonymous observer modes", async ({
+  page,
+}) => {
+  await page.goto("/research/strl/stress-test");
+  await page.getByRole("radio", { name: "Research Analyst" }).check();
+  await expect(page.getByLabel("Revenue growth")).toBeVisible();
+  await page.getByRole("radio", { name: "Risk Analyst" }).check();
+  await expect(page.getByLabel("Execution risk score")).toBeVisible();
+  await page
+    .getByRole("radio", { name: "Infrastructure / Project Finance" })
+    .check();
+  await expect(page.getByLabel("Project capacity")).toBeVisible();
+  await page.getByRole("radio", { name: "Observer" }).check();
+  await expect(page.getByText("Read-only committee review")).toBeVisible();
+});
+
+test("research-view endpoint rejects invalid anonymous submissions", async ({
+  request,
+}) => {
+  const response = await request.post("/api/research-views", {
+    data: {
+      professionalRole: "Research Analyst",
+      company: "Arista Networks",
+      thesisStance: "Neutral",
+      importantAssumption: "Margins",
+      mainDisagreement: "The margin assumption needs more evidence.",
+      researchQuestion: "What supports the forward margin assumption?",
+      sourceUrl: "javascript:alert(1)",
+      consent: "true",
+    },
+  });
+  expect(response.status()).toBe(400);
+});

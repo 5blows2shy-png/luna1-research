@@ -1,7 +1,8 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ResearchDisclaimer } from "@/components/research-ui";
-import { PageHeader, Score, SectionHeading } from "@/components/site";
 import { research } from "@/lib/data";
+import { PageHeader, Score, SectionHeading } from "@/components/site";
 
 export function generateStaticParams() {
   return research.map((report) => ({ slug: report.ticker.toLowerCase() }));
@@ -13,9 +14,10 @@ export default async function Report({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const report = research.find((item) => item.ticker.toLowerCase() === slug);
+  const report = research.find(
+    (item) => item.ticker.toLowerCase() === slug,
+  );
   if (!report) notFound();
-
   const sections = [
     [
       "What the Company Does",
@@ -76,7 +78,6 @@ export default async function Report({
       "Company filings, earnings materials, transcripts, and industry sources will be linked as reports are completed.",
     ],
   ];
-
   return (
     <>
       <PageHeader
@@ -103,6 +104,22 @@ export default async function Report({
         <div className="placeholder-banner">
           Illustrative research template — sample values are not current market
           data or a recommendation.
+        </div>
+        <div className="thesis-challenge-callout">
+          <div>
+            <span className="eyebrow">Interactive committee review</span>
+            <h2>Challenge the Luna1 assumptions.</h2>
+            <p>
+              Enter a professional research view, run deterministic scenarios,
+              compare conclusions, and export an investment committee memo.
+            </p>
+          </div>
+          <Link
+            className="button primary"
+            href={`/research/${report.ticker.toLowerCase()}/stress-test`}
+          >
+            Challenge the Thesis <span aria-hidden="true">→</span>
+          </Link>
         </div>
         <SectionHeading
           eyebrow="Executive summary"
