@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { DcfCalculator, PageHeader, SectionHeading } from "@/components/site";
+import { DcfCalculator } from "@/components/interactive-tools";
+import { PageHeader, SectionHeading } from "@/components/site";
 
 export const metadata: Metadata = {
   title: "Valuation Lab",

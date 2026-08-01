@@ -1,12 +1,27 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useState, type KeyboardEvent } from "react";
-import { MistakeJournal } from "@/components/mistake-journal";
 import { PortfolioMarketBoard } from "@/components/portfolio-market-board";
-import { ResearchCoverageGrid } from "@/components/research/research-coverage-grid";
 import { PageHeader, SectionHeading } from "@/components/site";
 import { watchlist } from "@/lib/watchlist-data";
+
+const MistakeJournal = dynamic(
+  () =>
+    import("@/components/mistake-journal").then(
+      (module) => module.MistakeJournal,
+    ),
+  { loading: () => <p className="market-message">Loading decision reviews…</p> },
+);
+
+const ResearchCoverageGrid = dynamic(
+  () =>
+    import("@/components/research/research-coverage-grid").then(
+      (module) => module.ResearchCoverageGrid,
+    ),
+  { loading: () => <p className="market-message">Loading research coverage…</p> },
+);
 
 type ActivePosition = {
   ticker: string;

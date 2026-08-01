@@ -1,15 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
+import { Cormorant_Garamond, Geist } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Footer, Navbar } from "@/components/site";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/site";
 import "./globals.css";
 import "./luxury.css";
-const sans=Geist({variable:"--font-sans",subsets:["latin"]});
-const mono=Geist_Mono({variable:"--font-mono",subsets:["latin"]});
-const serif=Cormorant_Garamond({variable:"--font-serif",subsets:["latin"],weight:["500","600"]});
+const sans=Geist({variable:"--font-sans",subsets:["latin"],display:"swap"});
+const serif=Cormorant_Garamond({variable:"--font-serif",subsets:["latin"],weight:"500",display:"optional"});
 export const viewport:Viewport={width:"device-width",initialScale:1,colorScheme:"dark light",themeColor:[{media:"(prefers-color-scheme: dark)",color:"#090b10"},{media:"(prefers-color-scheme: light)",color:"#f4f1e9"}]};
 export const metadata:Metadata={metadataBase:new URL("https://luna1research.com"),title:{default:"Luna1 Research | Professional Financial Research Portfolio",template:"%s | Luna1 Research"},description:"Shy Lee’s professional financial research platform connecting operational experience, accounting knowledge, valuation, and investment analysis.",applicationName:"Luna1 Research",category:"finance",robots:{index:true,follow:true},authors:[{name:"Shyheim Lee",url:"https://www.linkedin.com/in/shyheim-lee/"}],creator:"Shyheim Lee",icons:{icon:"/favicon.svg",shortcut:"/favicon.svg",apple:"/apple-icon.png"},openGraph:{type:"website",siteName:"Luna1 Research",locale:"en_US",url:"/",title:"Luna1 Research",description:"A professional portfolio of equity research, valuation, accounting controls, portfolio process, and continuous improvement."},twitter:{card:"summary_large_image",title:"Luna1 Research",description:"A professional financial research portfolio by Shy Lee."}};
 const schema={"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://luna1research.com/#website","url":"https://luna1research.com","name":"Luna1 Research","description":"A professional portfolio of educational equity research, valuation, accounting controls, and investment process."},{"@type":"Person","@id":"https://luna1research.com/#founder","name":"Shyheim Lee","url":"https://luna1research.com/about","jobTitle":"Finance Student and Investment Researcher","sameAs":["https://www.linkedin.com/in/shyheim-lee/"]}]};
 const themeInitializer=`(function(){try{var stored=localStorage.getItem("theme");var theme=stored==="light"||stored==="dark"?stored:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.dataset.theme=theme;}catch(error){document.documentElement.dataset.theme="dark";}})();`;
-export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en" className={`${sans.variable} ${mono.variable} ${serif.variable}`} data-theme="dark" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{__html:themeInitializer}}/></head><body><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replace(/</g,"\\u003c")}}/><a className="skip-link" href="#main-content">Skip to main content</a><Navbar/><main id="main-content" tabIndex={-1}>{children}</main><Footer/>{process.env.VERCEL&&<><Analytics/><SpeedInsights/></>}</body></html>}
+export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en" className={`${sans.variable} ${serif.variable}`} data-theme="dark" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{__html:themeInitializer}}/></head><body><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replace(/</g,"\\u003c")}}/><a className="skip-link" href="#main-content">Skip to main content</a><Navbar/><main id="main-content" tabIndex={-1}>{children}</main><Footer/>{process.env.VERCEL&&<><Analytics/><SpeedInsights/></>}</body></html>}

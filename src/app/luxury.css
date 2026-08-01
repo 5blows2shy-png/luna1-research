@@ -1540,3 +1540,12 @@ main:has(.ti-workspace) {
 .page-header.page-header-with-aside{grid-template-columns:minmax(0,1fr) minmax(460px,560px)}
 .page-header.page-header-with-aside>.page-header-rule{grid-column:1/-1}
 @media(max-width:1000px){.page-header.page-header-with-aside{grid-template-columns:1fr}.page-header.page-header-with-aside>.page-header-rule{grid-column:auto}}
+.recruiter-index ~ section,
+.luxury-hero ~ section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
+}
+:root {
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+}
