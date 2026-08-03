@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
-import { useMarketQuotes } from "@/hooks/use-market-quotes";
+import { useMarketQuotesContext } from "@/components/market/market-quotes-provider";
 import type { MarketQuote } from "@/lib/market-data";
 import { MarketCountdown } from "@/components/market/market-countdown";
 import { MarketStatusBadge } from "@/components/market/market-status-badge";
@@ -42,7 +42,8 @@ export function PortfolioMarketBoard() {
     return () => window.clearTimeout(restore);
   }, []);
   const symbols = useMemo(() => Array.from(new Set(selectedGroups.flatMap((group) => portfolioTickerGroups[group]))), [selectedGroups]);
-  const market = useMarketQuotes(symbols);
+  const sharedMarket = useMarketQuotesContext();
+  const market = useMemo(() => ({ ...sharedMarket, quotes: symbols.map((symbol) => sharedMarket.quotesBySymbol[symbol]).filter((quote): quote is MarketQuote => Boolean(quote)) }), [sharedMarket, symbols]);
   function toggleGroup(group: PortfolioTickerGroup) { setSelectedGroups((current) => { const next = current.includes(group) ? current.filter((item) => item !== group) : [...current, group]; const safe = next.length ? next : [group]; window.localStorage.setItem("luna1-portfolio-ticker-groups", JSON.stringify(safe)); return safe; }); }
   function handleTrackKeys(event: KeyboardEvent<HTMLDivElement>) { if (!trackRef.current || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return; const items = Array.from(trackRef.current.querySelectorAll<HTMLButtonElement>(".portfolio-quote")); const current = items.indexOf(document.activeElement as HTMLButtonElement); if (current < 0) return; event.preventDefault(); const next = event.key === "Home" ? 0 : event.key === "End" ? items.length - 1 : event.key === "ArrowRight" ? Math.min(current + 1, items.length - 1) : Math.max(current - 1, 0); items[next]?.focus(); items[next]?.scrollIntoView({ behavior: paused ? "auto" : "smooth", inline: "center", block: "nearest" }); }
   return <aside className="portfolio-market-board" aria-label="Luna1 portfolio market ticker">

@@ -4,6 +4,8 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useState, type KeyboardEvent } from "react";
 import { PortfolioMarketBoard } from "@/components/portfolio-market-board";
+import { MarketQuotesProvider } from "@/components/market/market-quotes-provider";
+import { QuoteDisplay } from "@/components/market/quote-display";
 import { PageHeader, SectionHeading } from "@/components/site";
 import { watchlist } from "@/lib/watchlist-data";
 
@@ -199,6 +201,13 @@ const compounders: Holding[] = [
   },
 ];
 
+const allPortfolioSymbols = Array.from(new Set([
+  ...activePositions.map(({ ticker }) => ticker),
+  ...watchlist.map(({ ticker }) => ticker),
+  ...coreAllocation.map(({ ticker }) => ticker),
+  ...compounders.map(({ ticker }) => ticker),
+])).map((symbol) => symbol.toUpperCase()).sort();
+
 const tabs = [
   "Overview",
   "Active Positions",
@@ -221,6 +230,7 @@ function HoldingsTable({ title, items }: { title: string; items: Holding[] }) {
           <thead>
             <tr>
               <th>Ticker</th>
+              <th>Market quote</th>
               <th>Fund / company</th>
               <th>Investment thesis</th>
               <th>Current allocation</th>
@@ -230,10 +240,11 @@ function HoldingsTable({ title, items }: { title: string; items: Holding[] }) {
           </thead>
           <tbody>
             {items.map((item) => (
-              <tr key={item.ticker}>
+              <tr key={item.ticker} data-symbol={item.ticker}>
                 <td data-label="Ticker">
                   <b>{item.ticker}</b>
                 </td>
+                <td data-label="Market quote"><QuoteDisplay symbol={item.ticker} compact /></td>
                 <td data-label="Fund / company">{item.company}</td>
                 <td data-label="Investment thesis" className="portfolio-copy">
                   {item.thesis}
@@ -400,7 +411,7 @@ export default function Portfolios() {
   }
 
   return (
-    <>
+    <MarketQuotesProvider symbols={allPortfolioSymbols}>
       <PageHeader
         kicker="Portfolio Lab"
         title="Conviction made accountable."
@@ -460,12 +471,13 @@ export default function Portfolios() {
                 </thead>
                 <tbody>
                   {activePositions.map((position) => (
-                    <tr key={position.ticker}>
+                    <tr key={position.ticker} data-symbol={position.ticker}>
                       <td data-label="Ticker / Company">
                         <b className="portfolio-ticker">{position.ticker}</b>
                         <small className="company-under">
                           {position.company}
                         </small>
+                        <QuoteDisplay symbol={position.ticker} compact />
                       </td>
                       <td data-label="Purchase date">
                         {position.purchaseDate}
@@ -534,6 +546,7 @@ export default function Portfolios() {
                   <thead>
                     <tr>
                       <th>Ticker</th>
+                      <th>Market quote</th>
                       <th>Company name</th>
                       <th>LUNA Score</th>
                       <th>Research status</th>
@@ -545,10 +558,11 @@ export default function Portfolios() {
                   </thead>
                   <tbody>
                     {watchlist.map((item) => (
-                      <tr key={item.ticker}>
+                      <tr key={item.ticker} data-symbol={item.ticker}>
                         <td data-label="Ticker">
                           <b>{item.ticker}</b>
                         </td>
+                        <td data-label="Market quote"><QuoteDisplay symbol={item.ticker} compact /></td>
                         <td data-label="Company name">
                           {item.company}
                           <Link
@@ -649,6 +663,6 @@ export default function Portfolios() {
           </div>
         </div>
       </section>
-    </>
+    </MarketQuotesProvider>
   );
 }

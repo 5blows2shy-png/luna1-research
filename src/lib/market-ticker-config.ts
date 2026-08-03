@@ -41,8 +41,10 @@ export const portfolioTickerGroups = {
   "Long-Term Compounders": ["LLY", "AAPL", "COST", "PG", "AMZN"],
 } as const;
 
+export const portfolioFundSymbols = ["VOO", "QQQM", "IAU", "SLV", "SGOV"] as const;
+
 export type PortfolioTickerGroup = keyof typeof portfolioTickerGroups;
-export const portfolioTickerSymbols = Array.from(new Set(Object.values(portfolioTickerGroups).flat()));
+export const portfolioTickerSymbols = Array.from(new Set([...Object.values(portfolioTickerGroups).flat(), ...portfolioFundSymbols]));
 const bucketPrecedence: PortfolioTickerGroup[] = ["Watchlist", "Long-Term Compounders", "Active Positions"];
 export const portfolioBucketBySymbol = Object.fromEntries(bucketPrecedence.flatMap((bucket) => portfolioTickerGroups[bucket].map((symbol) => [symbol, bucket]))) as Record<string, PortfolioTickerGroup>;
 

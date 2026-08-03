@@ -489,6 +489,32 @@ test("Portfolio market monitor labels holdings and supports controls", async ({ 
   await page.getByRole("button", { name: "Close quote details" }).click();
 });
 
+test("portfolio sections share one quote request and reusable displays", async ({ page }) => {
+  let portfolioRequests = 0;
+  await page.route("**/api/market-quotes?**", async (route) => {
+    const url = new URL(route.request().url());
+    const symbols = (url.searchParams.get("symbols") ?? "").split(",").filter(Boolean);
+    if (["CASY", "AIPO", "AAPL", "COST", "VOO"].every((symbol) => symbols.includes(symbol))) portfolioRequests += 1;
+    await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ status: "success", lastUpdated: "2026-07-31T20:00:00.000Z", provider: "Financial Modeling Prep", unavailableSymbols: [], quotes: symbols.map((symbol, index) => ({ symbol, price: 100 + index, change: 1.25, changePercent: 1.1, currency: "USD", marketStatus: "closed", timestamp: "2026-07-31T20:00:00.000Z", dataType: "previous-close" })) }) });
+  });
+  const quoteRow = (symbol: string) => page.locator(`[data-symbol="${symbol}"]`);
+  await page.goto("/portfolio");
+  await page.getByRole("tab", { name: "Active Positions" }).click();
+  await expect(quoteRow("CASY").getByText("Previous Close")).toBeVisible();
+  await page.getByRole("tab", { name: "Watchlist" }).click();
+  await expect(quoteRow("AIPO").getByText("Previous Close")).toBeVisible();
+  await page.getByRole("tab", { name: "Long-Term Compounders" }).click();
+  for (const symbol of ["AAPL", "COST", "VOO"]) await expect(quoteRow(symbol).getByText("Previous Close")).toBeVisible();
+  expect(portfolioRequests).toBe(1);
+});
+
+test("portfolio quote displays tolerate unavailable responses", async ({ page }) => {
+  await page.route("**/api/market-quotes?**", (route) => route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ status: "unavailable", message: "Market data is temporarily unavailable." }) }));
+  await page.goto("/portfolio");
+  await page.getByRole("tab", { name: "Watchlist" }).click();
+  await expect(page.locator('[data-symbol="AIPO"]').getByText("Quote unavailable")).toBeVisible();
+});
+
 test("JBL decision review remains under Portfolio", async ({
   page,
 }, testInfo) => {

@@ -14,7 +14,7 @@ export function useMarketQuotes(symbols: readonly string[]) {
   const [updateUnavailable, setUpdateUnavailable] = useState(false);
   const inFlight = useRef(false);
   const controller = useRef<AbortController | null>(null);
-  const symbolKey = symbols.join(",");
+  const symbolKey = Array.from(new Set(symbols.map((symbol) => symbol.trim().toUpperCase()).filter((symbol) => /^[A-Z0-9]{1,10}$/.test(symbol)))).sort().join(",");
   const sessionInfo = useMarketSession();
 
   const refresh = useCallback(async () => {
@@ -65,5 +65,6 @@ export function useMarketQuotes(symbols: readonly string[]) {
   }, [refresh, refreshDelay]);
   const hasValidQuote = data.quotes.some(({ price }) => price !== null);
   const stale = data.quotes.some((quote) => quote.price !== null && isMarketDataStale(quote.timestamp ?? data.updatedAt, sessionInfo.session, quote.dataType, sessionInfo.now));
-  return { ...data, loading, refresh, sessionInfo, hasValidQuote, updateUnavailable, stale };
+  const quotesBySymbol = Object.fromEntries(data.quotes.map((quote) => [quote.symbol.toUpperCase(), quote])) as Record<string, MarketQuote>;
+  return { ...data, quotesBySymbol, loading, refresh, sessionInfo, hasValidQuote, updateUnavailable, stale };
 }
