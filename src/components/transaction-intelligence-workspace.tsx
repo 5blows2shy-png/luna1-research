@@ -175,9 +175,9 @@ function HomeTab() {
   return (
     <>
       <div className="ti-home-hero">
-        <span>Luna1 Transaction Intelligence</span>
+        <span>Luna Books</span>
         <h2>Clean messy books before they slow the business down.</h2>
-        <p>Luna1 Transaction Intelligence helps small businesses, nonprofits, churches, ministries, and creative teams clean up disorganized transactions, missing documents, unreconciled bank activity, and board reporting gaps.</p>
+        <p>Luna Books helps small businesses, nonprofits, churches, ministries, and creative teams clean up disorganized transactions, missing documents, unreconciled bank activity, and board reporting gaps.</p>
         <p>The client-facing promise is simple: send the files, see what is missing, clean the books, and leave every review item organized for follow-up.</p>
       </div>
       <div className="ti-service-grid">
@@ -381,12 +381,12 @@ export function TransactionIntelligenceWorkspace() {
   return (
     <div className="ti-workspace">
       <header className="ti-banner">
-        <div><span>In Development · Review Workspace</span><h1>Luna1 Transaction Intelligence</h1></div>
+        <div><span>In Development · Review Workspace</span><h1>Luna Books</h1></div>
         <p>Import, organize, classify, reconcile, and export transaction records through structured accounting controls.</p>
       </header>
       <div className="ti-review-banner">Clean messy books, organize client requests, and prepare finance review files. Tools are for review only and do not approve, post, or modify accounting records.</div>
       <Alert kind="warning">PDF extraction is best-effort and may require manual review. This workspace prepares review files only and does not replace accounting approval.</Alert>
-      <nav className="ti-tabs" aria-label="Transaction Intelligence workspace">
+      <nav className="ti-tabs" aria-label="Luna Books workspace">
         {tabs.map((tab) => <button key={tab} aria-pressed={activeTab === tab} onClick={() => setActiveTab(tab)}>{tab}</button>)}
       </nav>
       <main className="ti-panel">

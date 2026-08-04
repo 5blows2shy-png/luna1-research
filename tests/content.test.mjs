@@ -323,7 +323,7 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
     "Portfolio · Mistake Journal",
     "A career built across finance and operations.",
     "Start a professional conversation.",
-    "Transaction Intelligence",
+    "Luna Books",
   ])
     assert.ok(!source.includes(removed), `removed resume content remains: ${removed}`);
   assert.match(
@@ -355,7 +355,7 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
     "Home",
     "Equity Research",
     "Valuation Lab",
-    "Transaction Intelligence",
+    "Luna Books",
     "Portfolio Lab",
     "Analyst Journal",
     "Recruiter View",
@@ -405,7 +405,7 @@ test("recruiter-facing architecture documents analyst process without fabricated
   for (const pillar of [
     "Equity Research",
     "Valuation Lab",
-    "Transaction Intelligence",
+    "Luna Books",
     "Portfolio Lab",
     "Analyst Journal",
     "Development Log",

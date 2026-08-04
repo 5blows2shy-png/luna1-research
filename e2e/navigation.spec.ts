@@ -147,7 +147,7 @@ test("desktop and mobile navigation expose only the permanent product scope", as
     "Home",
     "Equity Research",
     "Valuation Lab",
-    "Transaction Intelligence",
+    "Luna Books",
     "Portfolio Lab",
     "Analyst Journal",
     "Recruiter View",
@@ -222,13 +222,13 @@ test("research note and development log filters work", async ({ page }) => {
   await expect(page.getByText("1 entries")).toBeVisible();
 });
 
-test("Transaction Intelligence preview is promoted without overstating readiness", async ({
+test("Luna Books preview is promoted without overstating readiness", async ({
   page,
 }) => {
   await page.goto("/development-log");
   const entry = page.locator("article").filter({
     has: page.getByRole("heading", {
-      name: "Integrated Transaction Intelligence Preview",
+      name: "Integrated Luna Books Preview",
     }),
   });
 
@@ -241,20 +241,20 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   await expect(entry.locator(".development-preview li")).toHaveCount(9);
   await expect(
     entry.getByRole("link", {
-      name: "View Transaction Intelligence Preview",
+      name: "View Luna Books Preview",
     }),
   ).toHaveAttribute("href", "/transaction-intelligence");
 
   await page.goto("/transaction-intelligence");
   await expect(
     page.getByRole("heading", {
-      name: "Luna1 Transaction Intelligence",
+      name: "Luna Books",
       level: 1,
     }),
   ).toBeVisible();
   await expect(page.getByText("In Development").first()).toBeVisible();
   const workspace = page.getByRole("navigation", {
-    name: "Transaction Intelligence workspace",
+    name: "Luna Books workspace",
   });
   for (const tab of [
     "Home",

@@ -7,13 +7,13 @@ const componentPath = "src/components/development-log-filter.tsx";
 const dataSource = fs.readFileSync(dataPath, "utf8");
 const componentSource = fs.readFileSync(componentPath, "utf8");
 
-test("Transaction Intelligence preview appears once in the centralized log", () => {
+test("Luna Books preview appears once in the centralized log", () => {
   assert.equal(
     dataSource.match(/id: "transaction-intelligence-preview"/g)?.length,
     1,
   );
   assert.equal(
-    dataSource.match(/title: "Integrated Transaction Intelligence Preview"/g)
+    dataSource.match(/title: "Integrated Luna Books Preview"/g)
       ?.length,
     1,
   );
@@ -70,7 +70,7 @@ test("preview capabilities remain visibly unfinished and link to the promoted pa
 
   assert.match(dataSource, /route: "\/transaction-intelligence"/);
   assert.ok(fs.existsSync("src/app/transaction-intelligence/page.tsx"));
-  assert.match(componentSource, /View Transaction Intelligence Preview/);
+  assert.match(componentSource, /View Luna Books Preview/);
 });
 
 test("public entry preserves project-origin privacy and educational scope", () => {
