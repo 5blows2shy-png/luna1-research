@@ -13,12 +13,13 @@ test("market credentials remain server-side and unavailable data is explicit", a
 });
 
 test("global market pulse includes the requested direct instruments", async () => {
-  const [config, component, layout] = await Promise.all([read("src/lib/market-ticker-config.ts"), read("src/components/market-pulse.tsx"), read("src/app/layout.tsx")]);
+  const [config, component, wrapper, layout] = await Promise.all([read("src/lib/market-ticker-config.ts"), read("src/components/market-pulse.tsx"), read("src/components/route-aware-market-pulse.tsx"), read("src/app/layout.tsx")]);
   for (const ticker of ["SPX", "COMP", "DJIA", "RUT", "US10Y", "WTI", "NATGAS", "GOLD", "NVDA", "AVGO", "EQIX", "DLR", "VRT", "ANET", "BE", "V", "MA", "ICE", "CME", "SPGI", "MSCI"]) assert.ok(config.includes(`symbol: "${ticker}"`) || config.includes(`"${ticker}"`));
   assert.match(component, /Luna1 Market Pulse/);
   assert.match(component, /Market data may be delayed/);
   assert.match(component, /ArrowRight/);
-  assert.match(layout, /<Navbar\/><MarketPulse\/>/);
+  assert.match(wrapper, /<MarketPulse \/>/);
+  assert.match(layout, /<Navbar\/><RouteAwareMarketPulse\/>/);
 });
 
 test("market service uses secure normalized FMP endpoints and adaptive caching", async () => {
