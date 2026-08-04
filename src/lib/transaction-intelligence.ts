@@ -164,6 +164,310 @@ export function cleanTransactions(rows: TransactionRow[]): TransactionRow[] {
   });
 }
 
+export type BoardPacketSource = {
+  key: string;
+  label: string;
+  rows: TransactionRow[];
+  note: string;
+  required?: boolean;
+};
+
+export type BoardPacketAnalysis = ReturnType<typeof buildBoardPacketAnalysis>;
+
+const boardMoney = (value: number) =>
+  value.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+export function buildBoardPacketAnalysis(
+  sources: BoardPacketSource[],
+  largeTransactionThreshold = 1000,
+) {
+  const transactionSource = sources.find(
+    (source) => source.key === "transactions",
+  );
+  const transactions = cleanTransactions(transactionSource?.rows ?? []);
+  const loadedSources = sources.filter((source) => source.rows.length > 0);
+  const flagged = transactions.filter((row) => Boolean(row.is_flagged));
+  const duplicates = flagged.filter((row) =>
+    String(row.review_flag).toLowerCase().includes("duplicate"),
+  );
+  const uncategorized = transactions.filter((row) =>
+    ["Needs Review", "Uncategorized"].includes(
+      String(row.suggested_category),
+    ),
+  );
+  const large = transactions.filter(
+    (row) => Math.abs(Number(row.amount) || 0) >= largeTransactionThreshold,
+  );
+  const incoming = transactions.reduce(
+    (sum, row) => sum + Math.max(0, Number(row.amount) || 0),
+    0,
+  );
+  const outgoing = transactions.reduce(
+    (sum, row) => sum + Math.abs(Math.min(0, Number(row.amount) || 0)),
+    0,
+  );
+  const netChange = incoming - outgoing;
+  const datedTransactions = transactions
+    .map((row) => ({ row, date: new Date(String(row.date ?? "")) }))
+    .filter(({ date }) => Number.isFinite(date.getTime()))
+    .sort((left, right) => left.date.getTime() - right.date.getTime());
+  const periodStart = datedTransactions.at(0)?.date;
+  const periodEnd = datedTransactions.at(-1)?.date;
+  const formatDate = (date?: Date) =>
+    date
+      ? date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          timeZone: "UTC",
+        })
+      : "Not available";
+
+  const categoryMap = new Map<string, { count: number; inflow: number; outflow: number }>();
+  transactions.forEach((row) => {
+    const category = String(
+      row.suggested_category || row.category || "Uncategorized",
+    );
+    const amount = Number(row.amount) || 0;
+    const current = categoryMap.get(category) ?? {
+      count: 0,
+      inflow: 0,
+      outflow: 0,
+    };
+    current.count += 1;
+    current.inflow += Math.max(0, amount);
+    current.outflow += Math.abs(Math.min(0, amount));
+    categoryMap.set(category, current);
+  });
+  const categoryBreakdown: TransactionRow[] = [...categoryMap.entries()]
+    .sort((left, right) => right[1].outflow - left[1].outflow)
+    .map(([category, totals]) => ({
+      category,
+      transactions: totals.count,
+      money_in: boardMoney(totals.inflow),
+      money_out: boardMoney(totals.outflow),
+      share_of_outflow:
+        outgoing > 0
+          ? `${((totals.outflow / outgoing) * 100).toFixed(1)}%`
+          : "0.0%",
+    }));
+
+  const monthMap = new Map<string, { inflow: number; outflow: number; count: number }>();
+  datedTransactions.forEach(({ row, date }) => {
+    const month = date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      timeZone: "UTC",
+    });
+    const current = monthMap.get(month) ?? { inflow: 0, outflow: 0, count: 0 };
+    const amount = Number(row.amount) || 0;
+    current.inflow += Math.max(0, amount);
+    current.outflow += Math.abs(Math.min(0, amount));
+    current.count += 1;
+    monthMap.set(month, current);
+  });
+  const activityTrend: TransactionRow[] = [...monthMap.entries()].map(
+    ([period, totals]) => ({
+      period,
+      transactions: totals.count,
+      money_in: boardMoney(totals.inflow),
+      money_out: boardMoney(totals.outflow),
+      net_change: boardMoney(totals.inflow - totals.outflow),
+    }),
+  );
+
+  const topMovements: TransactionRow[] = [...transactions]
+    .sort(
+      (left, right) =>
+        Math.abs(Number(right.amount) || 0) -
+        Math.abs(Number(left.amount) || 0),
+    )
+    .slice(0, 10)
+    .map((row) => ({
+      date: row.date,
+      description: row.description,
+      amount: row.amount,
+      direction: Number(row.amount) >= 0 ? "Inflow" : "Outflow",
+      category: row.suggested_category,
+      review_status: row.review_flag || "No automated flag",
+    }));
+
+  const reconciliationRows =
+    sources.find((source) => source.key === "reconciliation")?.rows ?? [];
+  const journalRows =
+    sources.find((source) => source.key === "journal_entries")?.rows ?? [];
+  const reviewRegister: TransactionRow[] = [
+    ...flagged.map((row) => ({
+      priority:
+        Math.abs(Number(row.amount) || 0) >= largeTransactionThreshold
+          ? "High"
+          : "Normal",
+      source: "Cleaned Transactions",
+      review_item: row.review_flag || "Flagged transaction",
+      description: row.description,
+      amount: row.amount,
+      suggested_follow_up:
+        "Confirm support, business purpose, coding, approval, and duplicate status.",
+    })),
+    ...reconciliationRows.map((row) => ({
+      priority: "High",
+      source: "Reconciliation Exceptions",
+      review_item: "Imported reconciliation exception",
+      description:
+        row.description || row.bank_description || row.memo || "Review imported row",
+      amount: row.amount || row.bank_amount || row.qbo_amount || "",
+      suggested_follow_up:
+        "Resolve the difference and retain evidence before completing the close.",
+    })),
+    ...journalRows
+      .filter((row) =>
+        ["yes", "true", "review", "needs review"].includes(
+          String(row.review_required ?? row.status ?? "").toLowerCase(),
+        ),
+      )
+      .map((row) => ({
+        priority: "High",
+        source: "Suggested Journal Entries",
+        review_item: "Journal entry requires approval",
+        description: row.description || row.memo || "Review imported entry",
+        amount: row.debit_amount || row.credit_amount || row.amount || "",
+        suggested_follow_up:
+          "Validate accounts, support, period, and approval before posting.",
+      })),
+  ];
+
+  const sourceCoverage: TransactionRow[] = sources.map((source) => ({
+    file: source.label,
+    status: source.rows.length ? "Loaded" : source.required ? "Required" : "Recommended",
+    rows_imported: source.rows.length,
+    contribution: source.rows.length
+      ? source.key === "transactions"
+        ? "Cash activity, categories, trends, and transaction review"
+        : `Included in board context, review workflow, and full exports`
+      : "Not included in current analysis",
+    import_note: source.note || "No file imported",
+  }));
+  const missingSources = sources.filter((source) => !source.rows.length);
+  const coveragePoints = Math.round(
+    (loadedSources.length / Math.max(sources.length, 1)) * 55,
+  );
+  const reviewPenalty = transactions.length
+    ? Math.round((flagged.length / transactions.length) * 30)
+    : 30;
+  const readiness = transactions.length
+    ? Math.max(10, Math.min(100, 45 + coveragePoints - reviewPenalty))
+    : 0;
+  const topCategory = categoryBreakdown[0];
+  const unresolvedCount = reviewRegister.length;
+
+  const executiveSummary: TransactionRow[] = [
+    {
+      topic: "Imported evidence",
+      detailed_summary: `${loadedSources.length} of ${sources.length} close-file categories are loaded. The packet contains ${transactions.length} transaction records and ${loadedSources.reduce((sum, source) => sum + source.rows.length, 0)} total imported rows across all files.`,
+    },
+    {
+      topic: "Cash activity",
+      detailed_summary: `Imported transactions show ${boardMoney(incoming)} coming in, ${boardMoney(outgoing)} going out, and a net change of ${boardMoney(netChange)} for the detected period ${formatDate(periodStart)} through ${formatDate(periodEnd)}.`,
+    },
+    {
+      topic: "Operating concentration",
+      detailed_summary: topCategory
+        ? `${topCategory.category} is the largest detected outflow category at ${topCategory.money_out}, representing ${topCategory.share_of_outflow} of imported outflows.`
+        : "Category concentration cannot be evaluated until transaction data is imported.",
+    },
+    {
+      topic: "Close quality",
+      detailed_summary: `${flagged.length} of ${transactions.length} transactions are flagged, including ${uncategorized.length} uncategorized item(s), ${duplicates.length} possible duplicate(s), and ${large.length} transaction(s) at or above the ${boardMoney(largeTransactionThreshold)} review threshold.`,
+    },
+    {
+      topic: "Board readiness",
+      detailed_summary: `Indicative review readiness is ${readiness}%. This score reflects file coverage and unresolved automated review flags; it is not an accounting certification or approval.`,
+    },
+  ];
+
+  const boardNarrative: TransactionRow[] = [
+    {
+      board_lens: "What happened",
+      interpretation: `The imported activity produced a net change of ${boardMoney(netChange)} from ${transactions.length} transactions during the detected period.`,
+      evidence: `${boardMoney(incoming)} inflows less ${boardMoney(outgoing)} outflows`,
+    },
+    {
+      board_lens: "Where money moved",
+      interpretation: topCategory
+        ? `The largest detected outflow category is ${topCategory.category}; the board may want to compare this concentration with budget, program, and operating expectations.`
+        : "Spending concentration is not yet available.",
+      evidence: topCategory
+        ? `${topCategory.money_out} and ${topCategory.share_of_outflow} of outflows`
+        : "No categorized transaction evidence",
+    },
+    {
+      board_lens: "What needs attention",
+      interpretation: `${unresolvedCount} consolidated review item(s) should be resolved or explained before the packet is treated as close-ready.`,
+      evidence: `${flagged.length} transaction flags plus ${Math.max(0, unresolvedCount - flagged.length)} imported reconciliation or journal-entry review items`,
+    },
+    {
+      board_lens: "What is missing",
+      interpretation: missingSources.length
+        ? `${missingSources.map((source) => source.label).join(", ")} are not loaded, so related conclusions remain limited.`
+        : "All recommended close-file categories are represented in the packet.",
+      evidence: `${loadedSources.length} of ${sources.length} file categories loaded`,
+    },
+  ];
+
+  const managementQuestions: TransactionRow[] = [
+    ...(flagged.length
+      ? [{ question: `What support, approval, and business purpose resolves the ${flagged.length} flagged transaction(s)?`, reason: "Close quality and audit trail" }]
+      : []),
+    ...(duplicates.length
+      ? [{ question: `Are the ${duplicates.length} possible duplicate transaction(s) genuine duplicates, reversals, or separate valid activity?`, reason: "Potential overstatement or misclassification" }]
+      : []),
+    ...(large.length
+      ? [{ question: `Were all ${large.length} transaction(s) above the review threshold expected, authorized, and supported?`, reason: "Material cash movement" }]
+      : []),
+    ...missingSources.map((source) => ({
+      question: `Can management provide or explain the missing ${source.label} file?`,
+      reason: "Board packet evidence coverage",
+    })),
+    {
+      question:
+        "Do the imported results agree with the general ledger, bank reconciliation, and management's understanding of the period?",
+      reason: "Final close validation",
+    },
+  ];
+
+  return {
+    transactions,
+    flagged,
+    duplicates,
+    uncategorized,
+    large,
+    incoming,
+    outgoing,
+    netChange,
+    readiness,
+    periodStart: formatDate(periodStart),
+    periodEnd: formatDate(periodEnd),
+    loadedSourceCount: loadedSources.length,
+    totalSourceCount: sources.length,
+    totalImportedRows: loadedSources.reduce(
+      (sum, source) => sum + source.rows.length,
+      0,
+    ),
+    sourceCoverage,
+    categoryBreakdown,
+    activityTrend,
+    topMovements,
+    reviewRegister,
+    executiveSummary,
+    boardNarrative,
+    managementQuestions,
+    missingSources,
+  };
+}
+
 const similarity = (left: string, right: string) => {
   const a = new Set(left.toLowerCase().split(/\W+/).filter(Boolean));
   const b = new Set(right.toLowerCase().split(/\W+/).filter(Boolean));
@@ -304,7 +608,7 @@ export async function buildPdfReport({
       height: 64,
       color: colors.header,
     });
-    page.drawText("LUNA1 ACCOUNTING & TRANSACTION INTELLIGENCE", {
+    page.drawText("LUNA BOOKS", {
       x: margin,
       y: pageHeight - 34,
       size: 10,
@@ -473,7 +777,7 @@ export async function buildPdfReport({
   });
   document.setTitle(pdfText(title));
   document.setAuthor("Luna1 Research");
-  document.setSubject("Accounting and Transaction Intelligence review report");
+  document.setSubject("Luna Books review report");
   return document.save();
 }
 

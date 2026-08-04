@@ -38,7 +38,7 @@ export const platformPillars: PlatformPillar[] = [
   },
   {
     number: "03",
-    title: "Accounting Intelligence",
+    title: "Luna Books",
     href: "/transaction-intelligence",
     purpose:
       "An accounting-control workflow for cleaning, classifying, reconciling, reviewing, and exporting transaction records.",

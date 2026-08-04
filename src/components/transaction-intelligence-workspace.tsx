@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import {
+  buildBoardPacketAnalysis,
   cleanTransactions,
   downloadFile,
   downloadPdfReport,
@@ -11,6 +12,7 @@ import {
   reconcile,
   sampleTransactions,
   suggestJournalEntry,
+  type BoardPacketSource,
   type TransactionRow,
   workbookXml,
 } from "@/lib/transaction-intelligence";
@@ -38,6 +40,72 @@ const nonprofitRows = [
   { Area: "Grant deadline", Item: "Grant report backup", Owner: "Program manager", Status: "Waiting on documents", "Due date": "2026-05-20" },
   { Area: "Compliance", Item: "Insurance certificate renewal", Owner: "Operations", Status: "Pending", "Due date": "2026-06-01" },
 ];
+
+const boardFileDefinitions = [
+  {
+    key: "transactions",
+    label: "Cleaned Transactions",
+    required: true,
+    purpose: "Cash activity, category concentration, trends, and transaction-level review.",
+  },
+  {
+    key: "budget",
+    label: "Budget vs Actual",
+    required: false,
+    purpose: "Plan-versus-performance context and questions about meaningful variances.",
+  },
+  {
+    key: "profit_loss",
+    label: "Profit and Loss / Statement of Activities",
+    required: false,
+    purpose: "Revenue, expense, margin, and operating-result context.",
+  },
+  {
+    key: "balance_sheet",
+    label: "Balance Sheet / Statement of Financial Position",
+    required: false,
+    purpose: "Liquidity, obligations, assets, and financial-position context.",
+  },
+  {
+    key: "reconciliation",
+    label: "Reconciliation Exceptions",
+    required: false,
+    purpose: "Unresolved differences that can prevent a clean monthly close.",
+  },
+  {
+    key: "journal_entries",
+    label: "Suggested Journal Entries",
+    required: false,
+    purpose: "Proposed adjustments that still require support, review, and approval.",
+  },
+] as const;
+
+type BoardFileKey = (typeof boardFileDefinitions)[number]["key"];
+
+const boardSampleFiles: Record<BoardFileKey, TransactionRow[]> = {
+  transactions: sampleTransactions,
+  budget: [
+    { account: "Contributions Revenue", budget: 6200, actual: 6500, variance: 300 },
+    { account: "Payroll", budget: 2400, actual: 2200, variance: 200 },
+    { account: "Operations", budget: 900, actual: 807.63, variance: 92.37 },
+  ],
+  profit_loss: [
+    { line_item: "Total revenue", current_period: 6500 },
+    { line_item: "Total operating expenses", current_period: 3247.63 },
+    { line_item: "Net operating result", current_period: 3252.37 },
+  ],
+  balance_sheet: [
+    { line_item: "Cash and cash equivalents", ending_balance: 18450 },
+    { line_item: "Total liabilities", ending_balance: 4200 },
+    { line_item: "Net assets / equity", ending_balance: 14250 },
+  ],
+  reconciliation: [
+    { description: "Outstanding July deposit", amount: 1500, status: "Needs review", owner: "Finance" },
+  ],
+  journal_entries: [
+    { description: "Accrue software subscription", debit_account: "Software Expense", credit_account: "Accounts Payable", debit_amount: 85, credit_amount: 85, review_required: "Yes" },
+  ],
+};
 
 function Alert({ kind = "info", children }: { kind?: "info" | "warning" | "success"; children: React.ReactNode }) {
   return <div className={`ti-alert ti-alert--${kind}`}>{children}</div>;
@@ -96,18 +164,22 @@ async function loadFile(file: File): Promise<{ rows: TransactionRow[]; note: str
       cellDates: true,
       type: "array",
     });
-    const firstSheetName = workbook.SheetNames[0];
-    const firstSheet = firstSheetName
-      ? workbook.Sheets[firstSheetName]
-      : undefined;
-    if (!firstSheet)
+    if (!workbook.SheetNames.length)
       throw new Error("The Excel workbook does not contain a readable worksheet.");
-    const sheetData = XLSX.utils.sheet_to_json<
-      Array<string | number | boolean | Date | null>
-    >(firstSheet, { defval: null, header: 1, raw: true });
+    const rows = workbook.SheetNames.flatMap((sheetName) => {
+      const sheet = workbook.Sheets[sheetName];
+      if (!sheet) return [];
+      const sheetData = XLSX.utils.sheet_to_json<
+        Array<string | number | boolean | Date | null>
+      >(sheet, { defval: null, header: 1, raw: true });
+      return excelSheetToRows(sheetData).map((row) => ({
+        source_sheet: sheetName,
+        ...row,
+      }));
+    });
     return {
-      rows: excelSheetToRows(sheetData),
-      note: `Loaded ${file.name} from worksheet “${firstSheetName}”.`,
+      rows,
+      note: `Loaded ${file.name} from ${workbook.SheetNames.length} worksheet(s): ${workbook.SheetNames.join(", ")}.`,
     };
   }
   if (file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")) {
@@ -136,7 +208,19 @@ async function loadFile(file: File): Promise<{ rows: TransactionRow[]; note: str
         source_page: pageIndex + 1,
       }));
     });
-    return { rows: transactions, note: `Best-effort PDF text extraction completed across ${pdf.numPages} page(s). Manual review is required.` };
+    const rows = transactions.length
+      ? transactions
+      : lines.map((text, pageIndex) => ({
+          source_page: pageIndex + 1,
+          extracted_text: text.trim() || "No machine-readable text detected",
+          review_status: "Manual review required",
+        }));
+    return {
+      rows,
+      note: transactions.length
+        ? `Best-effort PDF transaction extraction completed across ${pdf.numPages} page(s). Manual review is required.`
+        : `No transaction table was detected, so page-level PDF text from ${pdf.numPages} page(s) was preserved for the summary, narrative, review workflow, and exports. Manual review is required.`,
+    };
   }
   throw new Error(
     "This file type is not supported. Upload CSV, PDF, XLSX, XLS, XLSM, XLSB, or ODS.",
@@ -176,9 +260,9 @@ function HomeTab() {
   return (
     <>
       <div className="ti-home-hero">
-        <span>Luna1 Accounting &amp; Transaction Intelligence</span>
+        <span>Luna Books</span>
         <h2>Clean messy books before they slow the business down.</h2>
-        <p>Luna1 Accounting &amp; Transaction Intelligence helps small businesses, nonprofits, churches, ministries, and creative teams clean up disorganized transactions, missing documents, unreconciled bank activity, and board reporting gaps.</p>
+        <p>Luna is a financial intelligence system that converts transactions, financial statements and market data into decisions. Luna Books helps small businesses, nonprofits, churches, ministries, and creative teams clean up disorganized transactions, missing documents, unreconciled bank activity, and board reporting gaps.</p>
         <p>The client-facing promise is simple: send the files, see what is missing, clean the books, and leave every review item organized for follow-up.</p>
       </div>
       <div className="ti-service-grid">
@@ -368,19 +452,89 @@ function JournalTab({ cleaned }: { cleaned: TransactionRow[] }) {
 function BoardPacketTab({ cleaned }: { cleaned: TransactionRow[] }) {
   const subtabs = ["Upload Files", "Summary", "Board Narrative", "Review Items", "Export Packet"] as const;
   const [subtab, setSubtab] = useState<(typeof subtabs)[number]>("Upload Files");
-  const [boardRows, setBoardRows] = useState<TransactionRow[]>(cleaned);
+  const [fileData, setFileData] = useState<
+    Record<BoardFileKey, { rows: TransactionRow[]; note: string }>
+  >(() =>
+    Object.fromEntries(
+      boardFileDefinitions.map((file) => [
+        file.key,
+        {
+          rows: file.key === "transactions" ? cleaned : [],
+          note:
+            file.key === "transactions" && cleaned.length
+              ? "Using transactions prepared in this workspace."
+              : "",
+        },
+      ]),
+    ) as Record<BoardFileKey, { rows: TransactionRow[]; note: string }>,
+  );
   const [metadata, setMetadata] = useState({ month: "July", year: 2026, preparedDate: "2026-07-26", organization: "Organization Name", preparedBy: "Finance Team", threshold: 1000 });
-  const flagged = boardRows.filter((row) => Boolean(row.is_flagged));
-  const duplicates = flagged.filter((row) => String(row.review_flag).includes("duplicate"));
-  const uncategorized = boardRows.filter((row) => ["Needs Review", "Uncategorized"].includes(String(row.suggested_category)));
-  const large = boardRows.filter((row) => Math.abs(Number(row.amount)) >= metadata.threshold);
-  const incoming = boardRows.reduce((sum, row) => sum + Math.max(0, Number(row.amount) || 0), 0);
-  const outgoing = boardRows.reduce((sum, row) => sum + Math.abs(Math.min(0, Number(row.amount) || 0)), 0);
-  const readiness = boardRows.length ? Math.max(30, 100 - flagged.length * 5) : 0;
+  const sources = useMemo<BoardPacketSource[]>(
+    () =>
+      boardFileDefinitions.map((file) => ({
+        ...file,
+        rows: fileData[file.key].rows,
+        note: fileData[file.key].note,
+      })),
+    [fileData],
+  );
+  const analysis = useMemo(
+    () => buildBoardPacketAnalysis(sources, metadata.threshold),
+    [metadata.threshold, sources],
+  );
+  const hasEvidence = analysis.loadedSourceCount > 0;
+  const currency = (value: number) =>
+    value.toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+    });
+  const importRows = (key: BoardFileKey, rows: TransactionRow[], note: string) =>
+    setFileData((current) => ({ ...current, [key]: { rows, note } }));
+  const loadSamplePacket = () =>
+    setFileData(
+      Object.fromEntries(
+        boardFileDefinitions.map((file) => [
+          file.key,
+          {
+            rows: boardSampleFiles[file.key],
+            note: `Loaded Luna1 sample ${file.label.toLowerCase()} data.`,
+          },
+        ]),
+      ) as Record<BoardFileKey, { rows: TransactionRow[]; note: string }>,
+    );
+  const importedSheets = Object.fromEntries(
+    sources
+      .filter((source) => source.rows.length)
+      .map((source) => [source.label, source.rows]),
+  );
+  const packetSheets = {
+    "Executive Summary": analysis.executiveSummary,
+    "File Coverage": analysis.sourceCoverage,
+    "Category Breakdown": analysis.categoryBreakdown,
+    "Activity Trend": analysis.activityTrend,
+    "Largest Cash Movements": analysis.topMovements,
+    "Review Register": analysis.reviewRegister,
+    "Board Narrative": analysis.boardNarrative,
+    "Management Questions": analysis.managementQuestions,
+    ...importedSheets,
+  };
+  const pdfSections = [
+    { title: "Executive Summary", rows: analysis.executiveSummary, columns: ["topic", "detailed_summary"] },
+    { title: "Imported File Coverage", rows: analysis.sourceCoverage, columns: ["file", "status", "rows_imported", "contribution"] },
+    { title: "Category Breakdown", rows: analysis.categoryBreakdown, columns: ["category", "transactions", "money_in", "money_out", "share_of_outflow"] },
+    { title: "Activity Trend", rows: analysis.activityTrend },
+    { title: "Largest Cash Movements", rows: analysis.topMovements, columns: ["date", "description", "amount", "direction", "category", "review_status"] },
+    { title: "Consolidated Review Register", rows: analysis.reviewRegister, columns: ["priority", "source", "review_item", "description", "amount", "suggested_follow_up"] },
+    { title: "Board Narrative", rows: analysis.boardNarrative, columns: ["board_lens", "interpretation", "evidence"] },
+    { title: "Questions for Management", rows: analysis.managementQuestions, columns: ["question", "reason"] },
+    ...sources
+      .filter((source) => source.rows.length)
+      .map((source) => ({ title: `Imported: ${source.label}`, rows: source.rows })),
+  ];
   return (
     <>
       <Alert kind="warning">This board packet is generated from uploaded files and is for review only. It does not replace accounting review, management approval, treasurer review, or board oversight.</Alert>
-      <Alert>Board packet summary is based only on the files uploaded.</Alert>
+      <Alert>Every imported file now feeds the shared Summary, Board Narrative, Review Items, and full Excel/PDF exports. Conclusions remain limited to the evidence actually loaded.</Alert>
       <div className="ti-form-grid ti-form-grid--board">
         <label>Reporting month<select value={metadata.month} onChange={(event) => setMetadata({ ...metadata, month: event.target.value })}>{["January","February","March","April","May","June","July","August","September","October","November","December"].map((month) => <option key={month}>{month}</option>)}</select></label>
         <label>Reporting year<input type="number" value={metadata.year} onChange={(event) => setMetadata({ ...metadata, year: Number(event.target.value) })} /></label>
@@ -390,22 +544,98 @@ function BoardPacketTab({ cleaned }: { cleaned: TransactionRow[] }) {
         <label>Large transaction threshold<input type="number" value={metadata.threshold} onChange={(event) => setMetadata({ ...metadata, threshold: Number(event.target.value) })} /></label>
       </div>
       <div className="ti-subtabs">{subtabs.map((item) => <button aria-pressed={subtab === item} key={item} onClick={() => setSubtab(item)}>{item}</button>)}</div>
-      {subtab === "Upload Files" && <Section title="Upload Files" caption="Upload the cleaned transactions file first. The other reports are optional."><UploadControl label="Cleaned Transactions PDF or CSV" onRows={(rows) => setBoardRows(cleanTransactions(rows))} /><button className="ti-button" onClick={() => setBoardRows(cleanTransactions(sampleTransactions))}>Use sample cleaned transactions</button>{["Budget vs Actual", "Profit and Loss / Statement of Activities", "Balance Sheet / Statement of Financial Position", "Reconciliation Exceptions", "Suggested Journal Entries"].map((label) => <UploadControl key={label} label={`${label} PDF or CSV`} onRows={() => undefined} />)}</Section>}
-      {subtab === "Summary" && <><Section title="Summary" caption="A high-level board packet view using every file currently uploaded.">{!boardRows.length && <Alert kind="warning">Cleaned Transactions is required for the Summary tab.</Alert>}<div className="ti-metrics"><div><span>Board Packet Readiness</span><strong>{readiness}%</strong></div><div><span>Money coming in</span><strong>{incoming.toFixed(2)}</strong></div><div><span>Money going out</span><strong>{outgoing.toFixed(2)}</strong></div><div><span>Net change</span><strong>{(incoming - outgoing).toFixed(2)}</strong></div><div><span>Transactions</span><strong>{boardRows.length}</strong></div><div><span>Needs review</span><strong>{flagged.length}</strong></div><div><span>Uncategorized</span><strong>{uncategorized.length}</strong></div><div><span>Possible duplicates</span><strong>{duplicates.length}</strong></div></div></Section><Section title="Plain-English Summary"><p>{boardRows.length ? `${metadata.organization} recorded ${boardRows.length} transactions in ${metadata.month} ${metadata.year}, with ${flagged.length} item(s) requiring review before board use.` : "Upload Cleaned Transactions to prepare the summary."}</p></Section><Section title="Key Highlights"><p>Money coming in: ${incoming.toFixed(2)} · Money going out: ${outgoing.toFixed(2)} · Net change: ${(incoming - outgoing).toFixed(2)}</p></Section><Section title="Things That Need Review"><p>{flagged.length} flagged · {uncategorized.length} uncategorized · {duplicates.length} possible duplicate(s).</p></Section><Section title="Missing Files"><p>Budget vs Actual, Profit and Loss, Balance Sheet, Reconciliation Exceptions, Suggested Journal Entries</p></Section><Section title="Data Loaded Checklist"><DataTable rows={[{ File: "Cleaned Transactions", Status: boardRows.length ? "Loaded" : "Missing" }, { File: "Budget vs Actual", Status: "Optional / not loaded" }, { File: "Profit and Loss", Status: "Optional / not loaded" }, { File: "Balance Sheet", Status: "Optional / not loaded" }]} /></Section></>}
-      {subtab === "Board Narrative" && <Section title="Board Narrative" caption="Simple, cautious language for non-finance board members.">{!boardRows.length ? <Alert kind="warning">Upload Cleaned Transactions before creating the board narrative.</Alert> : <><h3>What happened this month?</h3><p>{metadata.organization} had ${incoming.toFixed(2)} coming in and ${outgoing.toFixed(2)} going out, producing a net change of ${(incoming - outgoing).toFixed(2)}.</p><h3>Why it matters</h3><DataTable rows={[{ Topic: "Cash activity", Explanation: "Incoming and outgoing activity should be compared with the approved budget and expected operating cycle." }, { Topic: "Review items", Explanation: `${flagged.length} transaction(s) need follow-up before the close is considered complete.` }]} /><h3>Questions for management</h3><DataTable rows={[{ Question: "Are the large and uncategorized transactions supported and approved?" }, { Question: "Are all required monthly close files available?" }]} /><h3>Simple finance glossary</h3><DataTable rows={[{ Term: "Net change", Meaning: "Money coming in minus money going out." }, { Term: "Reconciliation", Meaning: "Comparing two records and resolving differences." }]} /></>}</Section>}
-      {subtab === "Review Items" && <>{!boardRows.length ? <Alert kind="warning">Upload Cleaned Transactions before reviewing detailed tables.</Alert> : <><Section title="Flagged Transactions"><DataTable rows={flagged} /></Section><Section title="Uncategorized Transactions"><DataTable rows={uncategorized} /></Section><Section title="Possible Duplicates"><DataTable rows={duplicates} /></Section><Section title="Large Transactions"><DataTable rows={large} /></Section></>}</>}
-      {subtab === "Export Packet" && <Section title="Export Packet" caption="Download the monthly close packet in Excel or PDF format for review.">{!boardRows.length ? <Alert kind="warning">Upload Cleaned Transactions before exporting the board packet.</Alert> : <><Alert>PDF and Excel exports are review files only and require accounting and management approval before board use.</Alert><div className="ti-action-row"><button className="ti-button" onClick={() => downloadFile("monthly_close_board_packet.xml", workbookXml({ Summary: [{ organization: metadata.organization, period: `${metadata.month} ${metadata.year}`, readiness, money_in: incoming, money_out: outgoing, net_change: incoming - outgoing }], "Cleaned Transactions": boardRows, "Flagged Transactions": flagged, "Uncategorized Review": uncategorized, "Possible Duplicates": duplicates, "Large Transactions": large }), "application/vnd.ms-excel")}>Download Monthly Close Board Packet</button><button className="ti-button" onClick={() => void downloadPdfReport("monthly_close_board_packet.pdf", {
-        title: "Monthly Close Board Packet",
-        subtitle: `${metadata.organization} - ${metadata.month} ${metadata.year} - Prepared by ${metadata.preparedBy}`,
-        sections: [
-          { title: "Close Summary", rows: [{ organization: metadata.organization, period: `${metadata.month} ${metadata.year}`, readiness: `${readiness}%`, money_in: incoming.toFixed(2), money_out: outgoing.toFixed(2), net_change: (incoming - outgoing).toFixed(2), needs_review: flagged.length }] },
-          { title: "Cleaned Transactions", rows: boardRows, columns: ["date", "description", "amount", "suggested_category", "review_flag"] },
-          { title: "Flagged Transactions", rows: flagged, columns: ["date", "description", "amount", "suggested_category", "review_flag"] },
-          { title: "Uncategorized Review", rows: uncategorized, columns: ["date", "description", "amount", "suggested_category", "review_flag"] },
-          { title: "Possible Duplicates", rows: duplicates, columns: ["date", "description", "amount", "review_flag"] },
-          { title: "Large Transactions", rows: large, columns: ["date", "description", "amount", "suggested_category", "review_flag"] },
-        ],
-      })}>Download Board Packet PDF</button></div></>}</Section>}
+      {subtab === "Upload Files" && (
+        <>
+          <Section title="Close File Center" caption="Import any supported CSV, PDF, XLSX, XLS, XLSM, XLSB, or ODS file. Each loaded source flows through the entire board packet.">
+            <div className="ti-metrics">
+              <div><span>File categories loaded</span><strong>{analysis.loadedSourceCount}/{analysis.totalSourceCount}</strong></div>
+              <div><span>Total imported rows</span><strong>{analysis.totalImportedRows}</strong></div>
+              <div><span>Detected period start</span><strong>{analysis.periodStart}</strong></div>
+              <div><span>Detected period end</span><strong>{analysis.periodEnd}</strong></div>
+            </div>
+            <button className="ti-button" onClick={loadSamplePacket}>Use complete sample close packet</button>
+          </Section>
+          <div className="ti-upload-grid">
+            {boardFileDefinitions.map((file) => {
+              const loaded = fileData[file.key];
+              return (
+                <Section key={file.key} title={file.label} caption={`${file.required ? "Required foundation. " : "Recommended context. "}${file.purpose}`}>
+                  <UploadControl label={`Upload ${file.label}`} onRows={(rows, note) => importRows(file.key, rows, note)} />
+                  <Alert kind={loaded.rows.length ? "success" : file.required ? "warning" : "info"}>
+                    {loaded.rows.length ? `${loaded.rows.length} row(s) linked to all packet tabs. ${loaded.note}` : `${file.required ? "Required" : "Not loaded"}. No evidence from this file is included yet.`}
+                  </Alert>
+                  {loaded.rows.length > 0 && <button className="ti-button" onClick={() => importRows(file.key, [], "")}>Remove imported file</button>}
+                </Section>
+              );
+            })}
+          </div>
+        </>
+      )}
+      {subtab === "Summary" && (
+        <>
+          <Section title="Detailed Close Summary" caption="A connected view derived from every file currently imported.">
+            {!hasEvidence && <Alert kind="warning">Import at least one close file or use the complete sample packet to begin.</Alert>}
+            <div className="ti-metrics">
+              <div><span>Indicative review readiness</span><strong>{analysis.readiness}%</strong></div>
+              <div><span>Money coming in</span><strong>{currency(analysis.incoming)}</strong></div>
+              <div><span>Money going out</span><strong>{currency(analysis.outgoing)}</strong></div>
+              <div><span>Net change</span><strong>{currency(analysis.netChange)}</strong></div>
+              <div><span>Transactions</span><strong>{analysis.transactions.length}</strong></div>
+              <div><span>Consolidated review items</span><strong>{analysis.reviewRegister.length}</strong></div>
+              <div><span>File categories loaded</span><strong>{analysis.loadedSourceCount}/{analysis.totalSourceCount}</strong></div>
+              <div><span>Total imported rows</span><strong>{analysis.totalImportedRows}</strong></div>
+            </div>
+            <Alert>Readiness is an indicative review score based on file coverage and automated flags. It is not an accounting opinion, certification, or approval.</Alert>
+          </Section>
+          <Section title="Executive Summary" caption="Plain-English observations tied to imported evidence.">
+            {analysis.executiveSummary.map((item) => <div key={String(item.topic)}><h3>{item.topic}</h3><p>{item.detailed_summary}</p></div>)}
+          </Section>
+          <Section title="Imported File Coverage" caption="What each source contributes—and what remains absent."><DataTable rows={analysis.sourceCoverage} /></Section>
+          <Section title="Category and Spending Concentration" caption="Detected inflows and outflows grouped from imported transactions."><DataTable rows={analysis.categoryBreakdown} /></Section>
+          <Section title="Period Activity Trend"><DataTable rows={analysis.activityTrend} /></Section>
+          <Section title="Largest Cash Movements" caption="The ten largest imported transactions by absolute value."><DataTable rows={analysis.topMovements} /></Section>
+        </>
+      )}
+      {subtab === "Board Narrative" && (
+        <>
+          <Section title="Board Narrative" caption="How a board may read the imported evidence, with limitations stated explicitly.">
+            {!hasEvidence ? <Alert kind="warning">Import close files before generating the board narrative.</Alert> : analysis.boardNarrative.map((item) => <div key={String(item.board_lens)}><h3>{item.board_lens}</h3><p>{item.interpretation}</p><small>Evidence: {item.evidence}</small></div>)}
+          </Section>
+          <Section title="Questions for Management" caption="Questions suggested by missing files, material movements, and unresolved review items."><DataTable rows={analysis.managementQuestions} /></Section>
+          <Section title="Board Reading Guide"><DataTable rows={[
+            { term: "Indicative review readiness", meaning: "A transparent workflow score based on imported coverage and unresolved flags—not an audit or close approval." },
+            { term: "Net change", meaning: "Imported cash inflows minus imported cash outflows for the detected period." },
+            { term: "Reconciliation exception", meaning: "A difference between records that requires investigation and support." },
+            { term: "Concentration", meaning: "A category or transaction representing a meaningful share of imported activity." },
+          ]} /></Section>
+        </>
+      )}
+      {subtab === "Review Items" && (
+        <>
+          {!hasEvidence && <Alert kind="warning">Import close files before reviewing detailed exceptions.</Alert>}
+          <Section title="Consolidated Review Register" caption="Transaction flags, imported reconciliation exceptions, and journal-entry approvals in one queue."><DataTable rows={analysis.reviewRegister} /></Section>
+          <Section title="Flagged Transactions"><DataTable rows={analysis.flagged} /></Section>
+          <Section title="Uncategorized Transactions"><DataTable rows={analysis.uncategorized} /></Section>
+          <Section title="Possible Duplicates"><DataTable rows={analysis.duplicates} /></Section>
+          <Section title="Large Transactions" caption={`Absolute amount at or above ${currency(metadata.threshold)}.`}><DataTable rows={analysis.large} /></Section>
+        </>
+      )}
+      {subtab === "Export Packet" && (
+        <Section title="Full Board Packet Export" caption="Exports include analysis, board narrative, review register, source coverage, and every imported source table.">
+          {!hasEvidence ? <Alert kind="warning">Import at least one close file before exporting the packet.</Alert> : <>
+            <Alert>PDF and Excel exports are review files only and require accounting and management approval before board use.</Alert>
+            <DataTable rows={analysis.sourceCoverage} />
+            <div className="ti-action-row">
+              <button className="ti-button" onClick={() => downloadFile("monthly_close_board_packet.xml", workbookXml(packetSheets), "application/vnd.ms-excel")}>Download Full Board Packet Excel</button>
+              <button className="ti-button" onClick={() => void downloadPdfReport("monthly_close_board_packet.pdf", {
+                title: "Monthly Close Board Packet",
+                subtitle: `${metadata.organization} - ${metadata.month} ${metadata.year} - Prepared by ${metadata.preparedBy} on ${metadata.preparedDate}`,
+                sections: pdfSections,
+              })}>Download Full Board Packet PDF</button>
+            </div>
+          </>}
+        </Section>
+      )}
     </>
   );
 }
@@ -416,12 +646,12 @@ export function TransactionIntelligenceWorkspace() {
   return (
     <div className="ti-workspace">
       <header className="ti-banner">
-        <div><span>In Development · Review Workspace</span><h1>Luna1 Accounting &amp; Transaction Intelligence</h1></div>
-        <p>Upload, organize, reconcile, analyze, and export financial transaction data through structured accounting controls.</p>
+        <div><span>In Development · Review Workspace</span><h1>Luna Books</h1></div>
+        <p>Luna is a financial intelligence system that converts transactions, financial statements and market data into decisions.</p>
       </header>
       <div className="ti-review-banner">Clean messy books, organize client requests, and prepare finance review files. Tools are for review only and do not approve, post, or modify accounting records.</div>
       <Alert kind="warning">PDF extraction is best-effort and may require manual review. This workspace prepares review files only and does not replace accounting approval.</Alert>
-      <nav className="ti-tabs" aria-label="Transaction Intelligence workspace">
+      <nav className="ti-tabs" aria-label="Luna Books workspace">
         {tabs.map((tab) => <button key={tab} aria-pressed={activeTab === tab} onClick={() => setActiveTab(tab)}>{tab}</button>)}
       </nav>
       <main className="ti-panel">

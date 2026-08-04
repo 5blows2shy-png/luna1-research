@@ -39,6 +39,7 @@ test("transaction workflow keeps sample processing, review, and exports", () => 
     "Possible duplicate",
     "reconcile",
     "suggestJournalEntry",
+    "buildBoardPacketAnalysis",
     "workbookXml",
     "buildPdfReport",
     "downloadPdfReport",
@@ -54,10 +55,45 @@ test("transaction workflow keeps sample processing, review, and exports", () => 
     "Download Reconciliation Workbook",
     "Download Reconciliation PDF",
     "Suggest Draft Journal Entry",
-    "Download Monthly Close Board Packet",
-    "Download Board Packet PDF",
+    "Use complete sample close packet",
+    "Download Full Board Packet Excel",
+    "Download Full Board Packet PDF",
   ])
     assert.ok(component.includes(control), control);
+});
+
+test("board packet connects every imported source to analysis and exports", () => {
+  for (const source of [
+    "Cleaned Transactions",
+    "Budget vs Actual",
+    "Profit and Loss / Statement of Activities",
+    "Balance Sheet / Statement of Financial Position",
+    "Reconciliation Exceptions",
+    "Suggested Journal Entries",
+  ])
+    assert.ok(component.includes(source), source);
+
+  for (const output of [
+    "Detailed Close Summary",
+    "Imported File Coverage",
+    "Category and Spending Concentration",
+    "Consolidated Review Register",
+    "Questions for Management",
+    "Full Board Packet Export",
+  ])
+    assert.ok(component.includes(output), output);
+
+  for (const analysis of [
+    "sourceCoverage",
+    "categoryBreakdown",
+    "activityTrend",
+    "topMovements",
+    "reviewRegister",
+    "executiveSummary",
+    "boardNarrative",
+    "managementQuestions",
+  ])
+    assert.ok(logic.includes(analysis), analysis);
 });
 
 test("Excel workbooks can be read from modern and legacy formats", () => {
@@ -106,7 +142,7 @@ test("PDF imports configure the bundled PDF.js worker", () => {
 
 test("PDF exports preserve review-only labeling and page furniture", () => {
   for (const marker of [
-    "LUNA1 ACCOUNTING & TRANSACTION INTELLIGENCE",
+    "LUNA BOOKS",
     "IN DEVELOPMENT - REVIEW WORKSPACE",
     "For accounting review only",
     "Page ${index + 1} of ${pages.length}",

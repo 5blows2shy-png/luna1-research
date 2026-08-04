@@ -142,7 +142,7 @@ export function DevelopmentLogFilter({
                         <div>
                           <span className="eyebrow">Feature preview</span>
                           <h3 id={`${entry.id}-features`}>
-                            Accounting &amp; Transaction Intelligence roadmap
+                            Luna Books roadmap
                           </h3>
                         </div>
                         <span className="research-status research-status--in-progress">
@@ -164,7 +164,7 @@ export function DevelopmentLogFilter({
                       <div className="development-preview-action">
                         {entry.route ? (
                           <Link className="button" href={entry.route}>
-                            View Accounting Intelligence Preview
+                            View Luna Books Preview
                           </Link>
                         ) : (
                           <>

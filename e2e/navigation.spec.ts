@@ -148,7 +148,7 @@ test("desktop and mobile navigation expose only the permanent product scope", as
     "Home",
     "Equity Research",
     "Valuation Lab",
-    "Accounting Intelligence",
+    "Luna Books",
     "Portfolio Lab",
     "Analyst Journal",
     "Recruiter View",
@@ -229,7 +229,7 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   await page.goto("/development-log");
   const entry = page.locator("article").filter({
     has: page.getByRole("heading", {
-      name: "Integrated Accounting & Transaction Intelligence Preview",
+      name: "Integrated Luna Books Preview",
     }),
   });
 
@@ -242,20 +242,20 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   await expect(entry.locator(".development-preview li")).toHaveCount(9);
   await expect(
     entry.getByRole("link", {
-      name: "View Accounting Intelligence Preview",
+      name: "View Luna Books Preview",
     }),
   ).toHaveAttribute("href", "/transaction-intelligence");
 
   await page.goto("/transaction-intelligence");
   await expect(
     page.getByRole("heading", {
-      name: "Luna1 Accounting & Transaction Intelligence",
+      name: "Luna Books",
       level: 1,
     }),
   ).toBeVisible();
   await expect(page.getByText("In Development").first()).toBeVisible();
   const workspace = page.getByRole("navigation", {
-    name: "Transaction Intelligence workspace",
+    name: "Luna Books workspace",
   });
   for (const tab of [
     "Home",
@@ -288,7 +288,7 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   });
   await expect(
     page.getByText(
-      'Loaded sample-transactions.xlsx from worksheet “Transactions”.',
+      "Loaded sample-transactions.xlsx from 1 worksheet(s): Transactions.",
     ),
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Cleaned Data" })).toBeVisible();
@@ -300,7 +300,7 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   });
   await expect(
     page.getByText(
-      "Best-effort PDF text extraction completed across 1 page(s). Manual review is required.",
+      "No transaction table was detected, so page-level PDF text from 1 page(s) was preserved for the summary, narrative, review workflow, and exports. Manual review is required.",
     ),
   ).toBeVisible();
 
@@ -328,6 +328,46 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   await expect(
     page.getByRole("heading", { name: "Matched Transactions" }),
   ).toBeVisible();
+
+  await page.getByRole("button", { name: "Monthly Close Board Packet" }).click();
+  await page.getByRole("button", { name: "Use complete sample close packet" }).click();
+  await expect(page.getByText("6/6", { exact: true })).toBeVisible();
+
+  await page.getByRole("button", { name: "Summary" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Detailed Close Summary" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Imported File Coverage" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Category and Spending Concentration" }),
+  ).toBeVisible();
+
+  await page.getByRole("button", { name: "Board Narrative" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Questions for Management" }),
+  ).toBeVisible();
+
+  await page.getByRole("button", { name: "Review Items" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Consolidated Review Register" }),
+  ).toBeVisible();
+
+  await page.getByRole("button", { name: "Export Packet" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Full Board Packet Export" }),
+  ).toBeVisible();
+  const boardPdfDownloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Download Full Board Packet PDF" }).click();
+  const boardPdfDownload = await boardPdfDownloadPromise;
+  expect(boardPdfDownload.suggestedFilename()).toBe(
+    "monthly_close_board_packet.pdf",
+  );
+  const boardPdfPath = `tmp/pdfs/monthly_close_board_packet-${testInfo.project.name}.pdf`;
+  await boardPdfDownload.saveAs(boardPdfPath);
+  const boardPdf = await PDFDocument.load(readFileSync(boardPdfPath));
+  expect(boardPdf.getPageCount()).toBeGreaterThan(1);
 });
 
 test("retired routes are removed and the old journal route redirects", async ({
