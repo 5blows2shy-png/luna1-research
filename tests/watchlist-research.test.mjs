@@ -141,6 +141,10 @@ test("research language, dates, evidence labels, and Bloom journal are explicit"
     "src/lib/bloom-analyst-journal.ts",
     "utf8",
   );
+  const journalPage = fs.readFileSync(
+    "src/app/analyst-journal/page.tsx",
+    "utf8",
+  );
   const allResearchSource = `${coverageSource}\n${pageSource}\n${evidence}`;
   assert.match(allResearchSource, /Updated July 28, 2026/);
   assert.doesNotMatch(
@@ -166,4 +170,10 @@ test("research language, dates, evidence labels, and Bloom journal are explicit"
   assert.match(journal, /Q2 2026 results pending official verification/);
   assert.match(journal, /latestVerifiedPeriod: "Q1 2026"/);
   assert.doesNotMatch(journal, /BE BE/);
+  assert.match(journalPage, /BE-Luna1-Analyst-Journal\.pdf/);
+  assert.doesNotMatch(journalPage, /bloomAnalystJournal/);
+  assert.ok(
+    fs.statSync("public/reports/BE-Luna1-Analyst-Journal.pdf").size > 0,
+    "Bloom Energy Analyst Journal PDF must be present and non-empty",
+  );
 });
