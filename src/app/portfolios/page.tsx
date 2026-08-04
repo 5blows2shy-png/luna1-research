@@ -29,14 +29,18 @@ type ActivePosition = {
   ticker: string;
   company: string;
   purchaseDate: string;
-  entryPrice: number;
+  entryPrice: number | null;
   thesis: string;
   valuation: string;
   positionSize: string;
   risk: string;
   exitRule: string;
   status: string;
-  thesisStatus: "Thesis confirmed" | "Thesis weakened" | "Thesis broken";
+  thesisStatus:
+    | "Thesis confirmed"
+    | "Thesis weakened"
+    | "Thesis broken"
+    | "Research needed";
   whatChanged: string;
 };
 type Holding = {
@@ -68,22 +72,20 @@ const activePositions: ActivePosition[] = [
       "No thesis-breaking change is documented. Store growth, prepared-food performance, EBITDA, and returns on invested capital remain the monitoring priorities.",
   },
   {
-    ticker: "PANW",
-    company: "Palo Alto Networks Inc.",
-    purchaseDate: "Date pending verification",
-    entryPrice: 272.54,
+    ticker: "ANET",
+    company: "Arista Networks Inc.",
+    purchaseDate: "Research needed",
+    entryPrice: null,
     thesis:
-      "Palo Alto Networks is a cybersecurity leader benefiting from enterprise demand for integrated security platforms and AI-related security products. Fiscal Q3 2026 revenue grew 31% to approximately $3.0 billion, while remaining performance obligations increased 36% to $18.4 billion, providing strong visibility into future contracted revenue. Its platformization strategy, recurring revenue base, and high customer switching costs support durable growth as companies consolidate multiple security tools onto fewer strategic vendors. My thesis remains intact while recurring security revenue, customer commitments, free cash flow, and the Stage 2 price trend continue advancing.",
-    risk: "Medium",
-    valuation:
-      "Formal valuation range is still being documented; no public estimate is presented.",
-    positionSize: "Not publicly disclosed",
-    exitRule:
-      "Exit if recurring security revenue, customer commitments, free cash flow, or the Stage 2 price trend materially deteriorate.",
-    status: "Monitoring",
-    thesisStatus: "Thesis confirmed",
-    whatChanged:
-      "No thesis-breaking change is documented. Recurring security revenue, customer commitments, free cash flow, and price structure remain the monitoring priorities.",
+      "Arista Networks is a leading AI and cloud-networking business combining strong growth, profitability, and institutional-quality execution.",
+    risk:
+      "Hyperscaler concentration, competition, premium valuation, and growth deceleration.",
+    valuation: "Research needed",
+    positionSize: "Research needed",
+    exitRule: "Research needed",
+    status: "Research needed",
+    thesisStatus: "Research needed",
+    whatChanged: "Research needed",
   },
   {
     ticker: "WELL",
@@ -198,6 +200,15 @@ const compounders: Holding[] = [
     allocation: "20%",
     type: "Long-term compounder",
     horizon: "5+ years",
+  },
+  {
+    ticker: "AIPO",
+    company: "Defiance AI & Power Infrastructure ETF",
+    thesis:
+      "Diversified thematic exposure to the AI-compute, power, grid, nuclear, and infrastructure buildout without relying on a single operating company.",
+    allocation: "Research needed",
+    type: "Long-term thematic ETF",
+    horizon: "Research needed",
   },
 ];
 
@@ -483,7 +494,9 @@ export default function Portfolios() {
                         {position.purchaseDate}
                       </td>
                       <td data-label="Entry price">
-                        ${position.entryPrice.toFixed(2)}
+                        {position.entryPrice === null
+                          ? "Research needed"
+                          : `$${position.entryPrice.toFixed(2)}`}
                       </td>
                       <td
                         data-label="Initial thesis"
@@ -620,7 +633,9 @@ export default function Portfolios() {
                   </tbody>
                 </table>
               </div>
-              <ResearchCoverageGrid />
+              <ResearchCoverageGrid
+                tickers={watchlist.map((item) => item.ticker)}
+              />
             </div>
           )}
           {activeTab === "Conviction Dashboard" && <ConvictionDashboard />}

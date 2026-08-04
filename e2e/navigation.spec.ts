@@ -402,6 +402,29 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
       page.getByRole("tab", { name: label, exact: true }),
     ).toBeVisible();
   await activate(
+    page.getByRole("tab", { name: "Active Positions" }),
+    testInfo.project.name,
+  );
+  await expect(
+    page.locator(".active-positions-table tbody tr").filter({ hasText: "ANET" }),
+  ).toHaveCount(1);
+  await expect(
+    page.locator(".active-positions-table tbody tr").filter({ hasText: "PANW" }),
+  ).toHaveCount(0);
+  await expect(
+    page.locator("#portfolio-tab-panel").getByText("Research needed").first(),
+  ).toBeVisible();
+  await activate(
+    page.getByRole("tab", { name: "Long-Term Compounders" }),
+    testInfo.project.name,
+  );
+  await expect(
+    page.locator(".holdings-table tbody tr").filter({ hasText: "AIPO" }),
+  ).toHaveCount(1);
+  await expect(
+    page.locator(".holdings-table tbody tr").filter({ hasText: "SLV" }),
+  ).toHaveCount(1);
+  await activate(
     page.getByRole("tab", { name: "Watchlist" }),
     testInfo.project.name,
   );
@@ -409,7 +432,7 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
   await expect(page.getByRole("tab", { name: "Performance" })).toHaveCount(0);
   await expect(
     page.getByRole("link", { name: "View Full Research" }),
-  ).toHaveCount(18);
+  ).toHaveCount(12);
   await expect(page.getByText("Digital Realty Trust Inc.")).toBeVisible();
   await expect(page.getByText("Data pending", { exact: true })).toBeVisible();
 });

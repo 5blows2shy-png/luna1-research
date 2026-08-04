@@ -144,14 +144,13 @@ test("portfolio reflects approved public positions", () => {
     source.indexOf("constactivePositions"),
     source.indexOf("constcoreAllocation"),
   );
-  for (const ticker of ["WWD", "AMAT", "GS", "PDFS"])
+  for (const ticker of ["WWD", "AMAT", "GS", "PDFS", "PANW"])
     assert.ok(
       !activeSource.includes(`ticker:\"${ticker}\"`),
       `${ticker} remains active`,
     );
   for (const [ticker, price] of [
     ["CASY", "824.0"],
-    ["PANW", "272.54"],
     ["WELL", "237.21"],
   ]) {
     assert.ok(
@@ -163,6 +162,9 @@ test("portfolio reflects approved public positions", () => {
       `${ticker} entry price is missing`,
     );
   }
+  assert.match(activeSource, /ticker:"ANET"/);
+  assert.match(activeSource, /entryPrice:null/);
+  assert.match(activeSource, /Researchneeded/);
   for (const heading of [
     "Shares",
     "Cost basis",
@@ -177,14 +179,11 @@ test("portfolio reflects approved public positions", () => {
 test("watchlist matches the approved research records", () => {
   const source = fs.readFileSync("src/lib/watchlist-data.ts", "utf8");
   for (const [ticker, score] of [
-    ["AIPO", 82],
     ["GLW", 91],
     ["STRL", 89],
     ["ALAB", 88],
     ["JBL", 87],
     ["RY", 84],
-    ["PANW", 86],
-    ["ANET", 95],
   ]) {
     assert.ok(
       new RegExp(`ticker:\\s*\"${ticker}\"`).test(source),
@@ -199,10 +198,10 @@ test("watchlist matches the approved research records", () => {
   for (const field of ["note:", "catalyst:", "risk:"])
     assert.equal(
       source.match(new RegExp(field, "g"))?.length,
-      10,
+      7,
       `each record should include ${field}`,
     );
-  for (const removed of ["AMAT", "WWD", "PDFS", "GS"])
+  for (const removed of ["AMAT", "WWD", "PDFS", "GS", "PANW", "ANET", "AIPO"])
     assert.ok(!source.includes(`ticker: "${removed}"`));
   for (const ticker of [
     "ROAD",
@@ -248,6 +247,7 @@ test("long-term portfolio allocations are complete", () => {
     ["COST", "20%"],
     ["PG", "15%"],
     ["AMZN", "20%"],
+    ["AIPO", "Researchneeded"],
   ])
     assert.match(
       source,

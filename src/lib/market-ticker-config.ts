@@ -9,6 +9,7 @@ export type MarketInstrument = {
 };
 
 export const researchRouteBySymbol: Record<string, string> = {
+  AIPO: "/watchlist/aipo",
   ANET: "/research/anet",
   BE: "/research/companies/be",
   PDFS: "/research/pdfs",
@@ -36,9 +37,9 @@ export const marketPulseInstruments: readonly MarketInstrument[] = [
 export const marketPulseSymbols = marketPulseInstruments.map(({ symbol }) => symbol);
 
 export const portfolioTickerGroups = {
-  "Active Positions": ["CASY", "PANW", "WELL"],
+  "Active Positions": ["CASY", "ANET", "WELL"],
   Watchlist: watchlist.map((item) => item.ticker),
-  "Long-Term Compounders": ["LLY", "AAPL", "COST", "PG", "AMZN"],
+  "Long-Term Compounders": ["LLY", "AAPL", "COST", "PG", "AMZN", "AIPO"],
 } as const;
 
 export const portfolioFundSymbols = ["VOO", "QQQM", "IAU", "SLV", "SGOV"] as const;

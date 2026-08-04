@@ -71,7 +71,8 @@ test("portfolio sections share a deduplicated quote provider", async () => {
 test("portfolio ticker exposes every Luna1 portfolio bucket", async () => {
   const config = await read("src/lib/market-ticker-config.ts");
   for (const bucket of ["Active Positions", "Watchlist", "Long-Term Compounders"]) assert.ok(config.includes(bucket));
-  for (const ticker of ["CASY", "PANW", "WELL", "LLY", "AAPL", "COST", "PG", "AMZN"]) assert.match(config, new RegExp(`["]${ticker}["]`));
+  for (const ticker of ["CASY", "ANET", "WELL", "LLY", "AAPL", "COST", "PG", "AMZN", "AIPO"]) assert.match(config, new RegExp(`["]${ticker}["]`));
+  assert.doesNotMatch(config, /"PANW"/);
 });
 
 test("ticker includes integrity, refresh, cache, and accessibility safeguards", async () => {
