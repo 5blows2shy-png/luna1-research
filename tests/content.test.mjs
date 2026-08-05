@@ -339,11 +339,13 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
   assert.match(recruiter, /portraitSrc="\/shyheim-lee-recruiter.jpeg"/);
   assert.ok(fs.existsSync("public/shyheim-lee-recruiter.jpeg"));
   assert.match(actions, /Download Profile/);
+  assert.match(actions, /Data center evidence/);
   assert.ok(!source.includes("FMVA"));
   assert.match(source, /Microsoft Excel<\/b>\s*<span>\s*Completed/);
   for (const file of [
     "public/downloads/shy-lee-resume.pdf",
     "public/downloads/shy-lee-one-page-profile.pdf",
+    "public/downloads/shyheim-lee-data-center-finance-evidence-sheet.pdf",
   ])
     assert.ok(fs.existsSync(file), `missing download: ${file}`);
 });

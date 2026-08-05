@@ -655,6 +655,15 @@ test("recruiter view retains profile and downloads", async ({ page }) => {
   await expect(
     page.getByRole("link", { name: /Download Profile/ }),
   ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /One-page brief/ }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /Data center evidence/ }),
+  ).toHaveAttribute(
+    "href",
+    "/downloads/shyheim-lee-data-center-finance-evidence-sheet.pdf",
+  );
 });
 
 test("reduced motion disables the prism sweep", async ({ page }) => {
