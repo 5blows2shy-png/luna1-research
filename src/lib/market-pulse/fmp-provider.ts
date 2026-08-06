@@ -50,19 +50,58 @@ export function normalizeFmpQuote(instrument: MarketPulseInstrument, payload: un
   return { ...instrument, price, change, changePercent, previousClose, marketStatus: marketStatus(now), asOf, delayed: true, stale: false };
 }
 
+export function normalizeFmpTreasury(instrument: MarketPulseInstrument, payload: unknown, now = new Date()): MarketPulseQuote {
+  if (!Array.isArray(payload)) throw new Error("INVALID_RESPONSE");
+  const rows = payload
+    .filter((row): row is FmpQuote => typeof row === "object" && row !== null && finiteNumber((row as FmpQuote).year10) !== null)
+    .sort((left, right) => String(right.date ?? "").localeCompare(String(left.date ?? "")));
+  if (!rows.length) throw new Error("PRICE_UNAVAILABLE");
+  const price = finiteNumber(rows[0].year10)!;
+  const previousClose = rows[1] ? finiteNumber(rows[1].year10) : null;
+  const change = previousClose === null ? null : price - previousClose;
+  const changePercent = change === null || previousClose === null || previousClose === 0 ? null : change / previousClose * 100;
+  const date = typeof rows[0].date === "string" ? rows[0].date : null;
+  return { ...instrument, price, change, changePercent, previousClose, marketStatus: marketStatus(now), asOf: date ? new Date(`${date}T20:00:00Z`).toISOString() : now.toISOString(), delayed: true, stale: false };
+}
+
+async function requestFmp(path: string, apiKey: string, signal: AbortSignal) {
+  const response = await fetch(`https://financialmodelingprep.com/stable/${path}`, { headers: { apikey: apiKey }, cache: "no-store", signal });
+  if (response.status === 401 || response.status === 403) throw new Error("UNAUTHORIZED");
+  if (response.status === 429) throw new Error("RATE_LIMITED");
+  if (!response.ok) throw new Error(`PROVIDER_${response.status}`);
+  return response.json() as Promise<unknown>;
+}
+
 export function createFmpMarketPulseProvider(apiKey: string): MarketPulseProvider {
+  let commodityQuotes: Promise<unknown> | null = null;
+  let treasuryRates: Promise<unknown> | null = null;
   return {
     name: "Financial Modeling Prep",
     async fetchQuote(instrument, signal) {
       const providerSymbol = fmpSymbolByInstrumentId[instrument.id];
       if (!providerSymbol) throw new Error("UNSUPPORTED_SYMBOL");
-      const url = new URL("https://financialmodelingprep.com/stable/quote");
-      url.searchParams.set("symbol", providerSymbol);
-      const response = await fetch(url, { headers: { apikey: apiKey }, cache: "no-store", signal });
-      if (response.status === 401 || response.status === 403) throw new Error("UNAUTHORIZED");
-      if (response.status === 429) throw new Error("RATE_LIMITED");
-      if (!response.ok) throw new Error(`PROVIDER_${response.status}`);
-      return normalizeFmpQuote(instrument, await response.json());
+      if (instrument.assetClass === "treasury") {
+        treasuryRates ??= requestFmp("treasury-rates", apiKey, signal);
+        return normalizeFmpTreasury(instrument, await treasuryRates);
+      }
+      if (instrument.assetClass === "commodity") {
+        commodityQuotes ??= requestFmp("batch-commodity-quotes", apiKey, signal);
+        try {
+          const payload = await commodityQuotes;
+          const match = Array.isArray(payload) ? payload.find((quote) => typeof quote === "object" && quote !== null && (quote as FmpQuote).symbol === providerSymbol) : null;
+          if (match) return normalizeFmpQuote(instrument, [match]);
+        } catch {
+          // Some FMP plans omit the batch endpoint; fall through to the documented symbol quote.
+        }
+      }
+      const encoded = encodeURIComponent(providerSymbol);
+      const fullQuote = await requestFmp(`quote?symbol=${encoded}`, apiKey, signal);
+      try {
+        return normalizeFmpQuote(instrument, fullQuote);
+      } catch (error) {
+        if (instrument.assetClass !== "equity") throw error;
+        return normalizeFmpQuote(instrument, await requestFmp(`quote-short?symbol=${encoded}`, apiKey, signal));
+      }
     },
   };
 }

@@ -11,6 +11,10 @@ test("market pulse normalizes FMP arrays and calculates missing percentages", as
   assert.match(provider, /change \/ previousClose \* 100/);
   assert.match(provider, /previousClose/);
   assert.match(provider, /fmpSymbolByInstrumentId/);
+  assert.match(provider, /treasury-rates/);
+  assert.match(provider, /year10/);
+  assert.match(provider, /batch-commodity-quotes/);
+  assert.match(provider, /quote-short\?symbol=/);
 });
 
 test("market pulse isolates failures and retains cached stale quotes", async () => {
