@@ -74,6 +74,7 @@ async function requestFmp(path: string, apiKey: string, signal: AbortSignal) {
 
 export function createFmpMarketPulseProvider(apiKey: string): MarketPulseProvider {
   let commodityQuotes: Promise<unknown> | null = null;
+  let nasdaqQuotes: Promise<unknown> | null = null;
   let treasuryRates: Promise<unknown> | null = null;
   return {
     name: "Financial Modeling Prep",
@@ -92,6 +93,16 @@ export function createFmpMarketPulseProvider(apiKey: string): MarketPulseProvide
           if (match) return normalizeFmpQuote(instrument, [match]);
         } catch {
           // Some FMP plans omit the batch endpoint; fall through to the documented symbol quote.
+        }
+      }
+      if (instrument.id === "nvidia" || instrument.id === "broadcom") {
+        nasdaqQuotes ??= requestFmp("batch-exchange-quote?exchange=NASDAQ", apiKey, signal);
+        try {
+          const payload = await nasdaqQuotes;
+          const match = Array.isArray(payload) ? payload.find((quote) => typeof quote === "object" && quote !== null && (quote as FmpQuote).symbol === providerSymbol) : null;
+          if (match) return normalizeFmpQuote(instrument, [match]);
+        } catch {
+          // Fall through to an individual quote when exchange batching is unavailable.
         }
       }
       const encoded = encodeURIComponent(providerSymbol);
