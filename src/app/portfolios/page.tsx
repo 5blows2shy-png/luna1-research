@@ -32,7 +32,6 @@ type ActivePosition = {
   entryPrice: number | null;
   thesis: string;
   valuation: string;
-  positionSize: string;
   risk: string;
   exitRule: string;
   status: string;
@@ -40,7 +39,7 @@ type ActivePosition = {
     | "Thesis confirmed"
     | "Thesis weakened"
     | "Thesis broken"
-    | "Research needed";
+    | "Thesis under review";
   whatChanged: string;
 };
 type Holding = {
@@ -63,7 +62,6 @@ const activePositions: ActivePosition[] = [
     risk: "Medium",
     valuation:
       "Formal valuation range is still being documented; no public estimate is presented.",
-    positionSize: "Not publicly disclosed",
     exitRule:
       "Exit if profitable store growth, prepared-food expansion, EBITDA, or returns on invested capital materially deteriorate.",
     status: "Monitoring",
@@ -74,17 +72,18 @@ const activePositions: ActivePosition[] = [
   {
     ticker: "ANET",
     company: "Arista Networks Inc.",
-    purchaseDate: "Research needed",
+    purchaseDate: "Not publicly disclosed",
     entryPrice: null,
     thesis:
       "Arista Networks is a leading AI and cloud-networking business combining strong growth, profitability, and institutional-quality execution.",
     risk:
       "Hyperscaler concentration, competition, premium valuation, and growth deceleration.",
-    valuation: "Research needed",
-    positionSize: "Research needed",
-    exitRule: "Research needed",
+    valuation:
+      "Formal valuation range is still being documented; no public estimate is presented.",
+    exitRule:
+      "Reduce or exit if AI and cloud-networking demand materially weakens, competitive losses impair growth, or execution no longer supports the investment thesis.",
     status: "Monitoring",
-    thesisStatus: "Research needed",
+    thesisStatus: "Thesis under review",
     whatChanged:
       "ANET moved from the Watchlist into Active Positions. The thesis remains centered on Ethernet-based AI and cloud-networking demand, execution quality, and product adoption; customer concentration, competition, valuation, and growth durability remain under review.",
   },
@@ -98,7 +97,6 @@ const activePositions: ActivePosition[] = [
     risk: "Medium",
     valuation:
       "Formal valuation range is still being documented; no public estimate is presented.",
-    positionSize: "Not publicly disclosed",
     exitRule:
       "Exit if occupancy, normalized FFO, same-store NOI, or returns from new investment activity materially deteriorate.",
     status: "Monitoring",
@@ -474,7 +472,6 @@ export default function Portfolios() {
                     <th>Entry price</th>
                     <th>Initial thesis</th>
                     <th>Valuation</th>
-                    <th>Position size</th>
                     <th>Risk factors</th>
                     <th>Exit criteria</th>
                     <th>Current status</th>
@@ -496,7 +493,7 @@ export default function Portfolios() {
                       </td>
                       <td data-label="Entry price">
                         {position.entryPrice === null
-                          ? "Research needed"
+                          ? "Not publicly disclosed"
                           : `$${position.entryPrice.toFixed(2)}`}
                       </td>
                       <td
@@ -507,9 +504,6 @@ export default function Portfolios() {
                       </td>
                       <td data-label="Valuation" className="portfolio-copy">
                         {position.valuation}
-                      </td>
-                      <td data-label="Position size">
-                        {position.positionSize}
                       </td>
                       <td data-label="Risk factors">{position.risk}</td>
                       <td data-label="Exit criteria" className="portfolio-copy">

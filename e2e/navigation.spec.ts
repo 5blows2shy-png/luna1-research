@@ -417,8 +417,12 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
     page.locator(".active-positions-table tbody tr").filter({ hasText: "PANW" }),
   ).toHaveCount(0);
   await expect(
-    page.locator("#portfolio-tab-panel").getByText("Research needed").first(),
+    anetRow.getByText("Not publicly disclosed", { exact: true }).first(),
   ).toBeVisible();
+  await expect(anetRow.getByText("Research needed")).toHaveCount(0);
+  await expect(
+    page.getByRole("columnheader", { name: "Position size" }),
+  ).toHaveCount(0);
   await activate(
     page.getByRole("tab", { name: "Long-Term Compounders" }),
     testInfo.project.name,

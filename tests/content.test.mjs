@@ -164,7 +164,9 @@ test("portfolio reflects approved public positions", () => {
   }
   assert.match(activeSource, /ticker:"ANET"/);
   assert.match(activeSource, /entryPrice:null/);
-  assert.match(activeSource, /Researchneeded/);
+  assert.match(activeSource, /Notpubliclydisclosed/);
+  assert.doesNotMatch(activeSource, /Researchneeded/);
+  assert.match(activeSource, /thesisStatus:"Thesisunderreview"/);
   assert.match(activeSource, /status:"Monitoring"/);
   assert.match(
     activeSource,
@@ -175,6 +177,7 @@ test("portfolio reflects approved public positions", () => {
     "Cost basis",
     "Current price",
     "Unrealized return",
+    "Position size",
   ])
     assert.ok(!source.includes(`<th>${heading}</th>`));
   assert.ok(!source.includes("Closed Positions"));
@@ -435,11 +438,11 @@ test("recruiter-facing architecture documents analyst process without fabricated
   for (const field of [
     "purchaseDate",
     "valuation",
-    "positionSize",
     "thesisStatus",
     "whatChanged",
   ])
     assert.ok(portfolio.includes(field), `missing portfolio field: ${field}`);
+  assert.doesNotMatch(portfolio, /positionSize|Position size/);
   assert.match(portfolio, /Date pending verification/);
   assert.match(portfolio, /Not publicly disclosed/);
 });
