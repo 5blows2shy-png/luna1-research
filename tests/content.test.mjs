@@ -165,6 +165,11 @@ test("portfolio reflects approved public positions", () => {
   assert.match(activeSource, /ticker:"ANET"/);
   assert.match(activeSource, /entryPrice:null/);
   assert.match(activeSource, /Researchneeded/);
+  assert.match(activeSource, /status:"Monitoring"/);
+  assert.match(
+    activeSource,
+    /ANETmovedfromtheWatchlistintoActivePositions/,
+  );
   for (const heading of [
     "Shares",
     "Cost basis",

@@ -405,9 +405,14 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
     page.getByRole("tab", { name: "Active Positions" }),
     testInfo.project.name,
   );
+  const anetRow = page
+    .locator(".active-positions-table tbody tr")
+    .filter({ hasText: "ANET" });
+  await expect(anetRow).toHaveCount(1);
+  await expect(anetRow.getByText("Monitoring", { exact: true })).toBeVisible();
   await expect(
-    page.locator(".active-positions-table tbody tr").filter({ hasText: "ANET" }),
-  ).toHaveCount(1);
+    anetRow.getByText(/ANET moved from the Watchlist into Active Positions/),
+  ).toBeVisible();
   await expect(
     page.locator(".active-positions-table tbody tr").filter({ hasText: "PANW" }),
   ).toHaveCount(0);

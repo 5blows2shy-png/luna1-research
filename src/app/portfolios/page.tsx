@@ -83,9 +83,10 @@ const activePositions: ActivePosition[] = [
     valuation: "Research needed",
     positionSize: "Research needed",
     exitRule: "Research needed",
-    status: "Research needed",
+    status: "Monitoring",
     thesisStatus: "Research needed",
-    whatChanged: "Research needed",
+    whatChanged:
+      "ANET moved from the Watchlist into Active Positions. The thesis remains centered on Ethernet-based AI and cloud-networking demand, execution quality, and product adoption; customer concentration, competition, valuation, and growth durability remain under review.",
   },
   {
     ticker: "WELL",
