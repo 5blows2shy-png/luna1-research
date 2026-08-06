@@ -41,6 +41,11 @@ export type ResearchKind =
   | "reit"
   | "etf";
 
+export type FinancialValue =
+  | number
+  | "Not applicable"
+  | "Not separately disclosed";
+
 export type ResearchLink = {
   label: string;
   href: string | null;
@@ -53,34 +58,37 @@ export type ResearchSection = {
 
 export type SegmentRecord = {
   name: string;
-  revenue: number | null;
-  revenueGrowth: number | null;
-  operatingIncome: number | null;
-  operatingMargin: number | null;
-  shareOfRevenue: number | null;
+  revenue: FinancialValue;
+  revenueGrowth: FinancialValue;
+  operatingIncome: FinancialValue;
+  operatingMargin: FinancialValue;
+  shareOfRevenue: FinancialValue;
+  profitMeasure: "Operating income" | "Segment income" | "Net income" | "Not applicable";
   driver: string;
-  sourceUrl: string | null;
+  sourceUrl: string;
 };
 
 export type HistoricalFinancialRecord = {
   period: string;
-  revenue: number | null;
-  revenueGrowth: number | null;
-  grossProfit: number | null;
-  grossMargin: number | null;
-  operatingIncome: number | null;
-  operatingMargin: number | null;
-  ebitda: number | null;
-  ebitdaMargin: number | null;
-  netIncome: number | null;
-  dilutedEps: number | null;
-  operatingCashFlow: number | null;
-  capitalExpenditures: number | null;
-  freeCashFlow: number | null;
-  cash: number | null;
-  debt: number | null;
-  dilutedShares: number | null;
-  sourceUrl: string | null;
+  revenue: FinancialValue;
+  revenueGrowth: FinancialValue;
+  grossProfit: FinancialValue;
+  grossMargin: FinancialValue;
+  operatingIncome: FinancialValue;
+  operatingMargin: FinancialValue;
+  ebitda: FinancialValue;
+  ebitdaMargin: FinancialValue;
+  netIncome: FinancialValue;
+  dilutedEps: FinancialValue;
+  operatingCashFlow: FinancialValue;
+  capitalExpenditures: FinancialValue;
+  freeCashFlow: FinancialValue;
+  cash: FinancialValue;
+  debt: FinancialValue;
+  dilutedShares: FinancialValue;
+  sourceUrl: string;
+  sourceLabel: string;
+  currency: "USD" | "CAD";
 };
 
 export type ForecastRecord = {

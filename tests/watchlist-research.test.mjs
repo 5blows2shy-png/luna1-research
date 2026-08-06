@@ -22,6 +22,10 @@ const pageSource = fs.readFileSync(
   "src/components/research/company-research-page.tsx",
   "utf8",
 );
+const financialSource = fs.readFileSync(
+  "src/data/research/research-financials.ts",
+  "utf8",
+);
 
 test("every requested Watchlist ticker has a typed research record", () => {
   for (const ticker of requiredTickers)
@@ -46,7 +50,10 @@ test("research pages identify incomplete work and block unfinished downloads", (
   assert.match(coverageSource, /url: null/);
   assert.doesNotMatch(coverageSource, /priceTarget|currentPrice|analystRating/);
   assert.match(pageSource, /disabled/);
-  assert.match(pageSource, /DATA_PENDING/);
+  assert.doesNotMatch(pageSource, /DATA_PENDING|all values remain pending/);
+  assert.match(financialSource, /historicalEvidenceByTicker/);
+  assert.match(financialSource, /segmentEvidenceByTicker/);
+  assert.match(financialSource, /SEC filed annual reports \/ XBRL company facts/);
 });
 
 test("specialized ETF, bank, and REIT frameworks are present", () => {
