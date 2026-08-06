@@ -36,10 +36,11 @@ test("research content uses typed centralized records", () => {
     source,
     /ReadingItem|readingLibrary|One Up On Wall Street/,
   );
-  assert.equal((source.match(/status: "Draft" as const/g) ?? []).length, 1);
+  assert.match(source, /slug === "glw-optical-demand"/);
+  assert.match(source, /date: "August 5, 2026"/);
 });
 
-test("incomplete research is labeled without fabricated data or PDFs", () => {
+test("incomplete research is labeled and only reviewed working notes are downloadable", () => {
   const data = fs.readFileSync("src/lib/research-content.ts", "utf8");
   const page = fs.readFileSync(
     "src/app/research/companies/[ticker]/page.tsx",
@@ -47,9 +48,21 @@ test("incomplete research is labeled without fabricated data or PDFs", () => {
   );
   assert.match(data, /Data pending update/);
   assert.match(data, /Date to be confirmed/);
-  assert.doesNotMatch(data, /pdfUrl:/);
+  assert.match(data, /pdfUrl: "\/reports\/GLW-Luna1-Working-Note\.pdf"/);
+  assert.ok(fs.existsSync("public/reports/GLW-Luna1-Working-Note.pdf"));
   assert.match(page, /Full research report in development\./);
   assert.match(page, /company\.pdfUrl/);
+});
+
+test("GLW working-note development entry is dated and remains in progress", () => {
+  const log = fs.readFileSync("src/lib/development-log.ts", "utf8");
+  assert.equal(
+    (log.match(/id: "glw-optical-connectivity-working-note"/g) ?? []).length,
+    1,
+  );
+  assert.match(log, /date: "2026-08-05"/);
+  assert.match(log, /Created GLW Optical-Connectivity Working Note/);
+  assert.match(log, /status: "In Progress"/);
 });
 
 test("every research surface renders the approved disclosure", () => {

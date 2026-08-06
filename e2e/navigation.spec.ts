@@ -213,7 +213,17 @@ test("research note and development log filters work", async ({ page }) => {
     page.getByRole("heading", { name: "RY: framing credit-cycle questions" }),
   ).toBeVisible();
   await expect(page.getByText("5 notes")).toHaveCount(0);
+  await page.getByLabel("Ticker").selectOption("GLW");
+  await expect(
+    page.getByRole("link", { name: "Download PDF" }),
+  ).toHaveAttribute("href", "/reports/GLW-Luna1-Working-Note.pdf");
+  await expect(page.getByText("August 5, 2026", { exact: true })).toBeVisible();
   await page.goto("/development-log");
+  await expect(
+    page.getByRole("heading", {
+      name: "Created GLW Optical-Connectivity Working Note",
+    }),
+  ).toBeVisible();
   await page.getByLabel("Status").selectOption("Planned");
   await expect(
     page.getByRole("heading", {

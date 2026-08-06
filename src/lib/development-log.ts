@@ -397,4 +397,31 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
       "Makes the path from military accountability and infrastructure operations to accounting, finance, and investment research easier to evaluate while preserving the underlying work.",
     status: "Completed",
   },
+  {
+    id: "glw-optical-connectivity-working-note",
+    date: "2026-08-05",
+    phase: "Current Research",
+    category: "Research",
+    title: "Created GLW Optical-Connectivity Working Note",
+    summary:
+      "Published a dated, downloadable working note that maps the evidence required to evaluate optical-connectivity demand at Corning without presenting unfinished research as a final conclusion.",
+    reason:
+      "The GLW research record needed a portable document that makes the research question, evidence gaps, source plan, and monitoring questions visible while the full analysis remains in development.",
+    lessons: [
+      "A working note should distinguish an analytical demand map from reported evidence.",
+      "Document dates should not overwrite the original publication dates of source materials.",
+      "Draft research is more credible when its unanswered questions and completion standard are explicit.",
+    ],
+    skills: [
+      "Equity-research scoping",
+      "Primary-source planning",
+      "Financial communication",
+      "Document production",
+    ],
+    impact:
+      "Adds a recruiter-visible example of disciplined research development and gives the GLW note a branded PDF artifact while preserving its Draft status.",
+    status: "In Progress",
+    route: "/research/notes",
+    visibility: "Public",
+  },
 ];

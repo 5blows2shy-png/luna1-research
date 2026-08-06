@@ -60,6 +60,7 @@ export type ResearchNote = {
   date: string;
   summary: string;
   sourceLinks: Array<{ label: string; href: string }>;
+  pdfUrl?: string;
 };
 
 const pendingMetrics = [
@@ -472,7 +473,21 @@ const researchNoteSeeds: Array<
 
 export const researchNotes: ResearchNote[] = researchNoteSeeds.map(
   ([slug, title, category, ticker, theme]) =>
-    slug === "be-project-economics"
+    slug === "glw-optical-demand"
+      ? {
+          slug,
+          title,
+          category: category as ResearchNote["category"],
+          ticker,
+          theme,
+          status: "Draft" as const,
+          date: "August 5, 2026",
+          summary:
+            "Working note. Evidence, primary sources, and final conclusions are still being developed.",
+          sourceLinks: [],
+          pdfUrl: "/reports/GLW-Luna1-Working-Note.pdf",
+        }
+      : slug === "be-project-economics"
       ? {
           slug,
           title,
