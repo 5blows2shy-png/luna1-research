@@ -9,7 +9,7 @@ test("market credentials remain server-side and unavailable data is explicit", a
   assert.match(service, /process\.env\.MARKET_DATA_API_KEY/);
   assert.doesNotMatch(client, /MARKET_DATA_API_KEY|api\.twelvedata\.com/);
   assert.match(service, /Market data unavailable/);
-  assert.match(route, /supportedMarketInstruments\.has/);
+  assert.match(route, /createEquityMarketInstrument/);
 });
 
 test("global market pulse includes the requested direct instruments", async () => {
@@ -22,10 +22,10 @@ test("global market pulse includes the requested direct instruments", async () =
 });
 
 test("market service uses secure normalized FMP endpoints and adaptive caching", async () => {
-  const [service, config, provider, watchlist] = await Promise.all([read("src/lib/market-data-service.ts"), read("src/lib/market-ticker-config.ts"), read("src/lib/market-pulse/fmp-provider.ts"), read("src/lib/watchlist-data.ts")]);
+  const [service, config, provider, watchlist, page] = await Promise.all([read("src/lib/market-data-service.ts"), read("src/lib/market-ticker-config.ts"), read("src/lib/market-pulse/fmp-provider.ts"), read("src/lib/watchlist-data.ts"), read("src/app/portfolios/page.tsx")]);
   assert.match(service, /process\.env\.MARKET_DATA_API_KEY/);
   assert.match(service, /financialmodelingprep\.com\/stable/);
-  assert.match(service, /quote\?symbol=/);
+  assert.match(service, /batch-quote\?symbols=/);
   assert.doesNotMatch(service, /batch-index-quotes|batch-commodity-quotes|treasury-rates|api\.twelvedata\.com/);
   assert.match(provider, /"us-10-year": "\^TNX"/);
   assert.match(service, /Array\.isArray\(payload\)/);
@@ -33,7 +33,8 @@ test("market service uses secure normalized FMP endpoints and adaptive caching",
   assert.match(service, /finiteNumber/);
   assert.match(service, /changePercentage/);
   assert.match(service, /Promise\.allSettled/);
-  for (const ticker of ["BE", "WELL", "AIPO"]) assert.match(`${config}\n${watchlist}`, new RegExp(`\\b${ticker}\\b`));
+  assert.match(service, /encodeURIComponent\(symbols\)/);
+  for (const ticker of ["BE", "WELL", "AIPO"]) assert.match(`${config}\n${watchlist}\n${page}`, new RegExp(`\\b${ticker}\\b`));
   assert.match(service, /60_000/);
   assert.match(service, /15 \* 60_000/);
 });
@@ -43,8 +44,8 @@ test("market quote route validates, rate limits, and sanitizes its public contra
   assert.match(route, /process\.env\.MARKET_DATA_API_KEY/);
   assert.doesNotMatch(route, /NEXT_PUBLIC_MARKET_DATA_API_KEY/);
   assert.match(route, /Market data connection is not configured\./);
-  assert.match(route, /supportedMarketInstruments\.has/);
-  assert.match(route, /MAX_SYMBOLS = 24/);
+  assert.match(route, /createEquityMarketInstrument/);
+  assert.match(route, /MAX_SYMBOLS = 50/);
   assert.match(route, /RATE_LIMIT = 60/);
   assert.match(route, /unavailableSymbols/);
   assert.match(route, /lastUpdated/);
@@ -68,10 +69,14 @@ test("portfolio sections share a deduplicated quote provider", async () => {
 });
 
 test("portfolio ticker exposes every Luna1 portfolio bucket", async () => {
-  const config = await read("src/lib/market-ticker-config.ts");
-  for (const bucket of ["Active Positions", "Watchlist", "Long-Term Compounders"]) assert.ok(config.includes(bucket));
+  const [page, board] = await Promise.all([read("src/app/portfolios/page.tsx"), read("src/components/portfolio-market-board.tsx")]);
+  const config = page;
+  for (const bucket of ["Active Positions", "Watchlist", "Long-Term Compounders"]) assert.ok(page.includes(bucket));
   for (const ticker of ["CASY", "ANET", "WELL", "LLY", "AAPL", "COST", "PG", "AMZN", "AIPO"]) assert.match(config, new RegExp(`["]${ticker}["]`));
-  assert.doesNotMatch(config, /"PANW"/);
+  assert.match(page, /activePositions\.map/);
+  assert.match(page, /watchlist\.map/);
+  assert.match(page, /\[\.\.\.coreAllocation, \.\.\.compounders\]\.map/);
+  assert.match(board, /useState<PortfolioTickerGroup\[]>\(groups\)/);
 });
 
 test("ticker includes integrity, refresh, cache, and accessibility safeguards", async () => {

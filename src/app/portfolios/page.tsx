@@ -8,6 +8,7 @@ import { MarketQuotesProvider } from "@/components/market/market-quotes-provider
 import { QuoteDisplay } from "@/components/market/quote-display";
 import { PageHeader, SectionHeading } from "@/components/site";
 import { watchlist } from "@/lib/watchlist-data";
+import type { PortfolioTickerGroups } from "@/lib/market-ticker-config";
 
 const MistakeJournal = dynamic(
   () =>
@@ -218,6 +219,12 @@ const allPortfolioSymbols = Array.from(new Set([
   ...compounders.map(({ ticker }) => ticker),
 ])).map((symbol) => symbol.toUpperCase()).sort();
 
+const portfolioTickerGroups: PortfolioTickerGroups = {
+  "Active Positions": activePositions.map(({ ticker }) => ticker),
+  Watchlist: watchlist.map(({ ticker }) => ticker),
+  "Long-Term Compounders": [...coreAllocation, ...compounders].map(({ ticker }) => ticker),
+};
+
 const tabs = [
   "Overview",
   "Active Positions",
@@ -427,7 +434,7 @@ export default function Portfolios() {
         title="Conviction made accountable."
         description="Positions and decision reviews are organized around the initial thesis, valuation work, position role, explicit risk, exit criteria, current thesis status, and what changed."
       >
-        <PortfolioMarketBoard />
+        <PortfolioMarketBoard portfolioGroups={portfolioTickerGroups} />
       </PageHeader>
       <section>
         <div

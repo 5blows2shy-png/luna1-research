@@ -76,7 +76,8 @@ export async function getMarketQuotes(instruments: MarketInstrument[]): Promise<
   if (!apiKey) return { quotes: instruments.map(unavailable), updatedAt: null, provider: null, status: "unavailable", message: "Market data unavailable. Add a server-side market data connection to enable current quotes." };
 
   try {
-    const quoteResults = await Promise.allSettled(instruments.map(({ providerSymbol }) => fmp<FmpQuote[]>(`quote?symbol=${encodeURIComponent(providerSymbol)}`, apiKey)));
+    const symbols = instruments.map(({ providerSymbol }) => providerSymbol).join(",");
+    const quoteResults = await Promise.allSettled([fmp<FmpQuote[]>(`batch-quote?symbols=${encodeURIComponent(symbols)}`, apiKey)]);
     const allQuotes = quoteResults.flatMap((result) => result.status === "fulfilled" ? result.value : []);
     if (!allQuotes.length) {
       const failure = quoteResults.find((result): result is PromiseRejectedResult => result.status === "rejected");
