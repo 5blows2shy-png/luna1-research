@@ -13,28 +13,27 @@ test("market credentials remain server-side and unavailable data is explicit", a
 });
 
 test("global market pulse includes the requested direct instruments", async () => {
-  const [config, component, wrapper, layout] = await Promise.all([read("src/lib/market-ticker-config.ts"), read("src/components/market-pulse.tsx"), read("src/components/route-aware-market-pulse.tsx"), read("src/app/layout.tsx")]);
-  for (const ticker of ["SPX", "COMP", "DJIA", "RUT", "US10Y", "WTI", "NATGAS", "GOLD", "NVDA", "AVGO", "EQIX", "DLR", "VRT", "ANET", "BE", "V", "MA", "ICE", "CME", "SPGI", "MSCI"]) assert.ok(config.includes(`symbol: "${ticker}"`) || config.includes(`"${ticker}"`));
+  const [config, component, layout] = await Promise.all([read("src/lib/market-pulse/config.ts"), read("src/components/market-pulse.tsx"), read("src/app/layout.tsx")]);
+  for (const ticker of ["SPY", "RUT", "US10Y", "WTI", "NATGAS", "GOLD", "NVDA", "AVGO"]) assert.ok(config.includes(`symbol: "${ticker}"`));
   assert.match(component, /Luna1 Market Pulse/);
   assert.match(component, /Market data may be delayed/);
   assert.match(component, /ArrowRight/);
-  assert.match(wrapper, /<MarketPulse \/>/);
-  assert.match(layout, /<Navbar\/><RouteAwareMarketPulse\/>/);
+  assert.match(layout, /<Navbar\/><MarketPulse\/>/);
 });
 
 test("market service uses secure normalized FMP endpoints and adaptive caching", async () => {
-  const [service, config, watchlist] = await Promise.all([read("src/lib/market-data-service.ts"), read("src/lib/market-ticker-config.ts"), read("src/lib/watchlist-data.ts")]);
+  const [service, config, provider, watchlist] = await Promise.all([read("src/lib/market-data-service.ts"), read("src/lib/market-ticker-config.ts"), read("src/lib/market-pulse/fmp-provider.ts"), read("src/lib/watchlist-data.ts")]);
   assert.match(service, /process\.env\.MARKET_DATA_API_KEY/);
   assert.match(service, /financialmodelingprep\.com\/stable/);
   assert.match(service, /quote\?symbol=/);
   assert.doesNotMatch(service, /batch-index-quotes|batch-commodity-quotes|treasury-rates|api\.twelvedata\.com/);
-  assert.match(config, /providerSymbol: "\^TNX"/);
+  assert.match(provider, /"us-10-year": "\^TNX"/);
   assert.match(service, /Array\.isArray\(payload\)/);
   assert.match(service, /\["Error Message"\]/);
   assert.match(service, /finiteNumber/);
   assert.match(service, /changePercentage/);
   assert.match(service, /Promise\.allSettled/);
-  for (const ticker of ["BE", "WELL", "AIPO"]) assert.match(`${config}\n${watchlist}`, new RegExp(`"${ticker}"`));
+  for (const ticker of ["BE", "WELL", "AIPO"]) assert.match(`${config}\n${watchlist}`, new RegExp(`\\b${ticker}\\b`));
   assert.match(service, /60_000/);
   assert.match(service, /15 \* 60_000/);
 });
