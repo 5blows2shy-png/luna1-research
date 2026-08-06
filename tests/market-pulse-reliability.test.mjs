@@ -14,7 +14,7 @@ test("market pulse normalizes FMP arrays and calculates missing percentages", as
   assert.match(provider, /treasury-rates/);
   assert.match(provider, /year10/);
   assert.match(provider, /batch-commodity-quotes/);
-  assert.match(provider, /batch-exchange-quote\?exchange=NASDAQ/);
+  assert.match(provider, /batch-quote\?symbols=NVDA%2CAVGO/);
   assert.match(provider, /quote-short\?symbol=/);
 });
 

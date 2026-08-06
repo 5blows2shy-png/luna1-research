@@ -96,13 +96,13 @@ export function createFmpMarketPulseProvider(apiKey: string): MarketPulseProvide
         }
       }
       if (instrument.id === "nvidia" || instrument.id === "broadcom") {
-        nasdaqQuotes ??= requestFmp("batch-exchange-quote?exchange=NASDAQ", apiKey, signal);
+        nasdaqQuotes ??= requestFmp("batch-quote?symbols=NVDA%2CAVGO", apiKey, signal);
         try {
           const payload = await nasdaqQuotes;
           const match = Array.isArray(payload) ? payload.find((quote) => typeof quote === "object" && quote !== null && (quote as FmpQuote).symbol === providerSymbol) : null;
           if (match) return normalizeFmpQuote(instrument, [match]);
         } catch {
-          // Fall through to an individual quote when exchange batching is unavailable.
+          // Fall through to an individual quote when symbol batching is unavailable.
         }
       }
       const encoded = encodeURIComponent(providerSymbol);
