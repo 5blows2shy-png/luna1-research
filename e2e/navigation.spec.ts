@@ -208,12 +208,13 @@ test("research hub exposes structured routes and transparent placeholders", asyn
 
 test("research note and development log filters work", async ({ page }) => {
   await page.goto("/research/notes");
-  await page.getByLabel("Ticker").selectOption("RY");
+  const tickerFilter = page.getByRole("combobox", { name: "Ticker", exact: true });
+  await tickerFilter.selectOption("RY");
   await expect(
     page.getByRole("heading", { name: "RY: framing credit-cycle questions" }),
   ).toBeVisible();
   await expect(page.getByText("5 notes")).toHaveCount(0);
-  await page.getByLabel("Ticker").selectOption("GLW");
+  await tickerFilter.selectOption("GLW");
   await expect(
     page.getByRole("link", { name: "Download PDF" }),
   ).toHaveAttribute("href", "/reports/GLW-Luna1-Working-Note.pdf");
@@ -231,6 +232,13 @@ test("research note and development log filters work", async ({ page }) => {
     }),
   ).toBeVisible();
   await expect(page.getByText("1 entries")).toBeVisible();
+  await page.goto("/analyst-journal");
+  await expect(
+    page.locator('a[href="/reports/GLW-Luna1-Working-Note.pdf"]'),
+  ).toBeVisible();
+  await expect(
+    page.locator('a[href="/reports/BE-Luna1-Analyst-Journal.pdf"]'),
+  ).toBeVisible();
 });
 
 test("Transaction Intelligence preview is promoted without overstating readiness", async ({

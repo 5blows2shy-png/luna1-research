@@ -62,11 +62,11 @@ export default function AnalystJournalPage() {
                   {note.status}
                 </span>
                 <small>{note.date}</small>
-                {note.slug === "be-project-economics" && (
+                {note.pdfUrl && (
                   <a
                     className="analyst-note-download"
                     download
-                    href="/reports/BE-Luna1-Analyst-Journal.pdf"
+                    href={note.pdfUrl}
                   >
                     Download PDF <span aria-hidden="true">↓</span>
                   </a>

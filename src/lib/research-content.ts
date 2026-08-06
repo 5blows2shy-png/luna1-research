@@ -504,6 +504,7 @@ export const researchNotes: ResearchNote[] = researchNoteSeeds.map(
               href: "https://investor.bloomenergy.com/press-releases/press-release-details/2026/Bloom-Energy-Reports-Record-First-Quarter-2026-Results-and-Raises-Full-Year-2026-Guidance/default.aspx",
             },
           ],
+          pdfUrl: "/reports/BE-Luna1-Analyst-Journal.pdf",
         }
       : {
           slug,
