@@ -16,26 +16,6 @@ export const researchRouteBySymbol: Record<string, string> = {
   STRL: "/research/strl",
 };
 
-export const marketPulseInstruments: readonly MarketInstrument[] = [
-  { symbol: "SPX", providerSymbol: "^GSPC", name: "S&P 500", kind: "index" },
-  { symbol: "COMP", providerSymbol: "^IXIC", name: "Nasdaq Composite", kind: "index" },
-  { symbol: "DJIA", providerSymbol: "^DJI", name: "Dow Jones Industrial Average", kind: "index" },
-  { symbol: "RUT", providerSymbol: "^RUT", name: "Russell 2000", kind: "index" },
-  { symbol: "US10Y", providerSymbol: "^TNX", name: "U.S. 10-Year Treasury Yield", kind: "treasury" },
-  { symbol: "WTI", providerSymbol: "CLUSD", name: "WTI Crude Oil", kind: "commodity" },
-  { symbol: "NATGAS", providerSymbol: "NGUSD", name: "Natural Gas", kind: "commodity" },
-  { symbol: "GOLD", providerSymbol: "GCUSD", name: "Gold", kind: "commodity" },
-  ...["NVDA", "AVGO", "EQIX", "DLR", "VRT", "ANET", "BE", "V", "MA", "ICE", "CME", "SPGI", "MSCI"].map((symbol) => ({
-    symbol,
-    providerSymbol: symbol,
-    name: symbol,
-    kind: "equity" as const,
-    researchRoute: researchRouteBySymbol[symbol],
-  })),
-] as const;
-
-export const marketPulseSymbols = marketPulseInstruments.map(({ symbol }) => symbol);
-
 export const portfolioTickerGroups = {
   "Active Positions": ["CASY", "ANET", "WELL"],
   Watchlist: watchlist.map((item) => item.ticker),
@@ -58,5 +38,5 @@ const portfolioInstruments: MarketInstrument[] = portfolioTickerSymbols.map((sym
 }));
 
 export const supportedMarketInstruments = new Map(
-  [...portfolioInstruments, ...marketPulseInstruments].map((instrument) => [instrument.symbol, instrument]),
+  portfolioInstruments.map((instrument) => [instrument.symbol, instrument]),
 );
