@@ -26,6 +26,7 @@ test("market service uses secure normalized FMP endpoints and adaptive caching",
   assert.match(service, /process\.env\.MARKET_DATA_API_KEY/);
   assert.match(service, /financialmodelingprep\.com\/stable/);
   assert.match(service, /batch-quote\?symbols=/);
+  assert.match(service, /quote\?symbol=/);
   assert.doesNotMatch(service, /batch-index-quotes|batch-commodity-quotes|treasury-rates|api\.twelvedata\.com/);
   assert.match(provider, /"us-10-year": "\^TNX"/);
   assert.match(service, /Array\.isArray\(payload\)/);

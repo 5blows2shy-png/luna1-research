@@ -77,8 +77,13 @@ export async function getMarketQuotes(instruments: MarketInstrument[]): Promise<
 
   try {
     const symbols = instruments.map(({ providerSymbol }) => providerSymbol).join(",");
-    const quoteResults = await Promise.allSettled([fmp<FmpQuote[]>(`batch-quote?symbols=${encodeURIComponent(symbols)}`, apiKey)]);
-    const allQuotes = quoteResults.flatMap((result) => result.status === "fulfilled" ? result.value : []);
+    const batchResult = await Promise.allSettled([fmp<FmpQuote[]>(`batch-quote?symbols=${encodeURIComponent(symbols)}`, apiKey)]);
+    let quoteResults: PromiseSettledResult<FmpQuote[]>[] = batchResult;
+    let allQuotes = batchResult.flatMap((result) => result.status === "fulfilled" ? result.value : []);
+    if (!allQuotes.length) {
+      quoteResults = await Promise.allSettled(instruments.map(({ providerSymbol }) => fmp<FmpQuote[]>(`quote?symbol=${encodeURIComponent(providerSymbol)}`, apiKey)));
+      allQuotes = quoteResults.flatMap((result) => result.status === "fulfilled" ? result.value : []);
+    }
     if (!allQuotes.length) {
       const failure = quoteResults.find((result): result is PromiseRejectedResult => result.status === "rejected");
       throw failure?.reason instanceof Error ? failure.reason : new Error("INVALID_RESPONSE");
