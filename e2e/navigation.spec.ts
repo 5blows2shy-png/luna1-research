@@ -744,7 +744,7 @@ test("recruiter view retains profile and downloads", async ({ page }) => {
     .toBeVisible();
   await expect(
     page.getByAltText("Portrait of Shy Lee, founder of Klyro"),
-  ).toHaveAttribute("src", /shyheim-lee-recruiter\.jpeg/);
+  ).toHaveAttribute("src", /shyheim-lee-recruiter-headshot\.jpg/);
   await expect(
     page.getByRole("link", { name: /Download Profile/ }),
   ).toBeVisible();
