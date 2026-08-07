@@ -460,6 +460,9 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
   await expect(
     page.getByRole("columnheader", { name: "Position size" }),
   ).toHaveCount(0);
+  await expect(
+    page.getByRole("columnheader", { name: "Purchase date" }),
+  ).toHaveCount(0);
   await activate(
     page.getByRole("tab", { name: "Long-Term Compounders" }),
     testInfo.project.name,
@@ -469,7 +472,13 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
   ).toHaveCount(1);
   await expect(
     page.locator(".holdings-table tbody tr").filter({ hasText: "SLV" }),
-  ).toHaveCount(1);
+  ).toHaveCount(0);
+  await expect(
+    page.locator(".holdings-table tbody tr").filter({ hasText: "SpaceX" }),
+  ).toContainText("Not publicly traded");
+  await expect(
+    page.locator(".holdings-table tbody tr").filter({ hasText: "PG" }),
+  ).toHaveCount(0);
   await activate(
     page.getByRole("tab", { name: "Watchlist" }),
     testInfo.project.name,
@@ -587,21 +596,17 @@ test("homepage omits retired overview modules", async ({ page }) => {
     await expect(page.getByText(section, { exact: true })).toHaveCount(0);
 });
 
-test("Portfolio market monitor labels holdings and supports controls", async ({ page }) => {
+test("Portfolio retains the global market pulse and its controls", async ({ page }) => {
   await page.goto("/portfolio");
-  const monitor = page.getByRole("complementary", { name: "Luna1 portfolio market ticker" });
-  await expect(monitor).toBeVisible();
-  await expect(monitor.getByText("Portfolio Market Monitor")).toBeVisible();
-  await expect(monitor.getByText("Market data unavailable", { exact: true }).first()).toBeVisible();
-  await expect(monitor.getByText("Active Positions", { exact: true }).first()).toBeVisible();
-  await monitor.getByRole("button", { name: "Pause" }).click();
-  await expect(monitor.getByRole("button", { name: "Resume" })).toHaveAttribute("aria-pressed", "true");
-  await monitor.getByRole("button", { name: "Customize Ticker" }).click();
-  await expect(monitor.getByRole("checkbox", { name: "Watchlist" })).toBeVisible();
-  await expect(monitor.getByRole("checkbox", { name: "Long-Term Compounders" })).toBeVisible();
-  await monitor.getByRole("button", { name: /CASY/ }).click();
-  await expect(page.getByRole("dialog", { name: /CASY/ })).toContainText("Active Positions");
-  await page.getByRole("button", { name: "Close quote details" }).click();
+  const pulse = page.getByRole("region", { name: "Luna1 Market Pulse" });
+  await expect(pulse).toBeVisible();
+  await pulse
+    .getByRole("button", { name: "Pause market ticker updates and motion" })
+    .click();
+  await expect(
+    pulse.getByRole("button", { name: "Resume market ticker updates and motion" }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(pulse.getByText(/Updates paused/)).toBeVisible();
 });
 
 test("portfolio sections share one quote request and reusable displays", async ({ page }, testInfo) => {

@@ -61,7 +61,7 @@ test("portfolio sections share a deduplicated quote provider", async () => {
   assert.match(page, /<MarketQuotesProvider symbols=\{allPortfolioSymbols\}>/);
   assert.match(page, /<QuoteDisplay symbol=\{position\.ticker\}/);
   assert.match(page, /<QuoteDisplay symbol=\{item\.ticker\}/);
-  for (const symbol of ["AAPL", "COST", "VOO", "QQQM", "IAU", "SLV", "SGOV"]) assert.match(`${page}\n${config}`, new RegExp(`"${symbol}"`));
+  for (const symbol of ["AAPL", "COST", "VOO", "QQQM", "IAU", "AIPO", "SGOV"]) assert.match(`${page}\n${config}`, new RegExp(`"${symbol}"`));
   assert.match(provider, /new Set/);
   assert.match(provider, /\.sort\(\)/);
   assert.match(display, /Previous Close|dataTypeLabels/);
@@ -72,7 +72,7 @@ test("portfolio sections share a deduplicated quote provider", async () => {
 test("portfolio ticker exposes every Luna1 portfolio bucket", async () => {
   const [page, config, pulseConfig] = await Promise.all([read("src/app/portfolios/page.tsx"), read("src/lib/market-ticker-config.ts"), read("src/lib/market-pulse/config.ts")]);
   for (const bucket of ["Active Positions", "Watchlist", "Long-Term Compounders"]) assert.ok(config.includes(bucket));
-  for (const ticker of ["CASY", "ANET", "WELL", "LLY", "AAPL", "COST", "PG", "AMZN", "AIPO"]) assert.match(config, new RegExp(`["]${ticker}["]`));
+  for (const ticker of ["CASY", "ANET", "WELL", "LLY", "AAPL", "COST", "AMZN", "AIPO"]) assert.match(config, new RegExp(`["]${ticker}["]`));
   assert.match(page, /portfolioTickerSymbols/);
   assert.doesNotMatch(page, /PortfolioMarketBoard|Portfolio Market Monitor/);
   assert.match(pulseConfig, /portfolioTickerGroups/);

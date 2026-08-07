@@ -28,7 +28,6 @@ const ResearchCoverageGrid = dynamic(
 type ActivePosition = {
   ticker: string;
   company: string;
-  purchaseDate: string;
   entryPrice: number | null;
   thesis: string;
   valuation: string;
@@ -49,13 +48,13 @@ type Holding = {
   allocation: string;
   type: string;
   horizon: string;
+  isPrivate?: boolean;
 };
 
 const activePositions: ActivePosition[] = [
   {
     ticker: "CASY",
     company: "Casey's General Stores Inc.",
-    purchaseDate: "Date pending verification",
     entryPrice: 824.0,
     thesis:
       "Casey’s is a high-quality retail compounder built around convenience stores, fuel, prepared food, and an efficient distribution network. Management plans to add at least 400 stores over fiscal 2027–2029 through acquisitions and new construction, expanding a system that already serves nearly 3,000 locations. The company can improve acquired stores by connecting them to Casey’s purchasing, distribution, prepared-food, and loyalty infrastructure, while the successful CEFCO integration demonstrates management’s ability to execute this strategy. My thesis remains intact while new locations produce profitable growth, prepared-food sales expand, and EBITDA and returns on invested capital continue improving.",
@@ -72,7 +71,6 @@ const activePositions: ActivePosition[] = [
   {
     ticker: "ANET",
     company: "Arista Networks Inc.",
-    purchaseDate: "Not publicly disclosed",
     entryPrice: null,
     thesis:
       "Arista Networks is a leading AI and cloud-networking business combining strong growth, profitability, and institutional-quality execution.",
@@ -90,7 +88,6 @@ const activePositions: ActivePosition[] = [
   {
     ticker: "WELL",
     company: "Welltower Inc.",
-    purchaseDate: "Date pending verification",
     entryPrice: 237.21,
     thesis:
       "Welltower is a healthcare real estate compounder benefiting from rising senior-housing demand, limited new supply, and improving property-level economics. In Q1 2026, normalized FFO per share grew 23% year over year to $1.47, while its senior housing operating portfolio produced 22.1% same-store NOI growth and 370 basis points of occupancy improvement. Revenue per occupied room increased 5%, expenses per occupied room rose only 0.4%, and operating margins expanded by 320 basis points, demonstrating meaningful operating leverage. My thesis remains intact while occupancy, normalized FFO, same-store NOI, and returns from new investment activity continue growing.",
@@ -135,13 +132,13 @@ const coreAllocation: Holding[] = [
     horizon: "Strategic allocation",
   },
   {
-    ticker: "SLV",
-    company: "iShares Silver Trust",
+    ticker: "AIPO",
+    company: "Defiance AI & Power Infrastructure ETF",
     thesis:
-      "Provides exposure to silver’s dual role as both a precious metal and an industrial commodity. The thesis is supported by potential demand from electrification, solar energy, electronics, and monetary-hedge buying, while recognizing silver’s higher volatility.",
+      "Diversified thematic exposure to the AI-compute, power, grid, nuclear, and infrastructure buildout without relying on a single operating company.",
     allocation: "9%",
-    type: "Real asset",
-    horizon: "Strategic allocation",
+    type: "Thematic equity ETF",
+    horizon: "Long term",
   },
   {
     ticker: "SGOV",
@@ -183,13 +180,14 @@ const compounders: Holding[] = [
     horizon: "5+ years",
   },
   {
-    ticker: "PG",
-    company: "The Procter & Gamble Company",
+    ticker: "Private",
+    company: "Space Exploration Technologies Corp. (SpaceX)",
     thesis:
-      "Procter & Gamble owns a diversified portfolio of essential consumer brands with recurring demand, global distribution, and significant pricing power. The company is positioned as a defensive compounder supported by steady cash flow, productivity improvements, dividends, and consistent capital returns.",
+      "The long-term investment thesis centers on Starlink, whose expanding satellite network can extend high-speed connectivity to underserved markets, mobile users, enterprises, and governments worldwide. SpaceX’s reusable-launch capabilities support the thesis by lowering deployment and replenishment costs, but the position remains subject to the risks and limited liquidity of a privately held company.",
     allocation: "15%",
-    type: "Long-term compounder",
+    type: "Private growth company",
     horizon: "5+ years",
+    isPrivate: true,
   },
   {
     ticker: "AMZN",
@@ -199,15 +197,6 @@ const compounders: Holding[] = [
     allocation: "20%",
     type: "Long-term compounder",
     horizon: "5+ years",
-  },
-  {
-    ticker: "AIPO",
-    company: "Defiance AI & Power Infrastructure ETF",
-    thesis:
-      "Diversified thematic exposure to the AI-compute, power, grid, nuclear, and infrastructure buildout without relying on a single operating company.",
-    allocation: "Research needed",
-    type: "Long-term thematic ETF",
-    horizon: "Research needed",
   },
 ];
 
@@ -249,7 +238,13 @@ function HoldingsTable({ title, items }: { title: string; items: Holding[] }) {
                 <td data-label="Ticker">
                   <b>{item.ticker}</b>
                 </td>
-                <td data-label="Market quote"><QuoteDisplay symbol={item.ticker} compact /></td>
+                <td data-label="Market quote">
+                  {item.isPrivate ? (
+                    <span>Not publicly traded</span>
+                  ) : (
+                    <QuoteDisplay symbol={item.ticker} compact />
+                  )}
+                </td>
                 <td data-label="Fund / company">{item.company}</td>
                 <td data-label="Investment thesis" className="portfolio-copy">
                   {item.thesis}
@@ -461,7 +456,6 @@ export default function Portfolios() {
                 <thead>
                   <tr>
                     <th>Ticker / Company</th>
-                    <th>Purchase date</th>
                     <th>Entry price</th>
                     <th>Initial thesis</th>
                     <th>Valuation</th>
@@ -480,9 +474,6 @@ export default function Portfolios() {
                           {position.company}
                         </small>
                         <QuoteDisplay symbol={position.ticker} compact />
-                      </td>
-                      <td data-label="Purchase date">
-                        {position.purchaseDate}
                       </td>
                       <td data-label="Entry price">
                         {position.entryPrice === null

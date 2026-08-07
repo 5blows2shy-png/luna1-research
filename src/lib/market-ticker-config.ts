@@ -20,7 +20,7 @@ export type PortfolioTickerGroups = Record<PortfolioTickerGroup, readonly string
 export const portfolioTickerGroups: PortfolioTickerGroups = {
   "Active Positions": ["CASY", "ANET", "WELL"],
   Watchlist: ["GLW", "STRL", "ALAB", "JBL", "RY", "DLR"],
-  "Long-Term Compounders": ["VOO", "QQQM", "IAU", "SLV", "SGOV", "LLY", "AAPL", "COST", "PG", "AMZN", "AIPO"],
+  "Long-Term Compounders": ["VOO", "QQQM", "IAU", "AIPO", "SGOV", "LLY", "AAPL", "COST", "AMZN"],
 };
 
 export const portfolioTickerSymbols = Array.from(new Set(Object.values(portfolioTickerGroups).flat()));

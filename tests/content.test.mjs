@@ -174,7 +174,7 @@ test("portfolio reflects approved public positions", () => {
   }
   assert.match(activeSource, /ticker:"ANET"/);
   assert.match(activeSource, /entryPrice:null/);
-  assert.match(activeSource, /Notpubliclydisclosed/);
+  assert.match(source, /Notpubliclydisclosed/);
   assert.doesNotMatch(activeSource, /Researchneeded/);
   assert.match(activeSource, /thesisStatus:"Thesisunderreview"/);
   assert.match(activeSource, /status:"Monitoring"/);
@@ -258,14 +258,13 @@ test("long-term portfolio allocations are complete", () => {
     ["VOO", "30%"],
     ["QQQM", "50%"],
     ["IAU", "10%"],
-    ["SLV", "9%"],
+    ["AIPO", "9%"],
     ["SGOV", "1%"],
     ["LLY", "25%"],
     ["AAPL", "20%"],
     ["COST", "20%"],
-    ["PG", "15%"],
+    ["Private", "15%"],
     ["AMZN", "20%"],
-    ["AIPO", "Researchneeded"],
   ])
     assert.match(
       source,
@@ -273,6 +272,11 @@ test("long-term portfolio allocations are complete", () => {
       `${ticker} allocation is missing`,
     );
   assert.ok(!source.includes("Average cost"));
+  assert.ok(!source.includes('ticker:"SLV"'));
+  assert.ok(!source.includes('ticker:"PG"'));
+  assert.match(source, /SpaceExplorationTechnologiesCorp\.\(SpaceX\)/);
+  assert.match(source, /investmentthesiscentersonStarlink/);
+  assert.match(source, /Notpubliclytraded/);
 });
 
 test("equity research uses the canonical research route", () => {
@@ -446,14 +450,13 @@ test("recruiter-facing architecture documents analyst process without fabricated
   assert.match(recruiter, /Why hire me\?/);
   assert.match(recruiter, /Luna1 is a professional research portfolio/);
   for (const field of [
-    "purchaseDate",
     "valuation",
     "thesisStatus",
     "whatChanged",
   ])
     assert.ok(portfolio.includes(field), `missing portfolio field: ${field}`);
   assert.doesNotMatch(portfolio, /positionSize|Position size/);
-  assert.match(portfolio, /Date pending verification/);
+  assert.doesNotMatch(portfolio, /purchaseDate|Purchase date/);
   assert.match(portfolio, /Not publicly disclosed/);
 });
 
