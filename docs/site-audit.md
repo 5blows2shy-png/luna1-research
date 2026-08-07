@@ -1,4 +1,4 @@
-# Klyro Site Audit
+# Luna1 Research Site Audit
 
 Audit date: 2026-07-14  
 Scope: all App Router pages, dynamic research/commentary routes, public assets, contact API, shared components, responsive styles, automated tests, production build, dependency audit, and a production-mode Lighthouse run.
@@ -136,7 +136,7 @@ Two issues require follow-up outside a code-only audit: production-grade distrib
 
 ## Verified clean areas
 
-- Alt text: every rendered `next/image` instance has meaningful alt text; decorative Klyro marks are hidden from assistive technology.
+- Alt text: every rendered `next/image` instance has meaningful alt text; decorative Luna marks are hidden from assistive technology.
 - API exposure: Supabase service-role and Resend credentials are read only from server-side environment variables; no `NEXT_PUBLIC_` secret usage was found.
 - TypeScript: strict type-check passes with no warnings or errors.
 - Broken internal routes/assets: Playwright loaded primary routes and verified all eight downloadable brand assets.

@@ -180,7 +180,7 @@ test("equity research is available from the public navigation", async ({
   await expect(
     page.getByRole("heading", { name: "Developing company dossiers" }),
   ).toBeVisible();
-  await expect(page.getByText("Original Klyro research library")).toBeVisible();
+  await expect(page.getByText("Original Luna1 research library")).toBeVisible();
 });
 
 test("research hub exposes structured routes and transparent placeholders", async ({
@@ -217,7 +217,7 @@ test("research note and development log filters work", async ({ page }) => {
   await tickerFilter.selectOption("GLW");
   await expect(
     page.getByRole("link", { name: "Download PDF" }),
-  ).toHaveAttribute("href", "/reports/GLW-Klyro-Working-Note.pdf");
+  ).toHaveAttribute("href", "/reports/GLW-Luna1-Working-Note.pdf");
   await expect(page.getByText("August 5, 2026", { exact: true })).toBeVisible();
   await page.goto("/development-log");
   await expect(
@@ -234,10 +234,10 @@ test("research note and development log filters work", async ({ page }) => {
   await expect(page.getByText("1 entries")).toBeVisible();
   await page.goto("/analyst-journal");
   await expect(
-    page.locator('a[href="/reports/GLW-Klyro-Working-Note.pdf"]'),
+    page.locator('a[href="/reports/GLW-Luna1-Working-Note.pdf"]'),
   ).toBeVisible();
   await expect(
-    page.locator('a[href="/reports/BE-Klyro-Analyst-Journal.pdf"]'),
+    page.locator('a[href="/reports/BE-Luna1-Analyst-Journal.pdf"]'),
   ).toBeVisible();
 });
 
@@ -254,7 +254,7 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   await expect(entry).toHaveCount(1);
   await expect(
     entry.getByText(
-      /Klyro is evolving from an independent equity-research platform/,
+      /Luna1 is evolving from an independent equity-research platform/,
     ),
   ).toBeVisible();
   await expect(entry.locator(".development-preview li")).toHaveCount(9);
@@ -298,7 +298,9 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   await scenarioSelect.selectOption("Conservative");
   await expect(scenarioSelect).toHaveValue("Conservative");
 
-  await page.getByRole("button", { name: "Upload & Clean Transactions" }).click();
+  await page
+    .getByRole("button", { name: "Upload & Clean Transactions", exact: true })
+    .click();
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(
     workbook,
@@ -634,7 +636,7 @@ test("homepage omits retired overview modules", async ({ page }) => {
 
 test("Portfolio retains the global market pulse and its controls", async ({ page }) => {
   await page.goto("/portfolio");
-  const pulse = page.getByRole("region", { name: "Klyro Market Pulse" });
+  const pulse = page.getByRole("region", { name: "Luna1 Market Pulse" });
   await expect(pulse).toBeVisible();
   await pulse
     .getByRole("button", { name: "Pause market ticker updates and motion" })
@@ -739,11 +741,11 @@ test("recruiter view retains profile and downloads", async ({ page }) => {
   await page.goto("/recruiter");
   await expect(page.getByText("Shy Lee · Founder")).toBeVisible();
   await expect(
-    page.getByAltText("Portrait of Shy Lee, founder of Klyro"),
+    page.getByAltText("Portrait of Shy Lee, founder of Luna1 Research"),
   )
     .toBeVisible();
   await expect(
-    page.getByAltText("Portrait of Shy Lee, founder of Klyro"),
+    page.getByAltText("Portrait of Shy Lee, founder of Luna1 Research"),
   ).toHaveAttribute("src", /shyheim-lee-recruiter-headshot\.jpg/);
   await expect(
     page.getByRole("link", { name: /Download Profile/ }),
@@ -778,7 +780,7 @@ test("thesis stress test validates probabilities and generates a memo", async ({
   await page.goto("/research/anet");
   await page.getByRole("link", { name: "Challenge the Thesis" }).click();
   await expect(
-    page.getByRole("heading", { name: "Klyro Thesis Stress Test" }),
+    page.getByRole("heading", { name: "Luna1 Thesis Stress Test" }),
   ).toBeVisible();
   await page.getByLabel("Bull-case probability").fill("20");
   await expect(page.locator(".validation-error")).toContainText("must equal 100%");
@@ -790,9 +792,9 @@ test("thesis stress test validates probabilities and generates a memo", async ({
     .getByRole("button", { name: /Generate deterministic analysis/ })
     .click();
   await expect(
-    page.getByRole("heading", { name: "Your View vs. Klyro" }),
+    page.getByRole("heading", { name: "Your View vs. Luna1" }),
   ).toBeVisible();
-  await expect(page.getByText("Klyro Investment Committee Challenge")).toBeVisible();
+  await expect(page.getByText("Luna1 Investment Committee Challenge")).toBeVisible();
   await expect(page.getByText(/not investment advice/i).last()).toBeVisible();
 });
 

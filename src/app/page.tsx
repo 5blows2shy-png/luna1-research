@@ -18,10 +18,11 @@ export default function Home() {
             <em>Analytical discipline.</em>
           </h1>
           <p>
-            Klyro is a financial intelligence system that converts transactions,
-            financial statements and market data into decisions. {professionalPositioning}{" "}
-            Klyro documents the research, valuation, accounting controls,
-            portfolio decisions, and lessons behind that process.
+            Luna1 is a professional financial research platform that connects
+            operating context, financial statements, and market evidence to
+            disciplined decisions. {professionalPositioning}{" "}It documents the
+            research, valuation, portfolio decisions, and lessons behind that
+            process.
           </p>
           <div className="button-row">
             <Link className="button primary" href="/research">

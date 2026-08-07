@@ -1,3 +1,3 @@
 import type { Metadata } from "next";
-export const metadata:Metadata={title:"The Klyro Framework",description:"Layered Understanding of Narrative Acceleration: a multi-factor framework for business fundamentals, structure, valuation, and risk."};
+export const metadata:Metadata={title:"Klyro",description:"Klyro accounting and financial decision-support preview."};
 export default function FrameworkLayout({children}:{children:React.ReactNode}){return children}

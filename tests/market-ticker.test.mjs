@@ -15,7 +15,7 @@ test("market credentials remain server-side and unavailable data is explicit", a
 test("global market pulse includes the requested direct instruments", async () => {
   const [config, component, layout] = await Promise.all([read("src/lib/market-pulse/config.ts"), read("src/components/market-pulse.tsx"), read("src/app/layout.tsx")]);
   for (const ticker of ["SPY", "RUT", "US10Y", "WTI", "NATGAS", "GOLD", "NVDA", "AVGO"]) assert.ok(config.includes(`symbol: "${ticker}"`));
-  assert.match(component, /Klyro Market Pulse/);
+  assert.match(component, /Luna1 Market Pulse/);
   assert.match(component, /Market data may be delayed/);
   assert.match(component, /ArrowRight/);
   assert.match(layout, /<Navbar\/><MarketPulse\/>/);
@@ -69,7 +69,7 @@ test("portfolio sections share a deduplicated quote provider", async () => {
   assert.match(hook, /quotesBySymbol/);
 });
 
-test("portfolio ticker exposes every Klyro portfolio bucket", async () => {
+test("portfolio ticker exposes every Luna1 portfolio bucket", async () => {
   const [page, config, pulseConfig] = await Promise.all([read("src/app/portfolios/page.tsx"), read("src/lib/market-ticker-config.ts"), read("src/lib/market-pulse/config.ts")]);
   for (const bucket of ["Active Positions", "Watchlist", "Long-Term Compounders"]) assert.ok(config.includes(bucket));
   for (const ticker of ["CASY", "ANET", "WELL", "LLY", "AAPL", "COST", "AMZN", "AIPO"]) assert.match(config, new RegExp(`["]${ticker}["]`));

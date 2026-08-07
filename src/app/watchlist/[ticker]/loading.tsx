@@ -5,7 +5,7 @@ export default function WatchlistResearchLoading() {
       aria-live="polite"
       className="research-loading-state"
     >
-      <span className="eyebrow">Klyro</span>
+      <span className="eyebrow">Luna1 Research</span>
       <p className="research-loading-title">Loading research record…</p>
     </section>
   );

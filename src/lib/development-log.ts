@@ -48,7 +48,7 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     category: "Strategy",
     title: "Established the research purpose",
     summary:
-      "Defined Klyro as a public record of investment analysis, portfolio accountability, and professional development.",
+      "Defined Luna1 Research as a public record of investment analysis, portfolio accountability, and professional development.",
     reason:
       "A durable process needed a clear purpose before it needed a website.",
     lessons: [
@@ -65,7 +65,7 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     date: "Date to be confirmed",
     phase: "Research Framework Development",
     category: "Research",
-    title: "Developed the Klyro research structure",
+    title: "Developed the LUNA research structure",
     summary:
       "Organized business fundamentals, institutional sponsorship, competitive position, technical structure, valuation, and risk into one repeatable process.",
     reason:
@@ -122,7 +122,7 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     date: "July 2026",
     phase: "Initial Website Build",
     category: "Platform",
-    title: "Built the first Klyro application",
+    title: "Built the first Luna1 Research application",
     summary:
       "Implemented the site with Next.js, React, strict TypeScript, the App Router, reusable components, responsive layouts, and Git-based version control.",
     reason:
@@ -143,7 +143,7 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     category: "Platform",
     title: "Established the first deployable public build",
     summary:
-      "Corrected the project-root deployment configuration and produced a deployable Klyro build.",
+      "Corrected the project-root deployment configuration and produced a deployable Luna1 Research build.",
     reason:
       "The application needed a reliable production path before feature expansion could continue.",
     lessons: [
@@ -307,9 +307,9 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     category: "Platform Expansion",
     title: "Integrated Klyro Preview",
     summary:
-      "Added the foundation of a transaction-analysis platform to the Klyro development roadmap, connecting research and valuation work with accounting controls, financial operations, and transaction-level analysis.",
+      "Added the foundation of a transaction-analysis platform to the Luna1 development roadmap, connecting research and valuation work with accounting controls, financial operations, and transaction-level analysis.",
     reason:
-      "Klyro can demonstrate a broader finance-and-technology workflow by connecting investment analysis with transaction organization, reconciliation concepts, exception identification, and audit-ready reporting design.",
+      "Luna1 can demonstrate a broader finance-and-technology workflow by connecting investment analysis with transaction organization, reconciliation concepts, exception identification, and audit-ready reporting design.",
     lessons: [
       "Transaction-level analysis depends on consistent normalization and reviewable data-cleaning rules.",
       "Accounting controls require visible exceptions, reconciliation logic, and an audit trail rather than silent automation.",
@@ -326,20 +326,20 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
       "Finance and technology integration",
     ],
     impact:
-      "Establishes a transparent roadmap for integrating transaction analytics into Klyro without representing unfinished capabilities as production-ready.",
+      "Establishes a transparent roadmap for integrating transaction analytics into Luna1 without representing unfinished capabilities as production-ready.",
     status: "In Progress",
     overview: [
-      "Expanded Klyro beyond investment research by incorporating the foundation of a financial transaction analysis platform into the Klyro ecosystem. This preview introduces the planned architecture for transaction import, data normalization, categorization, duplicate detection, transfer matching, reconciliation, exception review, and audit-ready reporting.",
-      "The integration demonstrates how Klyro can connect investment research and valuation work with practical accounting controls, financial operations, and transaction-level data analysis.",
+      "Expanded Luna1 beyond investment research by incorporating the foundation of a financial transaction analysis platform into the Luna1 ecosystem. This preview introduces the planned architecture for transaction import, data normalization, categorization, duplicate detection, transfer matching, reconciliation, exception review, and audit-ready reporting.",
+      "The integration demonstrates how Luna1 can connect investment research and valuation work with practical accounting controls, financial operations, and transaction-level data analysis.",
     ],
     milestones: [
-      "Incorporated the earlier transaction-analysis project into the Klyro development roadmap.",
+      "Incorporated the earlier transaction-analysis project into the Luna1 development roadmap.",
       "Introduced the Klyro module and dashboard preview.",
       "Established the foundation for transaction import, normalization, and categorization.",
       "Designed workflows for duplicate detection and possible mirrored-entry review.",
       "Planned transfer matching, reconciliation, and exception-review capabilities.",
       "Defined professional Excel, CSV, and PDF export workflows.",
-      "Connected accounting analytics with the broader Klyro research platform.",
+      "Connected accounting analytics with the broader Luna1 research platform.",
       "Preserved the original transaction-analysis project as the foundation for future development.",
     ],
     nextSteps: [
@@ -349,11 +349,11 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
       "Implement categorization and duplicate-detection engines.",
       "Add transfer matching and reconciliation tools.",
       "Create an exception-review queue and audit trail.",
-      "Add downloadable Klyro-branded reports and Excel exports.",
+      "Add downloadable Luna1-branded reports and Excel exports.",
       "Replace preview content with tested functionality as development progresses.",
     ],
     projectOrigin:
-      "Klyro builds on an earlier transaction-analysis project developed to separate and organize financial records, identify duplicate transactions, review exceptions, and export structured results. The original project is now being evaluated and integrated into Klyro through a more professional, scalable, and accounting-focused workflow.",
+      "Klyro builds on an earlier transaction-analysis project developed to separate and organize financial records, identify duplicate transactions, review exceptions, and export structured results. The original project is now being evaluated and integrated into Luna1 through a more professional, scalable, and accounting-focused workflow.",
     featurePreview: [
       { label: "Transaction Import", status: "Preview" },
       { label: "Data Normalization", status: "Preview" },
@@ -366,7 +366,7 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
       { label: "Export Center", status: "Planned" },
     ],
     evolutionStatement:
-      "Klyro is evolving from an independent equity-research platform into a broader financial intelligence ecosystem that connects investment analysis, valuation, accounting controls, and transaction analytics.",
+      "Luna1 is evolving from an independent equity-research platform into a broader financial intelligence ecosystem that connects investment analysis, valuation, accounting controls, and transaction analytics.",
     disclosure:
       "Klyro is a portfolio and educational project. It is not a substitute for professional accounting, audit, tax, legal, or financial advice.",
     route: "/transaction-intelligence",
@@ -377,7 +377,7 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     date: "2026-07-28",
     phase: "Recruiter Portfolio Refinement",
     category: "Strategy",
-    title: "Organized Klyro around analyst evidence",
+    title: "Organized Luna1 around analyst evidence",
     summary:
       "Reframed the public information architecture around Equity Research, Valuation, Klyro, Portfolio Process, the Analyst Journal, and the Development Log.",
     reason:

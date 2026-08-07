@@ -1,5 +1,5 @@
 import brandConfig from "./brand.json";
 
-export type KlyroBrand = typeof brandConfig;
+export type Luna1Brand = typeof brandConfig;
 
-export const luna1Brand: KlyroBrand = brandConfig;
+export const luna1Brand: Luna1Brand = brandConfig;
