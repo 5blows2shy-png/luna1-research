@@ -53,11 +53,11 @@ test("original transactions, payments, movements, versions, and audit events are
   assert.doesNotMatch(migration, /luna_bill_payments_update/);
   assert.doesNotMatch(migration, /luna_inventory_movements_update/);
   assert.doesNotMatch(migration, /luna_transaction_versions_update/);
-  assert.match(migration, /Luna audit events are append-only/);
+  assert.match(migration, /Klyro audit events are append-only/);
 });
 
 test("membership and grants preserve least privilege and at least one owner", () => {
-  assert.match(migration, /A Luna business must retain at least one owner/);
+  assert.match(migration, /A Klyro business must retain at least one owner/);
   assert.match(migration, /revoke all on public\.luna_businesses[\s\S]+from anon/);
   assert.match(migration, /grant delete on public\.luna_business_memberships to authenticated/);
   assert.doesNotMatch(migration, /grant delete on public\.luna_transactions/);

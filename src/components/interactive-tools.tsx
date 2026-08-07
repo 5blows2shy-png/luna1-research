@@ -20,14 +20,14 @@ export function Scorecard() {
       <div className="score-total">
         <Score score={total} />
         <div>
-          <span className="eyebrow">Illustrative ticker · LUNA</span>
+          <span className="eyebrow">Illustrative ticker · Klyro</span>
           <h3>
             {total >= 90
-              ? "LUNA Superleader"
+              ? "Klyro Superleader"
               : total >= 80
-                ? "LUNA-A"
+                ? "Klyro-A"
                 : total >= 70
-                  ? "LUNA-B / Inflection Leader"
+                  ? "Klyro-B / Inflection Leader"
                   : total >= 60
                     ? "Watchlist"
                     : "Does Not Qualify"}

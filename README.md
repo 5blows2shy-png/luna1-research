@@ -1,6 +1,6 @@
-# Luna1 Research
+# Klyro
 
-Luna1 Research is Shyheim Lee's institutional-quality educational investment research website. It separates a stock price into the business, institutional, technical, valuation, and risk forces producing it.
+Klyro is Shyheim Lee's institutional-quality educational investment research website. It separates a stock price into the business, institutional, technical, valuation, and risk forces producing it.
 
 ## Product scope
 
@@ -17,7 +17,7 @@ npm run dev
 
 Quality checks: `npm run lint`, `npm run type-check`, `npm test`, and `npm run build`.
 
-Luna1 uses Next.js 16, so linting runs through the ESLint CLI. The legacy `next lint` command was removed in Next.js 16.
+Klyro uses Next.js 16, so linting runs through the ESLint CLI. The legacy `next lint` command was removed in Next.js 16.
 
 Browser checks use `npm run test:e2e` after Playwright browsers are available.
 
@@ -35,7 +35,7 @@ Never prefix service-role, Resend, Sentry, or admin secrets with `NEXT_PUBLIC_`.
 - `docs/` - editing, deployment, and integration guides
 - `public/` - social preview and downloadable resume
 
-All seeded securities, scores, prices, allocations, and model outputs are illustrative placeholders. Luna1 Research does not provide personalized investment advice or brokerage trading.
+All seeded securities, scores, prices, allocations, and model outputs are illustrative placeholders. Klyro does not provide personalized investment advice or brokerage trading.
 
 ## Vercel deployment
 

@@ -1,5 +1,5 @@
 export const FINANCIAL_DISCLAIMER =
-  "Luna1 Research is an educational and personal research project. Nothing presented on this website constitutes investment advice, a recommendation, or an offer to buy or sell securities.";
+  "Klyro is an educational and personal research project. Nothing presented on this website constitutes investment advice, a recommendation, or an offer to buy or sell securities.";
 
 export type ResearchStatus = "Published" | "In Progress" | "Draft" | "Watching";
 
@@ -485,7 +485,7 @@ export const researchNotes: ResearchNote[] = researchNoteSeeds.map(
           summary:
             "Working note. Evidence, primary sources, and final conclusions are still being developed.",
           sourceLinks: [],
-          pdfUrl: "/reports/GLW-Luna1-Working-Note.pdf",
+          pdfUrl: "/reports/GLW-Klyro-Working-Note.pdf",
         }
       : slug === "be-project-economics"
       ? {
@@ -504,7 +504,7 @@ export const researchNotes: ResearchNote[] = researchNoteSeeds.map(
               href: "https://investor.bloomenergy.com/press-releases/press-release-details/2026/Bloom-Energy-Reports-Record-First-Quarter-2026-Results-and-Raises-Full-Year-2026-Guidance/default.aspx",
             },
           ],
-          pdfUrl: "/reports/BE-Luna1-Analyst-Journal.pdf",
+          pdfUrl: "/reports/BE-Klyro-Analyst-Journal.pdf",
         }
       : {
           slug,

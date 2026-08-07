@@ -24,7 +24,7 @@ import {
 export const metadata: Metadata = {
   title: "Equity Research",
   description:
-    "Institutional-style company research, industry analysis, valuation, risks, catalysts, sources, and ongoing updates from Luna1 Research.",
+    "Institutional-style company research, industry analysis, valuation, risks, catalysts, sources, and ongoing updates from Klyro.",
 };
 
 export default function ResearchPage() {
@@ -45,7 +45,7 @@ export default function ResearchPage() {
             </h2>
           </div>
           <p>
-            The hub preserves the existing Luna1 report archive while adding a
+            The hub preserves the existing Klyro report archive while adding a
             structured path for deeper company and thematic work. Financial
             evidence remains clearly labeled until it is verified from primary
             sources.
@@ -165,7 +165,7 @@ export default function ResearchPage() {
       <section className="library">
         <SectionHeading
           eyebrow="Existing archive"
-          title="Original Luna1 research library"
+          title="Original Klyro research library"
           copy="The previous report library remains intact. Its seeded scores and classifications are illustrative placeholders, not current market data."
         />
         <ExistingResearchFilter reports={research} />

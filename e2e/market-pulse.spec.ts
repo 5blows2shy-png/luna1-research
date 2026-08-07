@@ -31,7 +31,7 @@ test.beforeEach(async ({ page }) => {
 for (const path of ["/", "/portfolio", "/transaction-intelligence"]) {
   test(`Market Pulse renders globally on ${path}`, async ({ page }) => {
     await page.goto(path);
-    const pulse = page.getByRole("region", { name: "Luna1 Market Pulse" });
+    const pulse = page.getByRole("region", { name: "Klyro Market Pulse" });
     await expect(pulse).toBeVisible();
     await expect(pulse.getByText("SPY", { exact: true })).toBeVisible();
     await expect(pulse.getByText("US10Y", { exact: true })).toBeVisible();
@@ -41,7 +41,7 @@ for (const path of ["/", "/portfolio", "/transaction-intelligence"]) {
 
 test("Market Pulse pause and resume preserve displayed values", async ({ page }) => {
   await page.goto("/portfolio");
-  const pulse = page.getByRole("region", { name: "Luna1 Market Pulse" });
+  const pulse = page.getByRole("region", { name: "Klyro Market Pulse" });
   await expect(pulse.getByText("$100.00", { exact: true })).toBeVisible();
   await pulse.getByRole("button", { name: "Pause market ticker updates and motion" }).click();
   await expect(pulse.getByText("Updates paused · Current values preserved")).toBeVisible();

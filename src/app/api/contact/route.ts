@@ -4,7 +4,7 @@ import {Resend} from "resend";
 const RATE_LIMIT=5;
 const RATE_WINDOW_MS=60_000;
 const MAX_TRACKED_CLIENTS=500;
-const CONTACT_FROM="Luna1 Research <contact@luna1research.com>";
+const CONTACT_FROM="Klyro <contact@luna1research.com>";
 type RateLimitEntry={count:number;reset:number};
 const globalRateLimit=globalThis as typeof globalThis&{contactRateLimits?:Map<string,RateLimitEntry>};
 const attempts=globalRateLimit.contactRateLimits??=new Map<string,RateLimitEntry>();
@@ -47,7 +47,7 @@ export async function POST(request:Request){
       from:CONTACT_FROM,
       to:destination,
       replyTo:parsed.data.email,
-      subject:`Luna1 Research inquiry: ${parsed.data.subject}`,
+      subject:`Klyro inquiry: ${parsed.data.subject}`,
       text:`Name: ${parsed.data.name}\nEmail: ${parsed.data.email}\nOrganization: ${parsed.data.organization||"Not provided"}\nSubject: ${parsed.data.subject}\n\n${parsed.data.message}`,
     });
     if(error){

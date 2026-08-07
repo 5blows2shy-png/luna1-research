@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 
-test("Luna1 Next.js application is deployable from the repository root", () => {
+test("Klyro Next.js application is deployable from the repository root", () => {
   const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
 
   assert.equal(packageJson.scripts.dev, "next dev");

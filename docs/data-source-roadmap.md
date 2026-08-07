@@ -2,7 +2,7 @@
 
 ## Current platform boundary
 
-Luna1 Research is scoped to Home, Research, Portfolio, About, Recruiter View, and Contact. Portfolio owns the Mistake Journal alongside positions, watchlist, compounders, conviction analysis, and performance. Deal Lab, Python Lab, and Real Estate are retired product areas and are not part of this roadmap unless the user explicitly requests their return.
+Klyro is scoped to Home, Research, Portfolio, About, Recruiter View, and Contact. Portfolio owns the Mistake Journal alongside positions, watchlist, compounders, conviction analysis, and performance. Deal Lab, Python Lab, and Real Estate are retired product areas and are not part of this roadmap unless the user explicitly requests their return.
 
 1. Add a licensed market-data provider for delayed or real-time prices.
 2. Add SEC filing ingestion and explicit primary-source citations.

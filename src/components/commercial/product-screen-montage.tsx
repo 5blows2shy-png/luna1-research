@@ -23,7 +23,7 @@ function ProductScreen({ name, index }: { name: string; index: number }) {
         <i />
         <i />
         <i />
-        <span>LUNA1 / {String(index + 1).padStart(2, "0")}</span>
+        <span>KLYRO / {String(index + 1).padStart(2, "0")}</span>
       </header>
       <div className="screen-body">
         <small>{name}</small>

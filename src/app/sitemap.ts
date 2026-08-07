@@ -12,7 +12,7 @@ const routes = [
   "/development-log",
   "/financial-models",
   "/investment-philosophy",
-  "/luna1-framework",
+  "/klyro-framework",
   "/market-commentary",
   "/portfolio",
   "/portfolio/mistake-journal",

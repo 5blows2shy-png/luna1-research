@@ -15,7 +15,7 @@ export function ResearchCoverageGrid({
   return (
     <div className="research-coverage-block">
       <div className="section-heading">
-        <span className="eyebrow">Luna1 Research Coverage</span>
+        <span className="eyebrow">Klyro Coverage</span>
         <h2>Research beneath the Watchlist.</h2>
         <p>
           Independent company research, valuation work, investment theses, and
@@ -31,7 +31,7 @@ export function ResearchCoverageGrid({
           >
             <header>
               <Image
-                alt="Luna1 Research logo"
+                alt="Klyro logo"
                 className="coverage-logo"
                 height={34}
                 src={luna1Brand.logoPath}

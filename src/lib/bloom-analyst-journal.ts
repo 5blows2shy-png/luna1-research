@@ -54,7 +54,7 @@ export const bloomAnalystJournal = {
   whatRemainsUnclear:
     "The release does not answer the complete installed cost per megawatt, customer payback, contract-level returns, project working capital, backlog conversion schedule, or sustainable margin contribution by hardware, installation, and service.",
   forecastImplications:
-    "The raised guidance is management evidence, not a Luna1 forecast. A forecast should be withheld until capacity, project timing, customer concentration, backlog conversion, service economics, and working-capital requirements can be built from disclosed operating components.",
+    "The raised guidance is management evidence, not a Klyro forecast. A forecast should be withheld until capacity, project timing, customer concentration, backlog conversion, service economics, and working-capital requirements can be built from disclosed operating components.",
   valuationImplications:
     "A defensible valuation requires separating product, installation, service, and financing economics; measuring cash conversion; and testing how much growth and margin durability current expectations require. No price target is published because a verified market-data and operating forecast are not yet connected.",
   thesisImpact:

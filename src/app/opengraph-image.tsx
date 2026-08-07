@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "Luna1 Research — Independent research across public markets, capital allocation, and real assets";
+  "Klyro — Independent research across public markets, capital allocation, and real assets";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -47,7 +47,7 @@ export default function OpenGraphImage() {
                 transform: "skew(-20deg)",
               }}
             />
-            LUNA1 RESEARCH
+            KLYRO
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div

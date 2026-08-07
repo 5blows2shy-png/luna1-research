@@ -1,9 +1,9 @@
 export function Score({ score }: { score: number }) {
   return (
-    <div className="score" aria-label={`LUNA Score ${score} out of 100`}>
+    <div className="score" aria-label={`Klyro Score ${score} out of 100`}>
       <span>{score}</span>
       <small>
-        LUNA
+        KLYRO
         <br />
         SCORE
       </small>

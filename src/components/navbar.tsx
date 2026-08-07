@@ -127,7 +127,7 @@ export function Navbar() {
         <Link className="brand" href="/" onClick={() => setOpen(false)}>
           <LunaMark />
           <span className="brand-lockup">
-            <b>LUNA1 RESEARCH</b>
+            <b>KLYRO</b>
             <small>Independent investment research</small>
           </span>
         </Link>
@@ -185,7 +185,7 @@ export function Navbar() {
           >
             <div className="mobile-nav-header">
               <span>Navigation</span>
-              <small>Luna1 Research</small>
+              <small>Klyro</small>
             </div>
             <nav aria-label="Mobile navigation">
               {navigationItems.map((item, index) => (

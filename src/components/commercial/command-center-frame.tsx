@@ -25,7 +25,7 @@ export function CommandCenterFrame({ active }: { active: boolean }) {
         transition={{ duration: 1.1, ease: cinematicEase }}
       >
         <header>
-          <span>LUNA1 / PORTFOLIO INTELLIGENCE</span>
+          <span>KLYRO / PORTFOLIO INTELLIGENCE</span>
           <b>MODEL STATUS · ACTIVE</b>
         </header>
         <section className="command-layout">

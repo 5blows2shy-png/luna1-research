@@ -18,9 +18,9 @@ export default function Home() {
             <em>Analytical discipline.</em>
           </h1>
           <p>
-            Luna is a financial intelligence system that converts transactions,
+            Klyro is a financial intelligence system that converts transactions,
             financial statements and market data into decisions. {professionalPositioning}{" "}
-            Luna1 documents the research, valuation, accounting controls,
+            Klyro documents the research, valuation, accounting controls,
             portfolio decisions, and lessons behind that process.
           </p>
           <div className="button-row">

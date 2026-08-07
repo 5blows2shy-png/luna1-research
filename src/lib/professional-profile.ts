@@ -80,7 +80,7 @@ export const platformPillars: PlatformPillar[] = [
     title: "Development Log",
     href: "/development-log",
     purpose:
-      "A transparent record of what changed across Luna1, why it changed, and what the work demonstrated.",
+      "A transparent record of what changed across Klyro, why it changed, and what the work demonstrated.",
     evidence: [
       "Research coverage",
       "Platform architecture",

@@ -1,6 +1,6 @@
 # Vercel deployment guide
 
-Luna1 Research is a standard Next.js App Router application located at the repository root.
+Klyro is a standard Next.js App Router application located at the repository root.
 
 ## Vercel project settings
 

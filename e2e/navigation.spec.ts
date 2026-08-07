@@ -180,7 +180,7 @@ test("equity research is available from the public navigation", async ({
   await expect(
     page.getByRole("heading", { name: "Developing company dossiers" }),
   ).toBeVisible();
-  await expect(page.getByText("Original Luna1 research library")).toBeVisible();
+  await expect(page.getByText("Original Klyro research library")).toBeVisible();
 });
 
 test("research hub exposes structured routes and transparent placeholders", async ({
@@ -217,7 +217,7 @@ test("research note and development log filters work", async ({ page }) => {
   await tickerFilter.selectOption("GLW");
   await expect(
     page.getByRole("link", { name: "Download PDF" }),
-  ).toHaveAttribute("href", "/reports/GLW-Luna1-Working-Note.pdf");
+  ).toHaveAttribute("href", "/reports/GLW-Klyro-Working-Note.pdf");
   await expect(page.getByText("August 5, 2026", { exact: true })).toBeVisible();
   await page.goto("/development-log");
   await expect(
@@ -234,10 +234,10 @@ test("research note and development log filters work", async ({ page }) => {
   await expect(page.getByText("1 entries")).toBeVisible();
   await page.goto("/analyst-journal");
   await expect(
-    page.locator('a[href="/reports/GLW-Luna1-Working-Note.pdf"]'),
+    page.locator('a[href="/reports/GLW-Klyro-Working-Note.pdf"]'),
   ).toBeVisible();
   await expect(
-    page.locator('a[href="/reports/BE-Luna1-Analyst-Journal.pdf"]'),
+    page.locator('a[href="/reports/BE-Klyro-Analyst-Journal.pdf"]'),
   ).toBeVisible();
 });
 
@@ -254,7 +254,7 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   await expect(entry).toHaveCount(1);
   await expect(
     entry.getByText(
-      /Luna1 is evolving from an independent equity-research platform/,
+      /Klyro is evolving from an independent equity-research platform/,
     ),
   ).toBeVisible();
   await expect(entry.locator(".development-preview li")).toHaveCount(9);
@@ -397,6 +397,42 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   await boardPdfDownload.saveAs(boardPdfPath);
   const boardPdf = await PDFDocument.load(readFileSync(boardPdfPath));
   expect(boardPdf.getPageCount()).toBeGreaterThan(1);
+});
+
+test("Klyro portal home launches highlighted and complete workflows", async ({ page }) => {
+  await page.goto("/transaction-intelligence");
+
+  await expect(
+    page.getByRole("heading", { name: "Klyro Workflow Highlights" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "All Klyro Portal Tools" }),
+  ).toBeVisible();
+
+  for (const workflow of [
+    "Upload & Clean Transactions",
+    "Journal Entry Assistant",
+    "Monthly Close Board Packet",
+  ]) {
+    await page.getByRole("button", { name: `Open ${workflow}`, exact: true }).click();
+    await expect(
+      page.getByRole("button", { name: workflow, exact: true }),
+    ).toHaveAttribute("aria-pressed", "true");
+    await page.getByRole("button", { name: "Home", exact: true }).click();
+  }
+
+  for (const workflow of [
+    "Client Request Portal",
+    "Nonprofit Back Office",
+    "Bank Statement PDF Parser",
+    "Bank-to-QuickBooks Reconciliation",
+  ]) {
+    await page.locator(".ti-workflow-launcher button").filter({ hasText: workflow }).click();
+    await expect(
+      page.getByRole("button", { name: workflow, exact: true }),
+    ).toHaveAttribute("aria-pressed", "true");
+    await page.getByRole("button", { name: "Home", exact: true }).click();
+  }
 });
 
 test("Klyro login preview communicates trust without collecting credentials", async ({ page }) => {
@@ -598,7 +634,7 @@ test("homepage omits retired overview modules", async ({ page }) => {
 
 test("Portfolio retains the global market pulse and its controls", async ({ page }) => {
   await page.goto("/portfolio");
-  const pulse = page.getByRole("region", { name: "Luna1 Market Pulse" });
+  const pulse = page.getByRole("region", { name: "Klyro Market Pulse" });
   await expect(pulse).toBeVisible();
   await pulse
     .getByRole("button", { name: "Pause market ticker updates and motion" })
@@ -703,11 +739,11 @@ test("recruiter view retains profile and downloads", async ({ page }) => {
   await page.goto("/recruiter");
   await expect(page.getByText("Shy Lee · Founder")).toBeVisible();
   await expect(
-    page.getByAltText("Portrait of Shy Lee, founder of Luna1 Research"),
+    page.getByAltText("Portrait of Shy Lee, founder of Klyro"),
   )
     .toBeVisible();
   await expect(
-    page.getByAltText("Portrait of Shy Lee, founder of Luna1 Research"),
+    page.getByAltText("Portrait of Shy Lee, founder of Klyro"),
   ).toHaveAttribute("src", /shyheim-lee-recruiter\.jpeg/);
   await expect(
     page.getByRole("link", { name: /Download Profile/ }),
@@ -742,7 +778,7 @@ test("thesis stress test validates probabilities and generates a memo", async ({
   await page.goto("/research/anet");
   await page.getByRole("link", { name: "Challenge the Thesis" }).click();
   await expect(
-    page.getByRole("heading", { name: "Luna1 Thesis Stress Test" }),
+    page.getByRole("heading", { name: "Klyro Thesis Stress Test" }),
   ).toBeVisible();
   await page.getByLabel("Bull-case probability").fill("20");
   await expect(page.locator(".validation-error")).toContainText("must equal 100%");
@@ -754,9 +790,9 @@ test("thesis stress test validates probabilities and generates a memo", async ({
     .getByRole("button", { name: /Generate deterministic analysis/ })
     .click();
   await expect(
-    page.getByRole("heading", { name: "Your View vs. Luna1" }),
+    page.getByRole("heading", { name: "Your View vs. Klyro" }),
   ).toBeVisible();
-  await expect(page.getByText("Luna1 Investment Committee Challenge")).toBeVisible();
+  await expect(page.getByText("Klyro Investment Committee Challenge")).toBeVisible();
   await expect(page.getByText(/not investment advice/i).last()).toBeVisible();
 });
 

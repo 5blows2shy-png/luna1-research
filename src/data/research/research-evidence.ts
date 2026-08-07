@@ -166,7 +166,7 @@ function driverForecast(reason: string): ForecastScenario[] {
         "Scenario Assumption — demand timing, pricing, mix, or execution weakens enough to pressure revenue and cash conversion.",
       operatingDriverBuild: reason,
       managementGuidanceDifference:
-        "This is a Luna1 directional scenario, not management guidance and not an external consensus estimate.",
+        "This is a Klyro directional scenario, not management guidance and not an external consensus estimate.",
       mainSensitivity: "Conversion of the cited operating drivers into reported revenue and cash flow",
       principalRisk: "The operating evidence may not persist through the next fiscal year",
       sourceUrl: null,
@@ -299,7 +299,7 @@ export const researchEvidenceByTicker: Record<string, EvidenceProfile> = {
       assumption(
         "Optical and solar demand conversion",
         urls.GLW.latest,
-        "Management disclosed current-quarter performance and forward outlook; no Luna1 point forecast is substituted for that guidance.",
+        "Management disclosed current-quarter performance and forward outlook; no Klyro point forecast is substituted for that guidance.",
       ),
     ],
     valuationFramework: pendingValuation(
@@ -519,7 +519,7 @@ export const researchEvidenceByTicker: Record<string, EvidenceProfile> = {
       "Build from average balances, net interest margin, fee assets, provisions, expenses, tax, and regulatory capital.",
     ),
     forecastAssumptions: [
-      assumption("Credit normalization and operating leverage", urls.RY.latest, "RBC reported Q2 provisions, revenue growth, ROE, and CET1; no independent Luna1 point forecast is published."),
+      assumption("Credit normalization and operating leverage", urls.RY.latest, "RBC reported Q2 provisions, revenue growth, ROE, and CET1; no independent Klyro point forecast is published."),
     ],
     valuationFramework: pendingValuation(
       "Price-to-book and residual-income framework",

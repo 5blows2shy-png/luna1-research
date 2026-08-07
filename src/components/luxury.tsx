@@ -64,14 +64,14 @@ export function PrismSignature() {
   return (
     <div
       className="prism-signature"
-      aria-label="The Luna1 prism separates one market price into underlying research dimensions"
+      aria-label="The Klyro prism separates one market price into underlying research dimensions"
     >
       <div className="prism-price">
         <span>MARKET PRICE</span>
         <i />
       </div>
       <div className="prism-core">
-        <span>L1</span>
+        <span>K</span>
       </div>
       <div className="prism-rays">
         {factors.map((factor, index) => (

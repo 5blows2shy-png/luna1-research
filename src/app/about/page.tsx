@@ -8,9 +8,9 @@ export default function About() {
   return (
     <>
       <PageHeader
-        kicker="About Luna1"
+        kicker="About Klyro"
         title="Research shaped by accountable operations."
-        description="Luna1 is Shy Lee’s professional financial research platform: a record of analytical thinking across public companies, valuation, accounting controls, portfolio decisions, and continuous improvement."
+        description="Klyro is Shy Lee’s professional financial research platform: a record of analytical thinking across public companies, valuation, accounting controls, portfolio decisions, and continuous improvement."
       />
       <section className="prose">
         <SectionHeading
@@ -26,7 +26,7 @@ export default function About() {
           resources, manage risk, produce financial results, and create value.
         </p>
         <p>
-          Luna1 does not represent a startup or commercial financial product. It
+          Klyro does not represent a startup or commercial financial product. It
           is a professional portfolio of research methods, documented decisions,
           and developing analytical work.
         </p>

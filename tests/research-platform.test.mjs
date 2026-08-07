@@ -48,10 +48,10 @@ test("incomplete research is labeled and only reviewed working notes are downloa
   );
   assert.match(data, /Data pending update/);
   assert.match(data, /Date to be confirmed/);
-  assert.match(data, /pdfUrl: "\/reports\/GLW-Luna1-Working-Note\.pdf"/);
-  assert.match(data, /pdfUrl: "\/reports\/BE-Luna1-Analyst-Journal\.pdf"/);
-  assert.ok(fs.existsSync("public/reports/GLW-Luna1-Working-Note.pdf"));
-  assert.ok(fs.existsSync("public/reports/BE-Luna1-Analyst-Journal.pdf"));
+  assert.match(data, /pdfUrl: "\/reports\/GLW-Klyro-Working-Note\.pdf"/);
+  assert.match(data, /pdfUrl: "\/reports\/BE-Klyro-Analyst-Journal\.pdf"/);
+  assert.ok(fs.existsSync("public/reports/GLW-Klyro-Working-Note.pdf"));
+  assert.ok(fs.existsSync("public/reports/BE-Klyro-Analyst-Journal.pdf"));
   assert.match(page, /Full research report in development\./);
   assert.match(page, /company\.pdfUrl/);
 });

@@ -99,7 +99,7 @@ function DocumentPreview({
     <article className="document-preview-card">
       <div className="document-preview-paper">
         <Image
-          alt="Luna1 Research logo"
+          alt="Klyro logo"
           height={55}
           src={luna1Brand.logoPath}
           width={160}
@@ -182,7 +182,7 @@ export function CompanyResearchPage({
             </div>
             <div>
               <dt>Analyst</dt>
-              <dd>{luna1Brand.analyst} · Luna1 Research</dd>
+              <dd>{luna1Brand.analyst} · Klyro</dd>
             </div>
           </dl>
         </aside>
@@ -415,7 +415,7 @@ export function CompanyResearchPage({
             <table>
               <caption>
                 Reported financial inputs in millions, except per-share data and
-                percentages. EBITDA and FCF are Luna1 calculations where shown.
+                percentages. EBITDA and FCF are Klyro calculations where shown.
               </caption>
               <thead>
                 <tr>
@@ -621,7 +621,7 @@ export function CompanyResearchPage({
                 <th>Assumption</th>
                 <th>Historical basis</th>
                 <th>Management evidence</th>
-                <th>Luna1 interpretation</th>
+                <th>Klyro interpretation</th>
                 <th>Base</th>
                 <th>Bull</th>
                 <th>Bear</th>
@@ -646,7 +646,7 @@ export function CompanyResearchPage({
                   <td data-label="Management evidence">
                     {record.managementEvidence}
                   </td>
-                  <td data-label="Luna1 interpretation">
+                  <td data-label="Klyro interpretation">
                     {record.interpretation}
                   </td>
                   <td data-label="Base">{record.baseCase}</td>
@@ -1002,12 +1002,12 @@ export function CompanyResearchPage({
           <div>
             <h3>{luna1Brand.analyst}</h3>
             <p>Finance Student, San Diego State University</p>
-            <p>Founder, Luna1 Research</p>
+            <p>Founder, Klyro</p>
             <p>Bloomberg Market Concepts Completed</p>
             <p>U.S. Army Veteran</p>
             <p>Experience in nonprofit finance and data-center operations</p>
           </div>
-          <nav aria-label="Related Luna1 pages">
+          <nav aria-label="Related Klyro pages">
             <Link href="/portfolio">Watchlist</Link>
             <Link href="/research/themes">Investment Themes</Link>
             <Link href="/development-log">Development Log</Link>

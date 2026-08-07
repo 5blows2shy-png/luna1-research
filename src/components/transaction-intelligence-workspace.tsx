@@ -258,7 +258,31 @@ function UploadControl({
   );
 }
 
-function HomeTab() {
+function HomeTab({ onSelectTab }: { onSelectTab: (tab: Tab) => void }) {
+  const featuredWorkflows = [
+    {
+      tab: "Upload & Clean Transactions" as const,
+      label: "01 · Start here",
+      title: "Upload & Clean Transactions",
+      description: "Bring in CSV, PDF, Excel, and OpenDocument files; normalize columns and amounts; review categories and duplicates; then carry clean data into downstream workflows.",
+      outcome: "Produces a review-ready transaction register",
+    },
+    {
+      tab: "Journal Entry Assistant" as const,
+      label: "02 · Prepare accounting",
+      title: "Journal Entry Assistant",
+      description: "Turn cleaned transaction activity into balanced journal-entry suggestions with account, debit, credit, memo, and review-status fields for accountant approval.",
+      outcome: "Produces a controlled journal-entry review file",
+    },
+    {
+      tab: "Monthly Close Board Packet" as const,
+      label: "03 · Understand the month",
+      title: "Monthly Close Board Packet",
+      description: "Connect every imported source to a detailed financial summary, board narrative, management questions, review register, source coverage, and full Excel or PDF export.",
+      outcome: "Produces a board-ready close review packet",
+    },
+  ];
+  const workspaceTools = tabs.filter((tab) => tab !== "Home");
   const portalModules = [
     ["Overview", "Available", "A connected view of imported activity, close status, and review priorities."],
     ["Transactions", "Available", "Import, normalize, categorize, flag duplicates, and export transaction records."],
@@ -283,12 +307,38 @@ function HomeTab() {
         <Alert kind="warning">Klyro is in development. Authentication, encrypted document storage, controlled accountant invitations, invoicing, and direct QuickBooks Online synchronization are planned—not currently production-ready.</Alert>
         <Link className="button" href="/login">Preview secure portal login <span>→</span></Link>
       </div>
-      <div className="ti-product-flow" aria-label="Luna product hierarchy">
+      <Section title="Klyro Workflow Highlights" caption="Move from imported files to accounting review and a detailed view of business performance.">
+        <div className="ti-featured-workflows">
+          {featuredWorkflows.map((workflow) => (
+            <article key={workflow.tab}>
+              <span>{workflow.label}</span>
+              <h3>{workflow.title}</h3>
+              <p>{workflow.description}</p>
+              <small>{workflow.outcome}</small>
+              <button className="ti-button" onClick={() => onSelectTab(workflow.tab)}>
+                Open {workflow.title}
+              </button>
+            </article>
+          ))}
+        </div>
+      </Section>
+      <Section title="All Klyro Portal Tools" caption="Every workflow remains available inside this connected business portal.">
+        <div className="ti-workflow-launcher">
+          {workspaceTools.map((tab, index) => (
+            <button key={tab} onClick={() => onSelectTab(tab)}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <b>{tab}</b>
+              <small>Open tool →</small>
+            </button>
+          ))}
+        </div>
+      </Section>
+      <div className="ti-product-flow" aria-label="Klyro product hierarchy">
         <article><span>01 · Records</span><h3>Klyro</h3><b>Transactions and accounting records</b><p>Accounting, bookkeeping and financial records—including receipts, reconciliation, statements, and accountant review.</p></article>
         <span aria-hidden="true">↓</span>
-        <article><span>02 · Outlook</span><h3>Luna Forecast</h3><b>Budgets, projections and scenarios</b><p>Budgets, cash flow and future decisions built from finalized Klyro data.</p></article>
+        <article><span>02 · Outlook</span><h3>Klyro Forecast</h3><b>Budgets, projections and scenarios</b><p>Budgets, cash flow and future decisions built from finalized Klyro data.</p></article>
         <span aria-hidden="true">↓</span>
-        <article><span>03 · Decisions</span><h3>Luna Business</h3><b>Owner decisions and financial health</b><p>Run and understand your company through its profile, team, permissions, activity, and connected Luna products.</p></article>
+        <article><span>03 · Decisions</span><h3>Klyro Business</h3><b>Owner decisions and financial health</b><p>Run and understand your company through its profile, team, permissions, activity, and connected Klyro products.</p></article>
       </div>
       <Section title="Customer Portal" caption="One business profile, organized into connected financial workflows.">
         <div className="ti-portal-grid">
@@ -362,7 +412,7 @@ function CleanTab({ parser = false, onCleaned }: { parser?: boolean; onCleaned: 
       <Alert kind="warning">PDF extraction is best-effort and may require manual review because bank statement formats vary.</Alert>
       <div className="ti-action-row">
         <UploadControl label={parser ? "Upload bank statement PDF, CSV, or Excel" : "Upload PDF, CSV, or Excel"} onRows={process} />
-        <button className="ti-button" onClick={() => process(sampleTransactions, "Loaded Luna1 sample_transactions.csv demonstration data.")}>Use sample data</button>
+        <button className="ti-button" onClick={() => process(sampleTransactions, "Loaded Klyro sample_transactions.csv demonstration data.")}>Use sample data</button>
       </div>
       {note && <Alert kind="success">{note}</Alert>}
       {!cleaned.length ? <Alert>{parser ? "Upload a PDF bank statement to begin." : "Upload a CSV or PDF file to begin, or use sample data."}</Alert> : (
@@ -407,7 +457,7 @@ function ReconciliationTab() {
         <UploadControl label="Bank statement transactions file" onRows={(rows, note) => { setBank(rows); setNotes((items) => [...items, note]); }} />
         <UploadControl label="QuickBooks transactions file" onRows={(rows, note) => { setQbo(rows); setNotes((items) => [...items, note]); }} />
       </div>
-      <button className="ti-button" onClick={() => { setBank(sampleTransactions); setQbo(sampleTransactions.map((row) => ({ ...row, description: `${row.description} QBO` }))); setNotes(["Loaded paired Luna1 sample data."]); }}>Use paired sample data</button>
+      <button className="ti-button" onClick={() => { setBank(sampleTransactions); setQbo(sampleTransactions.map((row) => ({ ...row, description: `${row.description} QBO` }))); setNotes(["Loaded paired Klyro sample data."]); }}>Use paired sample data</button>
       {notes.map((note) => <Alert kind="success" key={note}>{note}</Alert>)}
       {!results ? <Alert>Upload both files or use paired sample data to run reconciliation.</Alert> : (
         <>
@@ -526,7 +576,7 @@ function BoardPacketTab({ cleaned }: { cleaned: TransactionRow[] }) {
           file.key,
           {
             rows: boardSampleFiles[file.key],
-            note: `Loaded Luna1 sample ${file.label.toLowerCase()} data.`,
+            note: `Loaded Klyro sample ${file.label.toLowerCase()} data.`,
           },
         ]),
       ) as Record<BoardFileKey, { rows: TransactionRow[]; note: string }>,
@@ -676,7 +726,7 @@ export function TransactionIntelligenceWorkspace() {
     <div className="ti-workspace">
       <header className="ti-banner">
         <div><span>In Development · Review Workspace</span><h1>Klyro</h1></div>
-        <p>Accounting, bookkeeping and financial records—organized so finalized data can support Luna Forecast and Luna Business decisions.</p>
+        <p>Accounting, bookkeeping and financial records—organized so finalized data can support Klyro Forecast and Klyro Business decisions.</p>
       </header>
       <div className="ti-review-banner">Clean messy books, organize client requests, and prepare finance review files. Tools are for review only and do not approve, post, or modify accounting records.</div>
       <Alert kind="warning">PDF extraction is best-effort and may require manual review. This workspace prepares review files only and does not replace accounting approval.</Alert>
@@ -684,7 +734,7 @@ export function TransactionIntelligenceWorkspace() {
         {tabs.map((tab) => <button key={tab} aria-pressed={activeTab === tab} onClick={() => setActiveTab(tab)}>{tab}</button>)}
       </nav>
       <main className="ti-panel">
-        {activeTab === "Home" && <HomeTab />}
+        {activeTab === "Home" && <HomeTab onSelectTab={setActiveTab} />}
         {activeTab === "Client Request Portal" && <TrackerTab />}
         {activeTab === "Nonprofit Back Office" && <TrackerTab nonprofit />}
         {activeTab === "Upload & Clean Transactions" && <CleanTab onCleaned={setCleaned} />}

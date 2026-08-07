@@ -12,7 +12,7 @@ import { CommandCenterFrame } from "./command-center-frame";
 import { commercialCuts, type CommercialCut } from "./motion-tokens";
 
 const featureStarts = [0, 5, 10, 15, 20, 24.5];
-const captions = ["Markets generate noise.", "Research creates clarity.", "One process. Multiple perspectives.", "Evidence, operationalized.", "Shyheim Lee — U.S. Army Veteran, Finance at SDSU, Investment Research, Python and Asset Management.", "Luna1 Research. Discipline. Evidence. Evolution."];
+const captions = ["Markets generate noise.", "Research creates clarity.", "One process. Multiple perspectives.", "Evidence, operationalized.", "Shyheim Lee — U.S. Army Veteran, Finance at SDSU, Investment Research, Python and Asset Management.", "Klyro. Discipline. Evidence. Evolution."];
 
 export type CommercialMedia = { mp4?: string; webm?: string; poster?: string };
 
@@ -39,9 +39,9 @@ export function LunaCommercial({ compact = false, media, cut = compact ? "traile
   const seek = (next: number) => { setTime(next); if (video.current) video.current.currentTime = next; };
   const fullscreen = () => player.current?.requestFullscreen?.();
   return <div ref={player} className={`commercial-player${compact ? " commercial-player--compact" : ""}`}>
-    <div className="commercial-stage" aria-label="Luna1 Research institutional brand commercial">
-      {hasVideo ? <video ref={video} className="commercial-video" muted={muted} poster={media?.poster ?? "/commercial-poster.png"} playsInline preload="metadata" onTimeUpdate={event => setTime(event.currentTarget.currentTime)} onEnded={() => setPlaying(false)}><source src={media?.webm} type="video/webm"/><source src={media?.mp4} type="video/mp4"/><track kind="captions" src="/commercial-assets/luna1-commercial.vtt" srcLang="en" label="English" default/></video> : <AnimatePresence mode="wait"><motion.div key={activeScene} className="scene-wrap" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reducedMotion ? 0 : .6 }}>{scenes[activeScene]}</motion.div></AnimatePresence>}
-      {!playing && (time === 0 || time >= duration) && !reducedMotion && <button className="commercial-play-overlay" onClick={() => { if(time >= duration) setTime(0); setPlaying(true); }} aria-label="Play Luna1 commercial"><Play aria-hidden="true"/><span>{time >= duration ? "Replay film" : "Play film"}</span><small>{duration} seconds · sound off</small></button>}
+    <div className="commercial-stage" aria-label="Klyro institutional brand commercial">
+      {hasVideo ? <video ref={video} className="commercial-video" muted={muted} poster={media?.poster ?? "/commercial-poster.png"} playsInline preload="metadata" onTimeUpdate={event => setTime(event.currentTarget.currentTime)} onEnded={() => setPlaying(false)}><source src={media?.webm} type="video/webm"/><source src={media?.mp4} type="video/mp4"/><track kind="captions" src="/commercial-assets/klyro-commercial.vtt" srcLang="en" label="English" default/></video> : <AnimatePresence mode="wait"><motion.div key={activeScene} className="scene-wrap" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reducedMotion ? 0 : .6 }}>{scenes[activeScene]}</motion.div></AnimatePresence>}
+      {!playing && (time === 0 || time >= duration) && !reducedMotion && <button className="commercial-play-overlay" onClick={() => { if(time >= duration) setTime(0); setPlaying(true); }} aria-label="Play Klyro commercial"><Play aria-hidden="true"/><span>{time >= duration ? "Replay film" : "Play film"}</span><small>{duration} seconds · sound off</small></button>}
       {reducedMotion && <div className="reduced-motion-note">Static poster shown because reduced motion is enabled.</div>}
       <div className="commercial-caption" aria-live="polite">{captions[activeScene]}</div>
     </div>
@@ -53,6 +53,6 @@ export function LunaCommercial({ compact = false, media, cut = compact ? "traile
       {!compact && <button onClick={fullscreen} aria-label="Enter fullscreen"><Expand/><span>Fullscreen</span></button>}
       <label className="commercial-progress"><span className="sr-only">Commercial timeline</span><input type="range" min="0" max={duration} step=".1" value={time} onChange={event => seek(Number(event.target.value))} aria-label="Commercial timeline"/><i style={{ width: `${(time / duration) * 100}%` }}/></label><time>{Math.floor(time).toString().padStart(2, "0")} / {duration}</time>
     </div>
-    <p className="sr-only">A 25-second brand film moves from noisy illustrative market data through a prism that separates research into fundamentals, technicals, valuation, risk, and discipline; then shows six concept product screens, introduces founder Shyheim Lee, and closes on the Luna1 Research identity.</p>
+    <p className="sr-only">A 25-second brand film moves from noisy illustrative market data through a prism that separates research into fundamentals, technicals, valuation, risk, and discipline; then shows six concept product screens, introduces founder Shyheim Lee, and closes on the Klyro identity.</p>
   </div>;
 }

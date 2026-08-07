@@ -13,7 +13,7 @@ export function Footer() {
           <Link className="brand" href="/">
             <LunaMark />
             <span className="brand-lockup">
-              <b>LUNA1 RESEARCH</b>
+              <b>KLYRO</b>
               <small>Independent investment research</small>
             </span>
           </Link>
@@ -53,14 +53,14 @@ export function Footer() {
         </div>
       </div>
       <div className="disclaimer">
-        <strong>Educational Disclosure:</strong> The information on Luna1
+        <strong>Educational Disclosure:</strong> The information on Klyro
         Research is provided for educational and informational purposes only. It
         reflects personal analysis and opinions and is not investment,
         financial, tax, or legal advice. Always conduct your own research before
         making investment decisions.
       </div>
       <div className="copyright">
-        <span>© 2026 Luna1 Research. All rights reserved.</span>
+        <span>© 2026 Klyro. All rights reserved.</span>
         <span>
           <Link href="/about">About</Link>
           <Link className="footer-brand-link" href="/brand">

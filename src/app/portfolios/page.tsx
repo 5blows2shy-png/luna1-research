@@ -532,7 +532,7 @@ export default function Portfolios() {
               <div className="table-wrap watchlist-table-wrap">
                 <table className="watchlist-table">
                   <caption>
-                    Research watchlist · LUNA Scores represent research
+                    Research watchlist · Klyro Scores represent research
                     priority, not recommendations
                   </caption>
                   <thead>
@@ -540,7 +540,7 @@ export default function Portfolios() {
                       <th>Ticker</th>
                       <th>Market quote</th>
                       <th>Company name</th>
-                      <th>LUNA Score</th>
+                      <th>Klyro Score</th>
                       <th>Research status</th>
                       <th>Watchlist note</th>
                       <th>Setup status</th>
@@ -564,13 +564,13 @@ export default function Portfolios() {
                             View Full Research
                           </Link>
                         </td>
-                        <td data-label="LUNA Score">
+                        <td data-label="Klyro Score">
                           <b
                             className="watchlist-score"
                             aria-label={
                               item.score === null
-                                ? "LUNA Score data pending"
-                                : `LUNA Score ${item.score} out of 100`
+                                ? "Klyro Score data pending"
+                                : `Klyro Score ${item.score} out of 100`
                             }
                           >
                             {item.score === null

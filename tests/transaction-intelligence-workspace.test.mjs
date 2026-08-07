@@ -97,7 +97,7 @@ test("board packet connects every imported source to analysis and exports", () =
 });
 
 test("Klyro presents the connected product hierarchy and honest portal roadmap", () => {
-  for (const product of ["Klyro", "Luna Forecast", "Luna Business"])
+  for (const product of ["Klyro", "Klyro Forecast", "Klyro Business"])
     assert.ok(component.includes(product), product);
 
   for (const portalModule of [
@@ -118,6 +118,21 @@ test("Klyro presents the connected product hierarchy and honest portal roadmap",
 
   assert.match(component, /Authentication, encrypted document storage/);
   assert.match(component, /planned—not currently production-ready/);
+});
+
+test("Klyro portal home highlights the core close workflow and launches every tool", () => {
+  for (const highlight of [
+    "Klyro Workflow Highlights",
+    "Upload & Clean Transactions",
+    "Journal Entry Assistant",
+    "Monthly Close Board Packet",
+    "All Klyro Portal Tools",
+  ])
+    assert.ok(component.includes(highlight), highlight);
+
+  assert.match(component, /onSelectTab\(workflow\.tab\)/);
+  assert.match(component, /onSelectTab\(tab\)/);
+  assert.match(component, /<HomeTab onSelectTab=\{setActiveTab\}/);
 });
 
 test("Excel workbooks can be read from modern and legacy formats", () => {
