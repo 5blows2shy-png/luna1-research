@@ -79,7 +79,7 @@ export function createFmpMarketPulseProvider(apiKey: string): MarketPulseProvide
   return {
     name: "Financial Modeling Prep",
     async fetchQuote(instrument, signal) {
-      const providerSymbol = fmpSymbolByInstrumentId[instrument.id];
+      const providerSymbol = fmpSymbolByInstrumentId[instrument.id] ?? (instrument.assetClass === "equity" ? instrument.symbol : undefined);
       if (!providerSymbol) throw new Error("UNSUPPORTED_SYMBOL");
       if (instrument.assetClass === "treasury") {
         treasuryRates ??= requestFmp("treasury-rates", apiKey, signal);

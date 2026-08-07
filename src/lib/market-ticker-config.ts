@@ -17,6 +17,14 @@ export const researchRouteBySymbol: Record<string, string> = {
 export type PortfolioTickerGroup = "Active Positions" | "Watchlist" | "Long-Term Compounders";
 export type PortfolioTickerGroups = Record<PortfolioTickerGroup, readonly string[]>;
 
+export const portfolioTickerGroups: PortfolioTickerGroups = {
+  "Active Positions": ["CASY", "ANET", "WELL"],
+  Watchlist: ["GLW", "STRL", "ALAB", "JBL", "RY", "DLR"],
+  "Long-Term Compounders": ["VOO", "QQQM", "IAU", "SLV", "SGOV", "LLY", "AAPL", "COST", "PG", "AMZN", "AIPO"],
+};
+
+export const portfolioTickerSymbols = Array.from(new Set(Object.values(portfolioTickerGroups).flat()));
+
 export function createEquityMarketInstrument(symbol: string): MarketInstrument {
   return { symbol, providerSymbol: symbol, name: symbol, kind: "equity", researchRoute: researchRouteBySymbol[symbol] };
 }

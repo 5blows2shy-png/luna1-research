@@ -5,7 +5,7 @@ import test from "node:test";
 const read = (file) => fs.readFile(new URL(`../${file}`, import.meta.url), "utf8");
 
 test("market credentials remain server-side and unavailable data is explicit", async () => {
-  const [route, service, client] = await Promise.all([read("src/app/api/market-quotes/route.ts"), read("src/lib/market-data-service.ts"), read("src/components/portfolio-market-board.tsx")]);
+  const [route, service, client] = await Promise.all([read("src/app/api/market-quotes/route.ts"), read("src/lib/market-data-service.ts"), read("src/components/market-pulse.tsx")]);
   assert.match(service, /process\.env\.MARKET_DATA_API_KEY/);
   assert.doesNotMatch(client, /MARKET_DATA_API_KEY|api\.twelvedata\.com/);
   assert.match(service, /Market data unavailable/);
@@ -70,24 +70,23 @@ test("portfolio sections share a deduplicated quote provider", async () => {
 });
 
 test("portfolio ticker exposes every Luna1 portfolio bucket", async () => {
-  const [page, board] = await Promise.all([read("src/app/portfolios/page.tsx"), read("src/components/portfolio-market-board.tsx")]);
-  const config = page;
-  for (const bucket of ["Active Positions", "Watchlist", "Long-Term Compounders"]) assert.ok(page.includes(bucket));
+  const [page, config, pulseConfig] = await Promise.all([read("src/app/portfolios/page.tsx"), read("src/lib/market-ticker-config.ts"), read("src/lib/market-pulse/config.ts")]);
+  for (const bucket of ["Active Positions", "Watchlist", "Long-Term Compounders"]) assert.ok(config.includes(bucket));
   for (const ticker of ["CASY", "ANET", "WELL", "LLY", "AAPL", "COST", "PG", "AMZN", "AIPO"]) assert.match(config, new RegExp(`["]${ticker}["]`));
-  assert.match(page, /activePositions\.map/);
-  assert.match(page, /watchlist\.map/);
-  assert.match(page, /\[\.\.\.coreAllocation, \.\.\.compounders\]\.map/);
-  assert.match(board, /useState<PortfolioTickerGroup\[]>\(groups\)/);
+  assert.match(page, /portfolioTickerSymbols/);
+  assert.doesNotMatch(page, /PortfolioMarketBoard|Portfolio Market Monitor/);
+  assert.match(pulseConfig, /portfolioTickerGroups/);
+  assert.match(pulseConfig, /portfolioGroup/);
 });
 
 test("ticker includes integrity, refresh, cache, and accessibility safeguards", async () => {
-  const [service, hook, component] = await Promise.all([read("src/lib/market-data-service.ts"), read("src/hooks/use-market-quotes.ts"), read("src/components/portfolio-market-board.tsx")]);
+  const [service, hook, component] = await Promise.all([read("src/lib/market-data-service.ts"), read("src/hooks/use-market-quotes.ts"), read("src/components/market-pulse.tsx")]);
   assert.match(service, /response\.status === 429/);
   assert.match(service, /quotes\.some\(\(\{ dataType \}\) => dataType === "unavailable"\)/);
   assert.match(service, /60_000/);
   assert.match(service, /15 \* 60_000/);
   assert.match(hook, /document\.visibilityState === "visible"/);
-  assert.match(component, /prefers-reduced-motion/);
+  assert.match(component, /market-pulse-track/);
   assert.match(component, /ArrowLeft/);
   assert.match(component, /Market data may be delayed/);
 });
