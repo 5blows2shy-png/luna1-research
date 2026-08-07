@@ -7,7 +7,7 @@ import { developmentLogEntries } from "@/lib/development-log";
 export const metadata: Metadata = {
   title: "Development Log",
   description:
-    "A transparent timeline of the strategy, research, portfolio, and platform decisions behind Klyro.",
+    "A transparent timeline of the strategy, research, portfolio, and platform decisions behind Luna1 Research.",
 };
 
 export default function DevelopmentLogPage() {
@@ -15,7 +15,7 @@ export default function DevelopmentLogPage() {
     <>
       <PageHeader
         kicker="Development log"
-        title="A living record of how Klyro is being built."
+        title="A living record of how Luna1 Research is being built."
         description="The timeline documents what changed, why it changed, what was learned, and how each decision affected the research process. Unknown historical dates remain explicitly unconfirmed."
       />
       <section className="development-intro">

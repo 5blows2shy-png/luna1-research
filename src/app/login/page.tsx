@@ -42,7 +42,7 @@ export default function LunaBooksLoginPage() {
             Continue securely
           </button>
         </div>
-        <Link className="text-link" href="/transaction-intelligence">
+        <Link className="text-link" href="/klyro">
           Return to Klyro →
         </Link>
         <small>

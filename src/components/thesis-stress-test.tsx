@@ -108,7 +108,7 @@ function NumberField({
   return (
     <label className="stress-field" htmlFor={id}>
       <span>{label}</span>
-      {luna !== undefined && <small>Klyro base case: {luna}{unit}</small>}
+      {luna !== undefined && <small>Luna1 base case: {luna}{unit}</small>}
       <span className="stress-input">
         <input
           id={id}
@@ -252,7 +252,7 @@ export function ThesisStressTest({ company }: { company: CompanyContext }) {
       <nav className="stress-steps" aria-label="Stress test workflow">
         {[
           "Select Role",
-          "Review Klyro Assumptions",
+          "Review Luna1 Assumptions",
           "Enter Your Assumptions",
           "Define Risk Conditions",
           "Generate Analysis",
@@ -297,7 +297,7 @@ export function ThesisStressTest({ company }: { company: CompanyContext }) {
         </fieldset>
 
         <div className="assumption-source">
-          <span className="eyebrow">02 · Klyro reference case</span>
+          <span className="eyebrow">02 · Luna1 reference case</span>
           <div>
             <Metric label="Revenue growth" value={`${defaultLunaAssumptions.revenueGrowth}%`} />
             <Metric label="Operating margin" value={`${defaultLunaAssumptions.operatingMargin}%`} />
@@ -305,7 +305,7 @@ export function ThesisStressTest({ company }: { company: CompanyContext }) {
             <Metric label="Fair value" value={formatMoney(defaultLunaAssumptions.fairValue)} />
           </div>
           <p>
-            Klyro estimate · Illustrative demonstration values, not current market
+            Luna1 estimate · Illustrative demonstration values, not current market
             data or company guidance. Replace with sourced report data before
             publication.
           </p>
@@ -457,7 +457,7 @@ export function ThesisStressTest({ company }: { company: CompanyContext }) {
           <div className="observer-note">
             <h3>Read-only committee review</h3>
             <p>
-              Observer mode preserves the Klyro reference case and generates a
+              Observer mode preserves the Luna1 reference case and generates a
               traceable comparison without collecting professional assumptions.
             </p>
           </div>
@@ -478,7 +478,7 @@ export function ThesisStressTest({ company }: { company: CompanyContext }) {
           <header className="stress-panel-heading">
             <div>
               <span className="eyebrow">05 · Committee output</span>
-              <h2>Your View vs. Klyro</h2>
+              <h2>Your View vs. Luna1</h2>
             </div>
             <p>
               Every conclusion below is tied to a numerical or selected
@@ -541,7 +541,7 @@ export function ThesisStressTest({ company }: { company: CompanyContext }) {
           {role === "Infrastructure / Project Finance" && (
             <>
               <div className="estimate-label">
-                Klyro analytical estimates based on user-entered assumptions.
+                Luna1 analytical estimates based on user-entered assumptions.
               </div>
               <div className="stress-metrics-grid">
                 <Metric label="Estimated project revenue" value={`$${projectResult.revenue}m`} />
@@ -559,7 +559,7 @@ export function ThesisStressTest({ company }: { company: CompanyContext }) {
 
           {role === "Observer" && (
             <div className="stress-metrics-grid">
-              <Metric label="Klyro fair value" value={formatMoney(defaultLunaAssumptions.fairValue)} />
+              <Metric label="Luna1 fair value" value={formatMoney(defaultLunaAssumptions.fairValue)} />
               <Metric label="Downside case" value={formatMoney(defaultLunaAssumptions.downsideValue)} />
               <Metric label="Confidence level" value={`${defaultLunaAssumptions.confidence}%`} />
               <Metric label="Thesis status" value="Illustrative / unverified" />
@@ -572,7 +572,7 @@ export function ThesisStressTest({ company }: { company: CompanyContext }) {
               <thead>
                 <tr>
                   <th>Measure</th>
-                  <th>Klyro view</th>
+                  <th>Luna1 view</th>
                   <th>Your view</th>
                   <th>Interpretation</th>
                 </tr>
@@ -594,8 +594,8 @@ export function ThesisStressTest({ company }: { company: CompanyContext }) {
                       <td>{unit}{user}</td>
                       <td>
                         {difference === 0
-                          ? "Aligned with the Klyro reference case."
-                          : `Your ${String(label).toLowerCase()} is ${Math.abs(difference).toFixed(1)}${unit} ${difference < 0 ? "below" : "above"} the Klyro case.`}
+                          ? "Aligned with the Luna1 reference case."
+                          : `Your ${String(label).toLowerCase()} is ${Math.abs(difference).toFixed(1)}${unit} ${difference < 0 ? "below" : "above"} the Luna1 case.`}
                       </td>
                     </tr>
                   );
@@ -624,7 +624,7 @@ export function ThesisStressTest({ company }: { company: CompanyContext }) {
               probability. IRR uses deterministic bisection.
             </p>
             <ul>
-              <li>Klyro values shown here are illustrative estimates.</li>
+              <li>Luna1 values shown here are illustrative estimates.</li>
               <li>Edited values are user-entered assumptions.</li>
               <li>Calculated values are scenario outputs, not company guidance.</li>
             </ul>
@@ -632,7 +632,7 @@ export function ThesisStressTest({ company }: { company: CompanyContext }) {
 
           <article className="committee-memo">
             <header>
-              <span>Klyro Investment Committee Challenge</span>
+              <span>Luna1 Investment Committee Challenge</span>
               <h2>{company.company} <small>{company.ticker}</small></h2>
               <p>Analysis date: {new Date().toISOString().slice(0, 10)} · Selected role: {role}</p>
             </header>
@@ -649,7 +649,7 @@ export function ThesisStressTest({ company }: { company: CompanyContext }) {
               for educational and research-demonstration purposes. It is not
               investment advice or a recommendation to buy or sell securities.
             </p>
-            <footer>Klyro | Interactive Thesis Stress Test | Educational and Portfolio Use</footer>
+            <footer>Luna1 Research | Interactive Thesis Stress Test | Educational and Portfolio Use</footer>
           </article>
           <button className="button primary no-print" type="button" onClick={() => window.print()}>
             Export committee memo <span aria-hidden="true">↗</span>
@@ -677,7 +677,7 @@ export function ThesisStressTest({ company }: { company: CompanyContext }) {
           <label>Optional name<input name="name" maxLength={100} /></label>
           <label>Optional organization<input name="organization" maxLength={160} /></label>
           <label>Optional email<input name="email" type="email" maxLength={254} /></label>
-          <label className="consent"><input name="consent" type="checkbox" value="true" required />I understand that my submission may be reviewed and summarized as part of the Klyro research process.</label>
+          <label className="consent"><input name="consent" type="checkbox" value="true" required />I understand that my submission may be reviewed and summarized as part of the Luna1 research process.</label>
           <label className="honeypot" aria-hidden="true">Website<input name="website" tabIndex={-1} autoComplete="off" /></label>
           <button className="button primary" type="submit">Submit for private review</button>
           <p className="form-note" role="status" aria-live="polite">{submissionMessage}</p>

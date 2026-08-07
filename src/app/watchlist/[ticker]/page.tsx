@@ -22,14 +22,14 @@ export async function generateMetadata({
   const company = getResearchCompany(ticker);
   if (!company) return {};
   const title = `${company.companyName} Equity Research and Valuation`;
-  const description = `Independent equity research, investment thesis, financial analysis, valuation framework, catalysts, and risks for ${company.companyName} by Shy Lee of Klyro.`;
+  const description = `Independent equity research, investment thesis, financial analysis, valuation framework, catalysts, and risks for ${company.companyName} by Shy Lee of Luna1 Research.`;
   const canonical = `/watchlist/${company.slug}`;
   return {
     title,
     description,
     alternates: { canonical },
     openGraph: {
-      title: `${title} | Klyro`,
+      title: `${title} | Luna1 Research`,
       description,
       type: "article",
       url: canonical,

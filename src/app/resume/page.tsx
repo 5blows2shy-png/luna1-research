@@ -119,7 +119,7 @@ export function ResumeContent({
           <Image
             className="profile-photo"
             src={portraitSrc}
-            alt="Portrait of Shy Lee, founder of Klyro"
+            alt="Portrait of Shy Lee, founder of Luna1 Research"
             width={400}
             height={400}
             sizes="(max-width: 900px) calc(100vw - 118px), 360px"
@@ -223,16 +223,16 @@ export function ResumeContent({
           </section>
           <section id="projects">
             <header className="recruiter-section-head">
-              <span className="eyebrow">Projects · Klyro capabilities</span>
+              <span className="eyebrow">Projects · Luna1 capabilities</span>
               <h2>One platform. Five forms of analytical evidence.</h2>
               <p>
-                Klyro is a professional research portfolio—not a startup or a
+                Luna1 is a professional research portfolio—not a startup or a
                 commercial software claim.
               </p>
             </header>
             <div className="recruiter-capability-grid">
               {platformPillars
-                .filter(({ href }) => href !== "/transaction-intelligence")
+                .filter(({ href }) => href !== "/klyro")
                 .map((pillar) => (
                   <Link href={pillar.href} key={pillar.title}>
                     <span>{pillar.number}</span>

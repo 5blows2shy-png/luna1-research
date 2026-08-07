@@ -97,7 +97,7 @@ test("board packet connects every imported source to analysis and exports", () =
 });
 
 test("Klyro presents the connected product hierarchy and honest portal roadmap", () => {
-  for (const product of ["Klyro", "Klyro Forecast", "Klyro Business"])
+  for (const product of ["Klyro", "Luna1 Forecast", "Luna1 Business"])
     assert.ok(component.includes(product), product);
 
   for (const portalModule of [

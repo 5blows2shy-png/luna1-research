@@ -92,7 +92,7 @@ export default function ValuationLabPage() {
         </div>
         <p>
           Downloadable workbooks will include source notes, assumption history,
-          formula checks, scenario controls, version information, and the Klyro
+          formula checks, scenario controls, version information, and the Luna1
           educational disclosure. No incomplete workbook is presented as a
           finished valuation model.
         </p>

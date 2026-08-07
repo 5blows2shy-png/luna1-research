@@ -69,7 +69,8 @@ test("preview capabilities remain visibly unfinished and link to the promoted pa
   for (const status of ["Planned", "Preview", "In Development"])
     assert.ok(dataSource.includes(`status: "${status}"`), status);
 
-  assert.match(dataSource, /route: "\/transaction-intelligence"/);
+  assert.match(dataSource, /route: "\/klyro"/);
+  assert.ok(fs.existsSync("src/app/klyro/page.tsx"));
   assert.ok(fs.existsSync("src/app/transaction-intelligence/page.tsx"));
   assert.match(componentSource, /View Klyro Preview/);
 });

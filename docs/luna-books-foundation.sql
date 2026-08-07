@@ -260,7 +260,7 @@ $$;
 
 create or replace function public.luna_prevent_audit_mutation()
 returns trigger language plpgsql set search_path = public, pg_temp
-as $$ begin raise exception 'Klyro audit events are append-only'; end; $$;
+as $$ begin raise exception 'Luna audit events are append-only'; end; $$;
 
 create or replace function public.luna_protect_owner_membership()
 returns trigger language plpgsql set search_path = public, pg_temp
@@ -271,7 +271,7 @@ begin
       if not exists (
         select 1 from public.luna_business_memberships
         where business_id = old.business_id and role = 'owner' and id <> old.id
-      ) then raise exception 'A Klyro business must retain at least one owner'; end if;
+      ) then raise exception 'A Luna business must retain at least one owner'; end if;
     end if;
   end if;
   return coalesce(new, old);

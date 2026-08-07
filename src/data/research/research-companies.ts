@@ -207,7 +207,7 @@ function createCoverage(seed: CoverageSeed): CompanyResearchCoverage {
     report: {
       status: "in-progress",
       url: null,
-      fileName: `${ticker}-Klyro-Research-Report.pdf`,
+      fileName: `${ticker}-Luna1-Research-Report.pdf`,
       fileFormat: "PDF",
       fileSize: null,
       version: "Draft - not published",
@@ -215,7 +215,7 @@ function createCoverage(seed: CoverageSeed): CompanyResearchCoverage {
     model: {
       status: "in-progress",
       url: null,
-      fileName: `${ticker}-Klyro-Valuation-Model.xlsx`,
+      fileName: `${ticker}-Luna1-Valuation-Model.xlsx`,
       fileFormat: "XLSX",
       fileSize: null,
       version: "Draft - not published",

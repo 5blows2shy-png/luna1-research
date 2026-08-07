@@ -21,7 +21,7 @@ export default async function Report({
   const sections = [
     [
       "What the Company Does",
-      `${report.company} is presented here as a sample company profile for demonstrating Klyro’s research structure.`,
+      `${report.company} is presented here as a sample company profile for demonstrating Luna1’s research structure.`,
     ],
     [
       "Revenue Model",
@@ -108,7 +108,7 @@ export default async function Report({
         <div className="thesis-challenge-callout">
           <div>
             <span className="eyebrow">Interactive committee review</span>
-            <h2>Challenge the Klyro assumptions.</h2>
+            <h2>Challenge the Luna1 assumptions.</h2>
             <p>
               Enter a professional research view, run deterministic scenarios,
               compare conclusions, and export an investment committee memo.
@@ -123,8 +123,8 @@ export default async function Report({
         </div>
         <SectionHeading
           eyebrow="Executive summary"
-          title="The Klyro view"
-          copy={`${report.company} is included to demonstrate the full structure of a Klyro research report. A published investment thesis would require current primary sources and dated financial evidence.`}
+          title="The Luna1 view"
+          copy={`${report.company} is included to demonstrate the full structure of a Luna1 research report. A published investment thesis would require current primary sources and dated financial evidence.`}
         />
         <div className="report-sections">
           {sections.map(([title, content], index) => (

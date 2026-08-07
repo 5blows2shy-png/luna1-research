@@ -10,7 +10,7 @@ import { researchNotes } from "@/lib/research-content";
 export const metadata: Metadata = {
   title: "Research Notes",
   description:
-    "Draft company, theme, macro, and process notes from Klyro.",
+    "Draft company, theme, macro, and process notes from Luna1 Research.",
 };
 export default function ResearchNotesPage() {
   return (

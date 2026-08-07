@@ -9,7 +9,7 @@ const routes = [
   "src/app/login/page.tsx",
   "src/app/about/page.tsx",
   "src/app/investment-philosophy/page.tsx",
-  "src/app/klyro-framework/page.tsx",
+  "src/app/luna1-framework/page.tsx",
   "src/app/research/page.tsx",
   "src/app/portfolio/page.tsx",
   "src/app/portfolio/mistake-journal/page.tsx",
@@ -87,7 +87,7 @@ test("contact delivery stays server-side and includes abuse controls", () => {
   assert.ok(!form.includes("CONTACT_DESTINATION"));
 });
 
-test("public branding uses Klyro exclusively", () => {
+test("public branding uses Luna1 exclusively", () => {
   const sourceFiles = [
     ...routes,
     "src/app/research/[slug]/page.tsx",
@@ -102,8 +102,8 @@ test("public branding uses Klyro exclusively", () => {
     .map((path) => fs.readFileSync(path, "utf8"))
     .join("\n");
   assert.doesNotMatch(source, /Prism Research/i);
-  assert.match(source, /Klyro/);
-  assert.match(source, /className="prism-core">\s*<span>K<\/span>/);
+  assert.match(source, /Luna1/);
+  assert.match(source, /className="prism-core">\s*<span>L1<\/span>/);
 });
 
 test("founder card and portrait appear on the resume", () => {
@@ -111,7 +111,7 @@ test("founder card and portrait appear on the resume", () => {
   const resume = fs.readFileSync("src/app/resume/page.tsx", "utf8");
   assert.doesNotMatch(about, /shyheim-lee-founder.jpeg/);
   assert.match(resume, /portraitSrc = "\/shyheim-lee-founder.jpeg"/);
-  assert.match(resume, /alt="Portrait of Shy Lee, founder of Klyro"/);
+  assert.match(resume, /alt="Portrait of Shy Lee, founder of Luna1 Research"/);
   assert.match(
     resume,
     /Infrastructure, Compounders, Inflections, Bottle Neck\s+Constraint\s+Analysis/,
@@ -340,7 +340,7 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
   for (const removed of [
     "Businesses worth understanding.",
     "Valuation with visible assumptions.",
-    "Klyro Framework",
+    "LUNA Framework",
     "Conviction made accountable.",
     "Portfolio · Mistake Journal",
     "A career built across finance and operations.",
@@ -448,7 +448,7 @@ test("recruiter-facing architecture documents analyst process without fabricated
     assert.ok(profile.includes(`stage: "${stage}"`), `missing stage: ${stage}`);
   assert.match(home, /professionalPositioning/);
   assert.match(recruiter, /Why hire me\?/);
-  assert.match(recruiter, /Klyro is a professional research portfolio/);
+  assert.match(recruiter, /Luna1 is a professional research portfolio/);
   for (const field of [
     "valuation",
     "thesisStatus",

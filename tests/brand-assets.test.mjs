@@ -6,7 +6,7 @@ import sharp from "sharp";
 
 const root = process.cwd();
 const brand = path.join(root, "public", "brand");
-const publicAssets = ["klyro-prism.svg", "klyro-prism-gold.svg", "klyro-prism-black.svg", "klyro-prism-white.svg", "klyro-prism-transparent.png", "klyro-logo-horizontal.svg", "klyro-logo-luxury.svg", "klyro-logo-horizontal.png", "klyro-logo-stacked.svg", "klyro-logo-stacked.png", "klyro-social-card.png", "klyro-commercial-poster.png", "README.md", "klyro-brand-kit.zip"];
+const publicAssets = ["luna1-prism.svg", "luna1-prism-gold.svg", "luna1-prism-black.svg", "luna1-prism-white.svg", "luna1-prism-transparent.png", "luna1-logo-horizontal.svg", "luna1-logo-luxury.svg", "luna1-logo-horizontal.png", "luna1-logo-stacked.svg", "luna1-logo-stacked.png", "luna1-social-card.png", "luna1-commercial-poster.png", "README.md", "luna1-brand-kit.zip"];
 
 test("brand kit and App Router metadata assets exist", async () => {
   for (const file of publicAssets) assert.ok((await fs.stat(path.join(brand, file))).size > 0, `${file} should not be empty`);
@@ -22,7 +22,7 @@ test("every public SVG declares a valid viewBox", async () => {
 });
 
 test("transparent prism PNG has genuinely transparent corners", async () => {
-  const image = sharp(path.join(brand, "klyro-prism-transparent.png"));
+  const image = sharp(path.join(brand, "luna1-prism-transparent.png"));
   const metadata = await image.metadata();
   assert.equal(metadata.hasAlpha, true);
   const { data } = await image.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
@@ -30,8 +30,8 @@ test("transparent prism PNG has genuinely transparent corners", async () => {
 });
 
 test("fixed-size campaign exports use approved dimensions", async () => {
-  const social = await sharp(path.join(brand, "klyro-social-card.png")).metadata();
-  const poster = await sharp(path.join(brand, "klyro-commercial-poster.png")).metadata();
+  const social = await sharp(path.join(brand, "luna1-social-card.png")).metadata();
+  const poster = await sharp(path.join(brand, "luna1-commercial-poster.png")).metadata();
   assert.deepEqual([social.width, social.height], [1200, 630]);
   assert.deepEqual([poster.width, poster.height], [1600, 900]);
 });

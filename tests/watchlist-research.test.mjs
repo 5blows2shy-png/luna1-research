@@ -100,10 +100,10 @@ test("the reusable page exposes the complete research workflow", () => {
   }
 });
 
-test("document branding uses one guarded Klyro configuration", () => {
+test("document branding uses one guarded Luna1 configuration", () => {
   const brand = JSON.parse(fs.readFileSync("src/config/brand.json", "utf8"));
-  assert.equal(brand.logoPath, "/brand/klyro-logo-horizontal.svg");
-  assert.equal(brand.logoRasterPath, "/brand/klyro-logo-horizontal.png");
+  assert.equal(brand.logoPath, "/brand/luna1-logo-horizontal.svg");
+  assert.equal(brand.logoRasterPath, "/brand/luna1-logo-horizontal.png");
   assert.ok(fs.existsSync(path.join("public", brand.logoPath)));
   assert.ok(fs.existsSync(path.join("public", brand.logoRasterPath)));
   const pdfGenerator = fs.readFileSync(
@@ -182,15 +182,15 @@ test("research language, dates, evidence labels, and Bloom journal are explicit"
     "utf8",
   );
   assert.match(journalPage, /note\.pdfUrl/);
-  assert.match(researchContent, /BE-Klyro-Analyst-Journal\.pdf/);
-  assert.match(researchContent, /GLW-Klyro-Working-Note\.pdf/);
+  assert.match(researchContent, /BE-Luna1-Analyst-Journal\.pdf/);
+  assert.match(researchContent, /GLW-Luna1-Working-Note\.pdf/);
   assert.doesNotMatch(journalPage, /bloomAnalystJournal/);
   assert.ok(
-    fs.statSync("public/reports/BE-Klyro-Analyst-Journal.pdf").size > 0,
+    fs.statSync("public/reports/BE-Luna1-Analyst-Journal.pdf").size > 0,
     "Bloom Energy Analyst Journal PDF must be present and non-empty",
   );
   assert.ok(
-    fs.statSync("public/reports/GLW-Klyro-Working-Note.pdf").size > 0,
+    fs.statSync("public/reports/GLW-Luna1-Working-Note.pdf").size > 0,
     "GLW working-note PDF must be present and non-empty",
   );
 });

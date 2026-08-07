@@ -7,7 +7,7 @@ import { research } from "@/lib/data";
 export const metadata: Metadata = {
   title: "Thesis Stress Test",
   description:
-    "Adjust assumptions, test risk conditions, and compare a structured research view with the Klyro reference case.",
+    "Adjust assumptions, test risk conditions, and compare a structured research view with the Luna1 reference case.",
 };
 
 export function generateStaticParams() {
@@ -28,8 +28,8 @@ export default async function StressTestPage({
     <>
       <PageHeader
         kicker={`${report.ticker} · Investment committee workspace`}
-        title="Klyro Thesis Stress Test"
-        description="Adjust the assumptions, challenge the investment case, and compare your conclusion with the Klyro research view."
+        title="Luna1 Thesis Stress Test"
+        description="Adjust the assumptions, challenge the investment case, and compare your conclusion with the Luna1 research view."
       />
       <ThesisStressTest
         company={{

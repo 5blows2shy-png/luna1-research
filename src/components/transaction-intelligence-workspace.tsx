@@ -333,12 +333,12 @@ function HomeTab({ onSelectTab }: { onSelectTab: (tab: Tab) => void }) {
           ))}
         </div>
       </Section>
-      <div className="ti-product-flow" aria-label="Klyro product hierarchy">
+      <div className="ti-product-flow" aria-label="Klyro portal and Luna1 product hierarchy">
         <article><span>01 · Records</span><h3>Klyro</h3><b>Transactions and accounting records</b><p>Accounting, bookkeeping and financial records—including receipts, reconciliation, statements, and accountant review.</p></article>
         <span aria-hidden="true">↓</span>
-        <article><span>02 · Outlook</span><h3>Klyro Forecast</h3><b>Budgets, projections and scenarios</b><p>Budgets, cash flow and future decisions built from finalized Klyro data.</p></article>
+        <article><span>02 · Outlook</span><h3>Luna1 Forecast</h3><b>Budgets, projections and scenarios</b><p>Budgets, cash flow and future decisions built from finalized Klyro data.</p></article>
         <span aria-hidden="true">↓</span>
-        <article><span>03 · Decisions</span><h3>Klyro Business</h3><b>Owner decisions and financial health</b><p>Run and understand your company through its profile, team, permissions, activity, and connected Klyro products.</p></article>
+        <article><span>03 · Decisions</span><h3>Luna1 Business</h3><b>Owner decisions and financial health</b><p>Run and understand your company through its profile, team, permissions, activity, and connected Luna1 products.</p></article>
       </div>
       <Section title="Customer Portal" caption="One business profile, organized into connected financial workflows.">
         <div className="ti-portal-grid">
@@ -726,7 +726,7 @@ export function TransactionIntelligenceWorkspace() {
     <div className="ti-workspace">
       <header className="ti-banner">
         <div><span>In Development · Review Workspace</span><h1>Klyro</h1></div>
-        <p>Accounting, bookkeeping and financial records—organized so finalized data can support Klyro Forecast and Klyro Business decisions.</p>
+        <p>Accounting, bookkeeping and financial records—organized so finalized data can support Luna1 Forecast and Luna1 Business decisions.</p>
       </header>
       <div className="ti-review-banner">Clean messy books, organize client requests, and prepare finance review files. Tools are for review only and do not approve, post, or modify accounting records.</div>
       <Alert kind="warning">PDF extraction is best-effort and may require manual review. This workspace prepares review files only and does not replace accounting approval.</Alert>

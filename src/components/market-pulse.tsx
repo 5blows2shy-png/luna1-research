@@ -56,12 +56,12 @@ export function MarketPulse() {
   return (
     <section className="market-pulse" aria-labelledby="market-pulse-title">
       <div className="market-pulse-header">
-        <div><h2 id="market-pulse-title">Klyro Market Pulse</h2><MarketStatusBadge session={sessionInfo.session} unavailable={!hasValidQuote && !loading} delayed={hasStaleQuote || status === "partial"} /><MarketCountdown now={sessionInfo.now} info={sessionInfo} /></div>
+        <div><h2 id="market-pulse-title">Luna1 Market Pulse</h2><MarketStatusBadge session={sessionInfo.session} unavailable={!hasValidQuote && !loading} delayed={hasStaleQuote || status === "partial"} /><MarketCountdown now={sessionInfo.now} info={sessionInfo} /></div>
         <div className="market-pulse-controls">
           <button type="button" onClick={() => setPaused((value) => !value)} aria-pressed={paused} aria-label={paused ? "Resume market ticker updates and motion" : "Pause market ticker updates and motion"}>{paused ? "Resume" : "Pause"}</button>
           <details>
             <summary aria-label="Market data disclosure">i</summary>
-            <p>Market data may be delayed and is provided for informational and educational purposes. Klyro does not guarantee its accuracy or completeness.</p>
+            <p>Market data may be delayed and is provided for informational and educational purposes. Luna1 does not guarantee its accuracy or completeness.</p>
           </details>
         </div>
       </div>

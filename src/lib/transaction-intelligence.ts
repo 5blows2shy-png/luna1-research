@@ -776,7 +776,7 @@ export async function buildPdfReport({
     });
   });
   document.setTitle(pdfText(title));
-  document.setAuthor("Klyro");
+  document.setAuthor("Luna1 Research");
   document.setSubject("Klyro review report");
   return document.save();
 }

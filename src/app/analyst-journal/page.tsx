@@ -8,7 +8,7 @@ import { researchNotes } from "@/lib/research-content";
 export const metadata: Metadata = {
   title: "Analyst Journal",
   description:
-    "An ongoing notebook of company, industry, earnings, macro, market, and investment-process observations from Klyro.",
+    "An ongoing notebook of company, industry, earnings, macro, market, and investment-process observations from Luna1 Research.",
 };
 
 export default function AnalystJournalPage() {
