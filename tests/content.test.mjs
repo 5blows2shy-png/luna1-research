@@ -6,6 +6,7 @@ const routes = [
   "src/app/page.tsx",
   "src/app/analyst-journal/page.tsx",
   "src/app/transaction-intelligence/page.tsx",
+  "src/app/login/page.tsx",
   "src/app/about/page.tsx",
   "src/app/investment-philosophy/page.tsx",
   "src/app/luna1-framework/page.tsx",
@@ -30,6 +31,15 @@ test("required routes and educational disclosure exist", () => {
     footer,
     /Always conduct your own research before\s+making investment decisions/,
   );
+});
+
+test("Luna Books login preview uses trust messaging without claiming live security", () => {
+  const login = fs.readFileSync("src/app/login/page.tsx", "utf8");
+  assert.match(login, /Your business\. Your books\. Your control\./);
+  assert.match(login, /is being designed to protect each business workspace/);
+  assert.match(login, /Customer authentication is not active yet/);
+  assert.match(login, /does not\s+collect credentials/);
+  assert.doesNotMatch(login, /type="password"/);
 });
 
 test("public source excludes private contact details", () => {

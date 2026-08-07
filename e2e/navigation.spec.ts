@@ -287,6 +287,17 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   ])
     await expect(workspace.getByRole("button", { name: tab })).toBeVisible();
 
+  await expect(page.getByRole("heading", { name: "Cash Flow Intelligence" })).toBeVisible();
+  await expect(page.getByText("Estimated safe to spend")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Top three decisions" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "13-week cash outlook" })).toBeVisible();
+  const purchaseInput = page.getByLabel("Purchase amount");
+  await purchaseInput.fill("30000");
+  await expect(page.locator('.ti-purchase-result[data-risk="high-risk"]')).toBeVisible();
+  const scenarioSelect = page.getByLabel("Scenario");
+  await scenarioSelect.selectOption("Conservative");
+  await expect(scenarioSelect).toHaveValue("Conservative");
+
   await page.getByRole("button", { name: "Upload & Clean Transactions" }).click();
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(
@@ -386,6 +397,14 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   await boardPdfDownload.saveAs(boardPdfPath);
   const boardPdf = await PDFDocument.load(readFileSync(boardPdfPath));
   expect(boardPdf.getPageCount()).toBeGreaterThan(1);
+});
+
+test("Luna Books login preview communicates trust without collecting credentials", async ({ page }) => {
+  await page.goto("/login");
+  await expect(page.getByRole("heading", { name: "Your business. Your books. Your control." })).toBeVisible();
+  await expect(page.getByText("Customer authentication is not active yet.", { exact: false })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Continue securely" })).toBeDisabled();
+  await expect(page.locator('input[type="password"]')).toHaveCount(0);
 });
 
 test("retired routes are removed and the old journal route redirects", async ({

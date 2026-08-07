@@ -96,6 +96,30 @@ test("board packet connects every imported source to analysis and exports", () =
     assert.ok(logic.includes(analysis), analysis);
 });
 
+test("Luna Books presents the connected product hierarchy and honest portal roadmap", () => {
+  for (const product of ["Luna Books", "Luna Forecast", "Luna Business"])
+    assert.ok(component.includes(product), product);
+
+  for (const portalModule of [
+    "Overview",
+    "Transactions",
+    "Banking",
+    "Receipts",
+    "Invoices",
+    "Reconcile",
+    "Chart of Accounts",
+    "Reports",
+    "Financial Health",
+    "Accountant Review",
+    "Integrations",
+    "Business Settings",
+  ])
+    assert.ok(component.includes(portalModule), portalModule);
+
+  assert.match(component, /Authentication, encrypted document storage/);
+  assert.match(component, /planned—not currently production-ready/);
+});
+
 test("Excel workbooks can be read from modern and legacy formats", () => {
   for (const bookType of ["xlsx", "xls", "xlsm", "xlsb", "ods"]) {
     const workbook = XLSX.utils.book_new();
