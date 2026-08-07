@@ -148,7 +148,7 @@ test("desktop and mobile navigation expose only the permanent product scope", as
     "Home",
     "Equity Research",
     "Valuation Lab",
-    "Luna Books",
+    "Klyro",
     "Portfolio Lab",
     "Analyst Journal",
     "Recruiter View",
@@ -247,7 +247,7 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   await page.goto("/development-log");
   const entry = page.locator("article").filter({
     has: page.getByRole("heading", {
-      name: "Integrated Luna Books Preview",
+      name: "Integrated Klyro Preview",
     }),
   });
 
@@ -260,20 +260,20 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   await expect(entry.locator(".development-preview li")).toHaveCount(9);
   await expect(
     entry.getByRole("link", {
-      name: "View Luna Books Preview",
+      name: "View Klyro Preview",
     }),
   ).toHaveAttribute("href", "/transaction-intelligence");
 
   await page.goto("/transaction-intelligence");
   await expect(
     page.getByRole("heading", {
-      name: "Luna Books",
+      name: "Klyro",
       level: 1,
     }),
   ).toBeVisible();
   await expect(page.getByText("In Development").first()).toBeVisible();
   const workspace = page.getByRole("navigation", {
-    name: "Luna Books workspace",
+    name: "Klyro workspace",
   });
   for (const tab of [
     "Home",
@@ -399,7 +399,7 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   expect(boardPdf.getPageCount()).toBeGreaterThan(1);
 });
 
-test("Luna Books login preview communicates trust without collecting credentials", async ({ page }) => {
+test("Klyro login preview communicates trust without collecting credentials", async ({ page }) => {
   await page.goto("/login");
   await expect(page.getByRole("heading", { name: "Your business. Your books. Your control." })).toBeVisible();
   await expect(page.getByText("Customer authentication is not active yet.", { exact: false })).toBeVisible();

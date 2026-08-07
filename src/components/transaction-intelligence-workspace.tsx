@@ -276,17 +276,17 @@ function HomeTab() {
   return (
     <>
       <div className="ti-home-hero">
-        <span>Your Luna Books Portal</span>
+        <span>Your Klyro Portal</span>
         <h2>Accounting, bookkeeping and financial records.</h2>
-        <p>Luna Books is designed to give your business one secure place to organize transactions, maintain financial records and understand its financial performance.</p>
+        <p>Klyro is designed to give your business one secure place to organize transactions, maintain financial records and understand its financial performance.</p>
         <p>Upload financial files, categorize transactions, identify duplicates or unusual activity, reconcile accounts, prepare accounting records, and generate detailed close summaries from one connected review workspace.</p>
-        <Alert kind="warning">Luna Books is in development. Authentication, encrypted document storage, controlled accountant invitations, invoicing, and direct QuickBooks Online synchronization are planned—not currently production-ready.</Alert>
+        <Alert kind="warning">Klyro is in development. Authentication, encrypted document storage, controlled accountant invitations, invoicing, and direct QuickBooks Online synchronization are planned—not currently production-ready.</Alert>
         <Link className="button" href="/login">Preview secure portal login <span>→</span></Link>
       </div>
       <div className="ti-product-flow" aria-label="Luna product hierarchy">
-        <article><span>01 · Records</span><h3>Luna Books</h3><b>Transactions and accounting records</b><p>Accounting, bookkeeping and financial records—including receipts, reconciliation, statements, and accountant review.</p></article>
+        <article><span>01 · Records</span><h3>Klyro</h3><b>Transactions and accounting records</b><p>Accounting, bookkeeping and financial records—including receipts, reconciliation, statements, and accountant review.</p></article>
         <span aria-hidden="true">↓</span>
-        <article><span>02 · Outlook</span><h3>Luna Forecast</h3><b>Budgets, projections and scenarios</b><p>Budgets, cash flow and future decisions built from finalized Luna Books data.</p></article>
+        <article><span>02 · Outlook</span><h3>Luna Forecast</h3><b>Budgets, projections and scenarios</b><p>Budgets, cash flow and future decisions built from finalized Klyro data.</p></article>
         <span aria-hidden="true">↓</span>
         <article><span>03 · Decisions</span><h3>Luna Business</h3><b>Owner decisions and financial health</b><p>Run and understand your company through its profile, team, permissions, activity, and connected Luna products.</p></article>
       </div>
@@ -675,12 +675,12 @@ export function TransactionIntelligenceWorkspace() {
   return (
     <div className="ti-workspace">
       <header className="ti-banner">
-        <div><span>In Development · Review Workspace</span><h1>Luna Books</h1></div>
+        <div><span>In Development · Review Workspace</span><h1>Klyro</h1></div>
         <p>Accounting, bookkeeping and financial records—organized so finalized data can support Luna Forecast and Luna Business decisions.</p>
       </header>
       <div className="ti-review-banner">Clean messy books, organize client requests, and prepare finance review files. Tools are for review only and do not approve, post, or modify accounting records.</div>
       <Alert kind="warning">PDF extraction is best-effort and may require manual review. This workspace prepares review files only and does not replace accounting approval.</Alert>
-      <nav className="ti-tabs" aria-label="Luna Books workspace">
+      <nav className="ti-tabs" aria-label="Klyro workspace">
         {tabs.map((tab) => <button key={tab} aria-pressed={activeTab === tab} onClick={() => setActiveTab(tab)}>{tab}</button>)}
       </nav>
       <main className="ti-panel">

@@ -33,7 +33,7 @@ test("required routes and educational disclosure exist", () => {
   );
 });
 
-test("Luna Books login preview uses trust messaging without claiming live security", () => {
+test("Klyro login preview uses trust messaging without claiming live security", () => {
   const login = fs.readFileSync("src/app/login/page.tsx", "utf8");
   assert.match(login, /Your business\. Your books\. Your control\./);
   assert.match(login, /is being designed to protect each business workspace/);
@@ -379,7 +379,7 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
     "Home",
     "Equity Research",
     "Valuation Lab",
-    "Luna Books",
+    "Klyro",
     "Portfolio Lab",
     "Analyst Journal",
     "Recruiter View",
@@ -429,7 +429,7 @@ test("recruiter-facing architecture documents analyst process without fabricated
   for (const pillar of [
     "Equity Research",
     "Valuation Lab",
-    "Luna Books",
+    "Klyro",
     "Portfolio Lab",
     "Analyst Journal",
     "Development Log",

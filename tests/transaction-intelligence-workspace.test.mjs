@@ -96,8 +96,8 @@ test("board packet connects every imported source to analysis and exports", () =
     assert.ok(logic.includes(analysis), analysis);
 });
 
-test("Luna Books presents the connected product hierarchy and honest portal roadmap", () => {
-  for (const product of ["Luna Books", "Luna Forecast", "Luna Business"])
+test("Klyro presents the connected product hierarchy and honest portal roadmap", () => {
+  for (const product of ["Klyro", "Luna Forecast", "Luna Business"])
     assert.ok(component.includes(product), product);
 
   for (const portalModule of [
@@ -166,7 +166,7 @@ test("PDF imports configure the bundled PDF.js worker", () => {
 
 test("PDF exports preserve review-only labeling and page furniture", () => {
   for (const marker of [
-    "LUNA BOOKS",
+    "KLYRO",
     "IN DEVELOPMENT - REVIEW WORKSPACE",
     "For accounting review only",
     "Page ${index + 1} of ${pages.length}",

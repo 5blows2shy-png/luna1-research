@@ -14,7 +14,7 @@ test("Transaction Intelligence preview appears once in the centralized log", () 
   );
   assert.equal(
     dataSource.match(
-      /title: "Integrated Luna Books Preview"/g,
+      /title: "Integrated Klyro Preview"/g,
     )?.length,
     1,
   );
@@ -71,7 +71,7 @@ test("preview capabilities remain visibly unfinished and link to the promoted pa
 
   assert.match(dataSource, /route: "\/transaction-intelligence"/);
   assert.ok(fs.existsSync("src/app/transaction-intelligence/page.tsx"));
-  assert.match(componentSource, /View Luna Books Preview/);
+  assert.match(componentSource, /View Klyro Preview/);
 });
 
 test("public entry preserves project-origin privacy and educational scope", () => {

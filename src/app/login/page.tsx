@@ -2,23 +2,23 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Luna Books Portal Login",
+  title: "Klyro Portal Login",
   description:
-    "Preview the planned secure login experience for the Luna Books business portal.",
+    "Preview the planned secure login experience for the Klyro business portal.",
 };
 
 export default function LunaBooksLoginPage() {
   return (
     <section className="luna-login-shell">
       <div className="luna-login-trust">
-        <span className="eyebrow">Luna Books · Private business portal</span>
+        <span className="eyebrow">Klyro · Private business portal</span>
         <h1>Your business. Your books. Your control.</h1>
         <p>
-          Luna Books is being designed to protect each business workspace with
+          Klyro is being designed to protect each business workspace with
           encrypted storage, multifactor authentication, permission-based access
           and a complete financial audit trail.
         </p>
-        <ul aria-label="Planned Luna Books security controls">
+        <ul aria-label="Planned Klyro security controls">
           <li>Encrypted financial-data storage</li>
           <li>Multifactor authentication</li>
           <li>Role- and permission-based access</li>
@@ -28,7 +28,7 @@ export default function LunaBooksLoginPage() {
 
       <div className="luna-login-card">
         <span className="status-chip status-planned">In development</span>
-        <h2>Sign in to Luna Books</h2>
+        <h2>Sign in to Klyro</h2>
         <p>
           Customer authentication is not active yet. This preview does not
           collect credentials or provide access to private financial records.
@@ -43,7 +43,7 @@ export default function LunaBooksLoginPage() {
           </button>
         </div>
         <Link className="text-link" href="/transaction-intelligence">
-          Return to Luna Books →
+          Return to Klyro →
         </Link>
         <small>
           No security certification or compliance status is claimed. These

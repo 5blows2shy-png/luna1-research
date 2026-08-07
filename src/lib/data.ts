@@ -4,7 +4,7 @@ export const navigationItems: NavigationItem[] = [
   { label: "Equity Research", href: "/research" },
   { label: "Valuation Lab", href: "/valuation-models" },
   {
-    label: "Luna Books",
+    label: "Klyro",
     href: "/transaction-intelligence",
   },
   { label: "Portfolio Lab", href: "/portfolio" },

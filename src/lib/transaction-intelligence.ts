@@ -608,7 +608,7 @@ export async function buildPdfReport({
       height: 64,
       color: colors.header,
     });
-    page.drawText("LUNA BOOKS", {
+    page.drawText("KLYRO", {
       x: margin,
       y: pageHeight - 34,
       size: 10,
@@ -777,7 +777,7 @@ export async function buildPdfReport({
   });
   document.setTitle(pdfText(title));
   document.setAuthor("Luna1 Research");
-  document.setSubject("Luna Books review report");
+  document.setSubject("Klyro review report");
   return document.save();
 }
 
