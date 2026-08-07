@@ -12,6 +12,7 @@ const routes = [
   "/development-log",
   "/financial-models",
   "/investment-philosophy",
+  "/klyro",
   "/klyro-framework",
   "/market-commentary",
   "/portfolio",
