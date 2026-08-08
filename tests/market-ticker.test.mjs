@@ -82,7 +82,7 @@ test("portfolio ticker exposes every Luna1 portfolio bucket", async () => {
 });
 
 test("ticker includes integrity, refresh, cache, and accessibility safeguards", async () => {
-  const [service, hook, component] = await Promise.all([read("src/lib/market-data-service.ts"), read("src/hooks/use-market-quotes.ts"), read("src/components/market-pulse.tsx")]);
+  const [service, hook, component, styles] = await Promise.all([read("src/lib/market-data-service.ts"), read("src/hooks/use-market-quotes.ts"), read("src/components/market-pulse.tsx"), read("src/app/globals.css")]);
   assert.match(service, /response\.status === 429/);
   assert.match(service, /quotes\.some\(\(\{ dataType \}\) => dataType === "unavailable"\)/);
   assert.match(service, /60_000/);
@@ -91,4 +91,6 @@ test("ticker includes integrity, refresh, cache, and accessibility safeguards", 
   assert.match(component, /market-pulse-track/);
   assert.match(component, /ArrowLeft/);
   assert.match(component, /Market data may be delayed/);
+  assert.match(styles, /grid-template-columns:repeat\(8,minmax\(0,1fr\)\)/);
+  assert.match(styles, /\.market-pulse-track\{display:grid[^}]+animation:none/);
 });
