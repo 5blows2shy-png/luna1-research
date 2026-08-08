@@ -122,6 +122,7 @@ export function ResumeContent({
             alt="Portrait of Shy Lee, founder of Luna1 Research"
             width={400}
             height={400}
+            quality={95}
             sizes="(max-width: 900px) calc(100vw - 118px), 360px"
             priority
           />

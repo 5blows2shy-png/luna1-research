@@ -745,7 +745,7 @@ test("recruiter view retains profile and downloads", async ({ page }) => {
     .toBeVisible();
   await expect(
     page.getByAltText("Portrait of Shy Lee, founder of Luna1 Research"),
-  ).toHaveAttribute("src", /shyheim-lee-recruiter-headshot\.jpg/);
+  ).toHaveAttribute("src", /shyheim-lee-recruiter-headshot-1080\.jpg/);
   await expect(
     page.getByRole("link", { name: /Download Profile/ }),
   ).toBeVisible();
