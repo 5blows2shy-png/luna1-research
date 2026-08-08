@@ -360,8 +360,8 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
   );
   assert.match(recruiter, /RecruiterView/);
   assert.match(recruiter, /ResumeContent/);
-  assert.match(recruiter, /portraitSrc="\/shyheim-lee-recruiter-headshot.jpg"/);
-  assert.ok(fs.existsSync("public/shyheim-lee-recruiter-headshot.jpg"));
+  assert.match(recruiter, /portraitSrc="\/shyheim-lee-recruiter-headshot-1080.jpg"/);
+  assert.ok(fs.existsSync("public/shyheim-lee-recruiter-headshot-1080.jpg"));
   assert.match(actions, /Download Profile/);
   assert.match(actions, /Data center evidence/);
   assert.ok(!source.includes("FMVA"));
