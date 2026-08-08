@@ -12,9 +12,11 @@ test("market credentials remain server-side and unavailable data is explicit", a
   assert.match(route, /createEquityMarketInstrument/);
 });
 
-test("global market pulse includes the requested direct instruments", async () => {
+test("global market pulse includes only consistently verified instruments", async () => {
   const [config, component, layout] = await Promise.all([read("src/lib/market-pulse/config.ts"), read("src/components/market-pulse.tsx"), read("src/app/layout.tsx")]);
-  for (const ticker of ["SPY", "RUT", "US10Y", "WTI", "NATGAS", "GOLD", "NVDA", "AVGO"]) assert.ok(config.includes(`symbol: "${ticker}"`));
+  for (const ticker of ["SPY", "RUT", "US10Y", "GOLD", "NVDA"]) assert.ok(config.includes(`symbol: "${ticker}"`));
+  for (const ticker of ["AAPL", "COST", "AMZN"]) assert.ok(config.includes(`"${ticker}"`));
+  for (const ticker of ["WTI", "NATGAS", "AVGO"]) assert.ok(!config.includes(`symbol: "${ticker}"`));
   assert.match(component, /Luna1 Market Pulse/);
   assert.match(component, /Market data may be delayed/);
   assert.match(component, /ArrowRight/);
