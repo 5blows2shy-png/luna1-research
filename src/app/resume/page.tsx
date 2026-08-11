@@ -120,8 +120,8 @@ export function ResumeContent({
             className="profile-photo"
             src={portraitSrc}
             alt="Portrait of Shy Lee, founder of Luna1 Research"
-            width={400}
-            height={400}
+            width={recruiterView ? 1080 : 400}
+            height={recruiterView ? 1080 : 400}
             quality={95}
             sizes="(max-width: 900px) calc(100vw - 118px), 360px"
             priority
