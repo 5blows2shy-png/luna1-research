@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { LunaBooksCashIntelligence } from "@/components/luna-books-cash-intelligence";
 import {
@@ -9,39 +9,38 @@ import {
   downloadFile,
   downloadPdfReport,
   excelSheetToRows,
-  journalAccounts,
   parseCsv,
   reconcile,
   sampleTransactions,
-  suggestJournalEntry,
   type BoardPacketSource,
   type TransactionRow,
   workbookXml,
 } from "@/lib/transaction-intelligence";
+import {
+  buildAccountingRecords,
+  buildFocusSummary,
+  businessFocusOptions,
+  closeReadiness,
+  resolveAccountingRecord,
+  starterChartOfAccounts,
+  type AccountingRecord,
+  type BusinessFocus,
+  type ClassificationAuditEvent,
+} from "@/lib/klyro-accounting-workflow";
 
 const tabs = [
-  "Home",
-  "Client Request Portal",
-  "Nonprofit Back Office",
-  "Upload & Clean Transactions",
-  "Bank Statement PDF Parser",
-  "Bank-to-QuickBooks Reconciliation",
-  "Journal Entry Assistant",
-  "Monthly Close Board Packet",
+  "Overview",
+  "Decision Board",
+  "Transactions",
+  "Journal Entries",
+  "Cash Flow",
+  "Financials",
+  "Monthly Close",
+  "Accountant",
+  "Documents",
+  "Settings",
 ] as const;
 type Tab = (typeof tabs)[number];
-
-const requestRows = [
-  { Client: "Sample Client", Request: "April bank statement", "File type": "Bank statement", Status: "Waiting on client", "Due date": "2026-05-10", Reminder: "Send follow-up email" },
-  { Client: "Sample Client", Request: "Payroll summary", "File type": "Payroll report", Status: "Received", "Due date": "2026-05-10", Reminder: "No reminder needed" },
-  { Client: "Sample Client", Request: "Missing receipt for Amazon purchase", "File type": "Receipt", Status: "Needs review", "Due date": "2026-05-12", Reminder: "Ask for receipt or business purpose" },
-];
-const nonprofitRows = [
-  { Area: "Board docs", Item: "Monthly close packet", Owner: "Finance", Status: "In progress", "Due date": "2026-05-15" },
-  { Area: "Finance checklist", Item: "Review uncategorized transactions", Owner: "Bookkeeper", Status: "Needs review", "Due date": "2026-05-08" },
-  { Area: "Grant deadline", Item: "Grant report backup", Owner: "Program manager", Status: "Waiting on documents", "Due date": "2026-05-20" },
-  { Area: "Compliance", Item: "Insurance certificate renewal", Owner: "Operations", Status: "Pending", "Due date": "2026-06-01" },
-];
 
 const boardFileDefinitions = [
   {
@@ -261,28 +260,42 @@ function UploadControl({
 function HomeTab({ onSelectTab }: { onSelectTab: (tab: Tab) => void }) {
   const featuredWorkflows = [
     {
-      tab: "Upload & Clean Transactions" as const,
-      label: "01 · Start here",
+      tab: "Decision Board" as const,
+      label: "01 · Tell Klyro",
+      title: "Decision Board",
+      description: "Choose the financial question that matters most. Klyro uses it to prioritize analysis without changing accounting classifications.",
+      outcome: "Sets the question your completed books should answer",
+    },
+    {
+      tab: "Transactions" as const,
+      label: "02 · Add activity",
       title: "Upload & Clean Transactions",
       description: "Bring in CSV, PDF, Excel, and OpenDocument files; normalize columns and amounts; review categories and duplicates; then carry clean data into downstream workflows.",
       outcome: "Produces a review-ready transaction register",
     },
     {
-      tab: "Journal Entry Assistant" as const,
-      label: "02 · Prepare accounting",
+      tab: "Journal Entries" as const,
+      label: "03 · Review accounting",
       title: "Journal Entry Assistant",
       description: "Turn cleaned transaction activity into balanced journal-entry suggestions with account, debit, credit, memo, and review-status fields for accountant approval.",
       outcome: "Produces a controlled journal-entry review file",
     },
     {
-      tab: "Monthly Close Board Packet" as const,
-      label: "03 · Understand the month",
+      tab: "Monthly Close" as const,
+      label: "04 · Close the month",
       title: "Monthly Close Board Packet",
       description: "Connect every imported source to a detailed financial summary, board narrative, management questions, review register, source coverage, and full Excel or PDF export.",
       outcome: "Produces a board-ready close review packet",
     },
+    {
+      tab: "Decision Board" as const,
+      label: "05 · Answer the focus",
+      title: "Business Answers",
+      description: "Connect cleaned records, accounting entries, calculations, and your selected Business Focus into a transparent owner summary.",
+      outcome: "Separates recorded facts, calculations, forecasts, and recommendations",
+    },
   ];
-  const workspaceTools = tabs.filter((tab) => tab !== "Home");
+  const workspaceTools = tabs.filter((tab) => tab !== "Overview");
   const portalModules = [
     ["Overview", "Available", "A connected view of imported activity, close status, and review priorities."],
     ["Transactions", "Available", "Import, normalize, categorize, flag duplicates, and export transaction records."],
@@ -300,17 +313,50 @@ function HomeTab({ onSelectTab }: { onSelectTab: (tab: Tab) => void }) {
   return (
     <>
       <div className="ti-home-hero">
-        <span>Your Klyro Portal</span>
-        <h2>Accounting, bookkeeping and financial records.</h2>
+        <span>Coastal Heating &amp; Air LLC · Fictional demo business</span>
+        <h2>Klyro Books</h2>
+        <p className="ti-product-mission">The financial decision operating system for small business.</p>
+        <div className="ti-why-statement">
+          <span>Why Klyro exists</span>
+          <h3>Businesses generate more data, but owners still struggle to turn it into decisions.</h3>
+          <p>Klyro connects financial activity to organized accounting records, then turns those completed records into clear answers about cash, hiring, equipment, inventory, expenses, financing, and financial health.</p>
+        </div>
         <p>Klyro is designed to give your business one secure place to organize transactions, maintain financial records and understand its financial performance.</p>
         <p>Upload financial files, categorize transactions, identify duplicates or unusual activity, reconcile accounts, prepare accounting records, and generate detailed close summaries from one connected review workspace.</p>
         <Alert kind="warning">Klyro is in development. Authentication, encrypted document storage, controlled accountant invitations, invoicing, and direct QuickBooks Online synchronization are planned—not currently production-ready.</Alert>
         <Link className="button" href="/login">Preview secure portal login <span>→</span></Link>
       </div>
-      <Section title="Klyro Workflow Highlights" caption="Move from imported files to accounting review and a detailed view of business performance.">
+      <Section title="How Is My Business Doing?" caption="Deterministic fictional demonstration values—not connected financial records.">
+        <div className="ti-health-grid">
+          {[
+            ["Cash available", "$48,300", "$45,900", "↑", "Recorded", "Cash currently available across the demo operating accounts."],
+            ["Monthly revenue", "$74,500", "$71,200", "↑", "Recorded", "Revenue recognized in the current demo month."],
+            ["Monthly expenses", "$63,900", "$59,700", "↑", "Recorded", "Operating expenses increased faster than revenue."],
+            ["Free cash flow", "$8,300", "$11,500", "↓", "Calculated", "Cash generated after recurring operating needs."],
+            ["Operating margin", "14.2%", "16.1%", "↓", "Calculated", "The share of revenue remaining after operating expenses."],
+            ["Cash runway", "2.8 months", "3.1 months", "↓", "Forecast", "Estimated coverage if current operating costs continue."],
+            ["Accounts receivable", "$21,700", "$17,500", "↑ 24%", "Recorded", "Customer invoices awaiting collection."],
+            ["Accounts payable", "$12,400", "$11,900", "↑", "Recorded", "Supplier bills and obligations still due."],
+          ].map(([label, value, previous, direction, kind, why]) => <article key={label}>
+            <span>{label}</span><strong>{value}</strong><b data-direction={String(direction).startsWith("↑") ? "up" : "down"}>{direction}</b>
+            <small>{kind} · Previous {previous}</small><p>{why}</p>
+          </article>)}
+        </div>
+      </Section>
+      <Section title="What Needs Attention?" caption="Klyro connects the current position to the decisions that deserve review.">
+        <div className="ti-attention-callout"><span>Receivables increased 24%</span><h3>More revenue is waiting to become cash.</h3><p>Collections slowed while payroll and operating expenses continued. This reduces near-term flexibility for equipment and hiring decisions.</p></div>
+      </Section>
+      <Section title="Your Next 3 Moves" caption="A deliberately limited 30–90 day action plan.">
+        <div className="ti-next-moves">
+          <article><span>01 · Next 7 days</span><h3>Collect receivables</h3><p>Prioritize the oldest customer balances and confirm expected payment dates.</p><small>Recommendation · High confidence</small></article>
+          <article><span>02 · Next 30 days</span><h3>Delay the cash equipment purchase</h3><p>Compare financing with a cash purchase after collections improve.</p><small>Recommendation · Moderate confidence</small></article>
+          <article><span>03 · Next 30–90 days</span><h3>Reevaluate hiring</h3><p>Model the full payroll burden after confirming revenue stability and collections.</p><small>Recommendation · Moderate confidence</small></article>
+        </div>
+      </Section>
+      <Section title="Klyro Primary Workflow" caption="Tell Klyro the question, add financial activity once, resolve only unclear treatment, close the month, and review the answer.">
         <div className="ti-featured-workflows">
           {featuredWorkflows.map((workflow) => (
-            <article key={workflow.tab}>
+            <article key={workflow.title}>
               <span>{workflow.label}</span>
               <h3>{workflow.title}</h3>
               <p>{workflow.description}</p>
@@ -360,36 +406,6 @@ function HomeTab({ onSelectTab }: { onSelectTab: (tab: Tab) => void }) {
         <Alert>Finance cleanup, reconciliation, journal entry, and board packet tools operate as one review-first workspace.</Alert>
       </Section>
       <LunaBooksCashIntelligence />
-    </>
-  );
-}
-
-function TrackerTab({ nonprofit = false }: { nonprofit?: boolean }) {
-  const [rows, setRows] = useState<TransactionRow[]>(nonprofit ? nonprofitRows : requestRows);
-  return (
-    <>
-      <Section title={nonprofit ? "Small Nonprofit Back-Office SaaS" : "Bookkeeper Client-Request Portal"} caption={nonprofit ? "MVP: Notion/Airtable dashboard sold as a service." : "MVP: Google Form + Airtable + email reminders first."}>
-        <p>{nonprofit ? "This workflow is designed for museums, churches, ministries, and nonprofits that need simple operating visibility without a heavy finance system." : "Track the documents a bookkeeper needs from each client before cleanup work can move forward."}</p>
-        <DataTable rows={rows} editable onChange={setRows} />
-        <button className="ti-button" onClick={() => setRows([...rows, Object.fromEntries(Object.keys(rows[0] ?? { Item: "" }).map((key) => [key, ""]))])}>Add row</button>
-      </Section>
-      <Section title={nonprofit ? "Dashboard Modules" : "Suggested Google Form Fields"}>
-        <DataTable rows={nonprofit ? [
-          { Module: "Board packet center", "What it organizes": "Monthly financial summaries, review notes, and board questions." },
-          { Module: "Finance close checklist", "What it organizes": "Bank review, duplicates, categories, large transactions, and journal entries." },
-          { Module: "Grant deadline tracker", "What it organizes": "Reports, due dates, restricted funds notes, and backup documents." },
-          { Module: "Vendor file cabinet", "What it organizes": "W-9s, contracts, invoices, renewals, and insurance documents." },
-          { Module: "Compliance reminders", "What it organizes": "Filings, insurance, board approvals, policy reviews, and annual tasks." },
-        ] : [
-          { Field: "Client name", Purpose: "Connect the upload to the right cleanup client." },
-          { Field: "Document month", Purpose: "Match the file to the close period." },
-          { Field: "Document type", Purpose: "Bank statement, receipt, invoice, payroll, tax notice, or other." },
-          { Field: "Upload file", Purpose: "Collect the source document for cleanup." },
-          { Field: "Notes", Purpose: "Explain unusual transactions or missing files." },
-        ]} />
-      </Section>
-      {!nonprofit && <Section title="Reminder Email Template"><pre className="ti-code">Subject: Missing bookkeeping documents for this month&apos;s cleanup{"\n\n"}Hi [Client Name],{"\n\n"}I am cleaning up your books for [Month]. I still need the following items:{"\n\n"}- [Missing item 1]{"\n"}- [Missing item 2]{"\n\n"}Please upload them using the request form. If an item is unavailable, reply with a note so I can mark it for review.</pre></Section>}
-      <Alert>Future path: secure client access, uploads, request statuses, reminders, and role-based dashboards.</Alert>
     </>
   );
 }
@@ -489,46 +505,120 @@ function ReconciliationTab() {
   );
 }
 
-function JournalTab({ cleaned }: { cleaned: TransactionRow[] }) {
-  const [subtab, setSubtab] = useState<"Manual Entry" | "CSV Upload">("Manual Entry");
-  const [manual, setManual] = useState<TransactionRow>({ date: "2026-07-26", amount: 0, suggested_category: "Software & Subscriptions", description: "", bank_account_name: "Checking Account", memo: "" });
-  const [entry, setEntry] = useState<TransactionRow[]>([]);
-  const [uploaded, setUploaded] = useState<TransactionRow[]>([]);
-  const rows = uploaded.length ? cleanTransactions(uploaded) : cleaned;
+function BusinessFocusTab({ focus, secondary, onFocus, onSecondary }: { focus: BusinessFocus; secondary: BusinessFocus[]; onFocus: (focus: BusinessFocus) => void; onSecondary: (focus: BusinessFocus) => void }) {
   return (
     <>
-      <Alert kind="warning">Draft journal entries are suggestions only and must be reviewed before posting.</Alert>
-      <div className="ti-subtabs">{(["Manual Entry", "CSV Upload"] as const).map((item) => <button aria-pressed={subtab === item} key={item} onClick={() => setSubtab(item)}>{item}</button>)}</div>
-      {subtab === "Manual Entry" ? (
-        <>
-          <div className="ti-form-grid">
-            <label>transaction_date<input type="date" value={String(manual.date)} onChange={(event) => setManual({ ...manual, date: event.target.value })} /></label>
-            <label>amount<input type="number" step=".01" value={Number(manual.amount)} onChange={(event) => setManual({ ...manual, amount: Number(event.target.value) })} /></label>
-            <label>suggested_category<select value={String(manual.suggested_category)} onChange={(event) => setManual({ ...manual, suggested_category: event.target.value })}>{Object.keys(journalAccounts).map((category) => <option key={category}>{category}</option>)}</select></label>
-            <label className="wide">description<input value={String(manual.description)} onChange={(event) => setManual({ ...manual, description: event.target.value })} /></label>
-            <label>bank_account_name<input value={String(manual.bank_account_name)} onChange={(event) => setManual({ ...manual, bank_account_name: event.target.value })} /></label>
-            <label>memo<textarea value={String(manual.memo)} onChange={(event) => setManual({ ...manual, memo: event.target.value })} /></label>
-          </div>
-          <button className="ti-button" onClick={() => setEntry([suggestJournalEntry(manual, String(manual.bank_account_name))])}>Suggest Draft Journal Entry</button>
-          {entry.length > 0 && <><Section title="Draft Journal Entry Suggestion"><DataTable rows={entry} /></Section><Alert>Review required before posting. This app does not post to QuickBooks.</Alert><div className="ti-action-row"><button className="ti-button" onClick={() => downloadFile("draft_journal_entry.xml", workbookXml({ "Draft Journal Entry": entry }), "application/vnd.ms-excel")}>Download Draft Journal Entry</button><button className="ti-button" onClick={() => void downloadPdfReport("draft_journal_entry.pdf", { title: "Draft Journal Entry Review", subtitle: "Draft suggestion only. Review and approval are required before posting.", sections: [{ title: "Draft Journal Entry", rows: entry, columns: ["transaction_date", "description", "debit_account", "credit_account", "debit_amount", "credit_amount", "review_required"] }] })}>Download Journal Entry PDF</button></div></>}
-        </>
-      ) : (
-        <>
-          <UploadControl label="Upload cleaned transactions file" onRows={(newRows) => setUploaded(newRows)} />
-          {!rows.length ? <Alert>Upload a cleaned transactions file or process sample data in Upload &amp; Clean Transactions.</Alert> : (
-            <>
-              <Section title="Select Rows That Need Draft Journal Entry Suggestions"><DataTable rows={rows} /></Section>
-              <button className="ti-button" onClick={() => setEntry(rows.map((row) => suggestJournalEntry(row)))}>Suggest All Draft Journal Entries</button>
-              {entry.length > 0 && <><Section title="Draft Journal Entry Suggestions"><DataTable rows={entry} /></Section><div className="ti-metrics"><div><span>Total debits</span><strong>{entry.reduce((sum, row) => sum + Number(row.debit_amount), 0).toFixed(2)}</strong></div><div><span>Total credits</span><strong>{entry.reduce((sum, row) => sum + Number(row.credit_amount), 0).toFixed(2)}</strong></div></div><div className="ti-action-row"><button className="ti-button" onClick={() => downloadFile("draft_journal_entries.xml", workbookXml({ "Draft Journal Entries": entry }), "application/vnd.ms-excel")}>Download Draft Journal Entries</button><button className="ti-button" onClick={() => void downloadPdfReport("draft_journal_entries.pdf", { title: "Draft Journal Entry Review", subtitle: "Draft suggestions only. Review and approval are required before posting.", sections: [{ title: "Draft Journal Entries", rows: entry, columns: ["transaction_date", "description", "debit_account", "credit_account", "debit_amount", "credit_amount", "review_required"] }] })}>Download Journal Entries PDF</button></div></>}
-            </>
-          )}
-        </>
-      )}
+      <Section title="Decision Board" caption="Your primary focus prioritizes questions, metrics, and recommendations. It never changes accounting classification.">
+        <h3>What are you trying to understand or accomplish right now?</h3>
+        <div className="ti-focus-grid" role="radiogroup" aria-label="Primary business focus">
+          {businessFocusOptions.map((option) => (
+            <label key={option} data-selected={focus === option}>
+              <input checked={focus === option} name="business-focus" onChange={() => onFocus(option)} type="radio" />
+              <span>{option}</span>
+            </label>
+          ))}
+        </div>
+        <Alert kind="success">Primary focus saved for this local business workspace: <b>{focus}</b>.</Alert>
+        <h3>Additional focuses <small>(optional)</small></h3>
+        <div className="ti-secondary-focuses">
+          {businessFocusOptions.filter((option) => option !== focus).map((option) => <label key={option}><input checked={secondary.includes(option)} onChange={() => onSecondary(option)} type="checkbox" />{option}</label>)}
+        </div>
+      </Section>
     </>
   );
 }
 
-function BoardPacketTab({ cleaned }: { cleaned: TransactionRow[] }) {
+function AccountingEntryDetails({ record }: { record: AccountingRecord }) {
+  return (
+    <details className="ti-accounting-details">
+      <summary>View Accounting Entry</summary>
+      <dl>
+        <div><dt>Debit</dt><dd>{record.debitAccount || "Pending account selection"}</dd></div>
+        <div><dt>Credit</dt><dd>{record.creditAccount || "Pending account selection"}</dd></div>
+        <div><dt>Amount</dt><dd>{Math.abs(record.amount).toLocaleString("en-US", { style: "currency", currency: "USD" })}</dd></div>
+        <div><dt>Source transaction</dt><dd>{record.sourceTransactionId}</dd></div>
+        <div><dt>Supporting document</dt><dd>{record.sourceDocument || "Missing"}</dd></div>
+        <div><dt>Reason / rule</dt><dd>{record.ruleUsed || record.reason}</dd></div>
+      </dl>
+    </details>
+  );
+}
+
+function JournalTab({
+  records,
+  onResolve,
+}: {
+  records: AccountingRecord[];
+  onResolve: (record: AccountingRecord, account: string) => void;
+}) {
+  const ready = records.filter((record) => record.status === "Ready to Post");
+  const unclear = records.filter((record) => record.status === "Needs Input");
+  const exceptions = records.filter((record) => !["Ready to Post", "Needs Input"].includes(record.status));
+  const exportRows = records.map((record) => ({
+    source_transaction: record.sourceTransactionId,
+    date: record.date,
+    vendor: record.vendor,
+    amount: record.amount,
+    status: record.status,
+    confidence: record.confidence,
+    debit_account: record.debitAccount || "Pending",
+    credit_account: record.creditAccount || "Pending",
+    debit_amount: record.debitAmount,
+    credit_amount: record.creditAmount,
+    supporting_document: record.sourceDocument || "Missing",
+    reason: record.reason,
+  }));
+  return (
+    <>
+      <Alert kind="warning">Proposed entries are review records only. Klyro never auto-posts from weak confidence and does not modify QuickBooks.</Alert>
+      {!records.length && <Alert>Import transactions in Upload &amp; Clean. Proposed accounting entries will appear here automatically—no second upload is required.</Alert>}
+      <div className="ti-metrics">
+        <div><span>Imported transactions</span><strong>{records.length}</strong></div>
+        <div><span>Ready to post</span><strong>{ready.length}</strong></div>
+        <div><span>Needs your input</span><strong>{unclear.length}</strong></div>
+        <div><span>Duplicate / transfer review</span><strong>{exceptions.length}</strong></div>
+      </div>
+      <Section title="Ready to Post" caption="Clear proposed entries supported by an accounting mapping or approved rule.">
+        <div className="ti-accounting-cards">
+          {ready.map((record) => <article key={record.id}>
+            <div><span data-confidence={record.confidence.toLowerCase()}>{record.confidence} confidence</span><b>{record.status}</b></div>
+            <h3>{record.vendor}</h3><strong>{Math.abs(record.amount).toLocaleString("en-US", { style: "currency", currency: "USD" })}</strong>
+            <p>Recorded as <b>{record.finalAccount}</b> {record.amount < 0 ? "paid from" : "received into"} Operating Checking.</p>
+            <small>{record.reason}</small>
+            <AccountingEntryDetails record={record} />
+          </article>)}
+          {!ready.length && <Alert>No entries are ready yet.</Alert>}
+        </div>
+      </Section>
+      <Section title="Needs Your Input" caption="Klyro found more than one plausible treatment and did not finalize the entry.">
+        <div className="ti-accounting-cards ti-accounting-cards--needs-input">
+          {unclear.map((record) => <article id={record.sourceTransactionId} key={record.id}>
+            <div><span data-confidence="needs-input">Needs Input</span><b>{record.vendor}</b></div>
+            <h3>{Math.abs(record.amount).toLocaleString("en-US", { style: "currency", currency: "USD" })}</h3>
+            <p>What was this purchase for?</p>
+            <div className="ti-account-options">
+              {record.suggestions.map((suggestion) => <button key={suggestion.account} onClick={() => onResolve(record, suggestion.account)}><b>{suggestion.account}</b><span>{suggestion.confidence}% evidence fit</span></button>)}
+              <select aria-label={`Choose another account for ${record.vendor}`} defaultValue="" onChange={(event) => event.target.value && onResolve(record, event.target.value)}>
+                <option disabled value="">Choose another account</option>
+                {starterChartOfAccounts.map((account) => <option key={account.code} value={account.name}>{account.code} · {account.name}</option>)}
+              </select>
+            </div>
+            <details><summary>Why these suggestions?</summary><p>{record.reason}</p></details>
+          </article>)}
+          {!unclear.length && <Alert kind="success">No transactions currently need an account choice.</Alert>}
+        </div>
+      </Section>
+      {exceptions.length > 0 && <Section title="Exception Review" caption="Duplicates and transfers require separate review before an accounting entry can be approved."><DataTable rows={exceptions.map((record) => ({ source_transaction: record.sourceTransactionId, vendor: record.vendor, amount: record.amount, status: record.status, reason: record.reason }))} /></Section>}
+      <Section title="Chart of Accounts" caption="A compact starter structure. Additions require owner, bookkeeper, or accountant review.">
+        <DataTable rows={starterChartOfAccounts} />
+        <Alert>When imported activity needs a missing account, Klyro recommends it for approval instead of silently expanding the chart.</Alert>
+      </Section>
+      {records.length > 0 && <div className="ti-action-row"><button className="ti-button" onClick={() => downloadFile("proposed_journal_entries.xml", workbookXml({ "Proposed Journal Entries": exportRows }), "application/vnd.ms-excel")}>Download Journal Review</button><button className="ti-button" onClick={() => void downloadPdfReport("proposed_journal_entries.pdf", { title: "Proposed Journal Entry Review", subtitle: "Review-only accounting proposals linked to source transactions.", sections: [{ title: "Proposed Entries", rows: exportRows }] })}>Download Journal Review PDF</button></div>}
+    </>
+  );
+}
+
+function BoardPacketTab({ cleaned, records, onNavigate }: { cleaned: TransactionRow[]; records: AccountingRecord[]; onNavigate: (tab: Tab) => void }) {
   const subtabs = ["Upload Files", "Summary", "Board Narrative", "Review Items", "Export Packet"] as const;
   const [subtab, setSubtab] = useState<(typeof subtabs)[number]>("Upload Files");
   const [fileData, setFileData] = useState<
@@ -548,14 +638,32 @@ function BoardPacketTab({ cleaned }: { cleaned: TransactionRow[] }) {
     ) as Record<BoardFileKey, { rows: TransactionRow[]; note: string }>,
   );
   const [metadata, setMetadata] = useState({ month: "July", year: 2026, preparedDate: "2026-07-26", organization: "Organization Name", preparedBy: "Finance Team", threshold: 1000 });
+  const workflowClose = useMemo(() => closeReadiness(records), [records]);
   const sources = useMemo<BoardPacketSource[]>(
     () =>
       boardFileDefinitions.map((file) => ({
         ...file,
-        rows: fileData[file.key].rows,
-        note: fileData[file.key].note,
+        rows: file.key === "transactions" && cleaned.length
+          ? cleaned
+          : file.key === "journal_entries" && records.length
+            ? records.map((record) => ({
+                source_transaction: record.sourceTransactionId,
+                description: record.vendor,
+                amount: record.amount,
+                debit_account: record.debitAccount || "Pending",
+                credit_account: record.creditAccount || "Pending",
+                status: record.status,
+                confidence: record.confidence,
+                review_required: record.status === "Ready to Post" ? "No" : "Yes",
+              }))
+            : fileData[file.key].rows,
+        note: file.key === "transactions" && cleaned.length
+          ? "Automatically linked from Upload & Clean Transactions."
+          : file.key === "journal_entries" && records.length
+            ? "Automatically linked from Journal Entry Assistant."
+            : fileData[file.key].note,
       })),
-    [fileData],
+    [cleaned, fileData, records],
   );
   const analysis = useMemo(
     () => buildBoardPacketAnalysis(sources, metadata.threshold),
@@ -614,6 +722,20 @@ function BoardPacketTab({ cleaned }: { cleaned: TransactionRow[] }) {
     <>
       <Alert kind="warning">This board packet is generated from uploaded files and is for review only. It does not replace accounting review, management approval, treasurer review, or board oversight.</Alert>
       <Alert>Every imported file now feeds the shared Summary, Board Narrative, Review Items, and full Excel/PDF exports. Conclusions remain limited to the evidence actually loaded.</Alert>
+      <Section title={`${metadata.month.toUpperCase()} CLOSE`} caption="Transactions flow here automatically from Upload & Clean and Journal Entry Assistant.">
+        <div className="ti-close-readiness">
+          <div><span>Close Readiness</span><strong>{workflowClose.readiness}%</strong><small>Ready entries earn four points each; duplicate, transfer, and missing-document exceptions reduce the transparent score.</small></div>
+          <div className="ti-metrics">
+            <div><span>Transactions imported</span><strong>{workflowClose.transactionsImported}</strong></div>
+            <div><span>Categorized</span><strong>{workflowClose.categorized}</strong></div>
+            <div><span>Ready journal entries</span><strong>{workflowClose.ready}</strong></div>
+            <div><span>Needs user input</span><strong>{workflowClose.needsInput}</strong></div>
+            <div><span>Missing documents</span><strong>{workflowClose.missingDocuments}</strong></div>
+            <div><span>Possible duplicates</span><strong>{workflowClose.duplicates}</strong></div>
+          </div>
+        </div>
+        {(workflowClose.needsInput > 0 || workflowClose.duplicates > 0 || workflowClose.transfers > 0) && <button className="ti-button" onClick={() => onNavigate("Journal Entries")}>Review exact accounting issues →</button>}
+      </Section>
       <div className="ti-form-grid ti-form-grid--board">
         <label>Reporting month<select value={metadata.month} onChange={(event) => setMetadata({ ...metadata, month: event.target.value })}>{["January","February","March","April","May","June","July","August","September","October","November","December"].map((month) => <option key={month}>{month}</option>)}</select></label>
         <label>Reporting year<input type="number" value={metadata.year} onChange={(event) => setMetadata({ ...metadata, year: Number(event.target.value) })} /></label>
@@ -636,14 +758,15 @@ function BoardPacketTab({ cleaned }: { cleaned: TransactionRow[] }) {
           </Section>
           <div className="ti-upload-grid">
             {boardFileDefinitions.map((file) => {
-              const loaded = fileData[file.key];
+              const loaded = sources.find((source) => source.key === file.key) ?? { rows: [], note: "" };
+              const isAutomaticallyLinked = (file.key === "transactions" && cleaned.length > 0) || (file.key === "journal_entries" && records.length > 0);
               return (
                 <Section key={file.key} title={file.label} caption={`${file.required ? "Required foundation. " : "Recommended context. "}${file.purpose}`}>
                   <UploadControl label={`Upload ${file.label}`} onRows={(rows, note) => importRows(file.key, rows, note)} />
                   <Alert kind={loaded.rows.length ? "success" : file.required ? "warning" : "info"}>
                     {loaded.rows.length ? `${loaded.rows.length} row(s) linked to all packet tabs. ${loaded.note}` : `${file.required ? "Required" : "Not loaded"}. No evidence from this file is included yet.`}
                   </Alert>
-                  {loaded.rows.length > 0 && <button className="ti-button" onClick={() => importRows(file.key, [], "")}>Remove imported file</button>}
+                  {loaded.rows.length > 0 && !isAutomaticallyLinked && <button className="ti-button" onClick={() => importRows(file.key, [], "")}>Remove imported file</button>}
                 </Section>
               );
             })}
@@ -719,33 +842,122 @@ function BoardPacketTab({ cleaned }: { cleaned: TransactionRow[] }) {
   );
 }
 
+function SummaryBoard({ focus, records, onNavigate }: { focus: BusinessFocus; records: AccountingRecord[]; onNavigate: (tab: Tab) => void }) {
+  const summary = useMemo(() => buildFocusSummary(focus, records), [focus, records]);
+  return (
+    <>
+      <Section title="Your Question" caption="Business Focus determines what Klyro prioritizes; accounting treatment remains independent.">
+        <div className="ti-summary-question"><span>{focus}</span><h3>{summary.question}</h3></div>
+      </Section>
+      <Section title="Current Position" caption="Every value is labeled by evidence type.">
+        <div className="ti-metrics">
+          {summary.currentPosition.map((item) => <div key={item.label}><span>{item.label}</span><strong>{item.value}</strong><small>{item.kind}</small></div>)}
+        </div>
+      </Section>
+      <div className="ti-summary-grid">
+        <Section title="What Klyro Found"><p>{summary.finding}</p></Section>
+        <Section title="Potential Impact"><span className="ti-evidence-kind">Forecast</span><p>{summary.potentialImpact}</p></Section>
+        <Section title="What Deserves Attention"><span className="ti-evidence-kind">Recommendation</span><ul>{summary.attention.map((item) => <li key={item}>{item}</li>)}</ul></Section>
+        <Section title="Why"><p>{summary.why}</p></Section>
+        <Section title="Confidence"><strong className="ti-summary-confidence">{summary.confidence}</strong></Section>
+        <Section title="Assumptions"><ul>{summary.assumptions.map((item) => <li key={item}>{item}</li>)}</ul></Section>
+      </div>
+      {!records.length && <button className="ti-button" onClick={() => onNavigate("Transactions")}>Import financial activity →</button>}
+      {records.some((record) => record.status !== "Ready to Post") && <button className="ti-button" onClick={() => onNavigate("Journal Entries")}>Resolve accounting review items →</button>}
+      <Alert>Recorded facts come from imported activity. Calculations are deterministic. Forecasts and recommendations remain conditional and never constitute accounting approval.</Alert>
+    </>
+  );
+}
+
+function DecisionScenario() {
+  return <Section title="Equipment + Hiring Decision" caption="A deterministic demo scenario using the fictional Coastal Heating & Air data.">
+    <div className="ti-decision-options">
+      <article data-decision="wait"><span>Wait</span><h3>Preserve flexibility</h3><p>Collect receivables first, then reassess both decisions with stronger cash coverage.</p><b>Recommended now</b></article>
+      <article data-decision="finance"><span>Finance</span><h3>Finance the equipment</h3><p>Spread equipment cost over time while delaying the hire until revenue stability is confirmed.</p><b>Review terms</b></article>
+      <article data-decision="cash"><span>Cash</span><h3>Pay cash</h3><p>Fastest ownership path, but it reduces runway and leaves less capacity for payroll volatility.</p><b>High risk</b></article>
+    </div>
+    <Alert>Recommendation · Moderate confidence. Assumes $48,300 available cash, current collections timing, and no unrecorded obligations.</Alert>
+  </Section>;
+}
+
+function FinancialsTab() {
+  const statements = [
+    { Statement: "Profit & Loss", "Accounting view": "Revenue 74,500 · Expenses 63,900 · Operating profit 10,600", "Owner view": "The business earned $10,600 before taxes and owner distributions.", Confidence: "Moderate" },
+    { Statement: "Balance Sheet", "Accounting view": "Cash 48,300 · A/R 21,700 · A/P 12,400 · Debt 18,600", "Owner view": "Cash is positive, but more customer money is tied up in unpaid invoices.", Confidence: "Moderate" },
+    { Statement: "Cash Flow Statement", "Accounting view": "Operating cash 8,300 · Investing cash (0) · Financing cash (1,200)", "Owner view": "Operations generated cash, while debt payments reduced the ending balance.", Confidence: "Moderate" },
+  ];
+  return <>
+    <Alert kind="warning">Fictional demo statements. These previews are not generated from a complete ledger and are not suitable for filing, lending, or accounting reliance.</Alert>
+    <Section title="Financial Statements" caption="Accounting terminology and owner-friendly meaning appear together."><DataTable rows={statements} /></Section>
+    <Section title="Data Confidence"><DataTable rows={[
+      { Area: "Bank activity", Confidence: "High", Reason: "Demo transaction register is present." },
+      { Area: "Revenue and expenses", Confidence: "Moderate", Reason: "Demo classifications require final review." },
+      { Area: "Tax treatment", Confidence: "Insufficient", Reason: "No tax records or approved tax assumptions are present." },
+    ]} /></Section>
+  </>;
+}
+
+function PreviewModule({ title, description, rows }: { title: string; description: string; rows: TransactionRow[] }) {
+  return <><Alert kind="warning">Demo preview only. This area is not connected to production authentication or storage.</Alert><Section title={title} caption={description}><DataTable rows={rows} /></Section></>;
+}
+
 export function TransactionIntelligenceWorkspace() {
-  const [activeTab, setActiveTab] = useState<Tab>("Home");
+  const [activeTab, setActiveTab] = useState<Tab>("Overview");
   const [cleaned, setCleaned] = useState<TransactionRow[]>([]);
+  const [focus, setFocus] = useState<BusinessFocus>("Improve Cash Flow");
+  const [secondaryFocuses, setSecondaryFocuses] = useState<BusinessFocus[]>(["Buy Equipment", "Hire an Employee"]);
+  const [records, setRecords] = useState<AccountingRecord[]>([]);
+  const [auditEvents, setAuditEvents] = useState<ClassificationAuditEvent[]>([]);
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      const saved = window.localStorage.getItem("klyro-business-focus");
+      if (businessFocusOptions.includes(saved as BusinessFocus)) setFocus(saved as BusinessFocus);
+    }, 0);
+    return () => window.clearTimeout(timeoutId);
+  }, []);
+  const updateFocus = (next: BusinessFocus) => {
+    setFocus(next);
+    window.localStorage.setItem("klyro-business-focus", next);
+  };
+  const updateSecondaryFocus = (next: BusinessFocus) => {
+    setSecondaryFocuses((current) => current.includes(next) ? current.filter((item) => item !== next) : [...current, next]);
+  };
+  const updateCleaned = (rows: TransactionRow[]) => {
+    setCleaned(rows);
+    setRecords(buildAccountingRecords(rows));
+  };
+  const resolveRecord = (record: AccountingRecord, account: string) => {
+    const resolved = resolveAccountingRecord(record, account);
+    setRecords((current) => current.map((item) => item.id === record.id ? resolved.record : item));
+    setAuditEvents((current) => [...current, resolved.event]);
+  };
   return (
     <div className="ti-workspace">
       <header className="ti-banner">
-        <div><span>In Development · Review Workspace</span><h1>Klyro</h1></div>
-        <p>Accounting, bookkeeping and financial records—organized so finalized data can support Klyro Forecast and Klyro Business decisions.</p>
+        <div><span>In Development · Demo Preview · Not for operational use</span><h1>Klyro Books</h1></div>
+        <p>The financial decision operating system for small business.</p>
       </header>
+      <div className="ti-development-warning" role="alert"><strong>Development demonstration only.</strong> Klyro Books is not production-ready and must not be used as a system of record or relied on for bookkeeping, posting, filing, lending, tax, payroll, or business decisions. All values shown are fictional or user-supplied preview data and require qualified professional review.</div>
       <div className="ti-review-banner">Clean messy books, organize client requests, and prepare finance review files. Tools are for review only and do not approve, post, or modify accounting records.</div>
       <Alert kind="warning">PDF extraction is best-effort and may require manual review. This workspace prepares review files only and does not replace accounting approval.</Alert>
       <nav className="ti-tabs" aria-label="Klyro workspace">
         {tabs.map((tab) => <button key={tab} aria-pressed={activeTab === tab} onClick={() => setActiveTab(tab)}>{tab}</button>)}
       </nav>
       <main className="ti-panel">
-        {activeTab === "Home" && <HomeTab onSelectTab={setActiveTab} />}
-        {activeTab === "Client Request Portal" && <TrackerTab />}
-        {activeTab === "Nonprofit Back Office" && <TrackerTab nonprofit />}
-        {activeTab === "Upload & Clean Transactions" && <CleanTab onCleaned={setCleaned} />}
-        {activeTab === "Bank Statement PDF Parser" && <CleanTab parser onCleaned={setCleaned} />}
-        {activeTab === "Bank-to-QuickBooks Reconciliation" && <ReconciliationTab />}
-        {activeTab === "Journal Entry Assistant" && <JournalTab cleaned={cleaned} />}
-        {activeTab === "Monthly Close Board Packet" && <BoardPacketTab cleaned={cleaned} />}
+        {activeTab === "Overview" && <HomeTab onSelectTab={setActiveTab} />}
+        {activeTab === "Decision Board" && <><BusinessFocusTab focus={focus} secondary={secondaryFocuses} onFocus={updateFocus} onSecondary={updateSecondaryFocus} /><DecisionScenario /><SummaryBoard focus={focus} records={records} onNavigate={setActiveTab} /></>}
+        {activeTab === "Transactions" && <><CleanTab onCleaned={updateCleaned} /><Section title="Reconciliation"><ReconciliationTab /></Section></>}
+        {activeTab === "Journal Entries" && <JournalTab records={records} onResolve={resolveRecord} />}
+        {activeTab === "Cash Flow" && <LunaBooksCashIntelligence />}
+        {activeTab === "Financials" && <FinancialsTab />}
+        {activeTab === "Monthly Close" && <BoardPacketTab cleaned={cleaned} records={records} onNavigate={setActiveTab} />}
+        {activeTab === "Accountant" && <PreviewModule title="Accountant View" description="Review accounting exceptions and role boundaries." rows={[{ Role: "Owner", Access: "Manage business, books, members, and approvals" }, { Role: "Bookkeeper", Access: "Write and review books" }, { Role: "Accountant", Access: "Review books without silent posting" }]} />}
+        {activeTab === "Documents" && <PreviewModule title="Documents" description="Receipts, bills, invoices, and supporting evidence remain linked to source transactions." rows={[{ Document: "Vendor receipt", Status: "Sample linked", Use: "Accounting recommendation evidence" }, { Document: "Customer invoice", Status: "Sample missing", Use: "Receivables and collection analysis" }]} />}
+        {activeTab === "Settings" && <PreviewModule title="Business Settings" description="Fictional local demo profile." rows={[{ Business: "Coastal Heating & Air LLC", Industry: "HVAC services", Entity: "LLC", Currency: "USD" }, { "Primary focus": focus, "Additional focuses": secondaryFocuses.join(", "), Storage: "Local demo only" }]} />}
       </main>
       <footer className="ti-workspace-footer">
         <span>Sample data available · No brokerage or QuickBooks connection</span>
-        <span>Accounting review required before use</span>
+        <span>Accounting review required before use · {auditEvents.length} local classification change(s) retained</span>
       </footer>
     </div>
   );

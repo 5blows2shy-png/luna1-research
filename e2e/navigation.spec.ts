@@ -276,14 +276,16 @@ test("Transaction Intelligence preview is promoted without overstating readiness
     name: "Klyro workspace",
   });
   for (const tab of [
-    "Home",
-    "Client Request Portal",
-    "Nonprofit Back Office",
-    "Upload & Clean Transactions",
-    "Bank Statement PDF Parser",
-    "Bank-to-QuickBooks Reconciliation",
-    "Journal Entry Assistant",
-    "Monthly Close Board Packet",
+    "Overview",
+    "Decision Board",
+    "Transactions",
+    "Journal Entries",
+    "Cash Flow",
+    "Financials",
+    "Monthly Close",
+    "Accountant",
+    "Documents",
+    "Settings",
   ])
     await expect(workspace.getByRole("button", { name: tab })).toBeVisible();
 
@@ -299,7 +301,7 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   await scenarioSelect.selectOption("Conservative");
   await expect(scenarioSelect).toHaveValue("Conservative");
 
-  await page.getByRole("button", { name: "Upload & Clean Transactions", exact: true }).click();
+  await page.getByRole("button", { name: "Transactions", exact: true }).click();
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(
     workbook,
@@ -310,7 +312,8 @@ test("Transaction Intelligence preview is promoted without overstating readiness
     ]),
     "Transactions",
   );
-  await page.locator(".ti-panel input[type='file']").setInputFiles({
+  const primaryTransactionUpload = page.getByRole("button", { name: "Upload PDF, CSV, or Excel", exact: true });
+  await primaryTransactionUpload.setInputFiles({
     name: "sample-transactions.xlsx",
     mimeType:
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -323,7 +326,7 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Cleaned Data" })).toBeVisible();
 
-  await page.locator(".ti-panel input[type='file']").setInputFiles({
+  await primaryTransactionUpload.setInputFiles({
     name: "sample-statement.pdf",
     mimeType: "application/pdf",
     buffer: readFileSync("public/downloads/shy-lee-one-page-profile.pdf"),
@@ -351,19 +354,16 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   const pdfReport = await PDFDocument.load(pdfBytes);
   expect(pdfReport.getPageCount()).toBeGreaterThan(0);
 
-  await page
-    .getByRole("button", { name: "Bank-to-QuickBooks Reconciliation", exact: true })
-    .click();
   await page.getByRole("button", { name: "Use paired sample data" }).click();
   await expect(
     page.getByRole("heading", { name: "Matched Transactions" }),
   ).toBeVisible();
 
-  await page.getByRole("button", { name: "Monthly Close Board Packet", exact: true }).click();
+  await page.getByRole("button", { name: "Monthly Close", exact: true }).click();
   await page.getByRole("button", { name: "Use complete sample close packet" }).click();
   await expect(page.getByText("6/6", { exact: true })).toBeVisible();
 
-  await page.getByRole("button", { name: "Summary" }).click();
+  await page.getByRole("button", { name: "Summary", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Detailed Close Summary" }),
   ).toBeVisible();
@@ -404,44 +404,49 @@ test("Klyro portal home launches highlighted and complete workflows", async ({ p
   await page.goto("/klyro");
 
   await expect(
-    page.getByRole("heading", { name: "Klyro Workflow Highlights" }),
+    page.getByRole("heading", { name: "Klyro Primary Workflow" }),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "All Klyro Portal Tools" }),
   ).toBeVisible();
 
-  for (const workflow of [
-    "Upload & Clean Transactions",
-    "Journal Entry Assistant",
-    "Monthly Close Board Packet",
+  for (const [workflow, launcher] of [
+    ["Decision Board", "Open Decision Board"],
+    ["Transactions", "Open Upload & Clean Transactions"],
+    ["Journal Entries", "Open Journal Entry Assistant"],
+    ["Monthly Close", "Open Monthly Close Board Packet"],
   ]) {
-    await page.getByRole("button", { name: `Open ${workflow}`, exact: true }).click();
+    await page.getByRole("button", { name: launcher, exact: true }).click();
     await expect(
       page.getByRole("button", { name: workflow, exact: true }),
     ).toHaveAttribute("aria-pressed", "true");
-    await page.getByRole("button", { name: "Home", exact: true }).click();
+    await page.getByRole("button", { name: "Overview", exact: true }).click();
   }
 
   for (const workflow of [
-    "Client Request Portal",
-    "Nonprofit Back Office",
-    "Bank Statement PDF Parser",
-    "Bank-to-QuickBooks Reconciliation",
+    "Cash Flow",
+    "Financials",
+    "Accountant",
+    "Documents",
+    "Settings",
   ]) {
     await page.locator(".ti-workflow-launcher button").filter({ hasText: workflow }).click();
     await expect(
       page.getByRole("button", { name: workflow, exact: true }),
     ).toHaveAttribute("aria-pressed", "true");
-    await page.getByRole("button", { name: "Home", exact: true }).click();
+    await page.getByRole("button", { name: "Overview", exact: true }).click();
   }
 });
 
-test("Klyro login preview communicates trust without collecting credentials", async ({ page }) => {
+test("Klyro login launches an isolated demo without collecting credentials", async ({ page }) => {
   await page.goto("/login");
   await expect(page.getByRole("heading", { name: "Your business. Your books. Your control." })).toBeVisible();
   await expect(page.getByText("Customer authentication is not active yet.", { exact: false })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Continue securely" })).toBeDisabled();
   await expect(page.locator('input[type="password"]')).toHaveCount(0);
+  await page.getByRole("button", { name: "Launch demo workspace" }).click();
+  await expect(page).toHaveURL(/\/klyro\?welcome=demo$/);
+  await expect(page.getByRole("complementary", { name: "Demo workspace status" })).toContainText("Fictional sample data");
+  await expect(page.getByRole("button", { name: "Exit demo" })).toBeVisible();
 });
 
 test("retired routes are removed and the old journal route redirects", async ({
