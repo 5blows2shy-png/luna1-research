@@ -50,6 +50,10 @@ test("public source excludes private contact details", () => {
     "src/app/api/contact/route.ts",
   ];
   const source = files.map((path) => fs.readFileSync(path, "utf8")).join("\n");
+  const sourceWithoutApprovedOrganization = source.replaceAll(
+    "CFA Society San Diego Student Member",
+    "CFA Society Student Member",
+  );
   for (const forbidden of [
     "leeshyheim@yahoo.com",
     "mailto:",
@@ -58,7 +62,10 @@ test("public source excludes private contact details", () => {
     "San Diego",
     "(302) 344-9724",
   ])
-    assert.ok(!source.includes(forbidden), `found private value: ${forbidden}`);
+    assert.ok(
+      !sourceWithoutApprovedOrganization.includes(forbidden),
+      `found private value: ${forbidden}`,
+    );
 });
 
 test("contact delivery stays server-side and includes abuse controls", () => {
@@ -363,6 +370,11 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
   assert.match(actions, /Download Profile/);
   assert.match(actions, /Data center evidence/);
   assert.ok(!source.includes("FMVA"));
+  assert.ok(!source.includes(">SIE<"));
+  assert.match(source, /CFA Level I/);
+  assert.match(source, /Planned · August 2027/);
+  assert.match(source, /CFA Society San Diego Student Member/);
+  assert.match(source, /2026–Present/);
   assert.match(source, /Microsoft Excel<\/b>\s*<span>\s*Completed/);
   for (const file of [
     "public/downloads/shy-lee-resume.pdf",

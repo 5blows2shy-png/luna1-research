@@ -304,9 +304,15 @@ export function ResumeContent({
               <span>Completed</span>
             </div>
             <div>
-              <b>SIE</b>
-              <span>Planned</span>
+              <b>CFA Level I</b>
+              <span>Planned · August 2027</span>
             </div>
+            {recruiterView && (
+              <div>
+                <b>CFA Society San Diego Student Member</b>
+                <span>2026–Present</span>
+              </div>
+            )}
           </div>
           <Link className="text-link" href="/certifications">
             View certification roadmap →
