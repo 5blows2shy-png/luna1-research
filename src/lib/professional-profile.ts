@@ -38,8 +38,8 @@ export const platformPillars: PlatformPillar[] = [
   },
   {
     number: "03",
-    title: "Transaction Intelligence",
-    href: "/transaction-intelligence",
+    title: "Klyro",
+    href: "/klyro",
     purpose:
       "An accounting-control workflow for cleaning, classifying, reconciling, reviewing, and exporting transaction records.",
     evidence: [

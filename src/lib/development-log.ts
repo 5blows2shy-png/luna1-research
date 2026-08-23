@@ -305,7 +305,7 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     date: "2026-07-24",
     phase: "Current Work",
     category: "Platform Expansion",
-    title: "Integrated Transaction Intelligence Preview",
+    title: "Integrated Klyro Preview",
     summary:
       "Added the foundation of a transaction-analysis platform to the Luna1 development roadmap, connecting research and valuation work with accounting controls, financial operations, and transaction-level analysis.",
     reason:
@@ -334,7 +334,7 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     ],
     milestones: [
       "Incorporated the earlier transaction-analysis project into the Luna1 development roadmap.",
-      "Introduced the Luna1 Transaction Intelligence module and dashboard preview.",
+      "Introduced the Klyro module and dashboard preview.",
       "Established the foundation for transaction import, normalization, and categorization.",
       "Designed workflows for duplicate detection and possible mirrored-entry review.",
       "Planned transfer matching, reconciliation, and exception-review capabilities.",
@@ -344,7 +344,7 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     ],
     nextSteps: [
       "Complete migration of reusable logic from the legacy transaction-analysis project.",
-      "Finalize the Luna1 Transaction Intelligence dashboard.",
+      "Finalize the Klyro dashboard.",
       "Build the transaction file upload and column-mapping workflow.",
       "Implement categorization and duplicate-detection engines.",
       "Add transfer matching and reconciliation tools.",
@@ -353,7 +353,7 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
       "Replace preview content with tested functionality as development progresses.",
     ],
     projectOrigin:
-      "Luna1 Transaction Intelligence builds on an earlier transaction-analysis project developed to separate and organize financial records, identify duplicate transactions, review exceptions, and export structured results. The original project is now being evaluated and integrated into Luna1 through a more professional, scalable, and accounting-focused workflow.",
+      "Klyro builds on an earlier transaction-analysis project developed to separate and organize financial records, identify duplicate transactions, review exceptions, and export structured results. The original project is now being evaluated and integrated into Luna1 through a more professional, scalable, and accounting-focused workflow.",
     featurePreview: [
       { label: "Transaction Import", status: "Preview" },
       { label: "Data Normalization", status: "Preview" },
@@ -368,8 +368,8 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     evolutionStatement:
       "Luna1 is evolving from an independent equity-research platform into a broader financial intelligence ecosystem that connects investment analysis, valuation, accounting controls, and transaction analytics.",
     disclosure:
-      "Luna1 Transaction Intelligence is a portfolio and educational project. It is not a substitute for professional accounting, audit, tax, legal, or financial advice.",
-    route: "/transaction-intelligence",
+      "Klyro is a portfolio and educational project. It is not a substitute for professional accounting, audit, tax, legal, or financial advice.",
+    route: "/klyro",
     visibility: "Public",
   },
   {
@@ -379,7 +379,7 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     category: "Strategy",
     title: "Organized Luna1 around analyst evidence",
     summary:
-      "Reframed the public information architecture around Equity Research, Valuation, Transaction Intelligence, Portfolio Process, the Analyst Journal, and the Development Log.",
+      "Reframed the public information architecture around Equity Research, Valuation, Klyro, Portfolio Process, the Analyst Journal, and the Development Log.",
     reason:
       "Recruiters and finance professionals need to see how operating experience, accounting knowledge, financial reasoning, investment decisions, and continuous improvement connect—not only a collection of finished projects.",
     lessons: [
@@ -396,5 +396,32 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     impact:
       "Makes the path from military accountability and infrastructure operations to accounting, finance, and investment research easier to evaluate while preserving the underlying work.",
     status: "Completed",
+  },
+  {
+    id: "glw-optical-connectivity-research-note",
+    date: "2026-08-21",
+    phase: "Current Research",
+    category: "Research",
+    title: "Completed GLW Optical-Connectivity Research Note",
+    summary:
+      "Published a sourced, downloadable research note that maps Corning's reported optical-connectivity demand, segment evidence, open operating questions, and monitoring framework.",
+    reason:
+      "The GLW research record needed a portable document that separates reported Q2 2026 evidence from analyst interpretation, open questions, and the proof required for continued monitoring.",
+    lessons: [
+      "A research note should distinguish an analytical demand map from reported evidence.",
+      "Document dates should not overwrite the original publication dates of source materials.",
+      "Draft research is more credible when its unanswered questions and completion standard are explicit.",
+    ],
+    skills: [
+      "Equity-research scoping",
+      "Primary-source planning",
+      "Financial communication",
+      "Document production",
+    ],
+    impact:
+      "Adds a recruiter-visible example of disciplined, sourced research and gives the GLW note a completed branded PDF artifact without presenting it as personalized investment advice.",
+    status: "Completed",
+    route: "/research/notes",
+    visibility: "Public",
   },
 ];

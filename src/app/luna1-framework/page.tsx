@@ -1,4 +1,5 @@
-import { PageHeader, Scorecard, SectionHeading } from "@/components/site";
+import { Scorecard } from "@/components/interactive-tools";
+import { PageHeader, SectionHeading } from "@/components/site";
 
 const factors = ["Earnings Acceleration","Revenue Acceleration","Institutional Sponsorship","Competitive Moats","Industry Structure","Capital Allocation","Technical Structure","Risk Management","Valuation"];
 const groups=[

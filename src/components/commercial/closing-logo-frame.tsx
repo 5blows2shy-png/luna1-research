@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { LunaMark } from "@/components/site";
+import { LunaMark } from "@/components/luna-mark";
 
 export function ClosingLogoFrame({ active }: { active: boolean }) {
   return <div className="commercial-scene closing-scene" aria-hidden={!active}>

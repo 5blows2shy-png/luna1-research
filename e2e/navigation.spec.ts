@@ -1,6 +1,7 @@
 import { test, expect, type Locator } from "@playwright/test";
 import * as XLSX from "@e965/xlsx";
-import { readFileSync } from "node:fs";
+import { mkdirSync, readFileSync } from "node:fs";
+import { PDFDocument } from "pdf-lib";
 
 async function activate(locator: Locator, projectName: string) {
   if (projectName === "mobile") {
@@ -148,7 +149,7 @@ test("desktop and mobile navigation expose only the permanent product scope", as
     "Home",
     "Equity Research",
     "Valuation Lab",
-    "Transaction Intelligence",
+    "Klyro",
     "Portfolio Lab",
     "Analyst Journal",
     "Recruiter View",
@@ -208,12 +209,23 @@ test("research hub exposes structured routes and transparent placeholders", asyn
 
 test("research note and development log filters work", async ({ page }) => {
   await page.goto("/research/notes");
-  await page.getByLabel("Ticker").selectOption("RY");
+  const tickerFilter = page.getByRole("combobox", { name: "Ticker", exact: true });
+  await tickerFilter.selectOption("RY");
   await expect(
     page.getByRole("heading", { name: "RY: framing credit-cycle questions" }),
   ).toBeVisible();
   await expect(page.getByText("5 notes")).toHaveCount(0);
+  await tickerFilter.selectOption("GLW");
+  await expect(
+    page.getByRole("link", { name: "Download PDF" }),
+  ).toHaveAttribute("href", "/reports/GLW-Luna1-Analyst-Journal.pdf");
+  await expect(page.getByText("August 21, 2026", { exact: true })).toBeVisible();
   await page.goto("/development-log");
+  await expect(
+    page.getByRole("heading", {
+      name: "Completed GLW Optical-Connectivity Research Note",
+    }),
+  ).toBeVisible();
   await page.getByLabel("Status").selectOption("Planned");
   await expect(
     page.getByRole("heading", {
@@ -221,15 +233,22 @@ test("research note and development log filters work", async ({ page }) => {
     }),
   ).toBeVisible();
   await expect(page.getByText("1 entries")).toBeVisible();
+  await page.goto("/analyst-journal");
+  await expect(
+    page.locator('a[href="/reports/GLW-Luna1-Analyst-Journal.pdf"]'),
+  ).toBeVisible();
+  await expect(
+    page.locator('a[href="/reports/BE-Luna1-Analyst-Journal.pdf"]'),
+  ).toBeVisible();
 });
 
 test("Transaction Intelligence preview is promoted without overstating readiness", async ({
   page,
-}) => {
+}, testInfo) => {
   await page.goto("/development-log");
   const entry = page.locator("article").filter({
     has: page.getByRole("heading", {
-      name: "Integrated Transaction Intelligence Preview",
+      name: "Integrated Klyro Preview",
     }),
   });
 
@@ -242,34 +261,48 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   await expect(entry.locator(".development-preview li")).toHaveCount(9);
   await expect(
     entry.getByRole("link", {
-      name: "View Transaction Intelligence Preview",
+      name: "View Klyro Preview",
     }),
-  ).toHaveAttribute("href", "/transaction-intelligence");
+  ).toHaveAttribute("href", "/klyro");
 
-  await page.goto("/transaction-intelligence");
+  await page.goto("/klyro");
   await expect(
     page.getByRole("heading", {
-      name: "Luna1 Transaction Intelligence",
+      name: "Klyro",
       level: 1,
     }),
   ).toBeVisible();
   await expect(page.getByText("In Development").first()).toBeVisible();
   const workspace = page.getByRole("navigation", {
-    name: "Transaction Intelligence workspace",
+    name: "Klyro workspace",
   });
   for (const tab of [
-    "Home",
-    "Client Request Portal",
-    "Nonprofit Back Office",
-    "Upload & Clean Transactions",
-    "Bank Statement PDF Parser",
-    "Bank-to-QuickBooks Reconciliation",
-    "Journal Entry Assistant",
-    "Monthly Close Board Packet",
+    "Overview",
+    "Decision Board",
+    "Transactions",
+    "Journal Entries",
+    "Cash Flow",
+    "Financials",
+    "Monthly Close",
+    "Accountant",
+    "Documents",
+    "Settings",
   ])
     await expect(workspace.getByRole("button", { name: tab })).toBeVisible();
 
-  await page.getByRole("button", { name: "Upload & Clean Transactions" }).click();
+  const cashFlowIntelligence = page.getByRole("region", { name: "Cash Flow Intelligence" });
+  await expect(cashFlowIntelligence.getByRole("heading", { name: "Cash Flow Intelligence" })).toBeVisible();
+  await expect(cashFlowIntelligence.getByText("Estimated safe to spend")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Top three decisions" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "13-week cash outlook" })).toBeVisible();
+  const purchaseInput = page.getByLabel("Purchase amount");
+  await purchaseInput.fill("30000");
+  await expect(page.locator('.ti-purchase-result[data-risk="high-risk"]')).toBeVisible();
+  const scenarioSelect = page.getByLabel("Scenario");
+  await scenarioSelect.selectOption("Conservative");
+  await expect(scenarioSelect).toHaveValue("Conservative");
+
+  await page.getByRole("button", { name: "Transactions", exact: true }).click();
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(
     workbook,
@@ -280,7 +313,8 @@ test("Transaction Intelligence preview is promoted without overstating readiness
     ]),
     "Transactions",
   );
-  await page.locator(".ti-panel input[type='file']").setInputFiles({
+  const primaryTransactionUpload = page.getByRole("button", { name: "Upload PDF, CSV, or Excel", exact: true });
+  await primaryTransactionUpload.setInputFiles({
     name: "sample-transactions.xlsx",
     mimeType:
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -288,19 +322,19 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   });
   await expect(
     page.getByText(
-      'Loaded sample-transactions.xlsx from worksheet “Transactions”.',
+      "Loaded sample-transactions.xlsx from 1 worksheet(s): Transactions.",
     ),
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Cleaned Data" })).toBeVisible();
 
-  await page.locator(".ti-panel input[type='file']").setInputFiles({
+  await primaryTransactionUpload.setInputFiles({
     name: "sample-statement.pdf",
     mimeType: "application/pdf",
     buffer: readFileSync("public/downloads/shy-lee-one-page-profile.pdf"),
   });
   await expect(
     page.getByText(
-      "Best-effort PDF text extraction completed across 1 page(s). Manual review is required.",
+      "No transaction table was detected, so page-level PDF text from 1 page(s) was preserved for the summary, narrative, review workflow, and exports. Manual review is required.",
     ),
   ).toBeVisible();
 
@@ -309,14 +343,111 @@ test("Transaction Intelligence preview is promoted without overstating readiness
   await expect(
     page.getByRole("heading", { name: "Flagged Transactions" }),
   ).toBeVisible();
+  const pdfDownloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Download PDF Review" }).click();
+  const pdfDownload = await pdfDownloadPromise;
+  expect(pdfDownload.suggestedFilename()).toBe("qbo_cleanup_review.pdf");
+  mkdirSync("tmp/pdfs", { recursive: true });
+  const pdfPath = `tmp/pdfs/qbo_cleanup_review-${testInfo.project.name}.pdf`;
+  await pdfDownload.saveAs(pdfPath);
+  const pdfBytes = readFileSync(pdfPath);
+  expect(pdfBytes.subarray(0, 5).toString()).toBe("%PDF-");
+  const pdfReport = await PDFDocument.load(pdfBytes);
+  expect(pdfReport.getPageCount()).toBeGreaterThan(0);
 
-  await page
-    .getByRole("button", { name: "Bank-to-QuickBooks Reconciliation" })
-    .click();
   await page.getByRole("button", { name: "Use paired sample data" }).click();
   await expect(
     page.getByRole("heading", { name: "Matched Transactions" }),
   ).toBeVisible();
+
+  await page.getByRole("button", { name: "Monthly Close", exact: true }).click();
+  await page.getByRole("button", { name: "Use complete sample close packet" }).click();
+  await expect(page.getByText("6/6", { exact: true })).toBeVisible();
+
+  await page.getByRole("button", { name: "Summary", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Detailed Close Summary" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Imported File Coverage" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Category and Spending Concentration" }),
+  ).toBeVisible();
+
+  await page.getByRole("button", { name: "Board Narrative" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Questions for Management" }),
+  ).toBeVisible();
+
+  await page.getByRole("button", { name: "Review Items" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Consolidated Review Register" }),
+  ).toBeVisible();
+
+  await page.getByRole("button", { name: "Export Packet" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Full Board Packet Export" }),
+  ).toBeVisible();
+  const boardPdfDownloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Download Full Board Packet PDF" }).click();
+  const boardPdfDownload = await boardPdfDownloadPromise;
+  expect(boardPdfDownload.suggestedFilename()).toBe(
+    "monthly_close_board_packet.pdf",
+  );
+  const boardPdfPath = `tmp/pdfs/monthly_close_board_packet-${testInfo.project.name}.pdf`;
+  await boardPdfDownload.saveAs(boardPdfPath);
+  const boardPdf = await PDFDocument.load(readFileSync(boardPdfPath));
+  expect(boardPdf.getPageCount()).toBeGreaterThan(1);
+});
+
+test("Klyro portal home launches highlighted and complete workflows", async ({ page }) => {
+  await page.goto("/klyro");
+
+  await expect(
+    page.getByRole("heading", { name: "Klyro Primary Workflow" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "All Klyro Portal Tools" }),
+  ).toBeVisible();
+
+  for (const [workflow, launcher] of [
+    ["Decision Board", "Open Decision Board"],
+    ["Transactions", "Open Upload & Clean Transactions"],
+    ["Journal Entries", "Open Journal Entry Assistant"],
+    ["Monthly Close", "Open Monthly Close Board Packet"],
+  ]) {
+    await page.getByRole("button", { name: launcher, exact: true }).click();
+    await expect(
+      page.getByRole("button", { name: workflow, exact: true }),
+    ).toHaveAttribute("aria-pressed", "true");
+    await page.getByRole("button", { name: "Overview", exact: true }).click();
+  }
+
+  for (const workflow of [
+    "Cash Flow",
+    "Financials",
+    "Accountant",
+    "Documents",
+    "Settings",
+  ]) {
+    await page.locator(".ti-workflow-launcher button").filter({ hasText: workflow }).click();
+    await expect(
+      page.getByRole("button", { name: workflow, exact: true }),
+    ).toHaveAttribute("aria-pressed", "true");
+    await page.getByRole("button", { name: "Overview", exact: true }).click();
+  }
+});
+
+test("Klyro login launches an isolated demo without collecting credentials", async ({ page }) => {
+  await page.goto("/login");
+  await expect(page.getByRole("heading", { name: "Your business. Your books. Your control." })).toBeVisible();
+  await expect(page.getByText("Customer authentication is not active yet.", { exact: false })).toBeVisible();
+  await expect(page.locator('input[type="password"]')).toHaveCount(0);
+  await page.getByRole("button", { name: "Launch demo workspace" }).click();
+  await expect(page).toHaveURL(/\/klyro\?welcome=demo$/);
+  await expect(page.getByRole("complementary", { name: "Demo workspace status" })).toContainText("Fictional sample data");
+  await expect(page.getByRole("button", { name: "Exit demo" })).toBeVisible();
 });
 
 test("retired routes are removed and the old journal route redirects", async ({
@@ -350,6 +481,43 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
       page.getByRole("tab", { name: label, exact: true }),
     ).toBeVisible();
   await activate(
+    page.getByRole("tab", { name: "Active Positions" }),
+    testInfo.project.name,
+  );
+  const anetRow = page.locator('.active-position-card[data-symbol="ANET"]');
+  await expect(anetRow).toHaveCount(1);
+  await expect(anetRow.getByText("Monitoring", { exact: true })).toBeVisible();
+  await expect(
+    anetRow.getByText(/ANET moved from the Watchlist into Active Positions/),
+  ).toBeVisible();
+  await expect(
+    page.locator('.active-position-card[data-symbol="PANW"]'),
+  ).toHaveCount(0);
+  await expect(anetRow.getByText("Entry price", { exact: true })).toHaveCount(0);
+  await expect(anetRow.getByText("Research needed")).toHaveCount(0);
+  await expect(
+    page.getByRole("columnheader", { name: "Position size" }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("columnheader", { name: "Purchase date" }),
+  ).toHaveCount(0);
+  await activate(
+    page.getByRole("tab", { name: "Long-Term Compounders" }),
+    testInfo.project.name,
+  );
+  await expect(
+    page.locator(".holdings-table tbody tr").filter({ hasText: "AIPO" }),
+  ).toHaveCount(1);
+  await expect(
+    page.locator(".holdings-table tbody tr").filter({ hasText: "SLV" }),
+  ).toHaveCount(0);
+  await expect(
+    page.locator(".holdings-table tbody tr").filter({ hasText: "SpaceX" }),
+  ).toContainText("Not publicly traded");
+  await expect(
+    page.locator(".holdings-table tbody tr").filter({ hasText: "PG" }),
+  ).toHaveCount(0);
+  await activate(
     page.getByRole("tab", { name: "Watchlist" }),
     testInfo.project.name,
   );
@@ -360,12 +528,12 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
   ).toHaveCount(0);
   await expect(
     page.getByRole("link", { name: "View Full Research" }),
-  ).toHaveCount(18);
+  ).toHaveCount(15);
   await expect(page.getByText("Digital Realty Trust Inc.")).toBeVisible();
   await expect(page.getByText("Data pending", { exact: true })).toBeVisible();
 });
 
-test("KRYS replaces ANET in Active Positions and opens sourced research", async ({
+test("KRYS joins ANET in Active Positions and opens sourced research", async ({
   page,
 }, testInfo) => {
   await page.goto("/portfolio");
@@ -373,13 +541,16 @@ test("KRYS replaces ANET in Active Positions and opens sourced research", async 
     page.getByRole("tab", { name: "Active Positions", exact: true }),
     testInfo.project.name,
   );
-  await expect(page.getByText("KRYS", { exact: true })).toBeVisible();
+  const krysPosition = page.locator('.active-position-card[data-symbol="KRYS"]');
+  await expect(krysPosition.locator(".portfolio-ticker")).toHaveText("KRYS");
   await expect(
     page.getByText("Krystal Biotech, Inc.", { exact: true }),
   ).toBeVisible();
-  await expect(page.getByText("ANET", { exact: true })).toHaveCount(0);
+  await expect(
+    page.locator('.active-position-card[data-symbol="ANET"] .portfolio-ticker'),
+  ).toHaveText("ANET");
   await expect(page.getByText("Initial Thesis", { exact: true })).toHaveCount(0);
-  await page.getByRole("link", { name: "View Position Research" }).click();
+  await krysPosition.getByRole("link", { name: "View Position Research" }).click();
   await expect(page).toHaveURL(/\/portfolio\/positions\/krys$/);
   await expect(page.getByRole("heading", { name: "KRYS", level: 1 })).toBeVisible();
   await expect(page.getByText("$119.2M", { exact: true }).first()).toBeVisible();
@@ -447,7 +618,13 @@ test("Watchlist research pages expose structured, non-fabricated coverage", asyn
   await expect(
     page.getByRole("button", { name: "Model in Progress" }),
   ).toBeDisabled();
-  await expect(page.getByText("Data pending").first()).toBeVisible();
+  await expect(page.getByText("Optical Communications").first()).toBeVisible();
+  await expect(page.getByRole("link", { name: "Annual report" }).first()).toHaveAttribute(
+    "href",
+    /sec\.gov\/Archives/,
+  );
+  await expect(page.getByText("FY2025").first()).toBeVisible();
+  await expect(page.getByText("Data pending")).toHaveCount(0);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
     "href",
     "https://luna1research.com/watchlist/glw",
@@ -483,6 +660,45 @@ test("homepage omits retired overview modules", async ({ page }) => {
     "Current Areas of Focus",
   ])
     await expect(page.getByText(section, { exact: true })).toHaveCount(0);
+});
+
+test("Portfolio retains the global market pulse and its controls", async ({ page }) => {
+  await page.goto("/portfolio");
+  const pulse = page.getByRole("region", { name: "Luna1 Market Pulse" });
+  await expect(pulse).toBeVisible();
+  await pulse
+    .getByRole("button", { name: "Pause market ticker updates and motion" })
+    .click();
+  await expect(
+    pulse.getByRole("button", { name: "Resume market ticker updates and motion" }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(pulse.getByText(/Updates paused/)).toBeVisible();
+});
+
+test("portfolio sections share one quote request and reusable displays", async ({ page }, testInfo) => {
+  let portfolioRequests = 0;
+  await page.route("**/api/market-quotes?**", async (route) => {
+    const url = new URL(route.request().url());
+    const symbols = (url.searchParams.get("symbols") ?? "").split(",").filter(Boolean);
+    if (["CASY", "AIPO", "AAPL", "COST", "VOO"].every((symbol) => symbols.includes(symbol))) portfolioRequests += 1;
+    await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ status: "success", lastUpdated: "2026-07-31T20:00:00.000Z", provider: "Financial Modeling Prep", unavailableSymbols: [], quotes: symbols.map((symbol, index) => ({ symbol, price: 100 + index, change: 1.25, changePercent: 1.1, currency: "USD", marketStatus: "closed", timestamp: "2026-07-31T20:00:00.000Z", dataType: "previous-close" })) }) });
+  });
+  const quoteRow = (symbol: string) => page.locator(`[data-symbol="${symbol}"]`);
+  await page.goto("/portfolio");
+  await activate(page.getByRole("tab", { name: "Active Positions" }), testInfo.project.name);
+  await expect(quoteRow("CASY").getByText("Previous Close")).toBeVisible({ timeout: 10_000 });
+  await activate(page.getByRole("tab", { name: "Watchlist" }), testInfo.project.name);
+  await expect(quoteRow("GLW").getByText("Previous Close")).toBeVisible();
+  await activate(page.getByRole("tab", { name: "Long-Term Compounders" }), testInfo.project.name);
+  for (const symbol of ["AAPL", "COST", "VOO"]) await expect(quoteRow(symbol).getByText("Previous Close")).toBeVisible();
+  expect(portfolioRequests).toBe(1);
+});
+
+test("portfolio quote displays tolerate unavailable responses", async ({ page }) => {
+  await page.route("**/api/market-quotes?**", (route) => route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ status: "unavailable", message: "Market data is temporarily unavailable." }) }));
+  await page.goto("/portfolio");
+  await page.getByRole("tab", { name: "Watchlist" }).click();
+  await expect(page.locator('[data-symbol="GLW"]').getByText("Quote unavailable")).toBeVisible();
 });
 
 test("JBL decision review remains under Portfolio", async ({
@@ -559,10 +775,19 @@ test("recruiter view retains profile and downloads", async ({ page }) => {
     .toBeVisible();
   await expect(
     page.getByAltText("Portrait of Shy Lee, founder of Luna1 Research"),
-  ).toHaveAttribute("src", /shyheim-lee-recruiter\.jpeg/);
+  ).toHaveAttribute("src", /shyheim-lee-recruiter-headshot-1080\.jpg/);
   await expect(
     page.getByRole("link", { name: /Download Profile/ }),
   ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /One-page brief/ }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /Data center evidence/ }),
+  ).toHaveAttribute(
+    "href",
+    "/downloads/shyheim-lee-data-center-finance-evidence-sheet.pdf",
+  );
 });
 
 test("reduced motion disables the prism sweep", async ({ page }) => {
@@ -576,4 +801,62 @@ test("reduced motion disables the prism sweep", async ({ page }) => {
         .evaluate((element) => getComputedStyle(element, "::after").display),
     )
     .toBe("none");
+});
+
+test("thesis stress test validates probabilities and generates a memo", async ({
+  page,
+}) => {
+  await page.goto("/research/anet");
+  await page.getByRole("link", { name: "Challenge the Thesis" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Luna1 Thesis Stress Test" }),
+  ).toBeVisible();
+  await page.getByLabel("Bull-case probability").fill("20");
+  await expect(page.locator(".validation-error")).toContainText("must equal 100%");
+  await expect(
+    page.getByRole("button", { name: /Generate deterministic analysis/ }),
+  ).toBeDisabled();
+  await page.getByLabel("Bull-case probability").fill("25");
+  await page
+    .getByRole("button", { name: /Generate deterministic analysis/ })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Your View vs. Luna1" }),
+  ).toBeVisible();
+  await expect(page.getByText("Luna1 Investment Committee Challenge")).toBeVisible();
+  await expect(page.getByText(/not investment advice/i).last()).toBeVisible();
+});
+
+test("stress test supports analyst, risk, project, and anonymous observer modes", async ({
+  page,
+}) => {
+  await page.goto("/research/strl/stress-test");
+  await page.getByRole("radio", { name: "Research Analyst" }).check();
+  await expect(page.getByLabel("Revenue growth")).toBeVisible();
+  await page.getByRole("radio", { name: "Risk Analyst" }).check();
+  await expect(page.getByLabel("Execution risk score")).toBeVisible();
+  await page
+    .getByRole("radio", { name: "Infrastructure / Project Finance" })
+    .check();
+  await expect(page.getByLabel("Project capacity")).toBeVisible();
+  await page.getByRole("radio", { name: "Observer" }).check();
+  await expect(page.getByText("Read-only committee review")).toBeVisible();
+});
+
+test("research-view endpoint rejects invalid anonymous submissions", async ({
+  request,
+}) => {
+  const response = await request.post("/api/research-views", {
+    data: {
+      professionalRole: "Research Analyst",
+      company: "Arista Networks",
+      thesisStance: "Neutral",
+      importantAssumption: "Margins",
+      mainDisagreement: "The margin assumption needs more evidence.",
+      researchQuestion: "What supports the forward margin assumption?",
+      sourceUrl: "javascript:alert(1)",
+      consent: "true",
+    },
+  });
+  expect(response.status()).toBe(400);
 });

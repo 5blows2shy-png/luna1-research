@@ -3,18 +3,18 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { luna1Brand } from "@/config/brand";
 import {
-  DATA_PENDING,
   RESEARCH_DISCLOSURE,
   RESEARCH_SOURCE_NOTE,
 } from "@/data/research/research-disclosures";
 import type {
   CompanyResearchCoverage,
+  FinancialValue,
   ResearchDocument,
   ResearchLink,
 } from "@/data/research/research-types";
 
-function value(value: number | null, format: "number" | "percent" = "number") {
-  if (value === null) return DATA_PENDING;
+function value(value: FinancialValue, format: "number" | "percent" = "number") {
+  if (typeof value === "string") return value;
   return format === "percent"
     ? `${(value * 100).toFixed(1)}%`
     : value.toLocaleString("en-US");
@@ -296,7 +296,7 @@ export function CompanyResearchPage({
           <table>
             <caption>
               {isEtf ? "Fund exposure inputs" : "Company segment inputs"} ·
-              source citations required
+              source citations required · financial values in {company.ticker === "RY" ? "CAD" : "USD"} millions
             </caption>
             <thead>
               <tr>
@@ -307,6 +307,7 @@ export function CompanyResearchPage({
                 <th>Operating margin</th>
                 <th>Share of total</th>
                 <th>Key driver</th>
+                <th>Source</th>
               </tr>
             </thead>
             <tbody>
@@ -321,6 +322,9 @@ export function CompanyResearchPage({
                   </td>
                   <td data-label="Operating income">
                     {value(segment.operatingIncome)}
+                    {segment.profitMeasure !== "Operating income" && (
+                      <small>{segment.profitMeasure}</small>
+                    )}
                   </td>
                   <td data-label="Operating margin">
                     {value(segment.operatingMargin, "percent")}
@@ -329,6 +333,11 @@ export function CompanyResearchPage({
                     {value(segment.shareOfRevenue, "percent")}
                   </td>
                   <td data-label="Key driver">{segment.driver}</td>
+                  <td data-label="Source">
+                    <a href={segment.sourceUrl} rel="noreferrer" target="_blank">
+                      Annual report
+                    </a>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -405,7 +414,8 @@ export function CompanyResearchPage({
           <div className="table-wrap research-table-wrap">
             <table>
               <caption>
-                Historical inputs · all values remain pending until sourced
+                Reported financial inputs in millions, except per-share data and
+                percentages. EBITDA and FCF are Luna1 calculations where shown.
               </caption>
               <thead>
                 <tr>
@@ -426,6 +436,7 @@ export function CompanyResearchPage({
                   <th>Cash</th>
                   <th>Debt</th>
                   <th>Diluted shares</th>
+                  <th>Source</th>
                 </tr>
               </thead>
               <tbody>
@@ -466,6 +477,12 @@ export function CompanyResearchPage({
                     <td data-label="Diluted shares">
                       {value(record.dilutedShares)}
                     </td>
+                    <td data-label="Source">
+                      <a href={record.sourceUrl} rel="noreferrer" target="_blank">
+                        {record.sourceLabel}
+                      </a>
+                      <small>{record.currency}</small>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -479,11 +496,14 @@ export function CompanyResearchPage({
         title="Model the actual economic drivers."
       >
         <div className="research-driver-grid">
-          {company.revenueDrivers.map((driver, index) => (
-            <article key={driver}>
+          {company.segments.map((segment, index) => (
+            <article key={segment.name}>
               <span>{String(index + 1).padStart(2, "0")}</span>
-              <h3>{driver}</h3>
-              <p>{DATA_PENDING} · source and assumption required</p>
+              <h3>{segment.name}</h3>
+              <p>{segment.driver}</p>
+              <a href={segment.sourceUrl} rel="noreferrer" target="_blank">
+                Review primary source
+              </a>
             </article>
           ))}
         </div>

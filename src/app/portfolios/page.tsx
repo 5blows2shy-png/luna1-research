@@ -1,12 +1,30 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useState, type KeyboardEvent } from "react";
-import { MistakeJournal } from "@/components/mistake-journal";
-import { ResearchCoverageGrid } from "@/components/research/research-coverage-grid";
+import { MarketQuotesProvider } from "@/components/market/market-quotes-provider";
+import { QuoteDisplay } from "@/components/market/quote-display";
 import { PageHeader, SectionHeading } from "@/components/site";
 import { activePositions } from "@/data/portfolio/active-positions";
+import { portfolioTickerSymbols } from "@/lib/market-ticker-config";
 import { watchlist } from "@/lib/watchlist-data";
+
+const MistakeJournal = dynamic(
+  () =>
+    import("@/components/mistake-journal").then(
+      (module) => module.MistakeJournal,
+    ),
+  { loading: () => <p className="market-message">Loading decision reviews…</p> },
+);
+
+const ResearchCoverageGrid = dynamic(
+  () =>
+    import("@/components/research/research-coverage-grid").then(
+      (module) => module.ResearchCoverageGrid,
+    ),
+  { loading: () => <p className="market-message">Loading research coverage…</p> },
+);
 
 type Holding = {
   ticker: string;
@@ -15,6 +33,7 @@ type Holding = {
   allocation: string;
   type: string;
   horizon: string;
+  isPrivate?: boolean;
 };
 
 const coreAllocation: Holding[] = [
@@ -46,13 +65,13 @@ const coreAllocation: Holding[] = [
     horizon: "Strategic allocation",
   },
   {
-    ticker: "SLV",
-    company: "iShares Silver Trust",
+    ticker: "AIPO",
+    company: "Defiance AI & Power Infrastructure ETF",
     thesis:
-      "Provides exposure to silver’s dual role as both a precious metal and an industrial commodity. The thesis is supported by potential demand from electrification, solar energy, electronics, and monetary-hedge buying, while recognizing silver’s higher volatility.",
+      "Diversified thematic exposure to the AI-compute, power, grid, nuclear, and infrastructure buildout without relying on a single operating company.",
     allocation: "9%",
-    type: "Real asset",
-    horizon: "Strategic allocation",
+    type: "Thematic equity ETF",
+    horizon: "Long term",
   },
   {
     ticker: "SGOV",
@@ -94,13 +113,14 @@ const compounders: Holding[] = [
     horizon: "5+ years",
   },
   {
-    ticker: "PG",
-    company: "The Procter & Gamble Company",
+    ticker: "Private",
+    company: "Space Exploration Technologies Corp. (SpaceX)",
     thesis:
-      "Procter & Gamble owns a diversified portfolio of essential consumer brands with recurring demand, global distribution, and significant pricing power. The company is positioned as a defensive compounder supported by steady cash flow, productivity improvements, dividends, and consistent capital returns.",
+      "The long-term investment thesis centers on Starlink, whose expanding satellite network can extend high-speed connectivity to underserved markets, mobile users, enterprises, and governments worldwide. SpaceX’s reusable-launch capabilities support the thesis by lowering deployment and replenishment costs, but the position remains subject to the risks and limited liquidity of a privately held company.",
     allocation: "15%",
-    type: "Long-term compounder",
+    type: "Private growth company",
     horizon: "5+ years",
+    isPrivate: true,
   },
   {
     ticker: "AMZN",
@@ -112,6 +132,8 @@ const compounders: Holding[] = [
     horizon: "5+ years",
   },
 ];
+
+const allPortfolioSymbols = [...portfolioTickerSymbols].sort();
 
 const tabs = [
   "Overview",
@@ -134,6 +156,7 @@ function HoldingsTable({ title, items }: { title: string; items: Holding[] }) {
           <thead>
             <tr>
               <th>Ticker</th>
+              <th>Market quote</th>
               <th>Fund / company</th>
               <th>Investment thesis</th>
               <th>Current allocation</th>
@@ -143,9 +166,16 @@ function HoldingsTable({ title, items }: { title: string; items: Holding[] }) {
           </thead>
           <tbody>
             {items.map((item) => (
-              <tr key={item.ticker}>
+              <tr key={item.ticker} data-symbol={item.ticker}>
                 <td data-label="Ticker">
                   <b>{item.ticker}</b>
+                </td>
+                <td data-label="Market quote">
+                  {item.isPrivate ? (
+                    <span>Not publicly traded</span>
+                  ) : (
+                    <QuoteDisplay symbol={item.ticker} compact />
+                  )}
                 </td>
                 <td data-label="Fund / company">{item.company}</td>
                 <td data-label="Investment thesis" className="portfolio-copy">
@@ -173,7 +203,11 @@ function ActivePositionCards() {
         metrics are labeled by source type and are not real-time market data.
       </div>
       {activePositions.map((position) => (
-        <article className="active-position-card" key={position.ticker}>
+        <article
+          className="active-position-card"
+          data-symbol={position.ticker}
+          key={position.ticker}
+        >
           <header>
             <div>
               <span className="portfolio-ticker">{position.ticker}</span>
@@ -181,6 +215,7 @@ function ActivePositionCards() {
               <p>
                 {position.sector} · {position.industry}
               </p>
+              <QuoteDisplay symbol={position.ticker} compact />
             </div>
             <span
               className="status"
@@ -349,7 +384,7 @@ export default function Portfolios() {
   }
 
   return (
-    <>
+    <MarketQuotesProvider symbols={allPortfolioSymbols}>
       <PageHeader
         kicker="Portfolio Lab"
         title="Conviction made accountable."
@@ -408,6 +443,7 @@ export default function Portfolios() {
                   <thead>
                     <tr>
                       <th>Ticker</th>
+                      <th>Market quote</th>
                       <th>Company name</th>
                       <th>LUNA Score</th>
                       <th>Research status</th>
@@ -419,9 +455,12 @@ export default function Portfolios() {
                   </thead>
                   <tbody>
                     {watchlist.map((item) => (
-                      <tr key={item.ticker}>
+                      <tr key={item.ticker} data-symbol={item.ticker}>
                         <td data-label="Ticker">
                           <b>{item.ticker}</b>
+                        </td>
+                        <td data-label="Market quote">
+                          <QuoteDisplay symbol={item.ticker} compact />
                         </td>
                         <td data-label="Company name">
                           {item.company}
@@ -522,6 +561,6 @@ export default function Portfolios() {
           </div>
         </div>
       </section>
-    </>
+    </MarketQuotesProvider>
   );
 }

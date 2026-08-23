@@ -43,27 +43,37 @@ export const activePositions: ActivePosition[] = [
       "No thesis-breaking change is documented. Store growth, prepared-food performance, EBITDA, and returns on invested capital remain the monitoring priorities.",
   },
   {
-    ticker: "PANW",
-    company: "Palo Alto Networks Inc.",
+    ticker: "ANET",
+    company: "Arista Networks Inc.",
     sector: "Technology",
-    industry: "Cybersecurity",
-    positionType: "Platform compounder",
+    industry: "Cloud and AI networking",
+    positionType: "Network-infrastructure compounder",
     thesis:
-      "Palo Alto Networks is a cybersecurity leader benefiting from enterprise demand for integrated security platforms and AI-related security products. The thesis depends on recurring security revenue, durable customer commitments, free-cash-flow conversion, and continued platform adoption.",
+      "Arista Networks is a leading AI and cloud-networking business combining strong growth, profitability, and institutional-quality execution. The thesis depends on sustained Ethernet adoption, disciplined product execution, and durable demand from cloud and AI infrastructure customers.",
     keyFundamentals: [
-      "Recurring security revenue",
-      "Remaining performance obligations",
-      "Free-cash-flow conversion",
+      "AI and cloud-networking demand",
+      "Revenue growth and operating profitability",
+      "Customer and product diversification",
     ],
     competitiveAdvantage:
-      "A broad security platform, embedded customer workflows, and switching costs support consolidation onto fewer strategic vendors.",
-    growthDrivers: ["Platformization", "Cloud security", "AI security", "Vendor consolidation"],
-    watching: ["Recurring revenue", "Customer commitments", "Free cash flow"],
+      "Arista's software-led networking architecture, operating-system consistency, and position with large cloud customers support product performance and customer retention.",
+    growthDrivers: [
+      "Ethernet-based AI networks",
+      "Cloud capital spending",
+      "Campus networking",
+      "Product adoption",
+    ],
+    watching: [
+      "Customer concentration",
+      "Competitive wins and losses",
+      "Growth durability",
+      "Valuation discipline",
+    ],
     thesisInvalidation:
-      "The thesis would weaken if recurring security revenue, customer commitments, free cash flow, or competitive positioning materially deteriorate.",
+      "The thesis would weaken if AI and cloud-networking demand materially slows, competitive losses impair growth, or execution no longer supports the company's profitability and product position.",
     status: "Monitoring",
     whatChanged:
-      "No thesis-breaking change is documented. Recurring security revenue, customer commitments, free cash flow, and price structure remain the monitoring priorities.",
+      "ANET moved from the Watchlist into Active Positions. The thesis remains centered on Ethernet-based AI and cloud-networking demand, execution quality, and product adoption; customer concentration, competition, valuation, and growth durability remain under review.",
   },
   {
     ticker: "WELL",

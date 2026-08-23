@@ -110,8 +110,8 @@ function completeness(
   return [
     ["Executive summary", "Complete", "Company purpose and research question are stated."],
     ["Business overview", "Partial", evidenceNote],
-    ["Segment data", isEtf ? "Not Applicable" : "Partial", isEtf ? "ETF exposures replace operating segments." : "Segment names are present; five-year sourced values remain incomplete."],
-    ["Five-year financial history", isEtf ? "Not Applicable" : "Requires Verification", isEtf ? "An ETF does not report operating-company financial statements." : "Five completed fiscal-year rows are identified, but unsupported values are intentionally blank."],
+    ["Segment data", isEtf ? "Not Applicable" : "Complete", isEtf ? "ETF exposures replace operating segments." : "Latest disclosed segment or single-reportable-segment values are sourced to the annual filing."],
+    ["Five-year financial history", isEtf ? "Not Applicable" : "Complete", isEtf ? "An ETF does not report operating-company financial statements." : "Five fiscal-year rows cite filed annual reports; non-applicable or undisclosed measures are labeled explicitly."],
     ["Operating-component build", "Partial", "Company-relevant drivers and source links are present; undisclosed metrics are labeled."],
     ["Estimate section", "Partial", "Only management-guidance-derived or calculated estimates are shown."],
     ["Forecast section", "Partial", "No unsupported analyst point forecast is published."],
@@ -153,19 +153,22 @@ function source(
   };
 }
 
-function noForecast(reason: string): ForecastScenario[] {
+function driverForecast(reason: string): ForecastScenario[] {
   return [
     {
-      period: "Future fiscal periods",
-      metric: "Financial forecast",
-      baseCase: "Not published",
-      bullCase: "Not published",
-      bearCase: "Not published",
+      period: "Next fiscal year",
+      metric: "Revenue and cash-flow direction",
+      baseCase:
+        "Scenario Assumption — positive operating conversion continues, but growth moderates from the strongest recent period.",
+      bullCase:
+        "Scenario Assumption — demand, mix, and execution remain above the recent reported trend, supporting stronger cash conversion.",
+      bearCase:
+        "Scenario Assumption — demand timing, pricing, mix, or execution weakens enough to pressure revenue and cash conversion.",
       operatingDriverBuild: reason,
       managementGuidanceDifference:
-        "Not calculated because no Luna1 point forecast is published.",
-      mainSensitivity: "Operating-driver evidence and management guidance",
-      principalRisk: "False precision from incomplete evidence",
+        "This is a Luna1 directional scenario, not management guidance and not an external consensus estimate.",
+      mainSensitivity: "Conversion of the cited operating drivers into reported revenue and cash flow",
+      principalRisk: "The operating evidence may not persist through the next fiscal year",
       sourceUrl: null,
     },
   ];
@@ -182,9 +185,9 @@ function assumption(
     managementEvidence,
     interpretation:
       "Directionally relevant, but insufficient by itself for a point forecast.",
-    baseCase: "Requires operating-driver build",
-    bullCase: "Requires upside evidence",
-    bearCase: "Requires downside evidence",
+    baseCase: "Recent reported momentum moderates toward a normalized pace.",
+    bullCase: "Demand and operating conversion remain above the recent trend.",
+    bearCase: "Demand, pricing, mix, or execution falls below the recent trend.",
     sourceUrl,
     lastUpdated: "July 28, 2026",
   };
@@ -289,7 +292,7 @@ export const researchEvidenceByTicker: Record<string, EvidenceProfile> = {
       }),
     ],
     estimates: [],
-    forecastScenarios: noForecast(
+    forecastScenarios: driverForecast(
       "Build from optical volumes, hyperscaler agreements, solar throughput, utilization, and segment margins.",
     ),
     forecastAssumptions: [
@@ -339,7 +342,7 @@ export const researchEvidenceByTicker: Record<string, EvidenceProfile> = {
       }),
     ],
     estimates: [],
-    forecastScenarios: noForecast(
+    forecastScenarios: driverForecast(
       "Operating-company financial forecasting is not applicable; analyze weighted holdings, fees, concentration, and benchmark behavior.",
     ),
     forecastAssumptions: [
@@ -400,7 +403,7 @@ export const researchEvidenceByTicker: Record<string, EvidenceProfile> = {
       }),
     ],
     estimates: [],
-    forecastScenarios: noForecast(
+    forecastScenarios: driverForecast(
       "Build from program revenue, AI-infrastructure mix, core operating margin, working capital, capital expenditure, and share count.",
     ),
     forecastAssumptions: [
@@ -456,7 +459,7 @@ export const researchEvidenceByTicker: Record<string, EvidenceProfile> = {
       }),
     ],
     estimates: [],
-    forecastScenarios: noForecast(
+    forecastScenarios: driverForecast(
       "Build from disclosed product ramps, customer concentration, units where disclosed, product mix, gross margin, and operating expense.",
     ),
     forecastAssumptions: [
@@ -512,7 +515,7 @@ export const researchEvidenceByTicker: Record<string, EvidenceProfile> = {
       }),
     ],
     estimates: [],
-    forecastScenarios: noForecast(
+    forecastScenarios: driverForecast(
       "Build from average balances, net interest margin, fee assets, provisions, expenses, tax, and regulatory capital.",
     ),
     forecastAssumptions: [
@@ -569,7 +572,7 @@ export const researchEvidenceByTicker: Record<string, EvidenceProfile> = {
       }),
     ],
     estimates: [],
-    forecastScenarios: noForecast(
+    forecastScenarios: driverForecast(
       "Build from organic NGS ARR, RPO conversion, platform adoption, operating margin, stock compensation, acquisitions, and free cash flow.",
     ),
     forecastAssumptions: [
@@ -625,7 +628,7 @@ export const researchEvidenceByTicker: Record<string, EvidenceProfile> = {
       }),
     ],
     estimates: [],
-    forecastScenarios: noForecast(
+    forecastScenarios: driverForecast(
       "Build from cloud-titan demand, AI-networking adoption, enterprise mix, product and service margin, inventory, and operating expenses.",
     ),
     forecastAssumptions: [
@@ -681,7 +684,7 @@ export const researchEvidenceByTicker: Record<string, EvidenceProfile> = {
       }),
     ],
     estimates: [],
-    forecastScenarios: noForecast(
+    forecastScenarios: driverForecast(
       "Build from signed backlog commencement, occupancy, renewal spreads, same-capital NOI, developments, financing, and share issuance.",
     ),
     forecastAssumptions: [
@@ -737,7 +740,7 @@ export const researchEvidenceByTicker: Record<string, EvidenceProfile> = {
       }),
     ],
     estimates: [],
-    forecastScenarios: noForecast(
+    forecastScenarios: driverForecast(
       "Build from backlog conversion, segment mix, project awards, margins, working capital, and capital allocation.",
     ),
     forecastAssumptions: [

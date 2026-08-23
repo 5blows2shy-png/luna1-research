@@ -15,26 +15,19 @@
   },
   "dependencies": {
     "@e965/xlsx": "^0.20.3",
-    "@hookform/resolvers": "^5.4.0",
-    "@mdx-js/react": "^3.1.1",
-    "@radix-ui/react-slot": "^1.3.0",
-    "@sentry/nextjs": "^10.65.0",
     "@supabase/supabase-js": "^2.110.2",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
     "framer-motion": "^12.42.2",
     "lucide-react": "^1.24.0",
-    "next": "16.2.12",
+    "next": "16.3.2",
     "next-mdx-remote": "^6.0.0",
-    "pdfjs-dist": "^6.1.200",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^6.2.108",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "react-hook-form": "^7.81.0",
-    "recharts": "^3.9.2",
+    "recharts": "^3.10.1",
     "resend": "^6.17.2",
-    "tailwind-merge": "^3.6.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -44,11 +37,11 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.2.12",
+    "eslint-config-next": "16.3.2",
     "tailwindcss": "^4.3.2",
     "typescript": "^5"
   },
   "overrides": {
-    "postcss": "8.5.18"
+    "postcss": "8.5.26"
   }
 }

@@ -46,7 +46,7 @@ test("research pages identify incomplete work and block unfinished downloads", (
   assert.match(coverageSource, /url: null/);
   assert.doesNotMatch(coverageSource, /priceTarget|currentPrice|analystRating/);
   assert.match(pageSource, /disabled/);
-  assert.match(pageSource, /DATA_PENDING/);
+  assert.match(pageSource, /document\.status !== "available"/);
 });
 
 test("specialized ETF, bank, and REIT frameworks are present", () => {

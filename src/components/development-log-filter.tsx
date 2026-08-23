@@ -142,7 +142,7 @@ export function DevelopmentLogFilter({
                         <div>
                           <span className="eyebrow">Feature preview</span>
                           <h3 id={`${entry.id}-features`}>
-                            Transaction Intelligence roadmap
+                            Klyro roadmap
                           </h3>
                         </div>
                         <span className="research-status research-status--in-progress">
@@ -164,7 +164,7 @@ export function DevelopmentLogFilter({
                       <div className="development-preview-action">
                         {entry.route ? (
                           <Link className="button" href={entry.route}>
-                            View Transaction Intelligence Preview
+                            View Klyro Preview
                           </Link>
                         ) : (
                           <>

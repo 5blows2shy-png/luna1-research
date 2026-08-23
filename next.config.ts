@@ -9,6 +9,9 @@ const upgradeInsecureRequests = process.env.VERCEL
   : "";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    optimizeCss: true,
+  },
   turbopack: {
     root: process.cwd(),
   },

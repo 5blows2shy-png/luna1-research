@@ -3,7 +3,15 @@ import Link from "next/link";
 import { luna1Brand } from "@/config/brand";
 import { watchlistCoverage } from "@/data/research/watchlist-coverage";
 
-export function ResearchCoverageGrid() {
+export function ResearchCoverageGrid({
+  tickers,
+}: {
+  tickers?: readonly string[];
+}) {
+  const companies = tickers
+    ? watchlistCoverage.filter((company) => tickers.includes(company.ticker))
+    : watchlistCoverage;
+
   return (
     <div className="research-coverage-block">
       <div className="section-heading">
@@ -16,7 +24,7 @@ export function ResearchCoverageGrid() {
         </p>
       </div>
       <div className="research-coverage-grid">
-        {watchlistCoverage.map((company) => (
+        {companies.map((company) => (
           <article
             className="luxury-card research-coverage-card"
             key={company.ticker}

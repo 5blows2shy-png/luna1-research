@@ -150,18 +150,18 @@ test("portfolio reflects approved public positions", () => {
   const activeSource = fs
     .readFileSync("src/data/portfolio/active-positions.ts", "utf8")
     .replace(/\s+/g, "");
-  for (const ticker of ["WWD", "AMAT", "GS", "PDFS"])
+  for (const ticker of ["WWD", "AMAT", "GS", "PDFS", "PANW"])
     assert.ok(
       !activeSource.includes(`ticker:\"${ticker}\"`),
       `${ticker} remains active`,
     );
-  for (const ticker of ["CASY", "PANW", "WELL", "KRYS"]) {
+  for (const ticker of ["CASY", "ANET", "WELL", "KRYS"]) {
     assert.ok(
       activeSource.includes(`ticker:\"${ticker}\"`),
       `${ticker} is missing`,
     );
   }
-  assert.ok(!activeSource.includes('ticker:\"ANET\"'), "ANET remains active");
+  assert.ok(!activeSource.includes("entryPrice"), "entry price remains active");
   for (const heading of [
     "Shares",
     "Cost basis",
@@ -177,14 +177,11 @@ test("portfolio reflects approved public positions", () => {
 test("watchlist matches the approved research records", () => {
   const source = fs.readFileSync("src/lib/watchlist-data.ts", "utf8");
   for (const [ticker, score] of [
-    ["AIPO", 82],
     ["GLW", 91],
     ["STRL", 89],
     ["ALAB", 88],
     ["JBL", 87],
     ["RY", 84],
-    ["PANW", 86],
-    ["ANET", 95],
   ]) {
     assert.ok(
       new RegExp(`ticker:\\s*\"${ticker}\"`).test(source),
@@ -199,7 +196,7 @@ test("watchlist matches the approved research records", () => {
   for (const field of ["note:", "catalyst:", "risk:"])
     assert.equal(
       source.match(new RegExp(field, "g"))?.length,
-      10,
+      7,
       `each record should include ${field}`,
     );
   for (const removed of ["AMAT", "WWD", "PDFS", "GS"])
@@ -241,12 +238,12 @@ test("long-term portfolio allocations are complete", () => {
     ["VOO", "30%"],
     ["QQQM", "50%"],
     ["IAU", "10%"],
-    ["SLV", "9%"],
+    ["AIPO", "9%"],
     ["SGOV", "1%"],
     ["LLY", "25%"],
     ["AAPL", "20%"],
     ["COST", "20%"],
-    ["PG", "15%"],
+    ["Private", "15%"],
     ["AMZN", "20%"],
   ])
     assert.match(
@@ -336,8 +333,8 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
   );
   assert.match(recruiter, /RecruiterView/);
   assert.match(recruiter, /ResumeContent/);
-  assert.match(recruiter, /portraitSrc="\/shyheim-lee-recruiter.jpeg"/);
-  assert.ok(fs.existsSync("public/shyheim-lee-recruiter.jpeg"));
+  assert.match(recruiter, /portraitSrc="\/shyheim-lee-recruiter-headshot-1080.jpg"/);
+  assert.ok(fs.existsSync("public/shyheim-lee-recruiter-headshot-1080.jpg"));
   assert.match(actions, /Download Profile/);
   assert.ok(!source.includes("FMVA"));
   assert.ok(!source.includes(">SIE<"));
@@ -360,7 +357,7 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
     "Home",
     "Equity Research",
     "Valuation Lab",
-    "Transaction Intelligence",
+    "Klyro",
     "Portfolio Lab",
     "Analyst Journal",
     "Recruiter View",
@@ -414,7 +411,7 @@ test("recruiter-facing architecture documents analyst process without fabricated
   for (const pillar of [
     "Equity Research",
     "Valuation Lab",
-    "Transaction Intelligence",
+    "Klyro",
     "Portfolio Lab",
     "Analyst Journal",
     "Development Log",

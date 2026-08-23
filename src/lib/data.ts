@@ -1,12 +1,11 @@
 export type NavigationItem = { label: string; href: string };
 export const navigationItems: NavigationItem[] = [
   { label: "Home", href: "/" },
-  { label: "Klyro", href: "/klyro" },
   { label: "Equity Research", href: "/research" },
   { label: "Valuation Lab", href: "/valuation-models" },
   {
-    label: "Transaction Intelligence",
-    href: "/transaction-intelligence",
+    label: "Klyro",
+    href: "/klyro",
   },
   { label: "Portfolio Lab", href: "/portfolio" },
   { label: "Analyst Journal", href: "/analyst-journal" },

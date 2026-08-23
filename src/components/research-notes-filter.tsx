@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { formatResearchDate } from "@/lib/date";
 import type { ResearchNote } from "@/lib/research-content";
@@ -80,9 +81,9 @@ export function ResearchNotesFilter({ notes }: { notes: ResearchNote[] }) {
               <time>{formatResearchDate(note.date)}</time>
               {note.theme && <small>{note.theme}</small>}
               {note.pdfUrl && (
-                <a className="analyst-note-download" download href={note.pdfUrl}>
-                  Download PDF <span aria-hidden="true">↓</span>
-                </a>
+                <Link className="button" href={note.pdfUrl} download>
+                  Download PDF
+                </Link>
               )}
             </div>
           </article>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Score } from "@/components/site";
+import { Score } from "@/components/luna-score";
 import type { ResearchReport } from "@/lib/data";
 
 export function ExistingResearchFilter({
