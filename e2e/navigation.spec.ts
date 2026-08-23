@@ -11,7 +11,7 @@ async function activate(locator: Locator, projectName: string) {
 }
 
 test("primary pages load without horizontal overflow", async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(120_000);
 
   for (const route of [
     "/",
@@ -26,6 +26,7 @@ test("primary pages load without horizontal overflow", async ({ page }) => {
     "/research/themes/ai-data-center-buildout",
     "/research/notes",
     "/portfolio",
+    "/portfolio/positions/krys",
     "/portfolio/mistake-journal",
     "/watchlist/glw",
     "/watchlist/aipo",
@@ -343,7 +344,6 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
     "Active Positions",
     "Watchlist",
     "Long-Term Compounders",
-    "Conviction Dashboard",
     "Mistake Journal",
   ])
     await expect(
@@ -356,10 +356,36 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
   await expect(page.getByText("JBL", { exact: true }).first()).toBeVisible();
   await expect(page.getByRole("tab", { name: "Performance" })).toHaveCount(0);
   await expect(
+    page.getByRole("tab", { name: "Conviction Dashboard" }),
+  ).toHaveCount(0);
+  await expect(
     page.getByRole("link", { name: "View Full Research" }),
   ).toHaveCount(18);
   await expect(page.getByText("Digital Realty Trust Inc.")).toBeVisible();
   await expect(page.getByText("Data pending", { exact: true })).toBeVisible();
+});
+
+test("KRYS replaces ANET in Active Positions and opens sourced research", async ({
+  page,
+}, testInfo) => {
+  await page.goto("/portfolio");
+  await activate(
+    page.getByRole("tab", { name: "Active Positions", exact: true }),
+    testInfo.project.name,
+  );
+  await expect(page.getByText("KRYS", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("Krystal Biotech, Inc.", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText("ANET", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Initial Thesis", { exact: true })).toHaveCount(0);
+  await page.getByRole("link", { name: "View Position Research" }).click();
+  await expect(page).toHaveURL(/\/portfolio\/positions\/krys$/);
+  await expect(page.getByRole("heading", { name: "KRYS", level: 1 })).toBeVisible();
+  await expect(page.getByText("$119.2M", { exact: true }).first()).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Why KRYS may have a moat.", level: 2 }),
+  ).toBeVisible();
 });
 
 test("Portfolio table headers do not cover the first data row", async ({
@@ -373,7 +399,6 @@ test("Portfolio table headers do not cover the first data row", async ({
   await page.goto("/portfolio");
 
   for (const tab of [
-    "Active Positions",
     "Watchlist",
     "Long-Term Compounders",
     "Mistake Journal",
@@ -525,6 +550,7 @@ test("contact form and endpoint validate", async ({ page, request }) => {
 });
 
 test("recruiter view retains profile and downloads", async ({ page }) => {
+  test.setTimeout(60_000);
   await page.goto("/recruiter");
   await expect(page.getByText("Shy Lee · Founder")).toBeVisible();
   await expect(

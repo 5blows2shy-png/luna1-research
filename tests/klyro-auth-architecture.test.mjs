@@ -1,0 +1,18 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import test from "node:test";
+const auth = readFileSync("src/lib/klyro/authorization.ts", "utf8");
+const seed = readFileSync("src/lib/klyro/demo-seed.ts", "utf8");
+const repo = readFileSync("src/lib/klyro/demo-repository.ts", "utf8");
+const session = readFileSync("src/lib/klyro/session.ts", "utf8");
+const klyroEntry = readFileSync("src/app/klyro/page.tsx", "utf8");
+const businessesPage = readFileSync("src/app/klyro/businesses/page.tsx", "utf8");
+const migration = readFileSync("supabase/migrations/202608060001_klyro_multitenant_auth.sql", "utf8");
+test("role permissions preserve owner-only destructive controls", () => { assert.match(auth, /OWNER:.*business:delete.*ownership:transfer.*owner-security:update/s); assert.doesNotMatch(auth.match(/ACCOUNTANT: new Set\(\[([^\]]+)/s)?.[1] || "", /business:delete|ownership:transfer|owner-security:update/); assert.match(auth, /VIEWER: new Set\(\["business:read", "financial:read", "report:export"\]/); });
+test("authorization binds permission checks to user and business membership", () => { assert.match(auth, /item\.userId === userId && item\.businessId === businessId/); assert.match(auth, /throw new Error\("FORBIDDEN"\)/); });
+test("sessions are signed, expiring and cookie protections are enabled", () => { assert.match(session, /createHmac\("sha256"/); assert.match(session, /expiresAt > Date\.now/); assert.match(session, /httpOnly: true/); assert.match(session, /sameSite: "lax"/); });
+test("seed is deterministic and financially consistent", () => { assert.match(seed, /operatingCashCents: 4_285_000/); assert.match(seed, /operatingCashCents - m\.upcomingObligationsCents === m\.safeToSpendCents/); assert.match(seed, /monthlyRevenueCents - m\.cogsCents === m\.grossProfitCents/); assert.match(seed, /grossProfitCents - m\.operatingExpensesCents === m\.netIncomeCents/); assert.match(seed, /healthyInventoryCents \+ m\.slowInventoryCents \+ m\.deadInventoryCents \+ m\.excessInventoryCents === m\.inventoryCostCents/); });
+test("demo reset is development, owner permission, and demo guarded", () => { assert.match(repo, /NODE_ENV === "production"/); assert.match(repo, /requireDemoPermission\(userId, "demo:reset"\)/); assert.match(repo, /if \(!demo\.isDemo\)/); assert.match(repo, /demo = createHarborSupplyDemo\(\)/); });
+test("demo external effects are denied", () => { assert.match(repo, /demoExternalActionAllowed/); assert.match(repo, /return false/); for (const action of ["SEND_INVOICE","SEND_EMAIL","TRANSFER","PAYMENT","BANK_WRITE","QUICKBOOKS_WRITE","INVITE"]) assert.match(repo, new RegExp(action)); });
+test("database enforces business tenant isolation with RLS", () => { assert.match(migration, /business_id uuid not null/g); assert.match(migration, /enable row level security/g); assert.match(migration, /m\.business_id=klyro_financial_records\.business_id and m\.user_id=auth\.uid\(\)/); });
+test("authenticated clients skip advertising and enter the business workspace", () => { assert.match(klyroEntry, /if \(await readSession\(\)\) redirect\("\/klyro\/businesses"\)/); assert.doesNotMatch(klyroEntry, /KlyroAd|luna-books-ad/); assert.doesNotMatch(businessesPage, /KlyroAd|luna-books-ad|advertisement/); assert.match(businessesPage, /Secure business workspace/); });

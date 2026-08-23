@@ -60,6 +60,7 @@ export type ResearchNote = {
   date: string;
   summary: string;
   sourceLinks: Array<{ label: string; href: string }>;
+  pdfUrl?: string;
 };
 
 const pendingMetrics = [
@@ -472,7 +473,53 @@ const researchNoteSeeds: Array<
 
 export const researchNotes: ResearchNote[] = researchNoteSeeds.map(
   ([slug, title, category, ticker, theme]) =>
-    slug === "be-project-economics"
+    slug === "ry-credit-cycle"
+      ? {
+          slug,
+          title,
+          category: category as ResearchNote["category"],
+          ticker,
+          theme,
+          status: "Published" as const,
+          date: "August 21, 2026",
+          summary:
+            "A sourced credit-cycle review of Royal Bank of Canada focused on provision trends, impaired-loan migration, mortgage exposure, capital resilience, and the evidence required before treating current profitability as through-cycle earnings power.",
+          sourceLinks: [
+            {
+              label: "RBC Q2 2026 Report to Shareholders",
+              href: "https://www.rbc.com/investor-relations/_assets-custom/pdf/2026q2_report.pdf",
+            },
+            {
+              label: "RBC 2025 Annual Report",
+              href: "https://www.rbc.com/investor-relations/_assets-custom/pdf/ar_2025_e.pdf",
+            },
+          ],
+          pdfUrl: "/reports/RY-Luna1-Analyst-Journal.pdf",
+        }
+      : slug === "glw-optical-demand"
+        ? {
+            slug,
+            title,
+            category: category as ResearchNote["category"],
+            ticker,
+            theme,
+            status: "Published" as const,
+            date: "August 21, 2026",
+            summary:
+              "A sourced monitoring note connecting Corning's Q2 2026 Optical Communications growth to AI data-center demand while separating reported segment evidence from the capacity, customer-concentration, margin, and cash-conversion questions that remain open.",
+            sourceLinks: [
+              {
+                label: "Corning Q2 2026 financial results",
+                href: "https://investor.corning.com/news-and-events/news/news-details/2026/Cornings-Strong-Second-Quarter-2026-Financial-Results1-Demonstrate-Progress-on-Recently-Upgraded-Springboard-Plan/default.aspx",
+              },
+              {
+                label: "Corning SEC filings",
+                href: "https://investor.corning.com/investor-relations/financials/sec-filings/default.aspx",
+              },
+            ],
+            pdfUrl: "/reports/GLW-Luna1-Analyst-Journal.pdf",
+          }
+        : slug === "be-project-economics"
       ? {
           slug,
           title,
@@ -489,6 +536,7 @@ export const researchNotes: ResearchNote[] = researchNoteSeeds.map(
               href: "https://investor.bloomenergy.com/press-releases/press-release-details/2026/Bloom-Energy-Reports-Record-First-Quarter-2026-Results-and-Raises-Full-Year-2026-Guidance/default.aspx",
             },
           ],
+          pdfUrl: "/reports/BE-Luna1-Analyst-Journal.pdf",
         }
       : {
           slug,

@@ -41,13 +41,17 @@ test("research content uses typed centralized records", () => {
 
 test("incomplete research is labeled without fabricated data or PDFs", () => {
   const data = fs.readFileSync("src/lib/research-content.ts", "utf8");
+  const companyRecords = data.slice(
+    data.indexOf("export const companyResearch"),
+    data.indexOf("export const investmentThemes"),
+  );
   const page = fs.readFileSync(
     "src/app/research/companies/[ticker]/page.tsx",
     "utf8",
   );
   assert.match(data, /Data pending update/);
   assert.match(data, /Date to be confirmed/);
-  assert.doesNotMatch(data, /pdfUrl:/);
+  assert.doesNotMatch(companyRecords, /pdfUrl:/);
   assert.match(page, /Full research report in development\./);
   assert.match(page, /company\.pdfUrl/);
 });

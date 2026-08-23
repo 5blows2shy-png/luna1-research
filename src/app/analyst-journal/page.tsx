@@ -43,8 +43,8 @@ export default function AnalystJournalPage() {
       <section>
         <SectionHeading
           eyebrow="Current notebook"
-          title="Research questions in development"
-          copy="These are research scaffolds. Primary sources, financial evidence, and final conclusions remain pending."
+          title="Research notes and open questions"
+          copy="Published entries link to sourced reports. Drafts remain clearly labeled while evidence and conclusions are still being developed."
         />
         <div className="analyst-note-ledger">
           {researchNotes.map((note) => (
@@ -62,11 +62,11 @@ export default function AnalystJournalPage() {
                   {note.status}
                 </span>
                 <small>{note.date}</small>
-                {note.slug === "be-project-economics" && (
+                {note.pdfUrl && (
                   <a
                     className="analyst-note-download"
                     download
-                    href="/reports/BE-Luna1-Analyst-Journal.pdf"
+                    href={note.pdfUrl}
                   >
                     Download PDF <span aria-hidden="true">↓</span>
                   </a>

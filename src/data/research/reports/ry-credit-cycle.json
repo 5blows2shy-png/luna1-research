@@ -1,0 +1,70 @@
+{
+  "companyName": "Royal Bank of Canada",
+  "ticker": "RY",
+  "reportTitle": "Framing Credit-Cycle Questions",
+  "reportType": "Analyst Journal Research Note",
+  "lastUpdated": "August 21, 2026",
+  "reviewed": true,
+  "sections": [
+    {
+      "title": "Research purpose",
+      "paragraphs": [
+        "This note does not assign a rating or price target. It frames the evidence needed to distinguish a strong reported quarter from durable through-cycle earning power at Royal Bank of Canada.",
+        "The latest officially verified period used here is the quarter ended April 30, 2026. RBC's fiscal third-quarter results were scheduled for August 27, 2026 and were not available as of this note's preparation date. All financial amounts are Canadian dollars unless stated otherwise."
+      ]
+    },
+    {
+      "title": "What RBC reported",
+      "paragraphs": [
+        "RBC reported Q2 2026 net income of C$5.509 billion, diluted EPS of C$3.85, total revenue of C$17.453 billion, and return on common equity of 17.2%. Net income increased 25% from the prior-year quarter, while the reported CET1 ratio was 13.5%.",
+        "Total provision for credit losses was C$912 million. PCL on loans was 35 basis points of average net loans and acceptances, versus 41 basis points in Q1 2026 and 58 basis points in Q2 2025. The improvement was driven largely by lower performing-loan provisions; PCL on impaired loans was 34 basis points, only one basis point below the prior-year quarter.",
+        "Reported gross impaired loans rose to C$9.790 billion from C$9.167 billion at January 31, 2026. The gross-impaired-loan ratio increased to 0.90% from 0.86%. Total allowance for credit losses was C$7.819 billion, including C$5.487 billion against performing loans and C$2.317 billion against impaired loans."
+      ]
+    },
+    {
+      "title": "Credit-cycle interpretation",
+      "paragraphs": [
+        "The headline decline in provisions is encouraging but should not be read in isolation. The prior-year comparison included elevated performing-loan provisions related to trade disruptions, while impaired-loan provisions increased year over year. A portfolio-manager view therefore separates reserve-model changes from actual borrower migration and loss emergence.",
+        "The main tension is that current earnings and capital remain strong while gross impaired loans continue to rise. Q2 gross impaired loans increased in Capital Markets and Wealth Management, including U.S. Wealth Management and City National, and also rose modestly in Personal Banking and Commercial Banking. The key question is whether impaired balances stabilize before charge-offs and impaired-loan provisions pressure returns."
+      ]
+    },
+    {
+      "title": "Mortgage and consumer questions",
+      "paragraphs": [
+        "RBC reported C$461.384 billion of Canadian residential mortgages at April 30, 2026, of which 81% were uninsured. The total Personal Banking - Canada residential mortgage portfolio had a reported average loan-to-value ratio of 62%, while 72% of the total mortgage portfolio had a remaining amortization of 25 years or less.",
+        "Questions for monitoring: How do Canadian mortgage delinquencies, renewals, impaired balances, and loss rates change as borrowers refinance? Does the portfolio's average loan-to-value protection remain effective in weaker housing markets? Are credit-card and personal-loan losses normalizing or moving above management assumptions? Which borrower cohorts account for Stage 2 migration?"
+      ]
+    },
+    {
+      "title": "Commercial and U.S. credit questions",
+      "paragraphs": [
+        "Commercial Banking gross impaired loans were C$3.486 billion and represented 1.78% of related loans and acceptances. Management attributed the sequential increase mainly to the small-business portfolio. Capital Markets gross impaired loans rose C$321 million sequentially, with pressure in real estate and related exposures, forest products, and consumer discretionary sectors.",
+        "Questions for monitoring: Which industries and geographies are driving new impaired loans? How concentrated are criticized exposures? How much collateral protection exists after stressed valuations? At City National, do retail, commercial-real-estate, and other criticized portfolios require additional reserves or capital? Are recoveries and cures keeping pace with new impairments?"
+      ]
+    },
+    {
+      "title": "Capital and earnings resilience",
+      "paragraphs": [
+        "The 13.5% CET1 ratio and 126% liquidity coverage ratio indicate substantial reported capital and liquidity resources, but the CET1 ratio declined 20 basis points sequentially. RBC returned C$4.0 billion to shareholders during the quarter through dividends and share repurchases.",
+        "The monitoring question is not simply whether capital exceeds regulatory requirements. It is whether internal capital generation can fund loan growth, absorb a less favorable credit mix, support integration and technology investment, and sustain distributions without weakening the balance sheet. Sustainable return on equity should be assessed after normalizing provisions rather than extrapolating a low performing-loan provision quarter."
+      ]
+    },
+    {
+      "title": "Thesis monitoring framework",
+      "pageBreak": true,
+      "paragraphs": [
+        "Evidence that would strengthen the view: stable or declining gross impaired loans; impaired-loan provisions contained near current levels; reserve coverage that remains adequate as risk migrates; CET1 supported by internal capital generation; and diversified revenue growth that produces positive operating leverage without higher risk appetite.",
+        "Evidence that would weaken the view: rising gross impaired loans across multiple businesses; accelerating charge-offs or impaired-loan provisions; material reserve additions; deteriorating Canadian mortgage or small-business performance; renewed City National credit pressure; or capital returns that outpace internally generated capital.",
+        "Quarterly scorecard: PCL on performing and impaired loans; gross impaired loans and GIL ratio; allowance coverage; Personal and Commercial Banking credit trends; City National and Capital Markets criticized exposures; CET1; return on equity; and pre-provision, pre-tax earnings. Status: Under Review."
+      ]
+    },
+    {
+      "title": "Primary sources and limitations",
+      "paragraphs": [
+        "Royal Bank of Canada, Q2 2026 Report to Shareholders, published May 28, 2026, quarter ended April 30, 2026. Relevant sections: financial highlights, credit quality performance, residential mortgages, allowance for credit losses, and capital management. https://www.rbc.com/investor-relations/_assets-custom/pdf/2026q2_report.pdf",
+        "Royal Bank of Canada, 2025 Annual Report, fiscal year ended October 31, 2025. Relevant sections: risk management, loans and allowance for credit losses, and capital. https://www.rbc.com/investor-relations/_assets-custom/pdf/ar_2025_e.pdf",
+        "This note uses company-reported data and Luna1 interpretation. It does not include real-time market data, a valuation output, or an investment recommendation. Credit outcomes may differ materially from reported allowances and current trends."
+      ]
+    }
+  ]
+}

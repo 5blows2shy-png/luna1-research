@@ -18,14 +18,14 @@ export default function ResearchNotesPage() {
       <PageHeader
         kicker="Research · Notes"
         title="Questions and observations before a full conclusion."
-        description="Working notes make the research path visible. Draft status means the evidence, sourcing, and final assessment remain incomplete."
+        description="Published notes make the sourced research path visible. Draft status identifies entries whose evidence, sourcing, or final assessment remains incomplete."
       />
       <section>
         <ResearchSectionNav />
         <SectionHeading
           eyebrow="Working notebook"
           title="Filter by category, ticker, or theme"
-          copy="These entries are research scaffolds, not completed reports or investment recommendations."
+          copy="Published entries include sourced downloadable reports. Drafts remain research scaffolds, and no entry is a personalized investment recommendation."
         />
         <ResearchNotesFilter notes={researchNotes} />
       </section>

@@ -79,6 +79,11 @@ export function ResearchNotesFilter({ notes }: { notes: ResearchNote[] }) {
               </span>
               <time>{formatResearchDate(note.date)}</time>
               {note.theme && <small>{note.theme}</small>}
+              {note.pdfUrl && (
+                <a className="analyst-note-download" download href={note.pdfUrl}>
+                  Download PDF <span aria-hidden="true">↓</span>
+                </a>
+              )}
             </div>
           </article>
         ))}

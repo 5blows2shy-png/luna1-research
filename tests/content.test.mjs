@@ -40,6 +40,10 @@ test("public source excludes private contact details", () => {
     "src/app/api/contact/route.ts",
   ];
   const source = files.map((path) => fs.readFileSync(path, "utf8")).join("\n");
+  const sourceWithoutApprovedOrganization = source.replaceAll(
+    "CFA Society San Diego Student Member",
+    "CFA Society Student Member",
+  );
   for (const forbidden of [
     "leeshyheim@yahoo.com",
     "mailto:",
@@ -48,7 +52,10 @@ test("public source excludes private contact details", () => {
     "San Diego",
     "(302) 344-9724",
   ])
-    assert.ok(!source.includes(forbidden), `found private value: ${forbidden}`);
+    assert.ok(
+      !sourceWithoutApprovedOrganization.includes(forbidden),
+      `found private value: ${forbidden}`,
+    );
 });
 
 test("contact delivery stays server-side and includes abuse controls", () => {
@@ -140,29 +147,21 @@ test("market commentary is hidden without deleting its archived routes", () => {
 
 test("portfolio reflects approved public positions", () => {
   const source = fs.readFileSync("src/app/portfolios/page.tsx", "utf8").replace(/\s+/g, "");
-  const activeSource = source.slice(
-    source.indexOf("constactivePositions"),
-    source.indexOf("constcoreAllocation"),
-  );
+  const activeSource = fs
+    .readFileSync("src/data/portfolio/active-positions.ts", "utf8")
+    .replace(/\s+/g, "");
   for (const ticker of ["WWD", "AMAT", "GS", "PDFS"])
     assert.ok(
       !activeSource.includes(`ticker:\"${ticker}\"`),
       `${ticker} remains active`,
     );
-  for (const [ticker, price] of [
-    ["CASY", "824.0"],
-    ["PANW", "272.54"],
-    ["WELL", "237.21"],
-  ]) {
+  for (const ticker of ["CASY", "PANW", "WELL", "KRYS"]) {
     assert.ok(
       activeSource.includes(`ticker:\"${ticker}\"`),
       `${ticker} is missing`,
     );
-    assert.ok(
-      activeSource.includes(`entryPrice:${price}`),
-      `${ticker} entry price is missing`,
-    );
   }
+  assert.ok(!activeSource.includes('ticker:\"ANET\"'), "ANET remains active");
   for (const heading of [
     "Shares",
     "Cost basis",
@@ -171,6 +170,7 @@ test("portfolio reflects approved public positions", () => {
   ])
     assert.ok(!source.includes(`<th>${heading}</th>`));
   assert.ok(!source.includes("Closed Positions"));
+  assert.ok(!source.includes("Initialthesis"));
   assert.match(source, /ticker:"AAPL"/);
 });
 
@@ -340,6 +340,11 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
   assert.ok(fs.existsSync("public/shyheim-lee-recruiter.jpeg"));
   assert.match(actions, /Download Profile/);
   assert.ok(!source.includes("FMVA"));
+  assert.ok(!source.includes(">SIE<"));
+  assert.match(source, /CFA Level I/);
+  assert.match(source, /Planned · August 2027/);
+  assert.match(source, /CFA Society San Diego Student Member/);
+  assert.match(source, /2026–Present/);
   assert.match(source, /Microsoft Excel<\/b>\s*<span>\s*Completed/);
   for (const file of [
     "public/downloads/shy-lee-resume.pdf",
@@ -402,6 +407,10 @@ test("recruiter-facing architecture documents analyst process without fabricated
     "src/app/portfolios/page.tsx",
     "utf8",
   );
+  const positionData = fs.readFileSync(
+    "src/data/portfolio/active-positions.ts",
+    "utf8",
+  );
   for (const pillar of [
     "Equity Research",
     "Valuation Lab",
@@ -426,15 +435,16 @@ test("recruiter-facing architecture documents analyst process without fabricated
   assert.match(recruiter, /Why hire me\?/);
   assert.match(recruiter, /Luna1 is a professional research portfolio/);
   for (const field of [
-    "purchaseDate",
-    "valuation",
-    "positionSize",
-    "thesisStatus",
+    "positionType",
+    "keyFundamentals",
+    "competitiveAdvantage",
+    "growthDrivers",
+    "watching",
+    "thesisInvalidation",
     "whatChanged",
   ])
-    assert.ok(portfolio.includes(field), `missing portfolio field: ${field}`);
-  assert.match(portfolio, /Date pending verification/);
-  assert.match(portfolio, /Not publicly disclosed/);
+    assert.ok(positionData.includes(field), `missing portfolio field: ${field}`);
+  assert.doesNotMatch(portfolio, /Initial Thesis/i);
 });
 
 test("retired expanded sections are absent and Mistake Journal belongs to Portfolio", () => {

@@ -5,22 +5,9 @@ import { useState, type KeyboardEvent } from "react";
 import { MistakeJournal } from "@/components/mistake-journal";
 import { ResearchCoverageGrid } from "@/components/research/research-coverage-grid";
 import { PageHeader, SectionHeading } from "@/components/site";
+import { activePositions } from "@/data/portfolio/active-positions";
 import { watchlist } from "@/lib/watchlist-data";
 
-type ActivePosition = {
-  ticker: string;
-  company: string;
-  purchaseDate: string;
-  entryPrice: number;
-  thesis: string;
-  valuation: string;
-  positionSize: string;
-  risk: string;
-  exitRule: string;
-  status: string;
-  thesisStatus: "Thesis confirmed" | "Thesis weakened" | "Thesis broken";
-  whatChanged: string;
-};
 type Holding = {
   ticker: string;
   company: string;
@@ -29,63 +16,6 @@ type Holding = {
   type: string;
   horizon: string;
 };
-
-const activePositions: ActivePosition[] = [
-  {
-    ticker: "CASY",
-    company: "Casey's General Stores Inc.",
-    purchaseDate: "Date pending verification",
-    entryPrice: 824.0,
-    thesis:
-      "Casey’s is a high-quality retail compounder built around convenience stores, fuel, prepared food, and an efficient distribution network. Management plans to add at least 400 stores over fiscal 2027–2029 through acquisitions and new construction, expanding a system that already serves nearly 3,000 locations. The company can improve acquired stores by connecting them to Casey’s purchasing, distribution, prepared-food, and loyalty infrastructure, while the successful CEFCO integration demonstrates management’s ability to execute this strategy. My thesis remains intact while new locations produce profitable growth, prepared-food sales expand, and EBITDA and returns on invested capital continue improving.",
-    risk: "Medium",
-    valuation:
-      "Formal valuation range is still being documented; no public estimate is presented.",
-    positionSize: "Not publicly disclosed",
-    exitRule:
-      "Exit if profitable store growth, prepared-food expansion, EBITDA, or returns on invested capital materially deteriorate.",
-    status: "Monitoring",
-    thesisStatus: "Thesis confirmed",
-    whatChanged:
-      "No thesis-breaking change is documented. Store growth, prepared-food performance, EBITDA, and returns on invested capital remain the monitoring priorities.",
-  },
-  {
-    ticker: "PANW",
-    company: "Palo Alto Networks Inc.",
-    purchaseDate: "Date pending verification",
-    entryPrice: 272.54,
-    thesis:
-      "Palo Alto Networks is a cybersecurity leader benefiting from enterprise demand for integrated security platforms and AI-related security products. Fiscal Q3 2026 revenue grew 31% to approximately $3.0 billion, while remaining performance obligations increased 36% to $18.4 billion, providing strong visibility into future contracted revenue. Its platformization strategy, recurring revenue base, and high customer switching costs support durable growth as companies consolidate multiple security tools onto fewer strategic vendors. My thesis remains intact while recurring security revenue, customer commitments, free cash flow, and the Stage 2 price trend continue advancing.",
-    risk: "Medium",
-    valuation:
-      "Formal valuation range is still being documented; no public estimate is presented.",
-    positionSize: "Not publicly disclosed",
-    exitRule:
-      "Exit if recurring security revenue, customer commitments, free cash flow, or the Stage 2 price trend materially deteriorate.",
-    status: "Monitoring",
-    thesisStatus: "Thesis confirmed",
-    whatChanged:
-      "No thesis-breaking change is documented. Recurring security revenue, customer commitments, free cash flow, and price structure remain the monitoring priorities.",
-  },
-  {
-    ticker: "WELL",
-    company: "Welltower Inc.",
-    purchaseDate: "Date pending verification",
-    entryPrice: 237.21,
-    thesis:
-      "Welltower is a healthcare real estate compounder benefiting from rising senior-housing demand, limited new supply, and improving property-level economics. In Q1 2026, normalized FFO per share grew 23% year over year to $1.47, while its senior housing operating portfolio produced 22.1% same-store NOI growth and 370 basis points of occupancy improvement. Revenue per occupied room increased 5%, expenses per occupied room rose only 0.4%, and operating margins expanded by 320 basis points, demonstrating meaningful operating leverage. My thesis remains intact while occupancy, normalized FFO, same-store NOI, and returns from new investment activity continue growing.",
-    risk: "Medium",
-    valuation:
-      "Formal valuation range is still being documented; no public estimate is presented.",
-    positionSize: "Not publicly disclosed",
-    exitRule:
-      "Exit if occupancy, normalized FFO, same-store NOI, or returns from new investment activity materially deteriorate.",
-    status: "Monitoring",
-    thesisStatus: "Thesis confirmed",
-    whatChanged:
-      "No thesis-breaking change is documented. Occupancy, normalized FFO, same-store NOI, and returns on new investment activity remain the monitoring priorities.",
-  },
-];
 
 const coreAllocation: Holding[] = [
   {
@@ -188,7 +118,6 @@ const tabs = [
   "Active Positions",
   "Watchlist",
   "Long-Term Compounders",
-  "Conviction Dashboard",
   "Mistake Journal",
 ] as const;
 type PortfolioTab = (typeof tabs)[number];
@@ -232,6 +161,99 @@ function HoldingsTable({ title, items }: { title: string; items: Holding[] }) {
           </tbody>
         </table>
       </div>
+    </div>
+  );
+}
+
+function ActivePositionCards() {
+  return (
+    <div className="active-position-stack">
+      <div className="placeholder-banner">
+        Position research is manually maintained and may be delayed. Financial
+        metrics are labeled by source type and are not real-time market data.
+      </div>
+      {activePositions.map((position) => (
+        <article className="active-position-card" key={position.ticker}>
+          <header>
+            <div>
+              <span className="portfolio-ticker">{position.ticker}</span>
+              <h2>{position.company}</h2>
+              <p>
+                {position.sector} · {position.industry}
+              </p>
+            </div>
+            <span
+              className="status"
+              data-status={position.status.toLowerCase().replaceAll(" ", "-")}
+            >
+              {position.status}
+            </span>
+          </header>
+          {position.previewMetrics && (
+            <div className="position-preview-metrics">
+              {position.previewMetrics.map((metric) => (
+                <div key={metric.label}>
+                  <small>{metric.label}</small>
+                  <strong>{metric.value}</strong>
+                </div>
+              ))}
+            </div>
+          )}
+          <div className="active-position-body">
+            <section>
+              <span className="eyebrow">Position Thesis</span>
+              <p>{position.thesis}</p>
+            </section>
+            <section>
+              <span className="eyebrow">Position Type</span>
+              <p>{position.positionType}</p>
+            </section>
+            <section>
+              <span className="eyebrow">Key Fundamentals</span>
+              <ul>
+                {position.keyFundamentals.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </section>
+            <section>
+              <span className="eyebrow">Competitive Advantage</span>
+              <p>{position.competitiveAdvantage}</p>
+            </section>
+            <section>
+              <span className="eyebrow">Growth Drivers</span>
+              <ul>
+                {position.growthDrivers.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </section>
+            <section>
+              <span className="eyebrow">What I Am Watching</span>
+              <ul>
+                {position.watching.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </section>
+            <section>
+              <span className="eyebrow">Thesis Invalidation</span>
+              <p>{position.thesisInvalidation}</p>
+            </section>
+            <section>
+              <span className="eyebrow">What Changed</span>
+              <p>{position.whatChanged}</p>
+            </section>
+          </div>
+          {position.researchHref && (
+            <footer>
+              <Link className="button primary" href={position.researchHref}>
+                View Position Research <span aria-hidden="true">→</span>
+              </Link>
+            </footer>
+          )}
+        </article>
+      ))}
     </div>
   );
 }
@@ -305,63 +327,6 @@ function Overview() {
   );
 }
 
-function ConvictionDashboard() {
-  return (
-    <div className="portfolio-overview">
-      <div className="portfolio-overview-grid">
-        <article>
-          <span className="eyebrow">Thesis discipline</span>
-          <strong>Written</strong>
-          <p>
-            Every active position includes a thesis, risk assessment, and
-            explicit exit rule.
-          </p>
-        </article>
-        <article>
-          <span className="eyebrow">Research priority</span>
-          <strong>{watchlist.length}</strong>
-          <p>
-            Watchlist candidates remain under review until evidence, valuation,
-            and structure align.
-          </p>
-        </article>
-        <article>
-          <span className="eyebrow">Decision reviews</span>
-          <strong>1</strong>
-          <p>
-            Completed decisions are reviewed and converted into repeatable
-            portfolio rules.
-          </p>
-        </article>
-      </div>
-      <div
-        className="allocation-ledger"
-        aria-label="Illustrative conviction framework"
-      >
-        <div>
-          <span>Business evidence</span>
-          <b>Primary</b>
-          <i style={{ width: "82%" }} />
-        </div>
-        <div>
-          <span>Valuation and structure</span>
-          <b>Confirming</b>
-          <i style={{ width: "64%" }} />
-        </div>
-        <div>
-          <span>Risk and invalidation</span>
-          <b>Explicit</b>
-          <i style={{ width: "72%" }} />
-        </div>
-        <small>
-          Framework visualization only · not a recommendation or real-time
-          brokerage signal
-        </small>
-      </div>
-    </div>
-  );
-}
-
 export default function Portfolios() {
   const [activeTab, setActiveTab] = useState<PortfolioTab>("Overview");
 
@@ -388,7 +353,7 @@ export default function Portfolios() {
       <PageHeader
         kicker="Portfolio Lab"
         title="Conviction made accountable."
-        description="Positions and decision reviews are organized around the initial thesis, valuation work, position role, explicit risk, exit criteria, current thesis status, and what changed."
+        description="Positions and decision reviews are organized around the position thesis, operating evidence, competitive advantage, explicit risk, thesis invalidation, and what changed."
       />
       <section>
         <div
@@ -419,80 +384,7 @@ export default function Portfolios() {
           aria-labelledby={`tab-${activeTab.toLowerCase().replaceAll(" ", "-")}`}
         >
           {activeTab === "Overview" && <Overview />}
-          {activeTab === "Active Positions" && (
-            <div className="table-wrap">
-              <table className="active-positions-table">
-                <caption>
-                  Active positions · process fields are manually maintained and
-                  incomplete values are explicitly labeled
-                </caption>
-                <thead>
-                  <tr>
-                    <th>Ticker / Company</th>
-                    <th>Purchase date</th>
-                    <th>Entry price</th>
-                    <th>Initial thesis</th>
-                    <th>Valuation</th>
-                    <th>Position size</th>
-                    <th>Risk factors</th>
-                    <th>Exit criteria</th>
-                    <th>Current status</th>
-                    <th>What changed?</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {activePositions.map((position) => (
-                    <tr key={position.ticker}>
-                      <td data-label="Ticker / Company">
-                        <b className="portfolio-ticker">{position.ticker}</b>
-                        <small className="company-under">
-                          {position.company}
-                        </small>
-                      </td>
-                      <td data-label="Purchase date">
-                        {position.purchaseDate}
-                      </td>
-                      <td data-label="Entry price">
-                        ${position.entryPrice.toFixed(2)}
-                      </td>
-                      <td
-                        data-label="Initial thesis"
-                        className="portfolio-copy"
-                      >
-                        {position.thesis}
-                      </td>
-                      <td data-label="Valuation" className="portfolio-copy">
-                        {position.valuation}
-                      </td>
-                      <td data-label="Position size">
-                        {position.positionSize}
-                      </td>
-                      <td data-label="Risk factors">{position.risk}</td>
-                      <td data-label="Exit criteria" className="portfolio-copy">
-                        {position.exitRule}
-                      </td>
-                      <td data-label="Current status">
-                        <span
-                          className="status"
-                          data-status={position.status
-                            .toLowerCase()
-                            .replaceAll(" ", "-")}
-                        >
-                          {position.status}
-                        </span>
-                        <small className="thesis-status">
-                          {position.thesisStatus}
-                        </small>
-                      </td>
-                      <td data-label="What changed?" className="portfolio-copy">
-                        {position.whatChanged}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+          {activeTab === "Active Positions" && <ActivePositionCards />}
           {activeTab === "Long-Term Compounders" && (
             <div className="holdings-stack">
               <HoldingsTable
@@ -591,7 +483,6 @@ export default function Portfolios() {
               <ResearchCoverageGrid />
             </div>
           )}
-          {activeTab === "Conviction Dashboard" && <ConvictionDashboard />}
           {activeTab === "Mistake Journal" && <MistakeJournal />}
         </div>
       </section>
@@ -603,7 +494,7 @@ export default function Portfolios() {
         <div className="category-grid">
           <div className="category-card">
             <span>01</span>
-            <h3>Initial thesis</h3>
+            <h3>Position thesis</h3>
             <p>Write the business change and expected evidence before entry.</p>
           </div>
           <div className="category-card">
