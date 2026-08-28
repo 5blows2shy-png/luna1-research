@@ -122,13 +122,19 @@ test("resume reflects the current investment-focused source document", () => {
     "Data Center Operations Technician / NOC Technician",
     "VMware virtualized environments",
     "more than $10 million",
-    "Advanced Finance Coursework",
-    "Aztec Investment Fund – Equity Research &amp; Portfolio Management",
+    "Investment Organizations &amp; Applied Experience",
+    "Aztec Investment Fund (AIF)",
+    "Student-managed investment fund focused on equity research, valuation, portfolio analysis, and investment decision-making.",
     "Financial statement analysis",
     "Budgeting and forecasting",
     "Account reconciliation",
   ])
     assert.ok(resume.includes(content), `missing resume content: ${content}`);
+  for (const retiredLabel of ["AIF Coursework", "Advanced Finance Coursework"])
+    assert.ok(
+      !resume.includes(retiredLabel),
+      `retired AIF label remains: ${retiredLabel}`,
+    );
   for (const privateValue of ["(302) 344-9724", "leeshyheim@yahoo.com"])
     assert.ok(
       !resume.includes(privateValue),
@@ -337,6 +343,15 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
   assert.ok(fs.existsSync("public/shyheim-lee-recruiter-headshot-1080.jpg"));
   assert.match(actions, /Download Profile/);
   assert.ok(!source.includes("FMVA"));
+  assert.match(
+    source,
+    /Bloomberg Market Concepts[\s\S]*?shy-lee-bloomberg-market-concepts-certificate\.pdf/,
+  );
+  assert.ok(
+    fs.existsSync(
+      "public/downloads/shy-lee-bloomberg-market-concepts-certificate.pdf",
+    ),
+  );
   assert.ok(!source.includes(">SIE<"));
   assert.match(source, /CFA Level I/);
   assert.match(source, /Planned · August 2027/);

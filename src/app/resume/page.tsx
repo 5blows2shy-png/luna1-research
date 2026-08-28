@@ -283,8 +283,12 @@ export function ResumeContent({
             <p>Associate of Science in Business Administration · 2024</p>
           </div>
           <div className="credential">
-            <b>Advanced Finance Coursework</b>
-            <p>Aztec Investment Fund – Equity Research &amp; Portfolio Management</p>
+            <b>Investment Organizations &amp; Applied Experience</b>
+            <span>Aztec Investment Fund (AIF)</span>
+            <p>
+              Student-managed investment fund focused on equity research,
+              valuation, portfolio analysis, and investment decision-making.
+            </p>
           </div>
         </div>
         <div id="certifications">
@@ -297,7 +301,16 @@ export function ResumeContent({
             </div>
             <div>
               <b>Bloomberg Market Concepts</b>
-              <span>Completed</span>
+              <span>
+                Completed ·{" "}
+                <a
+                  href="/downloads/shy-lee-bloomberg-market-concepts-certificate.pdf"
+                  download
+                  aria-label="Download Bloomberg Market Concepts certificate (PDF)"
+                >
+                  Certificate ↓
+                </a>
+              </span>
             </div>
             <div>
               <b>Microsoft Excel</b>
