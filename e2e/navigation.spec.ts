@@ -484,14 +484,16 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
     page.getByRole("tab", { name: "Active Positions" }),
     testInfo.project.name,
   );
-  const anetRow = page.locator('.active-position-card[data-symbol="ANET"]');
+  const anetRow = page.locator(
+    '.active-positions-table tr[data-symbol="ANET"]',
+  );
   await expect(anetRow).toHaveCount(1);
   await expect(anetRow.getByText("Monitoring", { exact: true })).toBeVisible();
   await expect(
     anetRow.getByText(/ANET moved from the Watchlist into Active Positions/),
   ).toBeVisible();
   await expect(
-    page.locator('.active-position-card[data-symbol="PANW"]'),
+    page.locator('.active-positions-table tr[data-symbol="PANW"]'),
   ).toHaveCount(0);
   await expect(anetRow.getByText("Entry price", { exact: true })).toHaveCount(0);
   await expect(anetRow.getByText("Research needed")).toHaveCount(0);
@@ -541,13 +543,17 @@ test("KRYS joins ANET in Active Positions and opens sourced research", async ({
     page.getByRole("tab", { name: "Active Positions", exact: true }),
     testInfo.project.name,
   );
-  const krysPosition = page.locator('.active-position-card[data-symbol="KRYS"]');
+  const krysPosition = page.locator(
+    '.active-positions-table tr[data-symbol="KRYS"]',
+  );
   await expect(krysPosition.locator(".portfolio-ticker")).toHaveText("KRYS");
   await expect(
     page.getByText("Krystal Biotech, Inc.", { exact: true }),
   ).toBeVisible();
   await expect(
-    page.locator('.active-position-card[data-symbol="ANET"] .portfolio-ticker'),
+    page.locator(
+      '.active-positions-table tr[data-symbol="ANET"] .portfolio-ticker',
+    ),
   ).toHaveText("ANET");
   await expect(page.getByText("Initial Thesis", { exact: true })).toHaveCount(0);
   await krysPosition.getByRole("link", { name: "View Position Research" }).click();

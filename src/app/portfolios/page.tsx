@@ -195,100 +195,114 @@ function HoldingsTable({ title, items }: { title: string; items: Holding[] }) {
   );
 }
 
-function ActivePositionCards() {
+function ActivePositionsTable() {
   return (
-    <div className="active-position-stack">
+    <div className="active-positions-ledger">
       <div className="placeholder-banner">
         Position research is manually maintained and may be delayed. Financial
         metrics are labeled by source type and are not real-time market data.
       </div>
-      {activePositions.map((position) => (
-        <article
-          className="active-position-card"
-          data-symbol={position.ticker}
-          key={position.ticker}
-        >
-          <header>
-            <div>
-              <span className="portfolio-ticker">{position.ticker}</span>
-              <h2>{position.company}</h2>
-              <p>
-                {position.sector} · {position.industry}
-              </p>
-              <QuoteDisplay symbol={position.ticker} compact />
-            </div>
-            <span
-              className="status"
-              data-status={position.status.toLowerCase().replaceAll(" ", "-")}
-            >
-              {position.status}
-            </span>
-          </header>
-          {position.previewMetrics && (
-            <div className="position-preview-metrics">
-              {position.previewMetrics.map((metric) => (
-                <div key={metric.label}>
-                  <small>{metric.label}</small>
-                  <strong>{metric.value}</strong>
-                </div>
-              ))}
-            </div>
-          )}
-          <div className="active-position-body">
-            <section>
-              <span className="eyebrow">Position Thesis</span>
-              <p>{position.thesis}</p>
-            </section>
-            <section>
-              <span className="eyebrow">Position Type</span>
-              <p>{position.positionType}</p>
-            </section>
-            <section>
-              <span className="eyebrow">Key Fundamentals</span>
-              <ul>
-                {position.keyFundamentals.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </section>
-            <section>
-              <span className="eyebrow">Competitive Advantage</span>
-              <p>{position.competitiveAdvantage}</p>
-            </section>
-            <section>
-              <span className="eyebrow">Growth Drivers</span>
-              <ul>
-                {position.growthDrivers.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </section>
-            <section>
-              <span className="eyebrow">What I Am Watching</span>
-              <ul>
-                {position.watching.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </section>
-            <section>
-              <span className="eyebrow">Thesis Invalidation</span>
-              <p>{position.thesisInvalidation}</p>
-            </section>
-            <section>
-              <span className="eyebrow">What Changed</span>
-              <p>{position.whatChanged}</p>
-            </section>
-          </div>
-          {position.researchHref && (
-            <footer>
-              <Link className="button primary" href={position.researchHref}>
-                View Position Research <span aria-hidden="true">→</span>
-              </Link>
-            </footer>
-          )}
-        </article>
-      ))}
+      <div className="table-wrap active-positions-table-wrap">
+        <table className="active-positions-table">
+          <caption>
+            Active positions · research fields are manually maintained ·
+            educational use only
+          </caption>
+          <thead>
+            <tr>
+              <th>Ticker / Company</th>
+              <th>Market quote</th>
+              <th>Position thesis</th>
+              <th>Position type</th>
+              <th>Research evidence</th>
+              <th>What I am watching</th>
+              <th>Thesis invalidation</th>
+              <th>Status / What changed</th>
+              <th>Research</th>
+            </tr>
+          </thead>
+          <tbody>
+            {activePositions.map((position) => (
+              <tr key={position.ticker} data-symbol={position.ticker}>
+                <td data-label="Ticker / Company">
+                  <b className="portfolio-ticker">{position.ticker}</b>
+                  <small className="company-under">{position.company}</small>
+                  <small className="company-under">
+                    {position.sector} · {position.industry}
+                  </small>
+                </td>
+                <td data-label="Market quote">
+                  <QuoteDisplay symbol={position.ticker} compact />
+                </td>
+                <td data-label="Position thesis" className="portfolio-copy">
+                  {position.thesis}
+                </td>
+                <td data-label="Position type">{position.positionType}</td>
+                <td data-label="Research evidence">
+                  <div className="active-position-evidence">
+                    <strong>Key fundamentals</strong>
+                    <ul>
+                      {position.keyFundamentals.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                    <strong>Competitive advantage</strong>
+                    <p>{position.competitiveAdvantage}</p>
+                    <strong>Growth drivers</strong>
+                    <ul>
+                      {position.growthDrivers.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                    {position.previewMetrics && (
+                      <dl className="position-metrics-inline">
+                        {position.previewMetrics.map((metric) => (
+                          <div key={metric.label}>
+                            <dt>{metric.label}</dt>
+                            <dd>{metric.value}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    )}
+                  </div>
+                </td>
+                <td data-label="What I am watching">
+                  <ul className="active-position-list">
+                    {position.watching.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </td>
+                <td data-label="Thesis invalidation" className="portfolio-copy">
+                  {position.thesisInvalidation}
+                </td>
+                <td data-label="Status / What changed">
+                  <span
+                    className="status"
+                    data-status={position.status
+                      .toLowerCase()
+                      .replaceAll(" ", "-")}
+                  >
+                    {position.status}
+                  </span>
+                  <p className="active-position-change">{position.whatChanged}</p>
+                </td>
+                <td data-label="Research">
+                  {position.researchHref ? (
+                    <Link className="text-link" href={position.researchHref}>
+                      View Position Research <span aria-hidden="true">→</span>
+                    </Link>
+                  ) : (
+                    <span className="research-status-note">
+                      Research record maintained in this table
+                    </span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -419,7 +433,7 @@ export default function Portfolios() {
           aria-labelledby={`tab-${activeTab.toLowerCase().replaceAll(" ", "-")}`}
         >
           {activeTab === "Overview" && <Overview />}
-          {activeTab === "Active Positions" && <ActivePositionCards />}
+          {activeTab === "Active Positions" && <ActivePositionsTable />}
           {activeTab === "Long-Term Compounders" && (
             <div className="holdings-stack">
               <HoldingsTable
