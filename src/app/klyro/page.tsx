@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { KlyroAd } from "@/components/luna-books-ad/luna-books-ad";
+import { KlyroTourSlideshow } from "@/components/klyro-tour-slideshow";
 import { TransactionIntelligenceWorkspace } from "@/components/transaction-intelligence-workspace";
 import { KLYRO_DEMO_COOKIE, readKlyroDemoSession } from "@/lib/klyro-demo-session";
 import { readSession } from "@/lib/klyro/session";
@@ -40,6 +41,7 @@ export default async function KlyroPage() {
       </aside>
       <section aria-label="Klyro introduction"><KlyroAd /></section>
       <TransactionIntelligenceWorkspace />
+      <KlyroTourSlideshow />
     </>
   );
 }
