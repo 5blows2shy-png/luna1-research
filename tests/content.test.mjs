@@ -40,10 +40,10 @@ test("public source excludes private contact details", () => {
     "src/app/api/contact/route.ts",
   ];
   const source = files.map((path) => fs.readFileSync(path, "utf8")).join("\n");
-  const sourceWithoutApprovedOrganization = source.replaceAll(
-    "CFA Society San Diego Student Member",
-    "CFA Society Student Member",
-  );
+  const sourceWithoutApprovedPublicLocation = source
+    .replaceAll("San Diego State University", "SDSU")
+    .replaceAll("CFA Society San Diego", "CFA Society")
+    .replaceAll("San Diego, California", "Approved public city");
   for (const forbidden of [
     "leeshyheim@yahoo.com",
     "mailto:",
@@ -53,7 +53,7 @@ test("public source excludes private contact details", () => {
     "(302) 344-9724",
   ])
     assert.ok(
-      !sourceWithoutApprovedOrganization.includes(forbidden),
+      !sourceWithoutApprovedPublicLocation.includes(forbidden),
       `found private value: ${forbidden}`,
     );
 });
@@ -140,6 +140,19 @@ test("resume reflects the current investment-focused source document", () => {
       !resume.includes(privateValue),
       `found private resume value: ${privateValue}`,
     );
+});
+
+test("recruiter AIF evidence links to sanitized analytical work samples", () => {
+  const recruiter = fs.readFileSync("src/app/recruiter/page.tsx", "utf8");
+  for (const sample of [
+    ["COST Qualitative Investment Memo", "public/downloads/shy-lee-costco-qualitative-investment-memo.docx"],
+    ["Casey’s Operations & Supply Chain Analysis", "public/downloads/shy-lee-caseys-operations-supply-chain-analysis.docx"],
+  ]) {
+    assert.ok(recruiter.includes(sample[0]), `missing AIF sample label: ${sample[0]}`);
+    assert.ok(recruiter.includes(`/${sample[1].replace("public/", "")}`), `missing AIF sample link: ${sample[1]}`);
+    assert.ok(fs.existsSync(sample[1]), `missing AIF sample file: ${sample[1]}`);
+  }
+  assert.match(recruiter, /not current market data or investment advice/);
 });
 
 test("market commentary is hidden without deleting its archived routes", () => {
@@ -342,9 +355,35 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
     /Start with business change\. Test it through earnings, competitive\s+position, institutional recognition, valuation, technical structure,\s+and explicit risk rules\./,
   );
   assert.match(recruiter, /RecruiterView/);
-  assert.match(recruiter, /ResumeContent/);
-  assert.match(recruiter, /portraitSrc="\/shyheim-lee-recruiter-headshot-1080.jpg"/);
-  assert.ok(fs.existsSync("public/shyheim-lee-recruiter-headshot-1080.jpg"));
+  for (const recruiterContent of [
+    "Finance Analyst • Investment Research • FP&A",
+    "Candidate snapshot",
+    "Selected work",
+    "Finance capabilities",
+    "Applied finance experience",
+    "Investment organizations & applied experience",
+    "Finance + Operations + Technology",
+    "Career alignment",
+    "Featured research",
+    "Interested in discussing an opportunity",
+    "2 work samples",
+    "In development",
+  ])
+    assert.ok(
+      recruiter.includes(recruiterContent),
+      `missing recruiter content: ${recruiterContent}`,
+    );
+  for (const proofLink of [
+    "/research/companies/glw",
+    "/valuation-models",
+    "/klyro",
+    "/contact",
+    "/resume",
+    "linkedin.com/in/shyheim-lee",
+    "shy-lee-resume.pdf",
+    "shy-lee-bloomberg-market-concepts-certificate.pdf",
+  ])
+    assert.ok(recruiter.includes(proofLink), `missing proof link: ${proofLink}`);
   assert.match(actions, /Download Profile/);
   assert.ok(!source.includes("FMVA"));
   assert.match(
