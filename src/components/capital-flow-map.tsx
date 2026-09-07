@@ -99,18 +99,24 @@ export function CapitalFlowMap() {
 
             <div className="capital-flow-horizons" aria-label={`${theme.name} qualitative horizon`}>
               {horizonLabels.map(([label, period, key]) => (
-                <div key={label}>
+                <div
+                  className={`capital-flow-horizon capital-flow-horizon--${theme.horizons[key].toLowerCase()}`}
+                  key={label}
+                >
                   <span>{label}</span>
                   <small>{period}</small>
-                  <b>{theme.horizons[key]}</b>
+                  <b><i aria-hidden="true" />{theme.horizons[key]}</b>
                 </div>
               ))}
               <p>Qualitative research view · not a probability forecast</p>
             </div>
 
             <ol className="capital-flow-chain" aria-label={`${theme.name} capital flow chain`}>
-              {theme.flow.map((step) => (
-                <li key={step}>{step}</li>
+              {theme.flow.map((step, index) => (
+                <li key={step}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <b>{step}</b>
+                </li>
               ))}
             </ol>
 
@@ -122,7 +128,7 @@ export function CapitalFlowMap() {
 
             <div className="capital-flow-bottlenecks">
               {theme.bottlenecks.map((bottleneck) => (
-                <section key={bottleneck.name}>
+                <section className="capital-flow-bottleneck-card" key={bottleneck.name}>
                   <span className="eyebrow">Bottleneck</span>
                   <h4>{bottleneck.name}</h4>
                   <p>{bottleneck.whyItMatters}</p>
@@ -148,7 +154,7 @@ export function CapitalFlowMap() {
                   {theme.companies.map((mapping) => {
                     const company = researchCompanies.get(mapping.ticker);
                     return (
-                      <article key={mapping.ticker}>
+                    <article className="capital-flow-company-card" key={mapping.ticker}>
                         <header>
                           <span className="ticker">{mapping.ticker}</span>
                           <small>{mapping.valueChainNode}</small>
@@ -185,7 +191,7 @@ export function CapitalFlowMap() {
                 <h4>Evidence review</h4>
                 <dl>
                   {theme.evidence.map((evidence) => (
-                    <div key={evidence.type}>
+                    <div className={`capital-flow-evidence capital-flow-evidence--${evidence.status.toLowerCase().replaceAll(" ", "-")}`} key={evidence.type}>
                       <dt>{evidence.type}</dt>
                       <dd>
                         <b>{evidence.status}</b>

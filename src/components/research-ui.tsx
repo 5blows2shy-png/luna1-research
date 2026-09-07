@@ -41,7 +41,6 @@ export function ResearchSectionNav() {
       <Link href="/research#capital-flows">Capital Flows</Link>
       <Link href="/research/themes">Investment Themes</Link>
       <Link href="/research/notes">Research Notes</Link>
-      <Link href="/analyst-journal">Analyst Journal</Link>
     </nav>
   );
 }

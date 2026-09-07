@@ -145,8 +145,8 @@ test("resume reflects the current investment-focused source document", () => {
 test("recruiter AIF evidence links to sanitized analytical work samples", () => {
   const recruiter = fs.readFileSync("src/app/recruiter/page.tsx", "utf8");
   for (const sample of [
-    ["COST Qualitative Investment Memo", "public/downloads/shy-lee-costco-qualitative-investment-memo.docx"],
-    ["Casey’s Operations & Supply Chain Analysis", "public/downloads/shy-lee-caseys-operations-supply-chain-analysis.docx"],
+    ["COST Qualitative Investment Memo", "public/downloads/shy-lee-costco-qualitative-investment-memo.pdf"],
+    ["Casey’s Operations & Supply Chain Analysis", "public/downloads/shy-lee-caseys-operations-supply-chain-analysis.pdf"],
   ]) {
     assert.ok(recruiter.includes(sample[0]), `missing AIF sample label: ${sample[0]}`);
     assert.ok(recruiter.includes(`/${sample[1].replace("public/", "")}`), `missing AIF sample link: ${sample[1]}`);
@@ -278,7 +278,7 @@ test("long-term portfolio allocations are complete", () => {
     ["LLY", "25%"],
     ["AAPL", "20%"],
     ["COST", "20%"],
-    ["SPCE", "15%"],
+    ["SpaceX", "15%"],
     ["AMZN", "20%"],
   ])
     assert.match(
@@ -376,8 +376,8 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
     "Investment organizations & applied experience",
     "Finance + Operations + Technology",
     "Career alignment",
-    "Featured research",
-    "Interested in discussing an opportunity",
+    "Supply Specialist & Financial Management Technician",
+    "Junior Reconciliation Accountant",
     "2 work samples",
     "In development",
   ])
@@ -386,11 +386,9 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
       `missing recruiter content: ${recruiterContent}`,
     );
   for (const proofLink of [
-    "/research/companies/glw",
     "/valuation-models",
     "/klyro",
     "/contact",
-    "/resume",
     "linkedin.com/in/shyheim-lee",
     "shy-lee-resume.pdf",
     "shy-lee-bloomberg-market-concepts-certificate.pdf",
@@ -442,7 +440,7 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
     "Real Estate",
     "Python Lab",
     "Mistake Journal",
-    "Analyst Journal",
+    "Research Notes",
   ])
     assert.ok(
       !data.includes(`label: "${retired}"`),
@@ -485,7 +483,7 @@ test("recruiter-facing architecture documents analyst process without fabricated
     "Valuation Lab",
     "Klyro",
     "Portfolio Lab",
-    "Analyst Journal",
+    "Research Notes",
     "Development Log",
   ])
     assert.ok(profile.includes(`title: "${pillar}"`), `missing pillar: ${pillar}`);
@@ -501,7 +499,7 @@ test("recruiter-facing architecture documents analyst process without fabricated
   ])
     assert.ok(profile.includes(`stage: "${stage}"`), `missing stage: ${stage}`);
   assert.match(home, /professionalPositioning/);
-  assert.match(recruiter, /Why hire me\?/);
+  assert.match(recruiter, /Professional profile/);
   assert.match(recruiter, /Luna1 is a professional research portfolio/);
   for (const field of [
     "positionType",

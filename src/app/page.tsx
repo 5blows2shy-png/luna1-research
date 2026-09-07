@@ -28,7 +28,7 @@ export default function Home() {
               Explore Equity Research <span>→</span>
             </Link>
             <Link className="button" href="/recruiter">
-              Why hire me? <span>→</span>
+              View recruiter profile <span>→</span>
             </Link>
           </div>
           <div className="hero-proof">

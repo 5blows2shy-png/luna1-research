@@ -53,12 +53,12 @@ const selectedWork = [
       {
         title: "COST Qualitative Investment Memo",
         context: "Equity valuation draft · July 28, 2026",
-        href: "/downloads/shy-lee-costco-qualitative-investment-memo.docx",
+        href: "/downloads/shy-lee-costco-qualitative-investment-memo.pdf",
       },
       {
         title: "Casey’s Operations & Supply Chain Analysis",
         context: "Related company analysis · BA 360 executive summary",
-        href: "/downloads/shy-lee-caseys-operations-supply-chain-analysis.docx",
+        href: "/downloads/shy-lee-caseys-operations-supply-chain-analysis.pdf",
       },
     ],
   },
@@ -119,8 +119,12 @@ const experience = [
     bullets: ["Analyze operational issues and coordinate work in uptime-sensitive environments.", "Follow change controls, document incidents, and maintain audit-ready operating records.", "Apply risk awareness across infrastructure, capacity, and service delivery."],
   },
   {
-    company: "U.S. Army", role: "Petroleum Supply Specialist", date: "Nov 2015–May 2019", relevance: "Resource accountability",
-    bullets: ["Managed accountable inventory and mission-critical resources.", "Supported operational planning, compliance, and disciplined recordkeeping in high-responsibility environments."],
+    company: "U.S. Army", role: "Supply Specialist & Financial Management Technician", date: "Nov 2015–May 2019", relevance: "Financial management & resource accountability",
+    bullets: ["Coordinated aviation and ground logistics while supporting budgets, reconciliations, reporting, and accountable resource management.", "Supported financial accountability for more than $10 million in operational expenditures through disciplined recordkeeping and compliance."],
+  },
+  {
+    company: "Wilgus Associates", role: "Junior Reconciliation Accountant", date: "Jun 2014–Jul 2015", relevance: "Reconciliation accounting",
+    bullets: ["Maintained ledger accounts, processed transactions, and performed bank reconciliations to support accurate financial records.", "Investigated variances and supported month-end close through reconciliation documentation and reporting.", "Implemented automated reconciliation processes that reduced reconciliation time by 50%."],
   },
 ] as const;
 
@@ -139,12 +143,6 @@ const roles = [
   { title: "Equity Research / Asset Management", proof: "Research · Valuation · Earnings · Thesis and risk" },
   { title: "Treasury", proof: "Cash visibility · Controls · Reconciliation · Risk awareness" },
   { title: "Finance Transformation", proof: "Process analysis · Automation · Financial data · Controls" },
-] as const;
-
-const featuredResearch = [
-  { subject: "Corning Incorporated", ticker: "GLW", type: "Company research · Optical connectivity", description: "Examines whether network density and computing demand can translate optical-connectivity volume into durable margins and free cash flow.", href: "/research/companies/glw" },
-  { subject: "Bloom Energy", ticker: "BE", type: "Company research · Power constraints", description: "Tests deployment speed, customer economics, manufacturing scale, contract quality, and cash conversion in distributed power.", href: "/research/companies/be" },
-  { subject: "Royal Bank of Canada", ticker: "RY", type: "Company research · Financial institutions", description: "Studies franchise durability, capital discipline, diversified earnings, credit sensitivity, and through-cycle returns.", href: "/research/companies/ry" },
 ] as const;
 
 function SectionLabel({ number, children }: { number: string; children: string }) {
@@ -166,6 +164,7 @@ export default function RecruiterView() {
           <a className="button primary" href="#selected-work">View selected work <span aria-hidden="true">↓</span></a>
           <a className="button" href="/downloads/shy-lee-resume.pdf" download>Download resume <span aria-hidden="true">↓</span></a>
           <Link className="button" href="/contact">Contact <span aria-hidden="true">→</span></Link>
+          <a className="button" href="https://www.linkedin.com/in/shyheim-lee/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
         </div>
       </div>
       <aside className={styles.heroBrief} aria-label="Candidate brief">
@@ -181,7 +180,7 @@ export default function RecruiterView() {
     </section>
 
     <nav className={styles.sectionNav} aria-label="Recruiter page sections">
-      <a href="#profile">01 Profile</a><a href="#selected-work">02 Selected work</a><a href="#capabilities">03 Capabilities</a><a href="#experience">04 Experience</a><a href="#investment-experience">05 Investment experience</a><a href="#alignment">06 Career alignment</a><a href="#contact">07 Contact</a>
+      <a href="#profile">01 Profile</a><a href="#selected-work">02 Selected work</a><a href="#capabilities">03 Capabilities</a><a href="#experience">04 Experience</a><a href="#investment-experience">05 Investment experience</a><a href="#alignment">06 Career alignment</a>
     </nav>
 
     <section id="profile" className={styles.snapshotSection}>
@@ -250,26 +249,5 @@ export default function RecruiterView() {
       <div className={styles.roleGrid}>{roles.map((role, index) => <article key={role.title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{role.title}</h3><p>{role.proof}</p></article>)}</div>
     </section>
 
-    <section id="featured-research">
-      <SectionHeading eyebrow="Featured research" title="A focused gateway into the research archive." copy="Three company dossiers show how business structure, operating evidence, valuation questions, catalysts, and risks are organized." />
-      <div className={styles.researchGrid}>{featuredResearch.map((research) => <Link href={research.href} key={research.ticker}>
-        <div className={styles.researchMeta}><b>{research.ticker}</b><span>{research.type}</span></div><h3>{research.subject}</h3><p>{research.description}</p><strong>View research <span aria-hidden="true">→</span></strong>
-      </Link>)}</div>
-    </section>
-
-    <section className={styles.resumeBand} aria-labelledby="resume-heading">
-      <div><span className="eyebrow">Resume</span><h2 id="resume-heading">Review the concise record.</h2><p>Download the recruiter-ready PDF or review the complete resume online.</p></div>
-      <div className={styles.actions}><a className="button primary" href="/downloads/shy-lee-resume.pdf" download>Download resume <span aria-hidden="true">↓</span></a><Link className="button" href="/resume">View resume online <span aria-hidden="true">→</span></Link></div>
-    </section>
-
-    <section id="contact" className={styles.contactSection}>
-      <div><SectionLabel number="07">Let&apos;s talk</SectionLabel><h2>Interested in discussing an opportunity?</h2><p>I&apos;m seeking roles where I can combine financial analysis, investment thinking, operational experience, and technology to support better financial decisions.</p></div>
-      <div className={styles.contactActions}>
-        <Link className="button primary" href="/contact">Contact Shy <span aria-hidden="true">→</span></Link>
-        <a className="button" href="https://www.linkedin.com/in/shyheim-lee/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
-        <a className="button" href="/downloads/shy-lee-resume.pdf" download>Download resume <span aria-hidden="true">↓</span></a>
-        <small>Professional inquiries are handled through the secure contact form.</small>
-      </div>
-    </section>
   </>;
 }

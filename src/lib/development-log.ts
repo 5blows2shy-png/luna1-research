@@ -379,7 +379,7 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     category: "Strategy",
     title: "Organized Luna1 around analyst evidence",
     summary:
-      "Reframed the public information architecture around Equity Research, Valuation, Klyro, Portfolio Process, the Analyst Journal, and the Development Log.",
+      "Reframed the public information architecture around Equity Research, Valuation, Klyro, Portfolio Process, Research Notes, and the Development Log.",
     reason:
       "Recruiters and finance professionals need to see how operating experience, accounting knowledge, financial reasoning, investment decisions, and continuous improvement connect—not only a collection of finished projects.",
     lessons: [
@@ -460,7 +460,7 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
       "Documented the evidence behind both Active Position status changes.",
       "Added BE and VRT to the Watchlist and removed JBL from the Watchlist.",
       "Published the Luna1-branded Power Constraints and the Next Data-Center Bottleneck report.",
-      "Moved Analyst Journal discovery into Equity Research while preserving its route and downloads.",
+      "Consolidated research-note discovery inside Equity Research while preserving its reports and downloads.",
     ],
     route: "/portfolio",
     visibility: "Public",

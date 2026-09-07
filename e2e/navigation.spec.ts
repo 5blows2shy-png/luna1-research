@@ -517,8 +517,8 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
     page.locator(".holdings-table tbody tr").filter({ hasText: "SLV" }),
   ).toHaveCount(0);
   await expect(
-    page.locator(".holdings-table tbody tr").filter({ hasText: "SPCE" }),
-  ).toContainText("Virgin Galactic");
+    page.locator(".holdings-table tbody tr").filter({ hasText: "SpaceX" }),
+  ).toContainText("Space Exploration Technologies");
   await expect(
     page.locator(".holdings-table tbody tr").filter({ hasText: "PG" }),
   ).toHaveCount(0);
@@ -814,7 +814,8 @@ test("recruiter view retains profile and downloads", async ({ page }) => {
   await expect(page.getByRole("link", { name: /Download resume/i }).first())
     .toHaveAttribute("href", "/downloads/shy-lee-resume.pdf");
   await expect(page.getByRole("link", { name: /View selected work/i })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Contact Shy/i })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Contact", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: /LinkedIn/i })).toBeVisible();
 });
 
 test("reduced motion disables the prism sweep", async ({ page }) => {
