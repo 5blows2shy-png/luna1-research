@@ -18,14 +18,6 @@ const MistakeJournal = dynamic(
   { loading: () => <p className="market-message">Loading decision reviews…</p> },
 );
 
-const ResearchCoverageGrid = dynamic(
-  () =>
-    import("@/components/research/research-coverage-grid").then(
-      (module) => module.ResearchCoverageGrid,
-    ),
-  { loading: () => <p className="market-message">Loading research coverage…</p> },
-);
-
 type Holding = {
   ticker: string;
   company: string;
@@ -515,7 +507,6 @@ export default function Portfolios() {
                   </tbody>
                 </table>
               </div>
-              <ResearchCoverageGrid tickers={watchlist.map((item) => item.ticker)} />
             </div>
           )}
           {activeTab === "Mistake Journal" && <MistakeJournal />}

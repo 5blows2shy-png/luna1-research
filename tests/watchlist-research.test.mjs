@@ -121,12 +121,7 @@ test("Watchlist links, sitemap entries, and development log are updated", () => 
   const sitemap = fs.readFileSync("src/app/sitemap.ts", "utf8");
   const log = fs.readFileSync("src/lib/development-log.ts", "utf8");
   assert.match(portfolio, /View Full Research/);
-  assert.match(portfolio, /ResearchCoverageGrid/);
-  assert.ok(
-    portfolio.indexOf("<WatchlistTable") <
-      portfolio.indexOf("<ResearchCoverageGrid"),
-    "Research coverage must appear directly after the Watchlist",
-  );
+  assert.doesNotMatch(portfolio, /ResearchCoverageGrid/);
   assert.match(sitemap, /\/watchlist\/\$\{item\.slug\}/);
   assert.match(log, /Expanded Watchlist into Research Coverage Platform/);
   assert.match(log, /Introduced Industry-Specific Valuation Frameworks/);
