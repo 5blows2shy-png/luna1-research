@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ExistingResearchFilter } from "@/components/existing-research-filter";
+import { CapitalFlowMap } from "@/components/capital-flow-map";
 import { EditorialLink, LuxuryCard } from "@/components/luxury";
 import {
   CompanyResearchCard,
@@ -8,7 +8,6 @@ import {
   ThemeCard,
 } from "@/components/research-ui";
 import { PageHeader, SectionHeading } from "@/components/site";
-import { research } from "@/lib/data";
 import {
   companyResearch,
   investmentThemes,
@@ -24,7 +23,7 @@ import {
 export const metadata: Metadata = {
   title: "Equity Research",
   description:
-    "Institutional-style company research, industry analysis, valuation, risks, catalysts, sources, and ongoing updates from Luna1 Research.",
+    "Luna1 Equity Research combines company analysis with capital-flow mapping to track structural spending, bottlenecks, value chains, and public companies positioned to benefit.",
 };
 
 export default function ResearchPage() {
@@ -45,13 +44,13 @@ export default function ResearchPage() {
             </h2>
           </div>
           <p>
-            The hub preserves the existing Luna1 report archive while adding a
-            structured path for deeper company and thematic work. Financial
-            evidence remains clearly labeled until it is verified from primary
-            sources.
+            The hub provides a structured path for deeper company and thematic
+            work. Financial evidence remains clearly labeled until it is
+            verified from primary sources.
           </p>
         </div>
       </section>
+      <CapitalFlowMap />
       <section>
         <SectionHeading
           eyebrow="Research architecture"
@@ -140,14 +139,14 @@ export default function ResearchPage() {
       </section>
       <section className="research-pathways">
         <LuxuryCard variant="research">
-          <span className="eyebrow">04 · Research notes</span>
-          <h2>{researchNotes.length} working notes</h2>
+          <span className="eyebrow">04 · Analyst Journal</span>
+          <h2>{researchNotes.length} research notes</h2>
           <p>
-            Short-form research questions organized by company, theme, macro
-            context, and process.
+            Published reports and developing research questions organized by
+            company, theme, macro context, and process.
           </p>
-          <EditorialLink href="/research/notes">
-            Open research notes
+          <EditorialLink href="/analyst-journal">
+            Open Analyst Journal
           </EditorialLink>
         </LuxuryCard>
         <LuxuryCard variant="research">
@@ -162,13 +161,23 @@ export default function ResearchPage() {
           </EditorialLink>
         </LuxuryCard>
       </section>
-      <section className="library">
+      <section>
         <SectionHeading
-          eyebrow="Existing archive"
-          title="Original Luna1 research library"
-          copy="The previous report library remains intact. Its seeded scores and classifications are illustrative placeholders, not current market data."
+          eyebrow="Downloadable research"
+          title="Published Analyst Journal reports"
+          copy="Branded reports keep primary-source evidence, interpretation, open questions, and educational disclosures together in a portable format."
         />
-        <ExistingResearchFilter reports={research} />
+        <div className="research-hub-grid">
+          {researchNotes.filter((note) => note.pdfUrl).map((note) => (
+            <LuxuryCard key={note.slug} variant="download">
+              <span className="eyebrow">{note.category}{note.ticker ? ` · ${note.ticker}` : ""}</span>
+              <h3>{note.title}</h3>
+              <p>{note.summary}</p>
+              <small>{note.date} · PDF</small>
+              <EditorialLink href={note.pdfUrl!}>Download PDF</EditorialLink>
+            </LuxuryCard>
+          ))}
+        </div>
       </section>
       <section className="research-disclaimer-section">
         <ResearchDisclaimer />

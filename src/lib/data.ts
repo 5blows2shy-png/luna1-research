@@ -7,7 +7,6 @@ export const navigationItems: NavigationItem[] = [
     href: "/klyro",
   },
   { label: "Portfolio Lab", href: "/portfolio" },
-  { label: "Analyst Journal", href: "/analyst-journal" },
   { label: "Development Log", href: "/development-log" },
   { label: "Recruiter View", href: "/recruiter" },
 ];

@@ -195,34 +195,46 @@ test("portfolio reflects approved public positions", () => {
   assert.ok(!source.includes("Closed Positions"));
   assert.ok(!source.includes("Initialthesis"));
   assert.match(source, /ticker:"AAPL"/);
+  for (const ticker of ["CASY", "WELL"]) {
+    assert.match(activeSource, new RegExp(`ticker:"${ticker}"[\\s\\S]*?status:"ActivePosition"`));
+    assert.ok(fs.existsSync(`src/app/portfolio/positions/${ticker.toLowerCase()}/page.tsx`));
+  }
+});
+
+test("active-position dossiers and power-constraint report are source grounded", () => {
+  const research = fs.readFileSync("src/data/portfolio/position-research.ts", "utf8");
+  const notes = fs.readFileSync("src/lib/research-content.ts", "utf8");
+  const navigation = fs.readFileSync("src/lib/data.ts", "utf8");
+  for (const ticker of ["CASY", "WELL"]) {
+    assert.match(research, new RegExp(`${ticker}: \\{`));
+    assert.match(research, new RegExp(`ticker: "${ticker}"`));
+  }
+  for (const label of ["Reported", "Calculated", "Company-defined"])
+    assert.ok(research.includes(label), `missing evidence label ${label}`);
+  assert.ok(!navigation.includes('label: "Analyst Journal"'));
+  assert.match(notes, /Power-Constraints-Data-Center-Bottleneck-Luna1\.pdf/);
+  assert.ok(
+    fs.statSync("public/reports/Power-Constraints-Data-Center-Bottleneck-Luna1.pdf").size > 0,
+    "power-constraint PDF must be present and non-empty",
+  );
 });
 
 test("watchlist matches the approved research records", () => {
   const source = fs.readFileSync("src/lib/watchlist-data.ts", "utf8");
-  for (const [ticker, score] of [
-    ["GLW", 91],
-    ["STRL", 89],
-    ["ALAB", 88],
-    ["JBL", 87],
-    ["RY", 84],
-  ]) {
+  for (const ticker of ["GLW", "STRL", "ALAB", "RY", "DLR", "BE", "VRT"]) {
     assert.ok(
       new RegExp(`ticker:\\s*\"${ticker}\"`).test(source),
       `${ticker} is missing from the watchlist`,
     );
-    assert.match(
-      source,
-      new RegExp(`ticker:\\s*\"${ticker}\"[\\s\\S]{0,180}?score:\\s*${score}`),
-      `${ticker} score is missing`,
-    );
   }
+  assert.ok(!source.includes("score:"), "LUNA score remains in Watchlist data");
   for (const field of ["note:", "catalyst:", "risk:"])
     assert.equal(
       source.match(new RegExp(field, "g"))?.length,
-      7,
+      8,
       `each record should include ${field}`,
     );
-  for (const removed of ["AMAT", "WWD", "PDFS", "GS"])
+  for (const removed of ["AMAT", "WWD", "PDFS", "GS", "JBL"])
     assert.ok(!source.includes(`ticker: "${removed}"`));
   for (const ticker of [
     "ROAD",
@@ -266,7 +278,7 @@ test("long-term portfolio allocations are complete", () => {
     ["LLY", "25%"],
     ["AAPL", "20%"],
     ["COST", "20%"],
-    ["Private", "15%"],
+    ["SPCE", "15%"],
     ["AMZN", "20%"],
   ])
     assert.match(
@@ -416,7 +428,6 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
     "Equity Research",
     "Klyro",
     "Portfolio Lab",
-    "Analyst Journal",
     "Recruiter View",
     "Development Log",
   ])
@@ -431,6 +442,7 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
     "Real Estate",
     "Python Lab",
     "Mistake Journal",
+    "Analyst Journal",
   ])
     assert.ok(
       !data.includes(`label: "${retired}"`),

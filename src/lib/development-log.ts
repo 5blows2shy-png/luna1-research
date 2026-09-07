@@ -424,4 +424,45 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     route: "/research/notes",
     visibility: "Public",
   },
+  {
+    id: "active-position-research-expansion",
+    date: "2026-09-07",
+    phase: "Portfolio Research Expansion",
+    category: "Research",
+    title: "Expanded Active-Position Research and Infrastructure Coverage",
+    summary:
+      "Added source-grounded CASY and WELL position dossiers, refocused the Watchlist toward BE and VRT, and published a branded thematic report on power constraints around data-center growth.",
+    reason:
+      "The Portfolio Lab needed to show the analytical work behind active positions while connecting company-level research to a broader infrastructure bottleneck thesis.",
+    lessons: [
+      "Margin definitions must remain attached to their source and business model; retail gross margin, store operating margin, REIT NOI margin, and normalized FFO are not interchangeable.",
+      "A change in position status should identify the evidence being monitored instead of implying certainty.",
+      "Thematic demand forecasts are most useful when paired with project timing, capacity, working-capital, and cash-conversion questions.",
+    ],
+    skills: [
+      "Primary-source equity research",
+      "Financial-statement interpretation",
+      "Margin and operating-driver analysis",
+      "Accessible data visualization",
+      "Portfolio monitoring",
+      "Research-document production",
+    ],
+    impact:
+      "Gives recruiters and employers concrete evidence of an end-to-end analyst workflow: locating primary filings, distinguishing GAAP and company-defined measures, calculating and visualizing operating trends, writing explicit monitoring rules, and presenting the work in both responsive web dossiers and a branded PDF.",
+    status: "Completed",
+    overview: [
+      "CASY and WELL now have dedicated active-position research pages with sourced margin charts, operating evidence, competitive-position analysis, monitoring questions, thesis-invalidation criteria, and clear educational disclosures.",
+      "The Watchlist removes the LUNA score display, replaces JBL with Bloom Energy and Vertiv, and keeps research navigation focused inside the Equity Research workflow.",
+    ],
+    milestones: [
+      "Published CASY and WELL active-position research routes.",
+      "Added reported and calculated margin progression with source labels.",
+      "Documented the evidence behind both Active Position status changes.",
+      "Added BE and VRT to the Watchlist and removed JBL from the Watchlist.",
+      "Published the Luna1-branded Power Constraints and the Next Data-Center Bottleneck report.",
+      "Moved Analyst Journal discovery into Equity Research while preserving its route and downloads.",
+    ],
+    route: "/portfolio",
+    visibility: "Public",
+  },
 ];

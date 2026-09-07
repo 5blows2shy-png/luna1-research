@@ -222,6 +222,51 @@ export const companyResearch: CompanyResearch[] = [
     earningsHistory: [],
     quarterlyUpdates: [],
   },
+  {
+    ticker: "VRT",
+    slug: "vrt",
+    companyName: "Vertiv Holdings Co.",
+    sector: "Industrials",
+    industry: "Electrical and Thermal Infrastructure",
+    status: "Watching",
+    lastUpdated: "Updated September 7, 2026",
+    summary:
+      "A data-center infrastructure provider being studied through power-management, thermal-management, service, capacity, and cash-conversion evidence.",
+    businessOverview:
+      "Vertiv provides critical digital-infrastructure products and services, including power management, thermal management, integrated rack systems, and lifecycle services for data centers and communications networks.",
+    businessModel:
+      "The company combines equipment sales, systems integration, and service revenue. Research will distinguish cyclical project demand from the installed-base and service economics that may support greater durability.",
+    revenueDrivers: [
+      "Data-center capacity additions",
+      "Rack power density and thermal requirements",
+      "Regional capacity and project execution",
+      "Installed-base service demand",
+    ],
+    thesis: [
+      "Rising compute density increases the value of reliable electrical and thermal infrastructure, which may support sustained demand for Vertiv's systems and services.",
+      "The thesis remains under review until backlog conversion, margins, cash generation, customer concentration, and valuation expectations are fully sourced.",
+    ],
+    risks: [
+      "Data-center capital-spending cycles and project timing can create volatile orders and revenue conversion.",
+      "Supply constraints, competition, execution, customer concentration, and valuation compression may weaken returns.",
+    ],
+    catalysts: [
+      "Continued data-center capacity additions and higher rack power density.",
+      "Evidence that volume, pricing, and service mix support durable margin and cash-flow improvement.",
+    ],
+    competitiveAdvantages: [
+      "A broad portfolio across power, thermal, rack, and service requirements.",
+      "Installed-base relationships and engineering knowledge in mission-critical environments.",
+    ],
+    valuation: {
+      methodology: ["Discounted cash flow", "EV/EBITDA", "Free-cash-flow sensitivity"],
+      currentAssessment: "Valuation model in progress.",
+      assumptions: "Primary-source inputs pending review.",
+    },
+    keyMetrics: pendingMetrics,
+    earningsHistory: [],
+    quarterlyUpdates: [],
+  },
 ];
 
 export const investmentThemes: InvestmentTheme[] = [
@@ -462,18 +507,29 @@ const researchNoteSeeds: Array<
     undefined,
     "Cybersecurity",
   ],
-  [
-    "research-invalidation",
-    "Writing clearer thesis-invalidation rules",
-    "Process",
-    undefined,
-    undefined,
-  ],
 ];
 
 export const researchNotes: ResearchNote[] = researchNoteSeeds.map(
   ([slug, title, category, ticker, theme]) =>
-    slug === "ry-credit-cycle"
+    slug === "power-constraint"
+      ? {
+          slug,
+          title,
+          category: category as ResearchNote["category"],
+          ticker,
+          theme,
+          status: "Published" as const,
+          date: "September 7, 2026",
+          summary:
+            "A sourced thematic note mapping generation, interconnection, power conversion, cooling, and deployment constraints around data-center growth while separating official demand scenarios from Luna1 interpretation.",
+          sourceLinks: [
+            { label: "Berkeley Lab 2025 U.S. Data Center Energy Usage Update", href: "https://eta-publications.lbl.gov/publications/united-states-data-center-energy-2025" },
+            { label: "FERC Large Load Interconnection proceeding", href: "https://ferc.gov/rm26-4" },
+            { label: "EIA data-center power-demand analysis", href: "https://www.eia.gov/todayinenergy/detail.php?id=67344" },
+          ],
+          pdfUrl: "/reports/Power-Constraints-Data-Center-Bottleneck-Luna1.pdf",
+        }
+      : slug === "ry-credit-cycle"
       ? {
           slug,
           title,

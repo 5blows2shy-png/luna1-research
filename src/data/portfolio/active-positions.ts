@@ -38,9 +38,16 @@ export const activePositions: ActivePosition[] = [
     watching: ["Store-level profitability", "Food margins", "Integration execution"],
     thesisInvalidation:
       "The thesis would weaken if profitable store growth, prepared-food expansion, EBITDA, or returns on invested capital materially deteriorate.",
-    status: "Monitoring",
+    status: "Active Position",
     whatChanged:
-      "No thesis-breaking change is documented. Store growth, prepared-food performance, EBITDA, and returns on invested capital remain the monitoring priorities.",
+      "Position status is now Active Position. Fiscal 2026 inside same-store sales increased 4.2%, inside margin reached 42.2%, and company-defined EBITDA increased 23.6%; profitable store growth and capital returns remain the next tests.",
+    researchHref: "/portfolio/positions/casy",
+    previewMetrics: [
+      { label: "Inside margin", value: "42.2%" },
+      { label: "Prepared-food margin", value: "58.6%" },
+      { label: "EBITDA growth", value: "23.6%" },
+      { label: "Stores", value: "2,944" },
+    ],
   },
   {
     ticker: "WELL",
@@ -61,9 +68,16 @@ export const activePositions: ActivePosition[] = [
     watching: ["Occupancy", "Same-store NOI", "Normalized FFO"],
     thesisInvalidation:
       "The thesis would weaken if occupancy, normalized FFO, same-store NOI, or returns from new investment activity materially deteriorate.",
-    status: "Monitoring",
+    status: "Active Position",
     whatChanged:
-      "No thesis-breaking change is documented. Occupancy, normalized FFO, same-store NOI, and returns on new investment activity remain the monitoring priorities.",
+      "Position status is now Active Position. Q2 2026 normalized FFO per share increased 25.0% year over year and total same-store NOI increased 15.5%; per-share growth, occupancy, and balance-sheet discipline remain the next tests.",
+    researchHref: "/portfolio/positions/well",
+    previewMetrics: [
+      { label: "Normalized FFO growth", value: "25.0%" },
+      { label: "Total SSNOI growth", value: "15.5%" },
+      { label: "SHO SSNOI growth", value: "20.5%" },
+      { label: "Net debt / EBITDA", value: "2.99x" },
+    ],
   },
   {
     ticker: "KRYS",

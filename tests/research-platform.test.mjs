@@ -39,6 +39,40 @@ test("research content uses typed centralized records", () => {
   assert.equal((source.match(/status: "Draft" as const/g) ?? []).length, 1);
 });
 
+test("capital flow map uses typed themes and centralized company records", () => {
+  const data = fs.readFileSync(
+    "src/data/research/capital-flows.ts",
+    "utf8",
+  );
+  const component = fs.readFileSync(
+    "src/components/capital-flow-map.tsx",
+    "utf8",
+  );
+  const page = fs.readFileSync("src/app/research/page.tsx", "utf8");
+  const nav = fs.readFileSync("src/components/research-ui.tsx", "utf8");
+
+  for (const theme of [
+    "Compute",
+    "Power",
+    "Data Center Infrastructure",
+    "Robotics & Automation",
+    "Cybersecurity",
+    "Defense & Aerospace",
+    "Physical Infrastructure",
+    "Healthcare / Biology",
+  ])
+    assert.match(data, new RegExp(`name: "${theme.replaceAll("&", "\\&")}"`));
+
+  assert.match(component, /companyResearch/);
+  assert.match(component, /researchCompanies/);
+  assert.match(component, /Who gets paid to remove the bottleneck\?/);
+  assert.match(component, /Not Yet Evaluated/);
+  assert.match(component, /What could change the thesis\?/);
+  assert.match(page, /<CapitalFlowMap \/>/);
+  assert.match(nav, /href="\/research#capital-flows"/);
+  assert.doesNotMatch(data, /Revenue growth: [0-9]|Earnings growth: [0-9]/);
+});
+
 test("incomplete research is labeled without fabricated data or PDFs", () => {
   const data = fs.readFileSync("src/lib/research-content.ts", "utf8");
   const companyRecords = data.slice(

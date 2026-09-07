@@ -150,7 +150,6 @@ test("desktop and mobile navigation expose only the permanent product scope", as
     "Equity Research",
     "Klyro",
     "Portfolio Lab",
-    "Analyst Journal",
     "Recruiter View",
     "Development Log",
   ])
@@ -164,6 +163,7 @@ test("desktop and mobile navigation expose only the permanent product scope", as
     "Python Lab",
     "Real Estate",
     "Mistake Journal",
+    "Analyst Journal",
   ])
     await expect(
       navigation.getByRole("link", { name: retired, exact: true }),
@@ -181,7 +181,17 @@ test("equity research is available from the public navigation", async ({
   await expect(
     page.getByRole("heading", { name: "Developing company dossiers" }),
   ).toBeVisible();
-  await expect(page.getByText("Original Luna1 research library")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Capital Flows" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Capital Flow Map", level: 2 }),
+  ).toBeVisible();
+  await expect(page.getByText("Who gets paid to remove the bottleneck?")).toBeVisible();
+  await expect(page.locator(".capital-flow-theme")).toHaveCount(8);
+  await expect(page.getByRole("link", { name: "View Equity Research →" }).first()).toBeVisible();
+  await expect(page.getByText("Original Luna1 research library")).toHaveCount(0);
+  await expect(
+    page.getByText("Writing clearer thesis-invalidation rules"),
+  ).toHaveCount(0);
 });
 
 test("research hub exposes structured routes and transparent placeholders", async ({
@@ -507,8 +517,8 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
     page.locator(".holdings-table tbody tr").filter({ hasText: "SLV" }),
   ).toHaveCount(0);
   await expect(
-    page.locator(".holdings-table tbody tr").filter({ hasText: "SpaceX" }),
-  ).toContainText("Not publicly traded");
+    page.locator(".holdings-table tbody tr").filter({ hasText: "SPCE" }),
+  ).toContainText("Virgin Galactic");
   await expect(
     page.locator(".holdings-table tbody tr").filter({ hasText: "PG" }),
   ).toHaveCount(0);
@@ -516,16 +526,18 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
     page.getByRole("tab", { name: "Watchlist" }),
     testInfo.project.name,
   );
-  await expect(page.getByText("JBL", { exact: true }).first()).toBeVisible();
+  await expect(page.locator('.watchlist-table tr[data-symbol="JBL"]')).toHaveCount(0);
+  await expect(page.locator('.watchlist-table tr[data-symbol="BE"]')).toBeVisible();
+  await expect(page.locator('.watchlist-table tr[data-symbol="VRT"]')).toBeVisible();
+  await expect(page.getByRole("columnheader", { name: "LUNA Score" })).toHaveCount(0);
   await expect(page.getByRole("tab", { name: "Performance" })).toHaveCount(0);
   await expect(
     page.getByRole("tab", { name: "Conviction Dashboard" }),
   ).toHaveCount(0);
   await expect(
     page.getByRole("link", { name: "View Full Research" }),
-  ).toHaveCount(15);
+  ).toHaveCount(12);
   await expect(page.getByText("Digital Realty Trust Inc.")).toBeVisible();
-  await expect(page.getByText("Data pending", { exact: true })).toBeVisible();
 });
 
 test("KRYS appears in Active Positions and opens sourced research", async ({
@@ -555,6 +567,38 @@ test("KRYS appears in Active Positions and opens sourced research", async ({
     page.getByRole("heading", { name: "Why KRYS may have a moat.", level: 2 }),
   ).toBeVisible();
 });
+
+for (const position of [
+  { ticker: "CASY", company: "Casey's General Stores, Inc." },
+  { ticker: "WELL", company: "Welltower Inc." },
+]) {
+  test(`${position.ticker} opens active-position research with margin evidence`, async ({
+    page,
+  }, testInfo) => {
+    await page.goto("/portfolio");
+    await activate(
+      page.getByRole("tab", { name: "Active Positions", exact: true }),
+      testInfo.project.name,
+    );
+    const row = page.locator(
+      `.active-positions-table tr[data-symbol="${position.ticker}"]`,
+    );
+    await expect(row).toContainText("Active Position");
+    await row.getByRole("link", { name: "View Position Research" }).click();
+    await expect(page).toHaveURL(
+      new RegExp(`/portfolio/positions/${position.ticker.toLowerCase()}$`),
+    );
+    await expect(
+      page.getByRole("heading", { name: position.ticker, level: 1 }),
+    ).toBeVisible();
+    await expect(page.getByText(position.company, { exact: true })).toBeVisible();
+    await expect(
+      page.getByText("Margins and Operating Progression", { exact: true }),
+    ).toBeVisible();
+    await expect(page.locator(".krys-progression-card svg").first()).toBeVisible();
+    await expect(page.getByText("Sources & Data Integrity", { exact: true })).toBeVisible();
+  });
+}
 
 test("Portfolio table headers do not cover the first data row", async ({
   page,
@@ -765,26 +809,12 @@ test("contact form and endpoint validate", async ({ page, request }) => {
 test("recruiter view retains profile and downloads", async ({ page }) => {
   test.setTimeout(60_000);
   await page.goto("/recruiter");
-  await expect(page.getByText("Shy Lee · Founder")).toBeVisible();
-  await expect(
-    page.getByAltText("Portrait of Shy Lee, founder of Luna1 Research"),
-  )
-    .toBeVisible();
-  await expect(
-    page.getByAltText("Portrait of Shy Lee, founder of Luna1 Research"),
-  ).toHaveAttribute("src", /shyheim-lee-recruiter-headshot-1080\.jpg/);
-  await expect(
-    page.getByRole("link", { name: /Download Profile/ }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("link", { name: /One-page brief/ }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("link", { name: /Data center evidence/ }),
-  ).toHaveAttribute(
-    "href",
-    "/downloads/shyheim-lee-data-center-finance-evidence-sheet.pdf",
-  );
+  await expect(page.getByRole("heading", { name: "Shy Lee", level: 1 })).toBeVisible();
+  await expect(page.getByText("Finance Analyst", { exact: false }).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: /Download resume/i }).first())
+    .toHaveAttribute("href", "/downloads/shy-lee-resume.pdf");
+  await expect(page.getByRole("link", { name: /View selected work/i })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Contact Shy/i })).toBeVisible();
 });
 
 test("reduced motion disables the prism sweep", async ({ page }) => {

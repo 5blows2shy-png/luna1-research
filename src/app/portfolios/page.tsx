@@ -113,14 +113,13 @@ const compounders: Holding[] = [
     horizon: "5+ years",
   },
   {
-    ticker: "Private",
-    company: "Space Exploration Technologies Corp. (SpaceX)",
+    ticker: "SPCE",
+    company: "Virgin Galactic Holdings, Inc.",
     thesis:
-      "The long-term investment thesis centers on Starlink, whose expanding satellite network can extend high-speed connectivity to underserved markets, mobile users, enterprises, and governments worldwide. SpaceX’s reusable-launch capabilities support the thesis by lowering deployment and replenishment costs, but the position remains subject to the risks and limited liquidity of a privately held company.",
+      "The long-term research thesis centers on whether Virgin Galactic can build a repeatable commercial spaceflight operation with sufficient flight cadence, customer demand, and unit economics. SPCE is not SpaceX or Starlink exposure; execution, financing, safety, and dilution risk remain substantial.",
     allocation: "15%",
-    type: "Private growth company",
+    type: "Public space-economy company",
     horizon: "5+ years",
-    isPrivate: true,
   },
   {
     ticker: "AMZN",
@@ -450,16 +449,12 @@ export default function Portfolios() {
             <div className="watchlist-research-stack">
               <div className="table-wrap watchlist-table-wrap">
                 <table className="watchlist-table">
-                  <caption>
-                    Research watchlist · LUNA Scores represent research
-                    priority, not recommendations
-                  </caption>
+                  <caption>Research watchlist · educational use only · not recommendations</caption>
                   <thead>
                     <tr>
                       <th>Ticker</th>
                       <th>Market quote</th>
                       <th>Company name</th>
-                      <th>LUNA Score</th>
                       <th>Research status</th>
                       <th>Watchlist note</th>
                       <th>Setup status</th>
@@ -480,24 +475,10 @@ export default function Portfolios() {
                           {item.company}
                           <Link
                             className="watchlist-research-link"
-                            href={`/watchlist/${item.ticker.toLowerCase()}`}
+                            href={item.researchHref ?? `/watchlist/${item.ticker.toLowerCase()}`}
                           >
                             View Full Research
                           </Link>
-                        </td>
-                        <td data-label="LUNA Score">
-                          <b
-                            className="watchlist-score"
-                            aria-label={
-                              item.score === null
-                                ? "LUNA Score data pending"
-                                : `LUNA Score ${item.score} out of 100`
-                            }
-                          >
-                            {item.score === null
-                              ? "Data pending"
-                              : `${item.score}/100`}
-                          </b>
                         </td>
                         <td data-label="Research status">
                           <span
@@ -533,7 +514,7 @@ export default function Portfolios() {
                   </tbody>
                 </table>
               </div>
-              <ResearchCoverageGrid />
+              <ResearchCoverageGrid tickers={watchlist.map((item) => item.ticker)} />
             </div>
           )}
           {activeTab === "Mistake Journal" && <MistakeJournal />}

@@ -145,11 +145,16 @@ def build_report(input_path: Path, output_path: Path, qa: bool) -> None:
     )
     document.addPageTemplates(
         [
-            PageTemplate(id="Cover", frames=[cover_frame]),
+            PageTemplate(
+                id="Cover",
+                frames=[cover_frame],
+                autoNextPageTemplate="Body",
+            ),
             PageTemplate(
                 id="Body",
                 frames=[body_frame],
                 onPage=lambda canvas, doc: draw_header_footer(canvas, doc, brand, report),
+                autoNextPageTemplate="Body",
             ),
         ]
     )

@@ -19,7 +19,7 @@ export type PortfolioTickerGroups = Record<PortfolioTickerGroup, readonly string
 
 export const portfolioTickerGroups: PortfolioTickerGroups = {
   "Active Positions": ["CASY", "WELL", "KRYS"],
-  Watchlist: ["GLW", "STRL", "ALAB", "JBL", "RY", "DLR"],
+  Watchlist: ["GLW", "STRL", "ALAB", "RY", "DLR", "BE", "VRT"],
   "Long-Term Compounders": ["VOO", "QQQM", "IAU", "AIPO", "SGOV", "LLY", "AAPL", "COST", "AMZN"],
 };
 
