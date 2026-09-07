@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { KlyroAd } from "@/components/luna-books-ad/luna-books-ad";
 import { TransactionIntelligenceWorkspace } from "@/components/transaction-intelligence-workspace";
@@ -29,6 +30,14 @@ export default async function KlyroPage() {
           </form>
         </aside>
       )}
+      <aside className="luna-public-demo" aria-label="Interactive Luna Books demo">
+        <div>
+          <span>Safe public demo</span>
+          <strong>See what the accounting workspace can do for a small business.</strong>
+          <p>Explore a fictional, read-only Harbor Supply workspace. No login, bank connection, upload, or customer data required.</p>
+        </div>
+        <Link href="/demo/luna-books-tour">Try the interactive demo <span aria-hidden>→</span></Link>
+      </aside>
       <section aria-label="Klyro introduction"><KlyroAd /></section>
       <TransactionIntelligenceWorkspace />
     </>
