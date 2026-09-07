@@ -139,14 +139,14 @@ export default function ResearchPage() {
       </section>
       <section className="research-pathways">
         <LuxuryCard variant="research">
-          <span className="eyebrow">04 · Analyst Journal</span>
+          <span className="eyebrow">04 · Research Notes</span>
           <h2>{researchNotes.length} research notes</h2>
           <p>
             Published reports and developing research questions organized by
             company, theme, macro context, and process.
           </p>
-          <EditorialLink href="/analyst-journal">
-            Open Analyst Journal
+          <EditorialLink href="/research/notes">
+            Open Research Notes
           </EditorialLink>
         </LuxuryCard>
         <LuxuryCard variant="research">
@@ -164,7 +164,7 @@ export default function ResearchPage() {
       <section>
         <SectionHeading
           eyebrow="Downloadable research"
-          title="Published Analyst Journal reports"
+          title="Published research reports"
           copy="Branded reports keep primary-source evidence, interpretation, open questions, and educational disclosures together in a portable format."
         />
         <div className="research-hub-grid">

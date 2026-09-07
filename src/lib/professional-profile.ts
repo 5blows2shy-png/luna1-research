@@ -64,8 +64,8 @@ export const platformPillars: PlatformPillar[] = [
   },
   {
     number: "05",
-    title: "Analyst Journal",
-    href: "/analyst-journal",
+    title: "Research Notes",
+    href: "/research/notes",
     purpose:
       "An ongoing notebook for company, industry, earnings, macro, process, and investment-learning observations.",
     evidence: [

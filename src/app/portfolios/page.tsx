@@ -113,13 +113,14 @@ const compounders: Holding[] = [
     horizon: "5+ years",
   },
   {
-    ticker: "SPCE",
-    company: "Virgin Galactic Holdings, Inc.",
+    ticker: "SpaceX",
+    company: "Space Exploration Technologies Corp. (SpaceX)",
     thesis:
-      "The long-term research thesis centers on whether Virgin Galactic can build a repeatable commercial spaceflight operation with sufficient flight cadence, customer demand, and unit economics. SPCE is not SpaceX or Starlink exposure; execution, financing, safety, and dilution risk remain substantial.",
+      "The long-term investment thesis centers on Starlink, whose expanding satellite network can extend high-speed connectivity to underserved markets, mobile users, enterprises, and governments worldwide. SpaceX’s reusable-launch capabilities support the thesis by lowering deployment and replenishment costs, but the position remains subject to the risks and limited liquidity of a privately held company.",
     allocation: "15%",
-    type: "Public space-economy company",
+    type: "Private growth company",
     horizon: "5+ years",
+    isPrivate: true,
   },
   {
     ticker: "AMZN",

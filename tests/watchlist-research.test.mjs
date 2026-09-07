@@ -141,8 +141,8 @@ test("research language, dates, evidence labels, and Bloom journal are explicit"
     "src/lib/bloom-analyst-journal.ts",
     "utf8",
   );
-  const journalPage = fs.readFileSync(
-    "src/app/analyst-journal/page.tsx",
+  const researchNotesPage = fs.readFileSync(
+    "src/app/research/notes/page.tsx",
     "utf8",
   );
   const researchContent = fs.readFileSync(
@@ -175,7 +175,7 @@ test("research language, dates, evidence labels, and Bloom journal are explicit"
   assert.match(journal, /latestVerifiedPeriod: "Q1 2026"/);
   assert.doesNotMatch(journal, /BE BE/);
   assert.match(researchContent, /BE-Luna1-Analyst-Journal\.pdf/);
-  assert.doesNotMatch(journalPage, /bloomAnalystJournal/);
+  assert.doesNotMatch(researchNotesPage, /bloomAnalystJournal/);
   assert.ok(
     fs.statSync("public/reports/BE-Luna1-Analyst-Journal.pdf").size > 0,
     "Bloom Energy Analyst Journal PDF must be present and non-empty",
@@ -186,5 +186,5 @@ test("research language, dates, evidence labels, and Bloom journal are explicit"
   ]) {
     assert.ok(fs.statSync(file).size > 0, `${file} must be present and non-empty`);
   }
-  assert.match(journalPage, /note\.pdfUrl/);
+  assert.match(researchNotesPage, /ResearchNotesFilter/);
 });
