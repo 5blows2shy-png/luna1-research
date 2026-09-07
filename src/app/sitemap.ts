@@ -10,6 +10,7 @@ const routes = [
   "/certifications",
   "/contact",
   "/development-log",
+  "/demo/luna-books-tour",
   "/financial-models",
   "/investment-philosophy",
   "/luna1-framework",
