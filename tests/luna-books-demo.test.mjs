@@ -5,7 +5,7 @@ import test from "node:test";
 const data = readFileSync("src/lib/luna-books-demo.ts", "utf8");
 const component = readFileSync("src/components/luna-books-tour.tsx", "utf8");
 const page = readFileSync("src/app/demo/luna-books-tour/page.tsx", "utf8");
-const lunaBooksPage = readFileSync("src/app/transaction-intelligence/page.tsx", "utf8");
+const lunaBooksPage = readFileSync("src/app/klyro/page.tsx", "utf8");
 const sitemap = readFileSync("src/app/sitemap.ts", "utf8");
 const css = readFileSync("src/app/luxury.css", "utf8");
 

@@ -11,17 +11,6 @@ export type WatchlistItem = {
 
 export const watchlist: WatchlistItem[] = [
   {
-    ticker: "AIPO",
-    company: "Defiance AI & Power Infrastructure ETF",
-    score: 82,
-    researchStatus: "Watchlist",
-    setupStatus: "Monitoring",
-    note: "Diversified thematic exposure to the AI-compute, power, grid, nuclear, and infrastructure buildout without relying on a single operating company.",
-    catalyst:
-      "Continued data-center, power-generation, grid-modernization, and AI-infrastructure investment.",
-    risk: "Thematic concentration, elevated underlying valuations, volatility, and fund expenses.",
-  },
-  {
     ticker: "GLW",
     company: "Corning Incorporated",
     score: 91,
@@ -75,28 +64,6 @@ export const watchlist: WatchlistItem[] = [
     catalyst:
       "Earnings growth, integration benefits, wealth-management expansion, and capital returns.",
     risk: "Canadian credit deterioration, housing weakness, regulation, and capital-market cyclicality.",
-  },
-  {
-    ticker: "PANW",
-    company: "Palo Alto Networks Inc.",
-    score: 86,
-    researchStatus: "Watchlist",
-    setupStatus: "Monitoring",
-    note: "Palo Alto Networks remains a leading cybersecurity consolidator as customers shift toward broader platform-based security spending.",
-    catalyst:
-      "Platformization, recurring cybersecurity demand, and adoption of next-generation security products.",
-    risk: "Premium valuation, intense competition, integration complexity, and slower billings growth.",
-  },
-  {
-    ticker: "ANET",
-    company: "Arista Networks Inc.",
-    score: 95,
-    researchStatus: "Watchlist",
-    setupStatus: "Monitoring",
-    note: "Arista Networks is a leading AI and cloud-networking business combining strong growth, profitability, and institutional-quality execution.",
-    catalyst:
-      "Accelerating Ethernet-based AI networking and adoption of next-generation high-speed products.",
-    risk: "Hyperscaler concentration, competition, premium valuation, and growth deceleration.",
   },
   {
     ticker: "DLR",

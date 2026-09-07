@@ -8,7 +8,7 @@ test("Luna1 Next.js application is deployable from the repository root", () => {
   assert.equal(packageJson.scripts.dev, "next dev");
   assert.equal(packageJson.scripts.build, "next build");
   assert.equal(packageJson.scripts.start, "next start");
-  assert.equal(packageJson.dependencies.next, "16.2.12");
+  assert.equal(packageJson.dependencies.next, "16.3.2");
   assert.ok(fs.existsSync("src/app/layout.tsx"));
   assert.ok(fs.existsSync("src/app/page.tsx"));
   assert.ok(fs.existsSync("next.config.ts"));

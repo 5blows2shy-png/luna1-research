@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   ArrowRight,
@@ -100,6 +101,7 @@ function SceneContent({ id }: { id: string }) {
 }
 
 export function LunaBooksTour() {
+  const router = useRouter();
   const [index, setIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const scene = tutorialScenes[index];
@@ -111,11 +113,11 @@ export function LunaBooksTour() {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "ArrowRight") setIndex(current => Math.min(current + 1, tutorialScenes.length - 1));
       if (event.key === "ArrowLeft") setIndex(current => Math.max(current - 1, 0));
-      if (event.key === "Escape") window.location.assign(exitHref);
+      if (event.key === "Escape") router.push(exitHref);
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (!isPlaying) return;

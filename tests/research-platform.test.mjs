@@ -41,15 +41,30 @@ test("research content uses typed centralized records", () => {
 
 test("incomplete research is labeled without fabricated data or PDFs", () => {
   const data = fs.readFileSync("src/lib/research-content.ts", "utf8");
+  const companyRecords = data.slice(
+    data.indexOf("export const companyResearch"),
+    data.indexOf("export const investmentThemes"),
+  );
   const page = fs.readFileSync(
     "src/app/research/companies/[ticker]/page.tsx",
     "utf8",
   );
   assert.match(data, /Data pending update/);
   assert.match(data, /Date to be confirmed/);
-  assert.doesNotMatch(data, /pdfUrl:/);
+  assert.doesNotMatch(companyRecords, /pdfUrl:/);
   assert.match(page, /Full research report in development\./);
   assert.match(page, /company\.pdfUrl/);
+});
+
+test("GLW research-note development entry is dated and completed", () => {
+  const log = fs.readFileSync("src/lib/development-log.ts", "utf8");
+  assert.equal(
+    (log.match(/id: "glw-optical-connectivity-research-note"/g) ?? []).length,
+    1,
+  );
+  assert.match(log, /date: "2026-08-21"/);
+  assert.match(log, /Completed GLW Optical-Connectivity Research Note/);
+  assert.match(log, /status: "Completed"/);
 });
 
 test("every research surface renders the approved disclosure", () => {

@@ -47,7 +47,11 @@ export function Navbar() {
     const currentTheme: ColorTheme =
       document.documentElement.dataset.theme === "light" ? "light" : "dark";
     applyTheme(currentTheme);
-    const frame = requestAnimationFrame(() => setTheme(currentTheme));
+    const frame = requestAnimationFrame(() => {
+      setTheme(
+        document.documentElement.dataset.theme === "light" ? "light" : "dark",
+      );
+    });
 
     const followSystemTheme = (event: MediaQueryListEvent) => {
       if (hasStoredTheme()) return;

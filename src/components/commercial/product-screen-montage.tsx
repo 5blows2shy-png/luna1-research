@@ -7,7 +7,7 @@ const products = [
   "Portfolio Overview",
   "Active Positions",
   "Watchlist",
-  "Conviction Dashboard",
+  "Research Coverage",
   "Performance",
 ];
 

@@ -1,0 +1,64 @@
+{
+  "companyName": "Corning Incorporated",
+  "ticker": "GLW",
+  "reportTitle": "Mapping Optical-Connectivity Demand",
+  "reportType": "Analyst Journal Research Note",
+  "lastUpdated": "August 21, 2026",
+  "reviewed": true,
+  "sections": [
+    {
+      "title": "Research purpose",
+      "paragraphs": [
+        "This note maps the operating evidence behind Corning's optical-connectivity demand and identifies the questions that must be answered before extrapolating recent growth. It does not assign a rating or price target."
+      ]
+    },
+    {
+      "title": "What Corning reported",
+      "paragraphs": [
+        "Corning reported Q2 2026 GAAP sales of $4.505 billion, up 17% year over year, GAAP operating margin of 15.5%, and operating cash flow of $1.72 billion. Core sales, a company-defined non-GAAP measure, were $4.738 billion, core operating margin was 20.9%, and adjusted free cash flow was $1.42 billion.",
+        "Optical Communications sales were $2.072 billion, up 32% year over year, and segment net income was $438 million, up 77%. Enterprise Networks sales increased 65%, with management identifying Gen AI products as a major demand driver."
+      ]
+    },
+    {
+      "title": "Demand map",
+      "paragraphs": [
+        "The current demand chain runs from accelerated-computing investment to larger data-center clusters, greater bandwidth requirements, and more fiber and optical connectivity per site. Corning's reported long-term agreements with hyperscale customers provide evidence of customer planning, but they do not by themselves establish realized revenue, contract margins, or cash conversion.",
+        "The most useful operating evidence is segment sales growth, Enterprise Networks growth, segment income, customer agreement conversion, capacity utilization, capital expenditure, and adjusted free cash flow. These measures should be reviewed together because volume growth can require meaningful manufacturing investment before cash returns are visible."
+      ]
+    },
+    {
+      "title": "Segment context",
+      "pageBreak": true,
+      "paragraphs": [
+        "Q2 2026 reported segment sales were $2.072 billion for Optical Communications, $1.463 billion for Glass Innovations, $471 million for Automotive, $438 million for Solar, and $294 million for Life Sciences and Emerging Growth Businesses. Corning revised its segment structure in Q1 2026, so historical comparisons must use recast figures where available.",
+        "Optical Communications is the clearest near-term acceleration engine, while Solar is a separate ramp with different operating and capital risks. The research should not attribute company-wide margin or cash-flow improvement solely to optical demand."
+      ]
+    },
+    {
+      "title": "Questions that remain open",
+      "paragraphs": [
+        "Customer concentration: What percentage of incremental Optical Communications revenue depends on a small group of hyperscale customers, and what cancellation, rescheduling, or volume protections support the announced agreements?",
+        "Capacity and returns: What capital spending and working capital are required for the planned U.S. optical-capacity expansion, how quickly can utilization rise, and what return on invested capital is achievable under base and downside volume scenarios?",
+        "Margin durability: How much of the segment's income growth came from volume, pricing, mix, utilization, or temporary cost effects? Can earnings grow faster than sales after the capacity build begins?",
+        "Cash conversion: How do customer deposits, receivables, inventory, capital expenditures, and contract timing convert reported demand into free cash flow?"
+      ]
+    },
+    {
+      "title": "Monitoring framework",
+      "pageBreak": true,
+      "paragraphs": [
+        "Evidence that would strengthen the view: sustained Optical Communications and Enterprise Networks growth; segment income growing at least as fast as sales; disclosed customer agreements converting into reported revenue; capacity additions meeting schedule and budget; and free-cash-flow growth that supports rising returns on invested capital.",
+        "Evidence that would weaken the view: hyperscale project delays; customer concentration without contractual protection; capacity spending that outruns demand; segment margin compression; elevated inventory or receivables; or company-wide cash conversion that fails to follow reported core earnings growth.",
+        "Status: Monitoring. The Q2 results are a meaningful proof point, but the durability of growth depends on customer conversion, capacity economics, and cash returns."
+      ]
+    },
+    {
+      "title": "Primary sources and limitations",
+      "paragraphs": [
+        "Corning Incorporated, Second-Quarter 2026 Financial Results, published July 28, 2026, quarter ended June 30, 2026. Relevant sections: financial highlights, segment results, third-quarter outlook, and reconciliations. https://investor.corning.com/news-and-events/news/news-details/2026/Cornings-Strong-Second-Quarter-2026-Financial-Results1-Demonstrate-Progress-on-Recently-Upgraded-Springboard-Plan/default.aspx",
+        "Corning Incorporated, SEC Filings archive. Relevant source set: quarterly and annual filings used to reconcile GAAP results, segment reporting, risks, and cash flow. https://investor.corning.com/investor-relations/financials/sec-filings/default.aspx",
+        "Core sales, core margins, core EPS, and adjusted free cash flow are company-defined non-GAAP measures. This note separates those measures from GAAP results and does not include real-time market data or an investment recommendation."
+      ]
+    }
+  ]
+}
