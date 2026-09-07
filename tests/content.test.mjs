@@ -161,12 +161,16 @@ test("portfolio reflects approved public positions", () => {
       !activeSource.includes(`ticker:\"${ticker}\"`),
       `${ticker} remains active`,
     );
-  for (const ticker of ["CASY", "ANET", "WELL", "KRYS"]) {
+  for (const ticker of ["CASY", "WELL", "KRYS"]) {
     assert.ok(
       activeSource.includes(`ticker:\"${ticker}\"`),
       `${ticker} is missing`,
     );
   }
+  assert.ok(
+    !activeSource.includes('ticker:"ANET"'),
+    "ANET remains active",
+  );
   assert.ok(!activeSource.includes("entryPrice"), "entry price remains active");
   for (const heading of [
     "Shares",
@@ -371,12 +375,10 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
   for (const label of [
     "Home",
     "Equity Research",
-    "Valuation Lab",
     "Klyro",
     "Portfolio Lab",
     "Analyst Journal",
     "Recruiter View",
-    "Contact",
     "Development Log",
   ])
     assert.ok(
@@ -384,6 +386,8 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
       `missing navigation item: ${label}`,
     );
   for (const retired of [
+    "Valuation Lab",
+    "Contact",
     "Deal Lab",
     "Real Estate",
     "Python Lab",
@@ -394,6 +398,8 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
       `retired top-level navigation remains: ${retired}`,
     );
   assert.ok(fs.existsSync("src/app/research/page.tsx"));
+  assert.ok(fs.existsSync("src/app/valuation-models/page.tsx"));
+  assert.ok(fs.existsSync("src/app/contact/page.tsx"));
   assert.ok(fs.existsSync("src/app/analyst-journal/page.tsx"));
   for (const token of [
     "--charcoal:",

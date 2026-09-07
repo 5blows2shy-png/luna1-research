@@ -148,18 +148,18 @@ test("desktop and mobile navigation expose only the permanent product scope", as
   for (const label of [
     "Home",
     "Equity Research",
-    "Valuation Lab",
     "Klyro",
     "Portfolio Lab",
     "Analyst Journal",
     "Recruiter View",
-    "Contact",
     "Development Log",
   ])
     await expect(
       navigation.getByRole("link", { name: new RegExp(`${label}$`) }),
     ).toBeVisible();
   for (const retired of [
+    "Valuation Lab",
+    "Contact",
     "Deal Lab",
     "Python Lab",
     "Real Estate",
@@ -484,19 +484,12 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
     page.getByRole("tab", { name: "Active Positions" }),
     testInfo.project.name,
   );
-  const anetRow = page.locator(
-    '.active-positions-table tr[data-symbol="ANET"]',
-  );
-  await expect(anetRow).toHaveCount(1);
-  await expect(anetRow.getByText("Monitoring", { exact: true })).toBeVisible();
   await expect(
-    anetRow.getByText(/ANET moved from the Watchlist into Active Positions/),
-  ).toBeVisible();
+    page.locator('.active-positions-table tr[data-symbol="ANET"]'),
+  ).toHaveCount(0);
   await expect(
     page.locator('.active-positions-table tr[data-symbol="PANW"]'),
   ).toHaveCount(0);
-  await expect(anetRow.getByText("Entry price", { exact: true })).toHaveCount(0);
-  await expect(anetRow.getByText("Research needed")).toHaveCount(0);
   await expect(
     page.getByRole("columnheader", { name: "Position size" }),
   ).toHaveCount(0);
@@ -535,7 +528,7 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
   await expect(page.getByText("Data pending", { exact: true })).toBeVisible();
 });
 
-test("KRYS joins ANET in Active Positions and opens sourced research", async ({
+test("KRYS appears in Active Positions and opens sourced research", async ({
   page,
 }, testInfo) => {
   await page.goto("/portfolio");
@@ -551,10 +544,8 @@ test("KRYS joins ANET in Active Positions and opens sourced research", async ({
     page.getByText("Krystal Biotech, Inc.", { exact: true }),
   ).toBeVisible();
   await expect(
-    page.locator(
-      '.active-positions-table tr[data-symbol="ANET"] .portfolio-ticker',
-    ),
-  ).toHaveText("ANET");
+    page.locator('.active-positions-table tr[data-symbol="ANET"]'),
+  ).toHaveCount(0);
   await expect(page.getByText("Initial Thesis", { exact: true })).toHaveCount(0);
   await krysPosition.getByRole("link", { name: "View Position Research" }).click();
   await expect(page).toHaveURL(/\/portfolio\/positions\/krys$/);

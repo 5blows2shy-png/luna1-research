@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader, SectionHeading } from "@/components/site";
-import { commentary } from "@/lib/data";
-import { analystJournalCategories } from "@/lib/professional-profile";
 import { researchNotes } from "@/lib/research-content";
 
 export const metadata: Metadata = {
@@ -19,27 +17,6 @@ export default function AnalystJournalPage() {
         title="Working notes before the conclusion."
         description="An analyst notebook for questions, observations, updates, and lessons. Drafts remain clearly labeled until evidence and sources are ready for review."
       />
-      <section>
-        <SectionHeading
-          eyebrow="Notebook structure"
-          title="Eight lenses for continuous research"
-          copy="Categories organize the work without presenting unfinished notes as complete research."
-        />
-        <div className="journal-category-grid">
-          {analystJournalCategories.map((category, index) => (
-            <article key={category.title}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <h2>{category.title}</h2>
-              <p>{category.description}</p>
-              <small>
-                {category.title === "Books"
-                  ? "No published entries"
-                  : "Notebook category"}
-              </small>
-            </article>
-          ))}
-        </div>
-      </section>
       <section>
         <SectionHeading
           eyebrow="Current notebook"
@@ -78,30 +55,6 @@ export default function AnalystJournalPage() {
         <Link className="text-link" href="/research/notes">
           Open the filterable research notebook →
         </Link>
-      </section>
-      <section>
-        <SectionHeading
-          eyebrow="Market notes archive"
-          title="Context without prediction"
-          copy="Archived market observations support company-level research but do not replace business analysis."
-        />
-        <div className="journal-list">
-          {commentary.map((item, index) => (
-            <Link href={`/market-commentary/${item.slug}`} key={item.slug}>
-              <span className="journal-number">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <div>
-                <span className="eyebrow">
-                  {item.category} · {item.date}
-                </span>
-                <h2>{item.title}</h2>
-                <p>{item.summary}</p>
-                <b>Read market note →</b>
-              </div>
-            </Link>
-          ))}
-        </div>
       </section>
     </>
   );

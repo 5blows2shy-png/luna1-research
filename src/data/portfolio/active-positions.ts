@@ -43,39 +43,6 @@ export const activePositions: ActivePosition[] = [
       "No thesis-breaking change is documented. Store growth, prepared-food performance, EBITDA, and returns on invested capital remain the monitoring priorities.",
   },
   {
-    ticker: "ANET",
-    company: "Arista Networks Inc.",
-    sector: "Technology",
-    industry: "Cloud and AI networking",
-    positionType: "Network-infrastructure compounder",
-    thesis:
-      "Arista Networks is a leading AI and cloud-networking business combining strong growth, profitability, and institutional-quality execution. The thesis depends on sustained Ethernet adoption, disciplined product execution, and durable demand from cloud and AI infrastructure customers.",
-    keyFundamentals: [
-      "AI and cloud-networking demand",
-      "Revenue growth and operating profitability",
-      "Customer and product diversification",
-    ],
-    competitiveAdvantage:
-      "Arista's software-led networking architecture, operating-system consistency, and position with large cloud customers support product performance and customer retention.",
-    growthDrivers: [
-      "Ethernet-based AI networks",
-      "Cloud capital spending",
-      "Campus networking",
-      "Product adoption",
-    ],
-    watching: [
-      "Customer concentration",
-      "Competitive wins and losses",
-      "Growth durability",
-      "Valuation discipline",
-    ],
-    thesisInvalidation:
-      "The thesis would weaken if AI and cloud-networking demand materially slows, competitive losses impair growth, or execution no longer supports the company's profitability and product position.",
-    status: "Monitoring",
-    whatChanged:
-      "ANET moved from the Watchlist into Active Positions. The thesis remains centered on Ethernet-based AI and cloud-networking demand, execution quality, and product adoption; customer concentration, competition, valuation, and growth durability remain under review.",
-  },
-  {
     ticker: "WELL",
     company: "Welltower Inc.",
     sector: "Real Estate",
