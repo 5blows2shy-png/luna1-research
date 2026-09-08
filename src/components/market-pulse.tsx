@@ -17,12 +17,12 @@ function QuoteShell({ quote, children }: { quote: MarketPulseQuote; children: Re
   return route ? <Link className={className} href={route} data-market-pulse-item>{children}</Link> : <div className={className} tabIndex={0} role="group" data-market-pulse-item>{children}</div>;
 }
 
-function QuoteContent({ quote }: { quote: MarketPulseQuote }) {
+function QuoteContent({ quote, regularMarketClosed }: { quote: MarketPulseQuote; regularMarketClosed: boolean }) {
   const change = formatQuoteChange(quote.change);
   const percent = formatQuoteChange(quote.changePercent);
   const usesCurrency = quote.assetClass === "equity" || quote.assetClass === "commodity";
   const price = quote.assetClass === "treasury" ? `${formatQuoteNumber(quote.price, 3)}%` : `${quote.assetClass === "equity" || quote.assetClass === "commodity" ? "$" : ""}${formatQuoteNumber(quote.price, quote.assetClass === "commodity" ? 2 : 2)}`;
-  const state = quote.stale ? "STALE" : quote.delayed ? "DELAYED" : "REAL-TIME";
+  const state = regularMarketClosed && quote.assetClass === "equity" && quote.price !== null ? "PREVIOUS CLOSE" : quote.stale ? "STALE" : quote.delayed ? "DELAYED" : "REAL-TIME";
   return <>
     <span className="market-pulse-identity"><b>{quote.symbol}</b><small>{quote.label}</small></span>
     <span className="market-pulse-values">
@@ -69,7 +69,7 @@ export function MarketPulse() {
         <div className={`market-pulse-track${paused ? " paused" : ""}`}>
           {visibleQuotes.map((quote) => (
             <QuoteShell quote={quote} key={quote.symbol}>
-              <QuoteContent quote={quote} />
+              <QuoteContent quote={quote} regularMarketClosed={sessionInfo.session !== "regular"} />
             </QuoteShell>
           ))}
         </div>

@@ -1,15 +1,17 @@
 import type {
   CompanyResearchCoverage,
-  HistoricalFinancialRecord,
   ResearchKind,
   ResearchSection,
-  SegmentRecord,
 } from "./research-types";
-import { DATA_PENDING, RESEARCH_IN_PROGRESS } from "./research-disclosures";
+import { RESEARCH_IN_PROGRESS } from "./research-disclosures";
 import {
   RESEARCH_UPDATED_DATE,
   researchEvidenceByTicker,
 } from "./research-evidence";
+import {
+  historicalEvidenceByTicker,
+  segmentEvidenceByTicker,
+} from "./research-financials";
 
 type CoverageSeed = {
   ticker: string;
@@ -28,44 +30,6 @@ type CoverageSeed = {
   valuationFocus?: string[];
   specialSection?: CompanyResearchCoverage["specialSection"];
 };
-
-const historicalPeriods = ["FY2021", "FY2022", "FY2023", "FY2024", "FY2025"];
-
-function pendingHistorical(period: string): HistoricalFinancialRecord {
-  return {
-    period,
-    revenue: null,
-    revenueGrowth: null,
-    grossProfit: null,
-    grossMargin: null,
-    operatingIncome: null,
-    operatingMargin: null,
-    ebitda: null,
-    ebitdaMargin: null,
-    netIncome: null,
-    dilutedEps: null,
-    operatingCashFlow: null,
-    capitalExpenditures: null,
-    freeCashFlow: null,
-    cash: null,
-    debt: null,
-    dilutedShares: null,
-    sourceUrl: null,
-  };
-}
-
-function pendingSegment(name: string): SegmentRecord {
-  return {
-    name,
-    revenue: null,
-    revenueGrowth: null,
-    operatingIncome: null,
-    operatingMargin: null,
-    shareOfRevenue: null,
-    driver: DATA_PENDING,
-    sourceUrl: null,
-  };
-}
 
 function diligenceCards(labels: string[]): ResearchSection[] {
   return labels.map((title) => ({
@@ -147,8 +111,8 @@ function createCoverage(seed: CoverageSeed): CompanyResearchCoverage {
       },
     ],
     revenueDrivers: seed.revenueDrivers,
-    segments: seed.segments.map(pendingSegment),
-    historicalFinancials: historicalPeriods.map(pendingHistorical),
+    segments: segmentEvidenceByTicker[ticker],
+    historicalFinancials: historicalEvidenceByTicker[ticker] ?? [],
     forecasts: [
       "Current Year Estimate",
       "Forecast Year 1",
@@ -286,9 +250,9 @@ const coverageSeeds: CoverageSeed[] = [
       "What normalized earnings and cash-flow profile is supported across Corning's different cycles?",
     segments: [
       "Optical Communications",
-      "Display Technologies",
+      "Display",
       "Specialty Materials",
-      "Environmental Technologies",
+      "Automotive",
       "Life Sciences",
       "Hemlock and Emerging Growth Businesses",
     ],
@@ -373,11 +337,7 @@ const coverageSeeds: CoverageSeed[] = [
       "Monitor unit growth, average selling prices, customer concentration, and gross-margin progression.",
     valuationQuestion:
       "What growth duration and margin structure are required to support the current business expectations?",
-    segments: [
-      "Connectivity Products",
-      "Memory Connectivity",
-      "PCIe and CXL Products",
-    ],
+    segments: ["Consolidated operations (single reportable segment)"],
     revenueDrivers: [
       "Hyperscaler demand",
       "Customer concentration",
@@ -403,11 +363,11 @@ const coverageSeeds: CoverageSeed[] = [
     valuationQuestion:
       "What price-to-book and residual-income valuation is justified by sustainable ROE and capital generation?",
     segments: [
-      "Canadian Personal and Commercial Banking",
+      "Personal Banking",
+      "Commercial Banking",
       "Wealth Management",
-      "Capital Markets",
       "Insurance",
-      "U.S. and International Banking",
+      "Capital Markets",
     ],
     revenueDrivers: [
       "Loan and deposit growth",
@@ -447,11 +407,7 @@ const coverageSeeds: CoverageSeed[] = [
       "Monitor recurring revenue, remaining obligations, customer growth, margins, and stock-based compensation.",
     valuationQuestion:
       "What growth and free-cash-flow duration are required to support the valuation?",
-    segments: [
-      "Next-Generation Security",
-      "Subscription and Support",
-      "Platformization",
-    ],
+    segments: ["Cybersecurity platform (single reportable segment)"],
     revenueDrivers: [
       "Remaining performance obligations",
       "Annual recurring revenue",
@@ -475,12 +431,7 @@ const coverageSeeds: CoverageSeed[] = [
       "Monitor cloud-titan demand, enterprise adoption, product mix, and product and service margins.",
     valuationQuestion:
       "What growth duration and normalized margin justify the embedded expectations?",
-    segments: [
-      "Data-Center Switching",
-      "Routing",
-      "Campus Products",
-      "Services",
-    ],
+    segments: ["Cloud networking (single reportable segment)"],
     revenueDrivers: [
       "Cloud titan customers",
       "Enterprise customers",
@@ -504,12 +455,7 @@ const coverageSeeds: CoverageSeed[] = [
       "Monitor occupancy, leasing, development yields, AFFO, leverage, debt maturities, and capital intensity.",
     valuationQuestion:
       "What Price/AFFO and NAV framework is supported by property growth, leverage, and financing conditions?",
-    segments: [
-      "Rental Revenue",
-      "Interconnection",
-      "Development Pipeline",
-      "Geographic Portfolio",
-    ],
+    segments: ["Data-center operations (single reportable segment)"],
     revenueDrivers: [
       "Same-capital cash NOI growth",
       "Occupancy and leasing volume",

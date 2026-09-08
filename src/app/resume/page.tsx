@@ -92,7 +92,7 @@ export function ResumeContent({
       <section className="recruiter-hero">
         <div>
           <span className="eyebrow">
-            {recruiterView ? "Recruiter View · Why hire me?" : "Resume · Shy Lee"}
+            {recruiterView ? "Recruiter View · Professional profile" : "Resume · Shy Lee"}
           </span>
           <p className="recruiter-status">
             <i /> Open to finance, investment research, and analyst
@@ -120,8 +120,9 @@ export function ResumeContent({
             className="profile-photo"
             src={portraitSrc}
             alt="Portrait of Shy Lee, founder of Luna1 Research"
-            width={400}
-            height={400}
+            width={recruiterView ? 1080 : 400}
+            height={recruiterView ? 1080 : 400}
+            quality={95}
             sizes="(max-width: 900px) calc(100vw - 118px), 360px"
             priority
           />
@@ -232,7 +233,7 @@ export function ResumeContent({
             </header>
             <div className="recruiter-capability-grid">
               {platformPillars
-                .filter(({ href }) => href !== "/transaction-intelligence")
+                .filter(({ href }) => href !== "/klyro")
                 .map((pillar) => (
                   <Link href={pillar.href} key={pillar.title}>
                     <span>{pillar.number}</span>
@@ -282,8 +283,12 @@ export function ResumeContent({
             <p>Associate of Science in Business Administration · 2024</p>
           </div>
           <div className="credential">
-            <b>Advanced Finance Coursework</b>
-            <p>Aztec Investment Fund – Equity Research &amp; Portfolio Management</p>
+            <b>Investment Organizations &amp; Applied Experience</b>
+            <span>Aztec Investment Fund (AIF)</span>
+            <p>
+              Student-managed investment fund focused on equity research,
+              valuation, portfolio analysis, and investment decision-making.
+            </p>
           </div>
         </div>
         <div id="certifications">
@@ -296,16 +301,31 @@ export function ResumeContent({
             </div>
             <div>
               <b>Bloomberg Market Concepts</b>
-              <span>Completed</span>
+              <span>
+                Completed ·{" "}
+                <a
+                  href="/downloads/shy-lee-bloomberg-market-concepts-certificate.pdf"
+                  download
+                  aria-label="Download Bloomberg Market Concepts certificate (PDF)"
+                >
+                  Certificate ↓
+                </a>
+              </span>
             </div>
             <div>
               <b>Microsoft Excel</b>
               <span>Completed</span>
             </div>
             <div>
-              <b>SIE</b>
-              <span>Planned</span>
+              <b>CFA Level I</b>
+              <span>Planned · August 2027</span>
             </div>
+            {recruiterView && (
+              <div>
+                <b>CFA Society San Diego Student Member</b>
+                <span>2026–Present</span>
+              </div>
+            )}
           </div>
           <Link className="text-link" href="/certifications">
             View certification roadmap →

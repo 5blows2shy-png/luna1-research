@@ -5,6 +5,22 @@ import { getMarketSession } from "@/lib/market/market-session";
 import type { MarketPulseQuote, MarketPulseResponse } from "@/lib/market-pulse/types";
 
 const empty: MarketPulseResponse = { quotes: [], updatedAt: null, provider: "Financial Modeling Prep", status: "unavailable" };
+const STORAGE_KEY = "luna1-market-pulse-last-verified-v1";
+const MAX_PERSISTED_AGE = 7 * 24 * 60 * 60 * 1000;
+
+type PersistedMarketPulse = { savedAt: number; data: MarketPulseResponse };
+
+function restorePersistedMarketPulse(): MarketPulseResponse | null {
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? "null") as Partial<PersistedMarketPulse> | null;
+    if (!parsed || typeof parsed.savedAt !== "number" || Date.now() - parsed.savedAt > MAX_PERSISTED_AGE || !parsed.data || !Array.isArray(parsed.data.quotes)) return null;
+    const quotes = parsed.data.quotes.filter((quote) => quote && typeof quote.id === "string" && typeof quote.symbol === "string" && typeof quote.price === "number" && Number.isFinite(quote.price));
+    if (!quotes.length) return null;
+    return { ...parsed.data, quotes: quotes.map((quote) => ({ ...quote, stale: true, error: "Awaiting the next verified update" })), status: "partial", message: "Previous close retained while the next update is unavailable." };
+  } catch {
+    return null;
+  }
+}
 
 function mergeQuotes(current: MarketPulseQuote[], incoming: MarketPulseQuote[]) {
   const previous = new Map(current.map((quote) => [quote.id, quote]));
@@ -16,6 +32,21 @@ export function useMarketPulse(paused: boolean) {
   const [loading, setLoading] = useState(true);
   const inFlight = useRef(false);
   const controller = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    const restore = window.setTimeout(() => {
+      const restored = restorePersistedMarketPulse();
+      if (restored) setData(restored);
+    }, 0);
+    return () => window.clearTimeout(restore);
+  }, []);
+
+  useEffect(() => {
+    if (!data.quotes.some(({ price }) => price !== null)) return;
+    const verified = { ...data, quotes: data.quotes.filter(({ price }) => price !== null) };
+    const updateTime = data.updatedAt ? Date.parse(data.updatedAt) : Number.NaN;
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ savedAt: Number.isFinite(updateTime) ? updateTime : Date.now(), data: verified } satisfies PersistedMarketPulse));
+  }, [data]);
   const refresh = useCallback(async () => {
     if (paused || inFlight.current || document.visibilityState === "hidden") return;
     inFlight.current = true;

@@ -1,4 +1,4 @@
--- Luna Books tenant and accounting foundation.
+-- Klyro tenant and accounting foundation.
 -- Apply through a reviewed Supabase migration or SQL editor transaction.
 -- This schema uses Supabase Auth identities and row-level security. It does not
 -- activate customer authentication by itself.

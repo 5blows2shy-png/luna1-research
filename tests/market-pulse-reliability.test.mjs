@@ -11,6 +11,11 @@ test("market pulse normalizes FMP arrays and calculates missing percentages", as
   assert.match(provider, /change \/ previousClose \* 100/);
   assert.match(provider, /previousClose/);
   assert.match(provider, /fmpSymbolByInstrumentId/);
+  assert.match(provider, /treasury-rates/);
+  assert.match(provider, /year10/);
+  assert.match(provider, /batch-commodity-quotes/);
+  assert.match(provider, /batch-quote\?symbols=NVDA%2CAVGO/);
+  assert.match(provider, /quote-short\?symbol=/);
 });
 
 test("market pulse isolates failures and retains cached stale quotes", async () => {
@@ -30,6 +35,10 @@ test("market pulse polling cleans up, pauses, and follows tab visibility", async
   assert.match(hook, /clearInterval/);
   assert.match(hook, /controller\.current\?\.abort\(\)/);
   assert.match(hook, /last verified values retained/i);
+  assert.match(hook, /luna1-market-pulse-last-verified-v1/);
+  assert.match(hook, /MAX_PERSISTED_AGE/);
+  assert.match(hook, /localStorage\.setItem/);
+  assert.match(hook, /Number\.isFinite\(quote\.price\)/);
 });
 
 test("market pulse formats Treasury yields and instrument-level fallbacks", async () => {
@@ -38,5 +47,6 @@ test("market pulse formats Treasury yields and instrument-level fallbacks", asyn
   assert.match(component, /formatQuoteNumber\(quote\.price, 3\)/);
   assert.match(component, /UNAVAILABLE/);
   assert.match(component, /STALE/);
+  assert.match(component, /PREVIOUS CLOSE/);
   assert.match(component, /Resume market ticker updates and motion/);
 });

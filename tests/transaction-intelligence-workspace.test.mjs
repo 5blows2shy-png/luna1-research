@@ -12,17 +12,19 @@ const logic = fs.readFileSync(
   "utf8",
 );
 
-test("workspace preserves the prototype tab order", () => {
+test("workspace presents the connected owner accounting flow before specialist tools", () => {
   let previous = -1;
   for (const tab of [
-    "Home",
-    "Client Request Portal",
-    "Nonprofit Back Office",
-    "Upload & Clean Transactions",
-    "Bank Statement PDF Parser",
-    "Bank-to-QuickBooks Reconciliation",
-    "Journal Entry Assistant",
-    "Monthly Close Board Packet",
+    "Overview",
+    "Decision Board",
+    "Transactions",
+    "Journal Entries",
+    "Cash Flow",
+    "Financials",
+    "Monthly Close",
+    "Accountant",
+    "Documents",
+    "Settings",
   ]) {
     const position = component.indexOf(`"${tab}"`);
     assert.ok(position > previous, tab);
@@ -54,7 +56,7 @@ test("transaction workflow keeps sample processing, review, and exports", () => 
     "Download PDF Review",
     "Download Reconciliation Workbook",
     "Download Reconciliation PDF",
-    "Suggest Draft Journal Entry",
+    "Download Journal Review",
     "Use complete sample close packet",
     "Download Full Board Packet Excel",
     "Download Full Board Packet PDF",
@@ -96,8 +98,8 @@ test("board packet connects every imported source to analysis and exports", () =
     assert.ok(logic.includes(analysis), analysis);
 });
 
-test("Luna Books presents the connected product hierarchy and honest portal roadmap", () => {
-  for (const product of ["Luna Books", "Luna Forecast", "Luna Business"])
+test("Klyro presents the connected product hierarchy and honest portal roadmap", () => {
+  for (const product of ["Klyro", "Klyro Forecast", "Klyro Business"])
     assert.ok(component.includes(product), product);
 
   for (const portalModule of [
@@ -120,6 +122,53 @@ test("Luna Books presents the connected product hierarchy and honest portal road
   assert.match(component, /planned—not currently production-ready/);
 });
 
+test("Klyro portal home highlights the core close workflow and launches every tool", () => {
+  for (const highlight of [
+    "Klyro Primary Workflow",
+    "Decision Board",
+    "Upload & Clean Transactions",
+    "Journal Entry Assistant",
+    "Monthly Close Board Packet",
+    "All Klyro Portal Tools",
+  ])
+    assert.ok(component.includes(highlight), highlight);
+
+  assert.match(component, /onSelectTab\(workflow\.tab\)/);
+  assert.match(component, /onSelectTab\(tab\)/);
+  assert.match(component, /<HomeTab onSelectTab=\{setActiveTab\}/);
+});
+
+test("Klyro Books Phase 1 demo centers decisions and the fictional HVAC business", () => {
+  for (const content of [
+    "Klyro Books",
+    "The financial decision operating system for small business.",
+    "Coastal Heating & Air LLC",
+    "Receivables increased 24%",
+    "Your Next 3 Moves",
+    "Collect receivables",
+    "Delay the cash equipment purchase",
+    "Reevaluate hiring",
+  ]) assert.ok(component.includes(content), content);
+});
+
+test("live Klyro preview clearly prohibits operational reliance", () => {
+  assert.match(component, /In Development · Demo Preview · Not for operational use/);
+  assert.match(component, /must not be used as a system of record/);
+  assert.match(component, /bookkeeping, posting, filing, lending, tax, payroll, or business decisions/);
+  assert.match(component, /require qualified professional review/);
+});
+
+test("Client Request Portal is removed from the visible workspace", () => {
+  assert.doesNotMatch(component, /Client Request Portal/);
+  assert.doesNotMatch(component, /Bookkeeper Client-Request Portal/);
+  assert.doesNotMatch(component, /Reminder Email Template/);
+});
+
+test("Klyro leads with the owner decision problem it exists to solve", () => {
+  assert.match(component, /Businesses generate more data, but owners still struggle to turn it into decisions\./);
+  assert.match(component, /connects financial activity to organized accounting records/);
+  assert.match(component, /cash, hiring, equipment, inventory, expenses, financing, and financial health/);
+});
 test("Excel workbooks can be read from modern and legacy formats", () => {
   for (const bookType of ["xlsx", "xls", "xlsm", "xlsb", "ods"]) {
     const workbook = XLSX.utils.book_new();
@@ -166,7 +215,7 @@ test("PDF imports configure the bundled PDF.js worker", () => {
 
 test("PDF exports preserve review-only labeling and page furniture", () => {
   for (const marker of [
-    "LUNA BOOKS",
+    "KLYRO",
     "IN DEVELOPMENT - REVIEW WORKSPACE",
     "For accounting review only",
     "Page ${index + 1} of ${pages.length}",

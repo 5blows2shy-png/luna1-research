@@ -1,0 +1,76 @@
+{
+  "companyName": "Power Constraints and the Next Data-Center Bottleneck",
+  "ticker": "THEME",
+  "reportTitle": "Power Constraints and the Next Data-Center Bottleneck",
+  "reportType": "Thematic Research Note",
+  "lastUpdated": "September 7, 2026",
+  "reviewed": true,
+  "sections": [
+    {
+      "title": "Executive Summary",
+      "paragraphs": [
+        "The data-center investment debate is expanding beyond accelerators and networking into the physical systems required to deliver reliable power. The central research question is no longer only how much computing demand exists, but where generation, transmission, interconnection, power conversion, cooling, and permitting can support that demand on the required timeline.",
+        "Lawrence Berkeley National Laboratory's 2025 update estimates that data centers could account for 11.8% of total U.S. electricity use by 2030, with a scenario range of 9.5% to 15.3%. That is a scenario, not a guaranteed outcome, and it makes forecast discipline, regional constraints, and project-level evidence essential.",
+        "Luna1's working view is that the most durable beneficiaries may be businesses that solve a measurable constraint while preserving customer economics. Demand headlines alone are insufficient; orders, backlog quality, capacity, margins, working capital, and cash conversion must confirm the thesis."
+      ]
+    },
+    {
+      "title": "The Bottleneck Map",
+      "paragraphs": [
+        "Generation: New load requires dependable energy supply. The relevant questions include fuel availability, capacity factor, development time, environmental requirements, and the customer's all-in delivered cost.",
+        "Transmission and interconnection: Large loads may require network upgrades and lengthy reliability studies. FERC's large-load interconnection proceeding defines large loads generally as demand above 20 MW and examines orderly connection to the interstate transmission system.",
+        "Power conversion and distribution: Utility power must be transformed, conditioned, backed up, and delivered within the facility. Higher rack density can increase the value of switchgear, busways, UPS systems, power-management software, and service capability.",
+        "Thermal management: More electrical input ultimately becomes heat. Cooling architecture, water availability, operating efficiency, and deployment timing therefore affect both capacity and lifetime economics.",
+        "Onsite supply and flexibility: Berkeley Lab identifies computational load shifting, facility adjustments, storage, and onsite generation as potential flexibility mechanisms. These approaches can help bridge constraints, but they do not eliminate reliability, emissions, fuel, permitting, or cost questions."
+      ]
+    },
+    {
+      "title": "Evidence and Forecast Discipline",
+      "paragraphs": [
+        "Reported: Berkeley Lab estimated 176 TWh of U.S. data-center electricity use in 2023, equal to about 4.4% of total U.S. electricity consumption. Its 2024 report presented a 2028 scenario range of 325 to 580 TWh, or 6.7% to 12.0% of U.S. electricity use.",
+        "Updated scenario: Berkeley Lab's 2025 update, published in June 2026, extended the analysis to 2030 and estimated an 11.8% central share with a 9.5% to 15.3% range. The range is more useful than a point estimate because equipment shipments, utilization, efficiency, cooling, and project completion remain uncertain.",
+        "Regional signal: The U.S. Energy Information Administration reported in March 2026 that electricity demand growth had accelerated after 2020 and identified ERCOT and PJM as regions expected to experience especially rapid data-center-related demand growth through 2027.",
+        "Luna1 interpretation: A forecast should begin with committed projects, expected megawatts, energization dates, utilization, redundancy, and customer economics. Announced capacity should not automatically be treated as completed load or revenue."
+      ]
+    },
+    {
+      "title": "Research Framework for Potential Beneficiaries",
+      "paragraphs": [
+        "Demand evidence: What portion of orders or backlog is supported by funded, non-cancellable projects? When should it convert, and what dependencies could delay energization?",
+        "Capacity evidence: What manufacturing, labor, component, and installation capacity exists today? What capital and working capital are required to expand it?",
+        "Margin evidence: How much improvement comes from price, volume, product mix, utilization, service, or temporary incentives? Are warranty and commissioning costs fully reflected?",
+        "Cash evidence: When are deposits collected, inventory built, systems accepted, and final payments received? Does growth create or consume cash before revenue recognition?",
+        "Competitive evidence: Does the supplier solve a qualification-intensive, reliability-critical problem, or is capacity likely to become commoditized as competitors expand?",
+        "Valuation evidence: What revenue growth, margin, reinvestment, and terminal economics are already implied? A real bottleneck can still be a poor investment when expectations exceed achievable cash flows."
+      ]
+    },
+    {
+      "title": "Risks and Thesis Invalidation",
+      "paragraphs": [
+        "Load forecasts may double count speculative projects, overstate utilization, or fail to incorporate efficiency gains. Utilities and regulators may also change tariff, cost-allocation, and interconnection rules.",
+        "Supply may arrive through multiple paths, including grid upgrades, new generation, storage, onsite generation, workload flexibility, or slower project schedules. A company positioned for one solution can lose relevance if customer economics favor another.",
+        "The thematic thesis would weaken if announced projects repeatedly fail to reach construction and energization, if supplier backlog fails to convert into cash, if capacity additions erase pricing power, or if customer returns cannot support the cost of infrastructure.",
+        "This note is a research framework, not a recommendation. Company-specific conclusions require issuer filings, contract evidence, management guidance, valuation work, and continuing monitoring."
+      ],
+      "pageBreak": true
+    },
+    {
+      "title": "Primary Sources",
+      "paragraphs": [
+        "Lawrence Berkeley National Laboratory, United States Data Center Energy Usage Report: 2025 Update, published June 2026. https://eta-publications.lbl.gov/publications/united-states-data-center-energy-2025",
+        "Lawrence Berkeley National Laboratory, 2024 United States Data Center Energy Usage Report, published December 19, 2024. https://energyanalysis.lbl.gov/publications/2024-lbnl-data-center-energy-usage-report",
+        "Lawrence Berkeley National Laboratory, Integrating AI Data Centers with the Power Grid, published May 2026. https://eta-publications.lbl.gov/publications/integrating-ai-data-centers-power",
+        "U.S. Energy Information Administration, Fossil generation could rise with faster-than-expected growth in data center power demand, published March 12, 2026. https://www.eia.gov/todayinenergy/detail.php?id=67344",
+        "Federal Energy Regulatory Commission, Interconnection of Large Loads to the Interstate Transmission System, Docket No. RM26-4-000. https://ferc.gov/rm26-4",
+        "U.S. Department of Energy, Powering AI and Data Center Infrastructure: Recommendations, July 2024. https://www.energy.gov/sites/default/files/2024-08/Powering%20AI%20and%20Data%20Center%20Infrastructure%20Recommendations%20July%202024.pdf",
+        "Sources accessed September 7, 2026. Historical publication dates and forecast periods are preserved above."
+      ]
+    },
+    {
+      "title": "Educational Disclosure",
+      "paragraphs": [
+        "The information on Luna1 Research is provided for educational and informational purposes only. It reflects personal analysis and opinions and is not investment, financial, tax, or legal advice. Always conduct your own research before making investment decisions."
+      ]
+    }
+  ]
+}

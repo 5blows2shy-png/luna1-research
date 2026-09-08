@@ -60,6 +60,7 @@ export type ResearchNote = {
   date: string;
   summary: string;
   sourceLinks: Array<{ label: string; href: string }>;
+  pdfUrl?: string;
 };
 
 const pendingMetrics = [
@@ -216,6 +217,51 @@ export const companyResearch: CompanyResearch[] = [
       ],
       currentAssessment: "Valuation model in progress.",
       assumptions: "Data pending update.",
+    },
+    keyMetrics: pendingMetrics,
+    earningsHistory: [],
+    quarterlyUpdates: [],
+  },
+  {
+    ticker: "VRT",
+    slug: "vrt",
+    companyName: "Vertiv Holdings Co.",
+    sector: "Industrials",
+    industry: "Electrical and Thermal Infrastructure",
+    status: "Watching",
+    lastUpdated: "Updated September 7, 2026",
+    summary:
+      "A data-center infrastructure provider being studied through power-management, thermal-management, service, capacity, and cash-conversion evidence.",
+    businessOverview:
+      "Vertiv provides critical digital-infrastructure products and services, including power management, thermal management, integrated rack systems, and lifecycle services for data centers and communications networks.",
+    businessModel:
+      "The company combines equipment sales, systems integration, and service revenue. Research will distinguish cyclical project demand from the installed-base and service economics that may support greater durability.",
+    revenueDrivers: [
+      "Data-center capacity additions",
+      "Rack power density and thermal requirements",
+      "Regional capacity and project execution",
+      "Installed-base service demand",
+    ],
+    thesis: [
+      "Rising compute density increases the value of reliable electrical and thermal infrastructure, which may support sustained demand for Vertiv's systems and services.",
+      "The thesis remains under review until backlog conversion, margins, cash generation, customer concentration, and valuation expectations are fully sourced.",
+    ],
+    risks: [
+      "Data-center capital-spending cycles and project timing can create volatile orders and revenue conversion.",
+      "Supply constraints, competition, execution, customer concentration, and valuation compression may weaken returns.",
+    ],
+    catalysts: [
+      "Continued data-center capacity additions and higher rack power density.",
+      "Evidence that volume, pricing, and service mix support durable margin and cash-flow improvement.",
+    ],
+    competitiveAdvantages: [
+      "A broad portfolio across power, thermal, rack, and service requirements.",
+      "Installed-base relationships and engineering knowledge in mission-critical environments.",
+    ],
+    valuation: {
+      methodology: ["Discounted cash flow", "EV/EBITDA", "Free-cash-flow sensitivity"],
+      currentAssessment: "Valuation model in progress.",
+      assumptions: "Primary-source inputs pending review.",
     },
     keyMetrics: pendingMetrics,
     earningsHistory: [],
@@ -461,18 +507,75 @@ const researchNoteSeeds: Array<
     undefined,
     "Cybersecurity",
   ],
-  [
-    "research-invalidation",
-    "Writing clearer thesis-invalidation rules",
-    "Process",
-    undefined,
-    undefined,
-  ],
 ];
 
 export const researchNotes: ResearchNote[] = researchNoteSeeds.map(
   ([slug, title, category, ticker, theme]) =>
-    slug === "be-project-economics"
+    slug === "power-constraint"
+      ? {
+          slug,
+          title,
+          category: category as ResearchNote["category"],
+          ticker,
+          theme,
+          status: "Published" as const,
+          date: "September 7, 2026",
+          summary:
+            "A sourced thematic note mapping generation, interconnection, power conversion, cooling, and deployment constraints around data-center growth while separating official demand scenarios from Luna1 interpretation.",
+          sourceLinks: [
+            { label: "Berkeley Lab 2025 U.S. Data Center Energy Usage Update", href: "https://eta-publications.lbl.gov/publications/united-states-data-center-energy-2025" },
+            { label: "FERC Large Load Interconnection proceeding", href: "https://ferc.gov/rm26-4" },
+            { label: "EIA data-center power-demand analysis", href: "https://www.eia.gov/todayinenergy/detail.php?id=67344" },
+          ],
+          pdfUrl: "/reports/Power-Constraints-Data-Center-Bottleneck-Luna1.pdf",
+        }
+      : slug === "ry-credit-cycle"
+      ? {
+          slug,
+          title,
+          category: category as ResearchNote["category"],
+          ticker,
+          theme,
+          status: "Published" as const,
+          date: "August 21, 2026",
+          summary:
+            "A sourced credit-cycle review of Royal Bank of Canada focused on provision trends, impaired-loan migration, mortgage exposure, capital resilience, and the evidence required before treating current profitability as through-cycle earnings power.",
+          sourceLinks: [
+            {
+              label: "RBC Q2 2026 Report to Shareholders",
+              href: "https://www.rbc.com/investor-relations/_assets-custom/pdf/2026q2_report.pdf",
+            },
+            {
+              label: "RBC 2025 Annual Report",
+              href: "https://www.rbc.com/investor-relations/_assets-custom/pdf/ar_2025_e.pdf",
+            },
+          ],
+          pdfUrl: "/reports/RY-Luna1-Analyst-Journal.pdf",
+        }
+      : slug === "glw-optical-demand"
+        ? {
+            slug,
+            title,
+            category: category as ResearchNote["category"],
+            ticker,
+            theme,
+            status: "Published" as const,
+            date: "August 21, 2026",
+            summary:
+              "A sourced monitoring note connecting Corning's Q2 2026 Optical Communications growth to AI data-center demand while separating reported segment evidence from the capacity, customer-concentration, margin, and cash-conversion questions that remain open.",
+            sourceLinks: [
+              {
+                label: "Corning Q2 2026 financial results",
+                href: "https://investor.corning.com/news-and-events/news/news-details/2026/Cornings-Strong-Second-Quarter-2026-Financial-Results1-Demonstrate-Progress-on-Recently-Upgraded-Springboard-Plan/default.aspx",
+              },
+              {
+                label: "Corning SEC filings",
+                href: "https://investor.corning.com/investor-relations/financials/sec-filings/default.aspx",
+              },
+            ],
+            pdfUrl: "/reports/GLW-Luna1-Analyst-Journal.pdf",
+          }
+        : slug === "be-project-economics"
       ? {
           slug,
           title,
@@ -489,6 +592,7 @@ export const researchNotes: ResearchNote[] = researchNoteSeeds.map(
               href: "https://investor.bloomenergy.com/press-releases/press-release-details/2026/Bloom-Energy-Reports-Record-First-Quarter-2026-Results-and-Raises-Full-Year-2026-Guidance/default.aspx",
             },
           ],
+          pdfUrl: "/reports/BE-Luna1-Analyst-Journal.pdf",
         }
       : {
           slug,

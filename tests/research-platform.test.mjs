@@ -39,17 +39,66 @@ test("research content uses typed centralized records", () => {
   assert.equal((source.match(/status: "Draft" as const/g) ?? []).length, 1);
 });
 
+test("capital flow map uses typed themes and centralized company records", () => {
+  const data = fs.readFileSync(
+    "src/data/research/capital-flows.ts",
+    "utf8",
+  );
+  const component = fs.readFileSync(
+    "src/components/capital-flow-map.tsx",
+    "utf8",
+  );
+  const page = fs.readFileSync("src/app/research/page.tsx", "utf8");
+  const nav = fs.readFileSync("src/components/research-ui.tsx", "utf8");
+
+  for (const theme of [
+    "Compute",
+    "Power",
+    "Data Center Infrastructure",
+    "Robotics & Automation",
+    "Cybersecurity",
+    "Defense & Aerospace",
+    "Physical Infrastructure",
+    "Healthcare / Biology",
+  ])
+    assert.match(data, new RegExp(`name: "${theme.replaceAll("&", "\\&")}"`));
+
+  assert.match(component, /companyResearch/);
+  assert.match(component, /researchCompanies/);
+  assert.match(component, /Who gets paid to remove the bottleneck\?/);
+  assert.match(component, /Not Yet Evaluated/);
+  assert.match(component, /What could change the thesis\?/);
+  assert.match(page, /<CapitalFlowMap \/>/);
+  assert.match(nav, /href="\/research#capital-flows"/);
+  assert.doesNotMatch(data, /Revenue growth: [0-9]|Earnings growth: [0-9]/);
+});
+
 test("incomplete research is labeled without fabricated data or PDFs", () => {
   const data = fs.readFileSync("src/lib/research-content.ts", "utf8");
+  const companyRecords = data.slice(
+    data.indexOf("export const companyResearch"),
+    data.indexOf("export const investmentThemes"),
+  );
   const page = fs.readFileSync(
     "src/app/research/companies/[ticker]/page.tsx",
     "utf8",
   );
   assert.match(data, /Data pending update/);
   assert.match(data, /Date to be confirmed/);
-  assert.doesNotMatch(data, /pdfUrl:/);
+  assert.doesNotMatch(companyRecords, /pdfUrl:/);
   assert.match(page, /Full research report in development\./);
   assert.match(page, /company\.pdfUrl/);
+});
+
+test("GLW research-note development entry is dated and completed", () => {
+  const log = fs.readFileSync("src/lib/development-log.ts", "utf8");
+  assert.equal(
+    (log.match(/id: "glw-optical-connectivity-research-note"/g) ?? []).length,
+    1,
+  );
+  assert.match(log, /date: "2026-08-21"/);
+  assert.match(log, /Completed GLW Optical-Connectivity Research Note/);
+  assert.match(log, /status: "Completed"/);
 });
 
 test("every research surface renders the approved disclosure", () => {

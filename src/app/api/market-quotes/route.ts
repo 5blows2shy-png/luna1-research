@@ -1,9 +1,9 @@
 import { getMarketQuotes } from "@/lib/market-data-service";
 import type { MarketDataType, MarketQuotesApiResponse } from "@/lib/market-data";
-import { supportedMarketInstruments } from "@/lib/market-ticker-config";
+import { createEquityMarketInstrument } from "@/lib/market-ticker-config";
 
 export const runtime = "nodejs";
-const MAX_SYMBOLS = 24;
+const MAX_SYMBOLS = 50;
 const RATE_WINDOW_MS = 60_000;
 const RATE_LIMIT = 60;
 type RateEntry = { count: number; resetsAt: number };
@@ -43,13 +43,12 @@ export async function GET(request: Request) {
   const raw = new URL(request.url).searchParams.get("symbols");
   const requested = raw?.split(",").map((symbol) => symbol.trim().toUpperCase()).filter(Boolean) ?? [];
   const malformed = requested.some((symbol) => !/^[A-Z0-9]{1,10}$/.test(symbol));
-  const unsupported = requested.filter((symbol) => !supportedMarketInstruments.has(symbol));
-  if (!requested.length || malformed || unsupported.length || requested.length > MAX_SYMBOLS) {
+  if (!requested.length || malformed || requested.length > MAX_SYMBOLS) {
     return Response.json(safeError("unavailable", "One or more requested market symbols are unsupported."), { status: 400 });
   }
 
   const symbols = Array.from(new Set(requested));
-  const response = await getMarketQuotes(symbols.map((symbol) => supportedMarketInstruments.get(symbol)!));
+  const response = await getMarketQuotes(symbols.map(createEquityMarketInstrument));
   const available = response.quotes.filter(({ dataType }) => dataType !== "unavailable");
   const unavailableSymbols = response.quotes.filter(({ dataType }) => dataType === "unavailable").map(({ symbol }) => symbol);
   const dataType: MarketDataType | undefined = available.some(({ dataType: type }) => type === "real-time") ? "real-time" : available.some(({ dataType: type }) => type === "delayed") ? "delayed" : available.length ? "previous-close" : undefined;

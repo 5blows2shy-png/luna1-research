@@ -46,7 +46,7 @@ test("research pages identify incomplete work and block unfinished downloads", (
   assert.match(coverageSource, /url: null/);
   assert.doesNotMatch(coverageSource, /priceTarget|currentPrice|analystRating/);
   assert.match(pageSource, /disabled/);
-  assert.match(pageSource, /DATA_PENDING/);
+  assert.match(pageSource, /document\.status !== "available"/);
 });
 
 test("specialized ETF, bank, and REIT frameworks are present", () => {
@@ -121,12 +121,7 @@ test("Watchlist links, sitemap entries, and development log are updated", () => 
   const sitemap = fs.readFileSync("src/app/sitemap.ts", "utf8");
   const log = fs.readFileSync("src/lib/development-log.ts", "utf8");
   assert.match(portfolio, /View Full Research/);
-  assert.match(portfolio, /ResearchCoverageGrid/);
-  assert.ok(
-    portfolio.indexOf("<WatchlistTable") <
-      portfolio.indexOf("<ResearchCoverageGrid"),
-    "Research coverage must appear directly after the Watchlist",
-  );
+  assert.doesNotMatch(portfolio, /ResearchCoverageGrid/);
   assert.match(sitemap, /\/watchlist\/\$\{item\.slug\}/);
   assert.match(log, /Expanded Watchlist into Research Coverage Platform/);
   assert.match(log, /Introduced Industry-Specific Valuation Frameworks/);
@@ -141,8 +136,12 @@ test("research language, dates, evidence labels, and Bloom journal are explicit"
     "src/lib/bloom-analyst-journal.ts",
     "utf8",
   );
-  const journalPage = fs.readFileSync(
-    "src/app/analyst-journal/page.tsx",
+  const researchNotesPage = fs.readFileSync(
+    "src/app/research/notes/page.tsx",
+    "utf8",
+  );
+  const researchContent = fs.readFileSync(
+    "src/lib/research-content.ts",
     "utf8",
   );
   const allResearchSource = `${coverageSource}\n${pageSource}\n${evidence}`;
@@ -170,10 +169,17 @@ test("research language, dates, evidence labels, and Bloom journal are explicit"
   assert.match(journal, /Q2 2026 results pending official verification/);
   assert.match(journal, /latestVerifiedPeriod: "Q1 2026"/);
   assert.doesNotMatch(journal, /BE BE/);
-  assert.match(journalPage, /BE-Luna1-Analyst-Journal\.pdf/);
-  assert.doesNotMatch(journalPage, /bloomAnalystJournal/);
+  assert.match(researchContent, /BE-Luna1-Analyst-Journal\.pdf/);
+  assert.doesNotMatch(researchNotesPage, /bloomAnalystJournal/);
   assert.ok(
     fs.statSync("public/reports/BE-Luna1-Analyst-Journal.pdf").size > 0,
     "Bloom Energy Analyst Journal PDF must be present and non-empty",
   );
+  for (const file of [
+    "public/reports/RY-Luna1-Analyst-Journal.pdf",
+    "public/reports/GLW-Luna1-Analyst-Journal.pdf",
+  ]) {
+    assert.ok(fs.statSync(file).size > 0, `${file} must be present and non-empty`);
+  }
+  assert.match(researchNotesPage, /ResearchNotesFilter/);
 });

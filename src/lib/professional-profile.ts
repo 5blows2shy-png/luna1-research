@@ -38,8 +38,8 @@ export const platformPillars: PlatformPillar[] = [
   },
   {
     number: "03",
-    title: "Luna Books",
-    href: "/transaction-intelligence",
+    title: "Klyro",
+    href: "/klyro",
     purpose:
       "An accounting-control workflow for cleaning, classifying, reconciling, reviewing, and exporting transaction records.",
     evidence: [
@@ -64,8 +64,8 @@ export const platformPillars: PlatformPillar[] = [
   },
   {
     number: "05",
-    title: "Analyst Journal",
-    href: "/analyst-journal",
+    title: "Research Notes",
+    href: "/research/notes",
     purpose:
       "An ongoing notebook for company, industry, earnings, macro, process, and investment-learning observations.",
     evidence: [

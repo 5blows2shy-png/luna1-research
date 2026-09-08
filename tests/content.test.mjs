@@ -132,13 +132,19 @@ test("resume reflects the current investment-focused source document", () => {
     "Data Center Operations Technician / NOC Technician",
     "VMware virtualized environments",
     "more than $10 million",
-    "Advanced Finance Coursework",
-    "Aztec Investment Fund – Equity Research &amp; Portfolio Management",
+    "Investment Organizations &amp; Applied Experience",
+    "Aztec Investment Fund (AIF)",
+    "Student-managed investment fund focused on equity research, valuation, portfolio analysis, and investment decision-making.",
     "Financial statement analysis",
     "Budgeting and forecasting",
     "Account reconciliation",
   ])
     assert.ok(resume.includes(content), `missing resume content: ${content}`);
+  for (const retiredLabel of ["AIF Coursework", "Advanced Finance Coursework"])
+    assert.ok(
+      !resume.includes(retiredLabel),
+      `retired AIF label remains: ${retiredLabel}`,
+    );
   for (const privateValue of ["(302) 344-9724", "leeshyheim@yahoo.com"])
     assert.ok(
       !resume.includes(privateValue),
@@ -149,8 +155,8 @@ test("resume reflects the current investment-focused source document", () => {
 test("recruiter AIF evidence links to sanitized analytical work samples", () => {
   const recruiter = fs.readFileSync("src/app/recruiter/page.tsx", "utf8");
   for (const sample of [
-    ["COST Qualitative Investment Memo", "public/downloads/shy-lee-costco-qualitative-investment-memo.docx"],
-    ["Casey’s Operations & Supply Chain Analysis", "public/downloads/shy-lee-caseys-operations-supply-chain-analysis.docx"],
+    ["COST Qualitative Investment Memo", "public/downloads/shy-lee-costco-qualitative-investment-memo.pdf"],
+    ["Casey’s Operations & Supply Chain Analysis", "public/downloads/shy-lee-caseys-operations-supply-chain-analysis.pdf"],
   ]) {
     assert.ok(recruiter.includes(sample[0]), `missing AIF sample label: ${sample[0]}`);
     assert.ok(recruiter.includes(`/${sample[1].replace("public/", "")}`), `missing AIF sample link: ${sample[1]}`);
@@ -170,29 +176,25 @@ test("market commentary is hidden without deleting its archived routes", () => {
 
 test("portfolio reflects approved public positions", () => {
   const source = fs.readFileSync("src/app/portfolios/page.tsx", "utf8").replace(/\s+/g, "");
-  const activeSource = source.slice(
-    source.indexOf("constactivePositions"),
-    source.indexOf("constcoreAllocation"),
-  );
-  for (const ticker of ["WWD", "AMAT", "GS", "PDFS"])
+  const activeSource = fs
+    .readFileSync("src/data/portfolio/active-positions.ts", "utf8")
+    .replace(/\s+/g, "");
+  for (const ticker of ["WWD", "AMAT", "GS", "PDFS", "PANW"])
     assert.ok(
       !activeSource.includes(`ticker:\"${ticker}\"`),
       `${ticker} remains active`,
     );
-  for (const [ticker, price] of [
-    ["CASY", "824.0"],
-    ["PANW", "272.54"],
-    ["WELL", "237.21"],
-  ]) {
+  for (const ticker of ["CASY", "WELL", "KRYS"]) {
     assert.ok(
       activeSource.includes(`ticker:\"${ticker}\"`),
       `${ticker} is missing`,
     );
-    assert.ok(
-      activeSource.includes(`entryPrice:${price}`),
-      `${ticker} entry price is missing`,
-    );
   }
+  assert.ok(
+    !activeSource.includes('ticker:"ANET"'),
+    "ANET remains active",
+  );
+  assert.ok(!activeSource.includes("entryPrice"), "entry price remains active");
   for (const heading of [
     "Shares",
     "Cost basis",
@@ -201,38 +203,48 @@ test("portfolio reflects approved public positions", () => {
   ])
     assert.ok(!source.includes(`<th>${heading}</th>`));
   assert.ok(!source.includes("Closed Positions"));
+  assert.ok(!source.includes("Initialthesis"));
   assert.match(source, /ticker:"AAPL"/);
+  for (const ticker of ["CASY", "WELL"]) {
+    assert.match(activeSource, new RegExp(`ticker:"${ticker}"[\\s\\S]*?status:"ActivePosition"`));
+    assert.ok(fs.existsSync(`src/app/portfolio/positions/${ticker.toLowerCase()}/page.tsx`));
+  }
+});
+
+test("active-position dossiers and power-constraint report are source grounded", () => {
+  const research = fs.readFileSync("src/data/portfolio/position-research.ts", "utf8");
+  const notes = fs.readFileSync("src/lib/research-content.ts", "utf8");
+  const navigation = fs.readFileSync("src/lib/data.ts", "utf8");
+  for (const ticker of ["CASY", "WELL"]) {
+    assert.match(research, new RegExp(`${ticker}: \\{`));
+    assert.match(research, new RegExp(`ticker: "${ticker}"`));
+  }
+  for (const label of ["Reported", "Calculated", "Company-defined"])
+    assert.ok(research.includes(label), `missing evidence label ${label}`);
+  assert.ok(!navigation.includes('label: "Analyst Journal"'));
+  assert.match(notes, /Power-Constraints-Data-Center-Bottleneck-Luna1\.pdf/);
+  assert.ok(
+    fs.statSync("public/reports/Power-Constraints-Data-Center-Bottleneck-Luna1.pdf").size > 0,
+    "power-constraint PDF must be present and non-empty",
+  );
 });
 
 test("watchlist matches the approved research records", () => {
   const source = fs.readFileSync("src/lib/watchlist-data.ts", "utf8");
-  for (const [ticker, score] of [
-    ["AIPO", 82],
-    ["GLW", 91],
-    ["STRL", 89],
-    ["ALAB", 88],
-    ["JBL", 87],
-    ["RY", 84],
-    ["PANW", 86],
-    ["ANET", 95],
-  ]) {
+  for (const ticker of ["GLW", "STRL", "ALAB", "RY", "DLR", "BE", "VRT"]) {
     assert.ok(
       new RegExp(`ticker:\\s*\"${ticker}\"`).test(source),
       `${ticker} is missing from the watchlist`,
     );
-    assert.match(
-      source,
-      new RegExp(`ticker:\\s*\"${ticker}\"[\\s\\S]{0,180}?score:\\s*${score}`),
-      `${ticker} score is missing`,
-    );
   }
+  assert.ok(!source.includes("score:"), "LUNA score remains in Watchlist data");
   for (const field of ["note:", "catalyst:", "risk:"])
     assert.equal(
       source.match(new RegExp(field, "g"))?.length,
-      10,
+      8,
       `each record should include ${field}`,
     );
-  for (const removed of ["AMAT", "WWD", "PDFS", "GS"])
+  for (const removed of ["AMAT", "WWD", "PDFS", "GS", "JBL"])
     assert.ok(!source.includes(`ticker: "${removed}"`));
   for (const ticker of [
     "ROAD",
@@ -271,12 +283,12 @@ test("long-term portfolio allocations are complete", () => {
     ["VOO", "30%"],
     ["QQQM", "50%"],
     ["IAU", "10%"],
-    ["SLV", "9%"],
+    ["AIPO", "9%"],
     ["SGOV", "1%"],
     ["LLY", "25%"],
     ["AAPL", "20%"],
     ["COST", "20%"],
-    ["PG", "15%"],
+    ["SpaceX", "15%"],
     ["AMZN", "20%"],
   ])
     assert.match(
@@ -374,8 +386,8 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
     "Investment organizations & applied experience",
     "Finance + Operations + Technology",
     "Career alignment",
-    "Featured research",
-    "Interested in discussing an opportunity",
+    "Supply Specialist & Financial Management Technician",
+    "Junior Reconciliation Accountant",
     "2 work samples",
     "In development",
   ])
@@ -384,11 +396,9 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
       `missing recruiter content: ${recruiterContent}`,
     );
   for (const proofLink of [
-    "/research/companies/glw",
     "/valuation-models",
     "/klyro",
     "/contact",
-    "/resume",
     "linkedin.com/in/shyheim-lee",
     "shy-lee-resume.pdf",
     "shy-lee-bloomberg-market-concepts-certificate.pdf",
@@ -396,6 +406,20 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
     assert.ok(recruiter.includes(proofLink), `missing proof link: ${proofLink}`);
   assert.match(actions, /Download Profile/);
   assert.ok(!source.includes("FMVA"));
+  assert.match(
+    source,
+    /Bloomberg Market Concepts[\s\S]*?shy-lee-bloomberg-market-concepts-certificate\.pdf/,
+  );
+  assert.ok(
+    fs.existsSync(
+      "public/downloads/shy-lee-bloomberg-market-concepts-certificate.pdf",
+    ),
+  );
+  assert.ok(!source.includes(">SIE<"));
+  assert.match(source, /CFA Level I/);
+  assert.match(source, /Planned · August 2027/);
+  assert.match(source, /CFA Society San Diego Student Member/);
+  assert.match(source, /2026–Present/);
   assert.match(source, /Microsoft Excel<\/b>\s*<span>\s*Completed/);
   for (const file of [
     "public/downloads/shy-lee-resume.pdf",
@@ -410,12 +434,9 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
   for (const label of [
     "Home",
     "Equity Research",
-    "Valuation Lab",
-    "Luna Books",
+    "Klyro",
     "Portfolio Lab",
-    "Analyst Journal",
     "Recruiter View",
-    "Contact",
     "Development Log",
   ])
     assert.ok(
@@ -423,16 +444,21 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
       `missing navigation item: ${label}`,
     );
   for (const retired of [
+    "Valuation Lab",
+    "Contact",
     "Deal Lab",
     "Real Estate",
     "Python Lab",
     "Mistake Journal",
+    "Research Notes",
   ])
     assert.ok(
       !data.includes(`label: "${retired}"`),
       `retired top-level navigation remains: ${retired}`,
     );
   assert.ok(fs.existsSync("src/app/research/page.tsx"));
+  assert.ok(fs.existsSync("src/app/valuation-models/page.tsx"));
+  assert.ok(fs.existsSync("src/app/contact/page.tsx"));
   assert.ok(fs.existsSync("src/app/analyst-journal/page.tsx"));
   for (const token of [
     "--charcoal:",
@@ -458,12 +484,16 @@ test("recruiter-facing architecture documents analyst process without fabricated
     "src/app/portfolios/page.tsx",
     "utf8",
   );
+  const positionData = fs.readFileSync(
+    "src/data/portfolio/active-positions.ts",
+    "utf8",
+  );
   for (const pillar of [
     "Equity Research",
     "Valuation Lab",
-    "Luna Books",
+    "Klyro",
     "Portfolio Lab",
-    "Analyst Journal",
+    "Research Notes",
     "Development Log",
   ])
     assert.ok(profile.includes(`title: "${pillar}"`), `missing pillar: ${pillar}`);
@@ -479,18 +509,19 @@ test("recruiter-facing architecture documents analyst process without fabricated
   ])
     assert.ok(profile.includes(`stage: "${stage}"`), `missing stage: ${stage}`);
   assert.match(home, /professionalPositioning/);
-  assert.match(recruiter, /Why hire me\?/);
+  assert.match(recruiter, /Professional profile/);
   assert.match(recruiter, /Luna1 is a professional research portfolio/);
   for (const field of [
-    "purchaseDate",
-    "valuation",
-    "positionSize",
-    "thesisStatus",
+    "positionType",
+    "keyFundamentals",
+    "competitiveAdvantage",
+    "growthDrivers",
+    "watching",
+    "thesisInvalidation",
     "whatChanged",
   ])
-    assert.ok(portfolio.includes(field), `missing portfolio field: ${field}`);
-  assert.match(portfolio, /Date pending verification/);
-  assert.match(portfolio, /Not publicly disclosed/);
+    assert.ok(positionData.includes(field), `missing portfolio field: ${field}`);
+  assert.doesNotMatch(portfolio, /Initial Thesis/i);
 });
 
 test("retired expanded sections are absent and Mistake Journal belongs to Portfolio", () => {
