@@ -103,7 +103,7 @@ export default function Home() {
         </p>
         <div className="button-row">
           <Link className="button primary" href="/recruiter">
-            Open Recruiter View <span>→</span>
+            Open Professional Profile <span>→</span>
           </Link>
           <Link className="button" href="/contact">
             Request a connection <span>↗</span>

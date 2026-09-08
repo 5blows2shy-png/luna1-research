@@ -1012,7 +1012,7 @@ export function CompanyResearchPage({
             <Link href="/research/themes">Investment Themes</Link>
             <Link href="/development-log">Development Log</Link>
             <Link href="/about">About</Link>
-            <Link href="/recruiter">Recruiter View</Link>
+            <Link href="/recruiter">Professional Profile</Link>
           </nav>
         </div>
       </ResearchSection>

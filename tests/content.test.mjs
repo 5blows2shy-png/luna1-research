@@ -436,7 +436,7 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
     "Equity Research",
     "Klyro",
     "Portfolio Lab",
-    "Recruiter View",
+    "Professional Profile",
     "Development Log",
   ])
     assert.ok(
@@ -509,7 +509,7 @@ test("recruiter-facing architecture documents analyst process without fabricated
   ])
     assert.ok(profile.includes(`stage: "${stage}"`), `missing stage: ${stage}`);
   assert.match(home, /professionalPositioning/);
-  assert.match(recruiter, /Professional profile/);
+  assert.match(recruiter, /Professional Profile/);
   assert.match(recruiter, /Luna1 is a professional research portfolio/);
   for (const field of [
     "positionType",

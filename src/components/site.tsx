@@ -42,7 +42,7 @@ export function Footer() {
             </Link>
             <Link href="/research/notes">Research Notes</Link>
             <Link href="/development-log">Development Log</Link>
-            <Link href="/recruiter">Recruiter View</Link>
+            <Link href="/recruiter">Professional Profile</Link>
           </p>
         </div>
         <div>

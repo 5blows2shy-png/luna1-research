@@ -92,7 +92,7 @@ export function ResumeContent({
       <section className="recruiter-hero">
         <div>
           <span className="eyebrow">
-            {recruiterView ? "Recruiter View · Professional profile" : "Resume · Shy Lee"}
+            {recruiterView ? "Professional Profile · Finance" : "Resume · Shy Lee"}
           </span>
           <p className="recruiter-status">
             <i /> Open to finance, investment research, and analyst
