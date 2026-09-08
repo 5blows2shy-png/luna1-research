@@ -8,6 +8,11 @@ export type FmpResource =
 
 export type FmpDataStatus = "ok" | "unavailable" | "rate-limited" | "unauthorized" | "subscription-restricted" | "stale";
 export type FmpDataResponse<T> = { status: FmpDataStatus; data: T; provider: "Financial Modeling Prep"; asOf: string | null; message?: string };
+export type CompanyProfile = { symbol?: string; companyName?: string; industry?: string; sector?: string; exchange?: string; website?: string; description?: string; beta?: number; marketCap?: number };
+export type HistoricalPrice = { date?: string; open?: number; high?: number; low?: number; close?: number; adjClose?: number; volume?: number };
+export type FinancialStatement = { date?: string; calendarYear?: string; period?: string; revenue?: number; netIncome?: number; totalAssets?: number; totalLiabilities?: number; operatingCashFlow?: number; freeCashFlow?: number };
+export type EarningsRecord = { date?: string; symbol?: string; eps?: number; epsEstimated?: number; revenue?: number; revenueEstimated?: number; fiscalDateEnding?: string };
+export type NewsRecord = { symbol?: string; publishedDate?: string; title?: string; image?: string; site?: string; text?: string; url?: string };
 type CacheEntry = { value: FmpDataResponse<unknown>; expiresAt: number };
 const globalState = globalThis as typeof globalThis & { luna1FmpResourceCache?: Map<string, CacheEntry> };
 const cache = (globalState.luna1FmpResourceCache ??= new Map());
@@ -69,3 +74,11 @@ export async function getFmpResource<T = Record<string, unknown>>(resource: FmpR
     return { status: "unavailable", data: [], provider: "Financial Modeling Prep", asOf: null, message: "FMP is temporarily unavailable; no data was fabricated." };
   }
 }
+
+export const getCompanyProfile = (symbol: string) => getFmpResource<CompanyProfile>("profile", { symbol }, { ttlMs: 24 * 60 * 60_000 });
+export const getHistoricalPrices = (symbol: string, from?: string, to?: string) => getFmpResource<HistoricalPrice>("historical-price-full", { symbol, from, to }, { ttlMs: 15 * 60_000 });
+export const getIncomeStatements = (symbol: string, limit = 8) => getFmpResource<FinancialStatement>("income-statement", { symbol, limit }, { ttlMs: 6 * 60 * 60_000 });
+export const getBalanceSheets = (symbol: string, limit = 8) => getFmpResource<FinancialStatement>("balance-sheet-statement", { symbol, limit }, { ttlMs: 6 * 60 * 60_000 });
+export const getCashFlowStatements = (symbol: string, limit = 8) => getFmpResource<FinancialStatement>("cash-flow-statement", { symbol, limit }, { ttlMs: 6 * 60 * 60_000 });
+export const getEarningsCalendar = (from?: string, to?: string) => getFmpResource<EarningsRecord>("earning-calendar", { from, to }, { ttlMs: 15 * 60_000 });
+export const getCompanyNews = (symbol?: string, limit = 20) => getFmpResource<NewsRecord>("stock-news", { symbol, limit }, { ttlMs: 5 * 60_000 });
