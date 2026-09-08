@@ -68,8 +68,13 @@ test("capital flow map uses typed themes and centralized company records", () =>
   assert.match(component, /Who gets paid to remove the bottleneck\?/);
   assert.match(component, /Not Yet Evaluated/);
   assert.match(component, /What could change the thesis\?/);
-  assert.match(page, /<CapitalFlowMap \/>/);
-  assert.match(nav, /href="\/research#capital-flows"/);
+  assert.doesNotMatch(page, /<CapitalFlowMap \/>/);
+  assert.match(nav, /href="\/research\/capital-flows"/);
+  const capitalFlowsPage = fs.readFileSync(
+    "src/app/research/capital-flows/page.tsx",
+    "utf8",
+  );
+  assert.match(capitalFlowsPage, /<CapitalFlowMap \/>/);
   assert.doesNotMatch(data, /Revenue growth: [0-9]|Earnings growth: [0-9]/);
 });
 
