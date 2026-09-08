@@ -20,6 +20,6 @@ test("market data and news routes preserve rate limits and explicit provider sta
   assert.match(route, /rate-limited/);
   assert.match(route, /subscription-restricted/);
   assert.match(route, /getFmpResource/);
-  assert.match(news, /getFmpResource/);
-  assert.match(news, /stock-news/);
+  assert.match(news, /getMarketNews/);
+  assert.match(news, /headlines: \[\]/);
 });
