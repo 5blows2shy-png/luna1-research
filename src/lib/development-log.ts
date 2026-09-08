@@ -465,4 +465,60 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     route: "/portfolio",
     visibility: "Public",
   },
+  {
+    id: "setora-alpha-capital-intelligence",
+    date: "2026-09-07",
+    phase: "Platform Expansion",
+    category: "Platform Expansion",
+    title: "Started the SETORA Alpha capital-intelligence build",
+    summary:
+      "Introduced SETORA as a source-aware capital-intelligence system for mapping AI infrastructure, data centers, power, robotics, suppliers, customers, and the events that connect them.",
+    reason:
+      "Investment research benefits from a structured view of the capital chains and operating relationships that shape future demand, capacity, and competitive position.",
+    lessons: [
+      "Capital-chain relationships should remain research candidates until they are supported by traceable primary sources.",
+      "A clear separation between reported facts, interpretation, and open questions protects analytical credibility.",
+      "A narrow Alpha scope creates a stronger foundation for future source ingestion and review workflows.",
+    ],
+    skills: [
+      "Capital-chain mapping",
+      "Source-aware data modeling",
+      "Infrastructure research",
+      "Product architecture",
+      "Evidence governance",
+    ],
+    impact:
+      "Adds a recruiter-visible example of connecting company research, industry structure, event normalization, and relationship mapping into a focused finance-and-technology product.",
+    status: "In Progress",
+    overview: [
+      "SETORA Alpha is a standalone capital-intelligence research product within the broader Luna1 portfolio. Its initial scope covers AI infrastructure, data centers, power infrastructure, and robotics.",
+      "The preview preserves source dates and discovery dates separately, keeps candidate relationships reviewable, and does not present unverified relationships or market signals as recommendations.",
+    ],
+    milestones: [
+      "Defined the SETORA Alpha architecture and source-aware evidence model.",
+      "Added capital-chain, company-candidate, theme, and event-taxonomy data structures.",
+      "Built capital-map, themes, companies, research, signals, methodology, and About routes.",
+      "Added relationship mapping for infrastructure and robotics ecosystems.",
+      "Separated SETORA coverage from Luna1's legacy equity-research universe.",
+    ],
+    nextSteps: [
+      "Connect reviewed primary-source ingestion to the Alpha evidence model.",
+      "Complete human review workflows for candidate capital events and relationships.",
+      "Add source-linked company and theme updates without implying real-time coverage.",
+      "Expand the capital maps only when the supporting evidence is verified.",
+    ],
+    featurePreview: [
+      { label: "Capital Map", status: "Preview" },
+      { label: "Theme Coverage", status: "Preview" },
+      { label: "Company Candidates", status: "In Development" },
+      { label: "Capital Events", status: "Planned" },
+      { label: "Evidence Lineage", status: "In Development" },
+    ],
+    evolutionStatement:
+      "SETORA extends Luna1's research practice into a structured view of the capital chains, operating dependencies, and source-backed events that shape investment questions.",
+    disclosure:
+      "SETORA Alpha is an educational research and product-development project. It is not investment advice, a real-time market-data service, or a recommendation engine.",
+    route: "/setora",
+    visibility: "Public",
+  },
 ];

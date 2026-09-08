@@ -27,6 +27,9 @@ export default function Home() {
             <Link className="button primary" href="/research">
               Explore Equity Research <span>→</span>
             </Link>
+            <Link className="button" href="/setora">
+              Open SETORA <span>→</span>
+            </Link>
             <Link className="button" href="/recruiter">
               View recruiter profile <span>→</span>
             </Link>

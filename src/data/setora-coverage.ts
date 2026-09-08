@@ -1,0 +1,38 @@
+import { setoraCompanyCandidates, setoraSegments } from "./setora-alpha";
+
+export const setoraCoverageGroups = [
+  {
+    id: "data-centers", name: "Data Center AI Infrastructure",
+    description: "AI demand, hyperscaler investment, compute, power, cooling, networking, and construction.",
+    themes: setoraSegments,
+    companies: setoraCompanyCandidates.map((company) => ({ ...company, listing: company.ticker })),
+  },
+  {
+    id: "robotics", name: "Robotics",
+    description: "Industrial automation, robot platforms, machine vision, controls, and customers deploying robotics.",
+    themes: ["Robot platforms", "Autonomous driving & robotaxis", "Nervous system: compute & sensing", "Motion: motors, reducers & joints", "Collaborative robots", "Autonomous mobile robots", "Controls & actuation", "Industrial customers"],
+    companies: [
+      { name: "ABB Robotics", ticker: "ABB", listing: "ABB group / listing review pending", segment: "Robot platforms", researchQuestion: "Track robot orders, product partnerships, and ownership disclosures." },
+      { name: "Boston Dynamics", ticker: "", listing: "Private / subsidiary", segment: "Robot platforms", researchQuestion: "Track Atlas and Stretch deployments through company and customer announcements." },
+      { name: "Teradyne", ticker: "TER", listing: "TER", segment: "Collaborative & mobile robots", researchQuestion: "Track Robotics segment results, Universal Robots, and Mobile Industrial Robots." },
+      { name: "NVIDIA", ticker: "NVDA", listing: "NVDA", segment: "AI compute & simulation", researchQuestion: "Track robotics platform adoption; distinguish design partnerships from component purchases." },
+      { name: "Rockwell Automation", ticker: "ROK", listing: "ROK", segment: "Controls & automation", researchQuestion: "Review automation investment, orders, and customer spending." },
+      { name: "Cognex", ticker: "CGNX", listing: "CGNX", segment: "Machine vision", researchQuestion: "Review machine-vision demand and automation customer disclosures." },
+      { name: "FANUC", ticker: "", listing: "Japan-listed / identifier review pending", segment: "Industrial robots", researchQuestion: "Review issuer results and robot orders; SEC quarterly filings may not apply." },
+      { name: "Yaskawa Electric", ticker: "", listing: "Japan-listed / identifier review pending", segment: "Robots & motion control", researchQuestion: "Review robotics and motion-control orders from issuer disclosures." },
+      { name: "Volvo Cars", ticker: "", listing: "Sweden-listed / identifier review pending", segment: "Industrial customers", researchQuestion: "Monitor documented robot deployments and manufacturing investment." },
+      { name: "DHL", ticker: "", listing: "Germany-listed / identifier review pending", segment: "Logistics customers", researchQuestion: "Monitor warehouse automation contracts and deployment announcements." },
+      { name: "Tesla", ticker: "TSLA", listing: "TSLA", segment: "Robot platforms", researchQuestion: "Track Optimus production plans, autonomy compute, and disclosed manufacturing deployments." },
+      { name: "Waymo", ticker: "", listing: "Alphabet subsidiary / private", segment: "Autonomous driving & robotaxis", researchQuestion: "Track Waymo Driver deployments, fleet partners, sensor stack, and operating expansion." },
+      { name: "Zoox", ticker: "", listing: "Amazon subsidiary / private", segment: "Autonomous driving & robotaxis", researchQuestion: "Track purpose-built robotaxi deployments, manufacturing partners, and regulatory milestones." },
+      { name: "Amazon", ticker: "AMZN", listing: "AMZN", segment: "Autonomous driving & robotaxis", researchQuestion: "Track Zoox funding, fleet rollout, and Amazon logistics/robotics adjacency separately." },
+      { name: "Harmonic Drive Systems", ticker: "6324.T", listing: "Japan-listed", segment: "Motion: reducers & joints", researchQuestion: "Track strain-wave gearing, actuator demand, and humanoid/industrial robot exposure." },
+      { name: "Nabtesco", ticker: "6268.T", listing: "Japan-listed", segment: "Motion: reducers & joints", researchQuestion: "Track precision reduction gears used in robot joints; separate company estimate from verified share data." },
+      { name: "Nidec", ticker: "6594.T", listing: "Japan-listed", segment: "Motion: motors & actuation", researchQuestion: "Track compact motors, actuators, and factory-automation demand." },
+      { name: "maxon", ticker: "", listing: "Private / subsidiary", segment: "Motion: motors & actuation", researchQuestion: "Track precision motors and drive systems used in mobile and medical robotics." },
+      { name: "Hesai", ticker: "HSAI", listing: "NASDAQ", segment: "Nervous system: sensing", researchQuestion: "Track lidar design wins and distinguish automotive autonomy from robotics deployments." },
+      { name: "Mobileye", ticker: "MBLY", listing: "MBLY", segment: "Nervous system: compute & sensing", researchQuestion: "Track EyeQ compute, autonomous-driving programs, and customer production ramps." },
+      { name: "Qualcomm", ticker: "QCOM", listing: "QCOM", segment: "Nervous system: compute & sensing", researchQuestion: "Track edge-AI, robotics, and autonomous-vehicle platform design wins." },
+    ],
+  },
+] as const;

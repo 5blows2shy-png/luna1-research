@@ -25,6 +25,7 @@ export function Footer() {
         <div>
           <span className="eyebrow">Research and valuation</span>
           <p>
+            <Link href="/setora">SETORA MAP</Link>
             <Link href="/research">Equity Research</Link>
             <Link href="/valuation-models">Valuation Lab</Link>
             <Link href="/portfolio">Portfolio Lab</Link>
