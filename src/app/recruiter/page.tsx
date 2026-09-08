@@ -69,6 +69,12 @@ const selectedWork = [
     description: "A focused case study for budget-versus-actual analysis, variance drivers, cash-flow planning, and management commentary.",
     status: "In development",
   },
+  {
+    number: "06", label: "Capital intelligence platform", title: "SETORA",
+    subtitle: "AI Infrastructure & Capital Flows",
+    description: "A source-linked research system organizing AI infrastructure themes, capital events, company coverage, and second-order beneficiaries across compute, networking, power, and related verticals.",
+    href: "/setora", action: "Explore SETORA", status: "Working product",
+  },
 ] as const;
 
 const capabilities = [
