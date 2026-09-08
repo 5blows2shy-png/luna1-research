@@ -9,6 +9,7 @@ export const navigationItems: NavigationItem[] = [
   { label: "Portfolio Lab", href: "/portfolio" },
   { label: "Development Log", href: "/development-log" },
   { label: "Recruiter View", href: "/recruiter" },
+  { label: "SETORA", href: "/setora" },
 ];
 
 export type ResearchReport = {
