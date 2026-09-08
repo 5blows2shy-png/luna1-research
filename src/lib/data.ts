@@ -1,6 +1,7 @@
 export type NavigationItem = { label: string; href: string };
 export const navigationItems: NavigationItem[] = [
   { label: "Home", href: "/" },
+  { label: "SETORA", href: "/setora" },
   { label: "Equity Research", href: "/research" },
   {
     label: "Klyro",
@@ -9,7 +10,6 @@ export const navigationItems: NavigationItem[] = [
   { label: "Portfolio Lab", href: "/portfolio" },
   { label: "Development Log", href: "/development-log" },
   { label: "Recruiter View", href: "/recruiter" },
-  { label: "SETORA", href: "/setora" },
 ];
 
 export type ResearchReport = {
