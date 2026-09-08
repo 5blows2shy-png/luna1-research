@@ -126,6 +126,12 @@ const dataProjects = [
     tool: "Retrieval · Cited research workflow",
     description: "Retrieve evidence from 10-Ks, 10-Qs, earnings transcripts, and investor presentations to answer questions such as what changed in management’s capex outlook, with citations.",
   },
+  {
+    number: "05",
+    title: "AI Infrastructure Coverage Lab",
+    tool: "Integrated capstone · Research note",
+    description: "Build a 10–20 company coverage universe across data centers, networking, optics, semiconductors, power, and cooling; connect Python ingestion, SQL queries, Tableau views, and cited filing analysis to one published investment conclusion.",
+  },
 ] as const;
 
 const experience = [
