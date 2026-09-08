@@ -1,7 +1,7 @@
 import { getFmpResource, type FmpResource } from "@/lib/fmp-market-service";
 
 export const runtime = "nodejs";
-const allowed = new Set<FmpResource>(["profile", "historical-price-full", "income-statement", "balance-sheet-statement", "cash-flow-statement", "earning-calendar", "analyst-estimates", "price-target", "dividends", "insider-trading", "institutional-ownership", "sec-filings", "earning-call-transcript", "etf-holdings", "economic-indicators", "market-performance", "sector-performance", "stock-peers", "dcf"]);
+const allowed = new Set<FmpResource>(["profile", "historical-price-full", "income-statement", "balance-sheet-statement", "cash-flow-statement", "earning-calendar", "analyst-estimates", "price-target", "dividends", "insider-trading", "institutional-ownership", "sec-filings", "stock-news", "earning-call-transcript", "etf-holdings", "economic-indicators", "market-performance", "sector-performance", "stock-peers", "dcf"]);
 const limits = new Map<string, { count: number; reset: number }>();
 
 function limited(request: Request) {
