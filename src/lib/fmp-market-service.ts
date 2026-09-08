@@ -3,7 +3,7 @@ import "server-only";
 export type FmpResource =
   | "profile" | "historical-price-full" | "income-statement" | "balance-sheet-statement" | "cash-flow-statement"
   | "earning-calendar" | "analyst-estimates" | "price-target" | "dividends" | "insider-trading" | "institutional-ownership"
-  | "sec-filings" | "earning-call-transcript" | "etf-holdings" | "economic-indicators" | "market-performance" | "sector-performance"
+  | "sec-filings" | "stock-news" | "earning-call-transcript" | "etf-holdings" | "economic-indicators" | "market-performance" | "sector-performance"
   | "stock-peers" | "dcf";
 
 export type FmpDataStatus = "ok" | "unavailable" | "rate-limited" | "unauthorized" | "subscription-restricted" | "stale";
@@ -25,6 +25,7 @@ const paths: Record<FmpResource, string> = {
   "insider-trading": "insider-trading",
   "institutional-ownership": "institutional-ownership/latest",
   "sec-filings": "sec-filings-8-k",
+  "stock-news": "stock-news",
   "earning-call-transcript": "earning_call_transcript",
   "etf-holdings": "etf-holder",
   "economic-indicators": "economic-indicators",
