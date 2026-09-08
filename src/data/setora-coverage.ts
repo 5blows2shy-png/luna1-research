@@ -35,4 +35,16 @@ export const setoraCoverageGroups = [
       { name: "Qualcomm", ticker: "QCOM", listing: "QCOM", segment: "Nervous system: compute & sensing", researchQuestion: "Track edge-AI, robotics, and autonomous-vehicle platform design wins." },
     ],
   },
+  {
+    id: "power-grid", name: "Power, Grid & Electrification",
+    description: "Generation, transmission, substations, transformers, switchgear, storage, and electrical systems required by AI, robotics, factories, and buildings.",
+    themes: ["Generation", "Transmission & grid expansion", "Transformers & substations", "Switchgear & power management", "Storage", "Copper, aluminum & materials"],
+    companies: setoraCompanyCandidates.filter((company) => ["Power & electrical", "Backup generation"].includes(company.segment)).map((company) => ({ ...company, listing: company.ticker })),
+  },
+  {
+    id: "tokenized-capital", name: "Tokenized Capital Markets",
+    description: "The financial infrastructure for issuing, owning, transferring, collateralizing, and settling tokenized assets.",
+    themes: ["Tokenized Treasuries", "Stablecoins & programmable money", "Tokenized funds & private credit", "Custody & digital identity", "Settlement & market infrastructure", "Collateral & financing"],
+    companies: [],
+  },
 ] as const;
