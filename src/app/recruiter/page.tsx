@@ -101,6 +101,33 @@ const capabilities = [
   },
 ] as const;
 
+const dataProjects = [
+  {
+    number: "01",
+    title: "Python Financial Data Pipeline",
+    tool: "Python · SEC/company filings",
+    description: "Pull company financials, clean quarterly income-statement, balance-sheet, and cash-flow data, calculate margins, ROIC, FCF, and growth, then export a research-ready dataset.",
+  },
+  {
+    number: "02",
+    title: "SQL Research Database",
+    tool: "SQL · Research data model",
+    description: "Store companies, quarterly fundamentals, valuation multiples, earnings revisions, sector tags, and thesis notes; query for signals such as accelerating revenue growth, margin expansion, and rising FCF.",
+  },
+  {
+    number: "03",
+    title: "Tableau Investment Dashboard",
+    tool: "Tableau · Interactive dashboard",
+    description: "Build an interactive company view for revenue and EPS trends, margins, FCF, valuation, estimate revisions, and peer comparisons.",
+  },
+  {
+    number: "04",
+    title: "LLM Research Assistant",
+    tool: "Retrieval · Cited research workflow",
+    description: "Retrieve evidence from 10-Ks, 10-Qs, earnings transcripts, and investor presentations to answer questions such as what changed in management’s capex outlook, with citations.",
+  },
+] as const;
+
 const experience = [
   {
     company: "Coronado Historical Association", role: "Executive & Finance Assistant", date: "May 2026–Present", relevance: "Financial operations",
@@ -213,6 +240,13 @@ export default function RecruiterView() {
         <div><b>Developing</b>{capability.developing.length ? <ul>{capability.developing.map((item) => <li key={item}>{item}</li>)}</ul> : <p>Evidence available in published work.</p>}</div>
         <Link className="text-link" href={capability.href}>{capability.proof} <span aria-hidden="true">→</span></Link>
       </article>)}</div>
+      <div className={styles.dataProjects} aria-labelledby="data-projects-title">
+        <div className={styles.dataProjectsHeading}><span className="eyebrow">Proof-oriented project briefs</span><h3 id="data-projects-title">Data &amp; Analytics projects</h3><p>These are planned evidence artifacts for making the toolset visible through finance work, not unsupported proficiency claims.</p></div>
+        <div className={styles.dataProjectsGrid}>{dataProjects.map((project) => <article key={project.title}>
+          <div className={styles.dataProjectMeta}><span>{project.number}</span><b>In development</b></div>
+          <h4>{project.title}</h4><small>{project.tool}</small><p>{project.description}</p>
+        </article>)}</div>
+      </div>
     </SectionDisclosure>
 
     <SectionDisclosure id="experience" number="04" title="Applied finance experience">
