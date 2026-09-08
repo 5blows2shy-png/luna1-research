@@ -87,20 +87,29 @@ export const capitalEcosystems: CapitalEcosystem[] = [
       { id: "powell", name: "Powell Industries", role: "Electrical distribution", column: 2 },
       { id: "quanta", name: "Quanta Services", role: "Grid and electrical construction", column: 2 },
       { id: "cummins", name: "Cummins", role: "Distributed power and generation", column: 2 },
+      { id: "siemens-energy", name: "Siemens Energy", role: "HVDC converter technology", column: 0 },
+      { id: "dragados", name: "Dragados Offshore", role: "Offshore platform engineering", column: 2 },
+      { id: "tennet", name: "TenneT", role: "Transmission grid operator", column: 3 },
+      { id: "powergrid-india", name: "Power Grid Corporation of India", role: "Transmission utility", column: 3 },
     ],
-    relationships: [],
+    relationships: [
+      { id: "ge-tennet", supplier: "ge-vernova", customer: "tennet", kind: "Supply", description: "Framework agreement to supply transformers and shunt reactors for German substations. Announcement evidence does not confirm current delivery volumes.", sourceTitle: "GE Vernova / TenneT framework agreement", sourceUrl: "https://www.gevernova.com/electrification/news-press/ge-vernova-signs-major-framework-agreement-tennet-reinforce-germanys-grid-infrastructure", sourceDate: "2023-10-25" },
+      { id: "ge-powergrid", supplier: "ge-vernova", customer: "powergrid-india", kind: "Supply", description: "GE announced orders for transformers and reactors for Rajasthan substations. Historical GE business relationship; the source is now hosted by GE Vernova.", sourceTitle: "GE transformer and reactor orders from PGCIL", sourceUrl: "https://www.gevernova.com/electrification/news-press/ge-vernova-wins-multiple-orders-high-voltage-power-transformers-and-reactors-indias", sourceDate: "2021-07-20" },
+      ...["siemens-energy", "dragados"].map((supplier) => ({ id: supplier + "-tennet", supplier, customer: "tennet", kind: "Supply" as const, description: "Consortium agreement for three offshore HVDC grid connections. The reported contract value belongs to the consortium, not either supplier individually.", sourceTitle: "Siemens Energy and Dragados / TenneT agreement", sourceUrl: "https://www.siemens-energy.com/us/en/home/press-releases/siemens-energy-supply-technology-three-offshore-grid-connections-north-sea-billion.html", sourceDate: "2023-04-20" })),
+    ],
   },
   {
     id: "tokenized-capital", name: "Tokenized Capital Markets",
     description: "A research map for the rails that issue, custody, transfer, collateralize, and settle tokenized financial assets.",
     capitalPath: ["Investor & issuer demand", "Identity · issuance · tokenized assets", "Custody · exchanges · settlement", "Collateral · programmable money · financing"],
     companies: [
-      { id: "blackrock-tokenized", name: "Asset managers", role: "Tokenized funds and Treasuries", column: 0 },
-      { id: "banks-tokenized", name: "Banks & dealers", role: "Deposits, credit, and distribution", column: 1 },
-      { id: "custody-tokenized", name: "Custody platforms", role: "Safekeeping and transfer controls", column: 2 },
-      { id: "settlement-tokenized", name: "Settlement networks", role: "Programmable settlement and collateral", column: 3 },
+      { id: "securitize", name: "Securitize", role: "Tokenization and transfer agent", column: 0 },
+      { id: "bny", name: "BNY", role: "Fund asset custody and administration", column: 1 },
+      { id: "blackrock-tokenized", name: "BlackRock / BUIDL", role: "Tokenized institutional liquidity fund", column: 2 },
     ],
-    relationships: [],
+    relationships: [
+      ...["securitize", "bny"].map((supplier) => ({ id: supplier + "-buidl", supplier, customer: "blackrock-tokenized", kind: "Technology partnership" as const, description: supplier === "securitize" ? "Securitize serves as BUIDL transfer agent and tokenization platform; Securitize Markets is placement agent." : "BNY Mellon was named custodian of the fund assets and administrator. Asset custody is distinct from custody of investors' tokens.", sourceTitle: "BlackRock BUIDL launch disclosure", sourceUrl: "https://investors.securitize.io/news/news-details/2024/BlackRock-Launches-Its-First-Tokenized-Fund-BUIDL-on-the-Ethereum-Network-03-20-2024/default.aspx", sourceDate: "2024-03-20" })),
+    ],
   },
 ];
 

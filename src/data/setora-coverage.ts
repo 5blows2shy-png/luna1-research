@@ -39,7 +39,13 @@ export const setoraCoverageGroups = [
     id: "power-grid", name: "Power, Grid & Electrification",
     description: "Generation, transmission, substations, transformers, switchgear, storage, and electrical systems required by AI, robotics, factories, and buildings.",
     themes: ["Generation", "Transmission & grid expansion", "Transformers & substations", "Switchgear & power management", "Storage", "Copper, aluminum & materials"],
-    companies: setoraCompanyCandidates.filter((company) => ["Power & electrical", "Backup generation"].includes(company.segment)).map((company) => ({ ...company, listing: company.ticker })),
+    companies: [
+      ...setoraCompanyCandidates.filter((company) => ["Power & electrical", "Backup generation", "Construction"].includes(company.segment)).map((company) => ({ ...company, listing: company.ticker })),
+      { name: "Siemens Energy", ticker: "", listing: "Listing review pending", segment: "HVDC transmission", researchQuestion: "Track conversion equipment orders and TenneT contract deliveries." },
+      { name: "Dragados Offshore", ticker: "", listing: "Subsidiary", segment: "Offshore grid platforms", researchQuestion: "Track consortium contracts, fabrication milestones, and delivery timing." },
+      { name: "TenneT", ticker: "", listing: "Grid operator", segment: "Transmission customers", researchQuestion: "Track grid investment and transformer procurement frameworks." },
+      { name: "Power Grid Corporation of India", ticker: "", listing: "Listing review pending", segment: "Transmission customers", researchQuestion: "Track substation investment and transformer orders." },
+    ],
   },
   {
     id: "tokenized-capital", name: "Tokenized Capital Markets",
