@@ -81,7 +81,7 @@ export function LunaBooksCashIntelligence() {
           <h3>Top three decisions</h3>
           <div className="ti-decision-list">
             {intelligence.recommendations.map((item, index) => (
-              <details key={item.id} open={index === 0}>
+              <details key={item.id}>
                 <summary><span>{index + 1}</span><b>{item.action}</b><small>{item.urgency}</small></summary>
                 <p>{item.reason}</p>
                 <dl>

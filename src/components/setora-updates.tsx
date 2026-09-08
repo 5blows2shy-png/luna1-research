@@ -4,7 +4,7 @@ import styles from "./setora-map.module.css";
 export function SetoraUpdates() {
   return <div className={styles.maps}>
     <p>Last checked: {new Date(updates.lastCheckedAt).toLocaleString("en-US", { timeZone: "America/Los_Angeles", dateStyle: "medium", timeStyle: "short" })} Pacific. {updates.coverageNote}</p>
-    {([["data-centers", "Data Center AI Infrastructure"], ["robotics", "Robotics"]] as const).map(([id, name]) => <details className={styles.ecosystem} open key={id}>
+    {([["data-centers", "Data Center AI Infrastructure"], ["robotics", "Robotics"]] as const).map(([id, name]) => <details className={styles.ecosystem} key={id}>
       <summary className={styles.summary}><span><small>FILINGS · EARNINGS · CAPITAL EVENTS</small><strong>{name}</strong></span><span className={styles.summaryMeta}>{updates.items.filter((item) => item.segment === id).length} updates <b aria-hidden="true">⌄</b></span></summary>
       <div className={styles.content}>{updates.items.filter((item) => item.segment === id).map((item) => <article className={styles.relationship} key={item.id}>
         <p><small>{item.company} · {item.publishedDate} · {item.sourceType} · {item.eventType.replaceAll("_", " ")} · {item.status === "candidate" ? "Candidate — review required" : "Source checked"}</small></p>
@@ -18,4 +18,3 @@ export function SetoraUpdates() {
     </details>)}
   </div>;
 }
-

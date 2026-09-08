@@ -3,8 +3,8 @@ import { setoraCoverageGroups } from "@/data/setora-coverage";
 import styles from "./setora-map.module.css";
 
 export function SetoraCoverage({ view }: { view: "themes" | "companies" }) {
-  return <div className={styles.maps}>{setoraCoverageGroups.map((group, index) => (
-    <details key={group.id} className={styles.ecosystem} open={index === 0}>
+  return <div className={styles.maps}>{setoraCoverageGroups.map((group) => (
+    <details key={group.id} className={styles.ecosystem}>
       <summary className={styles.summary}><span><small>SETORA SEGMENT</small><strong>{group.name}</strong></span><span className={styles.summaryMeta}>{view === "themes" ? group.themes.length + " themes" : group.companies.length + " companies"} <b aria-hidden="true">⌄</b></span></summary>
       <div className={styles.content}><p>{group.description}</p>
         <p><Link className="text-link" href={"/setora/capital-map#" + group.id}>Explore this capital map →</Link></p>
@@ -16,4 +16,3 @@ export function SetoraCoverage({ view }: { view: "themes" | "companies" }) {
     </details>
   ))}</div>;
 }
-

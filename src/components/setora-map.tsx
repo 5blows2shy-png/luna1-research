@@ -93,5 +93,5 @@ function EcosystemMap({ ecosystem, initiallyOpen }: { ecosystem: CapitalEcosyste
 }
 
 export function SetoraMap() {
-  return <div className={styles.maps}>{capitalEcosystems.map((ecosystem, index) => <EcosystemMap key={ecosystem.id} ecosystem={ecosystem} initiallyOpen={index === 0} />)}</div>;
+  return <div className={styles.maps}>{capitalEcosystems.map((ecosystem) => <EcosystemMap key={ecosystem.id} ecosystem={ecosystem} initiallyOpen={false} />)}</div>;
 }
