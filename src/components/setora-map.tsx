@@ -7,7 +7,7 @@ import styles from "./setora-map.module.css";
 function EcosystemMap({ ecosystem, initiallyOpen }: { ecosystem: CapitalEcosystem; initiallyOpen: boolean }) {
   const [focus, setFocus] = useState("all");
   const [depth, setDepth] = useState(2);
-  const [selected, setSelected] = useState(ecosystem.id === "robotics" ? "abb" : "nvidia");
+  const [selected, setSelected] = useState(ecosystem.companies[0]?.id ?? "");
   const visibleIds = connectedCompanyIds(ecosystem, focus, depth);
   const companies = ecosystem.companies.filter((company) => visibleIds.has(company.id));
   const relationships = ecosystem.relationships.filter((edge) => visibleIds.has(edge.supplier) && visibleIds.has(edge.customer));
