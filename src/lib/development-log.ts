@@ -397,4 +397,128 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
       "Makes the path from military accountability and infrastructure operations to accounting, finance, and investment research easier to evaluate while preserving the underlying work.",
     status: "Completed",
   },
+  {
+    id: "glw-optical-connectivity-research-note",
+    date: "2026-08-21",
+    phase: "Current Research",
+    category: "Research",
+    title: "Completed GLW Optical-Connectivity Research Note",
+    summary:
+      "Published a sourced, downloadable research note that maps Corning's reported optical-connectivity demand, segment evidence, open operating questions, and monitoring framework.",
+    reason:
+      "The GLW research record needed a portable document that separates reported Q2 2026 evidence from analyst interpretation, open questions, and the proof required for continued monitoring.",
+    lessons: [
+      "A research note should distinguish an analytical demand map from reported evidence.",
+      "Document dates should not overwrite the original publication dates of source materials.",
+      "Draft research is more credible when its unanswered questions and completion standard are explicit.",
+    ],
+    skills: [
+      "Equity-research scoping",
+      "Primary-source planning",
+      "Financial communication",
+      "Document production",
+    ],
+    impact:
+      "Adds a recruiter-visible example of disciplined, sourced research and gives the GLW note a completed branded PDF artifact without presenting it as personalized investment advice.",
+    status: "Completed",
+    route: "/research/notes",
+    visibility: "Public",
+  },
+  {
+    id: "active-position-research-expansion",
+    date: "2026-09-07",
+    phase: "Portfolio Research Expansion",
+    category: "Research",
+    title: "Expanded Active-Position Research and Infrastructure Coverage",
+    summary:
+      "Added source-grounded CASY and WELL position dossiers, refocused the Watchlist toward BE and VRT, and published a branded thematic report on power constraints around data-center growth.",
+    reason:
+      "The Portfolio Lab needed to show the analytical work behind active positions while connecting company-level research to a broader infrastructure bottleneck thesis.",
+    lessons: [
+      "Margin definitions must remain attached to their source and business model; retail gross margin, store operating margin, REIT NOI margin, and normalized FFO are not interchangeable.",
+      "A change in position status should identify the evidence being monitored instead of implying certainty.",
+      "Thematic demand forecasts are most useful when paired with project timing, capacity, working-capital, and cash-conversion questions.",
+    ],
+    skills: [
+      "Primary-source equity research",
+      "Financial-statement interpretation",
+      "Margin and operating-driver analysis",
+      "Accessible data visualization",
+      "Portfolio monitoring",
+      "Research-document production",
+    ],
+    impact:
+      "Gives recruiters and employers concrete evidence of an end-to-end analyst workflow: locating primary filings, distinguishing GAAP and company-defined measures, calculating and visualizing operating trends, writing explicit monitoring rules, and presenting the work in both responsive web dossiers and a branded PDF.",
+    status: "Completed",
+    overview: [
+      "CASY and WELL now have dedicated active-position research pages with sourced margin charts, operating evidence, competitive-position analysis, monitoring questions, thesis-invalidation criteria, and clear educational disclosures.",
+      "The Watchlist removes the LUNA score display, replaces JBL with Bloom Energy and Vertiv, and keeps research navigation focused inside the Equity Research workflow.",
+    ],
+    milestones: [
+      "Published CASY and WELL active-position research routes.",
+      "Added reported and calculated margin progression with source labels.",
+      "Documented the evidence behind both Active Position status changes.",
+      "Added BE and VRT to the Watchlist and removed JBL from the Watchlist.",
+      "Published the Luna1-branded Power Constraints and the Next Data-Center Bottleneck report.",
+      "Consolidated research-note discovery inside Equity Research while preserving its reports and downloads.",
+    ],
+    route: "/portfolio",
+    visibility: "Public",
+  },
+  {
+    id: "setora-alpha-capital-intelligence",
+    date: "2026-09-07",
+    phase: "Platform Expansion",
+    category: "Platform Expansion",
+    title: "Started the SETORA Alpha capital-intelligence build",
+    summary:
+      "Introduced SETORA as a source-aware capital-intelligence system for mapping AI infrastructure, data centers, power, robotics, suppliers, customers, and the events that connect them.",
+    reason:
+      "Investment research benefits from a structured view of the capital chains and operating relationships that shape future demand, capacity, and competitive position.",
+    lessons: [
+      "Capital-chain relationships should remain research candidates until they are supported by traceable primary sources.",
+      "A clear separation between reported facts, interpretation, and open questions protects analytical credibility.",
+      "A narrow Alpha scope creates a stronger foundation for future source ingestion and review workflows.",
+    ],
+    skills: [
+      "Capital-chain mapping",
+      "Source-aware data modeling",
+      "Infrastructure research",
+      "Product architecture",
+      "Evidence governance",
+    ],
+    impact:
+      "Adds a recruiter-visible example of connecting company research, industry structure, event normalization, and relationship mapping into a focused finance-and-technology product.",
+    status: "In Progress",
+    overview: [
+      "SETORA Alpha is a standalone capital-intelligence research product within the broader Luna1 portfolio. Its initial scope covers AI infrastructure, data centers, power infrastructure, and robotics.",
+      "The preview preserves source dates and discovery dates separately, keeps candidate relationships reviewable, and does not present unverified relationships or market signals as recommendations.",
+    ],
+    milestones: [
+      "Defined the SETORA Alpha architecture and source-aware evidence model.",
+      "Added capital-chain, company-candidate, theme, and event-taxonomy data structures.",
+      "Built capital-map, themes, companies, research, signals, methodology, and About routes.",
+      "Added relationship mapping for infrastructure and robotics ecosystems.",
+      "Separated SETORA coverage from Luna1's legacy equity-research universe.",
+    ],
+    nextSteps: [
+      "Connect reviewed primary-source ingestion to the Alpha evidence model.",
+      "Complete human review workflows for candidate capital events and relationships.",
+      "Add source-linked company and theme updates without implying real-time coverage.",
+      "Expand the capital maps only when the supporting evidence is verified.",
+    ],
+    featurePreview: [
+      { label: "Capital Map", status: "Preview" },
+      { label: "Theme Coverage", status: "Preview" },
+      { label: "Company Candidates", status: "In Development" },
+      { label: "Capital Events", status: "Planned" },
+      { label: "Evidence Lineage", status: "In Development" },
+    ],
+    evolutionStatement:
+      "SETORA extends Luna1's research practice into a structured view of the capital chains, operating dependencies, and source-backed events that shape investment questions.",
+    disclosure:
+      "SETORA Alpha is an educational research and product-development project. It is not investment advice, a real-time market-data service, or a recommendation engine.",
+    route: "/setora",
+    visibility: "Public",
+  },
 ];
