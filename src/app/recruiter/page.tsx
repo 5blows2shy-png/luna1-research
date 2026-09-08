@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionHeading } from "@/components/site";
+import { SectionDisclosure } from "@/components/section-disclosure";
 import styles from "./page.module.css";
 
 const title = "Shy Lee | Finance Analyst • Investment Research • FP&A";
@@ -53,12 +54,12 @@ const selectedWork = [
       {
         title: "COST Qualitative Investment Memo",
         context: "Equity valuation draft · July 28, 2026",
-        href: "/downloads/shy-lee-costco-qualitative-investment-memo.docx",
+        href: "/downloads/shy-lee-costco-qualitative-investment-memo.pdf",
       },
       {
         title: "Casey’s Operations & Supply Chain Analysis",
         context: "Related company analysis · BA 360 executive summary",
-        href: "/downloads/shy-lee-caseys-operations-supply-chain-analysis.docx",
+        href: "/downloads/shy-lee-caseys-operations-supply-chain-analysis.pdf",
       },
     ],
   },
@@ -119,8 +120,12 @@ const experience = [
     bullets: ["Analyze operational issues and coordinate work in uptime-sensitive environments.", "Follow change controls, document incidents, and maintain audit-ready operating records.", "Apply risk awareness across infrastructure, capacity, and service delivery."],
   },
   {
-    company: "U.S. Army", role: "Petroleum Supply Specialist", date: "Nov 2015–May 2019", relevance: "Resource accountability",
-    bullets: ["Managed accountable inventory and mission-critical resources.", "Supported operational planning, compliance, and disciplined recordkeeping in high-responsibility environments."],
+    company: "U.S. Army", role: "Supply Specialist & Financial Management Technician", date: "Nov 2015–May 2019", relevance: "Financial management & resource accountability",
+    bullets: ["Coordinated aviation and ground logistics while supporting budgets, reconciliations, reporting, and accountable resource management.", "Supported financial accountability for more than $10 million in operational expenditures through disciplined recordkeeping and compliance."],
+  },
+  {
+    company: "Wilgus Associates", role: "Junior Reconciliation Accountant", date: "Jun 2014–Jul 2015", relevance: "Reconciliation accounting",
+    bullets: ["Maintained ledger accounts, processed transactions, and performed bank reconciliations to support accurate financial records.", "Investigated variances and supported month-end close through reconciliation documentation and reporting.", "Implemented automated reconciliation processes that reduced reconciliation time by 50%."],
   },
 ] as const;
 
@@ -141,16 +146,6 @@ const roles = [
   { title: "Finance Transformation", proof: "Process analysis · Automation · Financial data · Controls" },
 ] as const;
 
-const featuredResearch = [
-  { subject: "Corning Incorporated", ticker: "GLW", type: "Company research · Optical connectivity", description: "Examines whether network density and computing demand can translate optical-connectivity volume into durable margins and free cash flow.", href: "/research/companies/glw" },
-  { subject: "Bloom Energy", ticker: "BE", type: "Company research · Power constraints", description: "Tests deployment speed, customer economics, manufacturing scale, contract quality, and cash conversion in distributed power.", href: "/research/companies/be" },
-  { subject: "Royal Bank of Canada", ticker: "RY", type: "Company research · Financial institutions", description: "Studies franchise durability, capital discipline, diversified earnings, credit sensitivity, and through-cycle returns.", href: "/research/companies/ry" },
-] as const;
-
-function SectionLabel({ number, children }: { number: string; children: string }) {
-  return <span className={styles.sectionLabel}><b>{number}</b> {children}</span>;
-}
-
 export default function RecruiterView() {
   return <>
     <section className={styles.hero} aria-labelledby="recruiter-title">
@@ -166,6 +161,7 @@ export default function RecruiterView() {
           <a className="button primary" href="#selected-work">View selected work <span aria-hidden="true">↓</span></a>
           <a className="button" href="/downloads/shy-lee-resume.pdf" download>Download resume <span aria-hidden="true">↓</span></a>
           <Link className="button" href="/contact">Contact <span aria-hidden="true">→</span></Link>
+          <a className="button" href="https://www.linkedin.com/in/shyheim-lee/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
         </div>
       </div>
       <aside className={styles.heroBrief} aria-label="Candidate brief">
@@ -181,20 +177,20 @@ export default function RecruiterView() {
     </section>
 
     <nav className={styles.sectionNav} aria-label="Recruiter page sections">
-      <a href="#profile">01 Profile</a><a href="#selected-work">02 Selected work</a><a href="#capabilities">03 Capabilities</a><a href="#experience">04 Experience</a><a href="#investment-experience">05 Investment experience</a><a href="#alignment">06 Career alignment</a><a href="#contact">07 Contact</a>
+      <a href="#profile">01 Profile</a><a href="#selected-work">02 Selected work</a><a href="#capabilities">03 Capabilities</a><a href="#experience">04 Experience</a><a href="#investment-experience">05 Investment experience</a><a href="#alignment">06 Career alignment</a>
     </nav>
 
-    <section id="profile" className={styles.snapshotSection}>
+    <SectionDisclosure id="profile" number="01" title="Candidate snapshot" defaultOpen>
+      <div className={styles.snapshotSection}>
       <div className={styles.snapshotHeading}>
-        <SectionLabel number="01">Candidate snapshot</SectionLabel>
         <h2>Finance capability grounded in accountable execution.</h2>
         <p>A concise view of education, current finance work, applied investment experience, and operating background.</p>
       </div>
       <dl className={styles.snapshotGrid}>{snapshot.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
-    </section>
+      </div>
+    </SectionDisclosure>
 
-    <section id="selected-work">
-      <SectionLabel number="02">Selected work</SectionLabel>
+    <SectionDisclosure id="selected-work" number="02" title="Selected work" defaultOpen>
       <SectionHeading eyebrow="Evidence, not claims" title="How I analyze, model, research, and improve financial workflows." copy="Completed work links directly to evidence. Developing work is labeled before publication." />
       <div className={styles.workGrid}>{selectedWork.map((work) => <article className={styles.workCard} key={work.title}>
         <div className={styles.cardMeta}><span>{work.number} · {work.label}</span><b>{work.status}</b></div>
@@ -207,10 +203,9 @@ export default function RecruiterView() {
           <small>Educational work only. The COST memo is a dated draft and is not current market data or investment advice.</small>
         </div> : "href" in work ? <Link className="text-link" href={work.href}>{work.action} <span aria-hidden="true">→</span></Link> : <span className={styles.pendingLink}>Supporting artifact forthcoming</span>}
       </article>)}</div>
-    </section>
+    </SectionDisclosure>
 
-    <section id="capabilities">
-      <SectionLabel number="03">Finance capabilities</SectionLabel>
+    <SectionDisclosure id="capabilities" number="03" title="Finance capabilities">
       <SectionHeading eyebrow="Capability register" title="Every capability points to work—or states that it is developing." copy="Applied indicates direct use in professional, academic, or portfolio work. Developing indicates continued study or an unfinished evidence artifact." />
       <div className={styles.capabilityLedger}>{capabilities.map((capability) => <article key={capability.title}>
         <span>{capability.number}</span><h3>{capability.title}</h3>
@@ -218,58 +213,34 @@ export default function RecruiterView() {
         <div><b>Developing</b>{capability.developing.length ? <ul>{capability.developing.map((item) => <li key={item}>{item}</li>)}</ul> : <p>Evidence available in published work.</p>}</div>
         <Link className="text-link" href={capability.href}>{capability.proof} <span aria-hidden="true">→</span></Link>
       </article>)}</div>
-    </section>
+    </SectionDisclosure>
 
-    <section id="experience">
-      <SectionLabel number="04">Applied finance experience</SectionLabel>
+    <SectionDisclosure id="experience" number="04" title="Applied finance experience">
       <SectionHeading eyebrow="Relevant experience" title="Finance work supported by operating discipline." copy="Focused on the responsibilities and transferable context most relevant to financial analysis and decision support." />
       <div className={styles.experienceLedger}>{experience.map((role, index) => <article key={role.company}>
         <span>{String(index + 1).padStart(2, "0")}</span>
         <div className={styles.roleIdentity}><small>{role.relevance}</small><h3>{role.company}</h3><b>{role.role}</b>{"date" in role && <time>{role.date}</time>}</div>
         <ul>{role.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul>
       </article>)}</div>
-    </section>
+    </SectionDisclosure>
 
-    <section id="investment-experience">
-      <SectionLabel number="05">Investment organizations & applied experience</SectionLabel>
+    <SectionDisclosure id="investment-experience" number="05" title="Investment organizations & applied experience">
       <SectionHeading eyebrow="Professional development" title="Investment participation and finance credentials." copy="An understated record of applied investment work, professional membership, completed credentials, and clearly labeled plans." />
       <div className={styles.organizationList}>{organizations.map((item, index) => <article key={item.name}>
         <span>{String(index + 1).padStart(2, "0")}</span><div><h3>{item.name}</h3><p>{item.detail}</p></div><b>{item.status}</b>
         {"href" in item ? <a className="text-link" href={item.href} download>View certificate <span aria-hidden="true">↓</span></a> : <span aria-hidden="true" />}
       </article>)}</div>
-    </section>
+    </SectionDisclosure>
 
     <section className={styles.differenceSection}>
       <div><span className="eyebrow">Why this profile is different</span><h2>Finance + Operations + Technology</h2></div>
       <div><p className={styles.editorialLead}>My experience sits at the intersection of financial operations, investment analysis, and technology.</p><p>I have worked directly with accounting records and financial reporting, developed investment research through Luna1 and applied investment work, and built tools aimed at making finance workflows more efficient.</p><p>The objective is straightforward: understand the numbers, identify what matters, and communicate the financial implications clearly.</p></div>
     </section>
 
-    <section id="alignment">
-      <SectionLabel number="06">Career alignment</SectionLabel>
+    <SectionDisclosure id="alignment" number="06" title="Career alignment">
       <SectionHeading eyebrow="Shared analytical foundation" title="Roles connected by the same finance disciplines." copy="Financial analysis, forecasting, valuation, decision support, and financial operations provide the common thread." />
       <div className={styles.roleGrid}>{roles.map((role, index) => <article key={role.title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{role.title}</h3><p>{role.proof}</p></article>)}</div>
-    </section>
+    </SectionDisclosure>
 
-    <section id="featured-research">
-      <SectionHeading eyebrow="Featured research" title="A focused gateway into the research archive." copy="Three company dossiers show how business structure, operating evidence, valuation questions, catalysts, and risks are organized." />
-      <div className={styles.researchGrid}>{featuredResearch.map((research) => <Link href={research.href} key={research.ticker}>
-        <div className={styles.researchMeta}><b>{research.ticker}</b><span>{research.type}</span></div><h3>{research.subject}</h3><p>{research.description}</p><strong>View research <span aria-hidden="true">→</span></strong>
-      </Link>)}</div>
-    </section>
-
-    <section className={styles.resumeBand} aria-labelledby="resume-heading">
-      <div><span className="eyebrow">Resume</span><h2 id="resume-heading">Review the concise record.</h2><p>Download the recruiter-ready PDF or review the complete resume online.</p></div>
-      <div className={styles.actions}><a className="button primary" href="/downloads/shy-lee-resume.pdf" download>Download resume <span aria-hidden="true">↓</span></a><Link className="button" href="/resume">View resume online <span aria-hidden="true">→</span></Link></div>
-    </section>
-
-    <section id="contact" className={styles.contactSection}>
-      <div><SectionLabel number="07">Let&apos;s talk</SectionLabel><h2>Interested in discussing an opportunity?</h2><p>I&apos;m seeking roles where I can combine financial analysis, investment thinking, operational experience, and technology to support better financial decisions.</p></div>
-      <div className={styles.contactActions}>
-        <Link className="button primary" href="/contact">Contact Shy <span aria-hidden="true">→</span></Link>
-        <a className="button" href="https://www.linkedin.com/in/shyheim-lee/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
-        <a className="button" href="/downloads/shy-lee-resume.pdf" download>Download resume <span aria-hidden="true">↓</span></a>
-        <small>Professional inquiries are handled through the secure contact form.</small>
-      </div>
-    </section>
   </>;
 }
