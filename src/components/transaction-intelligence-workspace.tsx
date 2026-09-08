@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
+import { LunaBooksCashIntelligence } from "@/components/luna-books-cash-intelligence";
 import {
   buildBoardPacketAnalysis,
   cleanTransactions,
@@ -257,21 +259,47 @@ function UploadControl({
 }
 
 function HomeTab() {
+  const portalModules = [
+    ["Overview", "Available", "A connected view of imported activity, close status, and review priorities."],
+    ["Transactions", "Available", "Import, normalize, categorize, flag duplicates, and export transaction records."],
+    ["Banking", "Preview", "Parse bank statements and prepare bank activity for structured review."],
+    ["Receipts", "Planned", "Collect receipts and connect supporting documents to transaction records."],
+    ["Invoices", "Planned", "Create and monitor customer invoices within the business record."],
+    ["Reconcile", "Preview", "Compare bank activity with accounting exports and organize exceptions."],
+    ["Chart of Accounts", "Preview", "Review suggested account mappings before accounting approval."],
+    ["Reports", "Preview", "Build close summaries, board packets, and controlled Excel or PDF exports."],
+    ["Financial Health", "Preview", "Translate imported records into trends, concentrations, and management questions."],
+    ["Accountant Review", "Preview", "Consolidate exceptions, suggested entries, and follow-up items for review."],
+    ["Integrations", "Planned", "Connect QuickBooks Online and other approved financial-data sources."],
+    ["Business Settings", "Planned", "Manage business profiles, team access, permissions, and security controls."],
+  ] as const;
   return (
     <>
       <div className="ti-home-hero">
-        <span>Luna Books</span>
-        <h2>Clean messy books before they slow the business down.</h2>
-        <p>Luna is a financial intelligence system that converts transactions, financial statements and market data into decisions. Luna Books helps small businesses, nonprofits, churches, ministries, and creative teams clean up disorganized transactions, missing documents, unreconciled bank activity, and board reporting gaps.</p>
-        <p>The client-facing promise is simple: send the files, see what is missing, clean the books, and leave every review item organized for follow-up.</p>
+        <span>Your Luna Books Portal</span>
+        <h2>Accounting, bookkeeping and financial records.</h2>
+        <p>Luna Books is designed to give your business one secure place to organize transactions, maintain financial records and understand its financial performance.</p>
+        <p>Upload financial files, categorize transactions, identify duplicates or unusual activity, reconcile accounts, prepare accounting records, and generate detailed close summaries from one connected review workspace.</p>
+        <Alert kind="warning">Luna Books is in development. Authentication, encrypted document storage, controlled accountant invitations, invoicing, and direct QuickBooks Online synchronization are planned—not currently production-ready.</Alert>
+        <Link className="button" href="/login">Preview secure portal login <span>→</span></Link>
       </div>
-      <div className="ti-service-grid">
-        {[
-          ["Offer 1", "Messy Books Cleanup", "Clean transaction exports, flag duplicates, find uncategorized items, prepare review files, and organize what still needs a decision."],
-          ["Offer 2", "Client Request Portal", "Track missing bank statements, receipts, payroll reports, invoices, and reminders so cleanup work does not get stuck in email."],
-          ["Offer 3", "Nonprofit Back Office", "Organize board packets, finance checklists, grant deadlines, vendor files, compliance reminders, and monthly close review items."],
-        ].map(([label, title, copy]) => <article key={title}><span>{label}</span><h3>{title}</h3><p>{copy}</p></article>)}
+      <div className="ti-product-flow" aria-label="Luna product hierarchy">
+        <article><span>01 · Records</span><h3>Luna Books</h3><b>Transactions and accounting records</b><p>Accounting, bookkeeping and financial records—including receipts, reconciliation, statements, and accountant review.</p></article>
+        <span aria-hidden="true">↓</span>
+        <article><span>02 · Outlook</span><h3>Luna Forecast</h3><b>Budgets, projections and scenarios</b><p>Budgets, cash flow and future decisions built from finalized Luna Books data.</p></article>
+        <span aria-hidden="true">↓</span>
+        <article><span>03 · Decisions</span><h3>Luna Business</h3><b>Owner decisions and financial health</b><p>Run and understand your company through its profile, team, permissions, activity, and connected Luna products.</p></article>
       </div>
+      <Section title="Customer Portal" caption="One business profile, organized into connected financial workflows.">
+        <div className="ti-portal-grid">
+          {portalModules.map(([name, status, description]) => (
+            <article key={name}>
+              <div><h3>{name}</h3><span data-status={status.toLowerCase()}>{status}</span></div>
+              <p>{description}</p>
+            </article>
+          ))}
+        </div>
+      </Section>
       <Section title="How The Service Works">
         <DataTable rows={[
           { Step: "1. Collect", "Client-friendly explanation": "Request the bank, payroll, vendor, grant, and receipt files needed for cleanup." },
@@ -281,6 +309,7 @@ function HomeTab() {
         ]} />
         <Alert>Finance cleanup, reconciliation, journal entry, and board packet tools operate as one review-first workspace.</Alert>
       </Section>
+      <LunaBooksCashIntelligence />
     </>
   );
 }
@@ -647,7 +676,7 @@ export function TransactionIntelligenceWorkspace() {
     <div className="ti-workspace">
       <header className="ti-banner">
         <div><span>In Development · Review Workspace</span><h1>Luna Books</h1></div>
-        <p>Luna is a financial intelligence system that converts transactions, financial statements and market data into decisions.</p>
+        <p>Accounting, bookkeeping and financial records—organized so finalized data can support Luna Forecast and Luna Business decisions.</p>
       </header>
       <div className="ti-review-banner">Clean messy books, organize client requests, and prepare finance review files. Tools are for review only and do not approve, post, or modify accounting records.</div>
       <Alert kind="warning">PDF extraction is best-effort and may require manual review. This workspace prepares review files only and does not replace accounting approval.</Alert>
