@@ -426,7 +426,7 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
     "Equity Research",
     "Klyro",
     "Portfolio Lab",
-    "Recruiter View",
+    "Professional Profile",
     "Development Log",
   ])
     assert.ok(
