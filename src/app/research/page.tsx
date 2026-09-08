@@ -1,29 +1,15 @@
 import type { Metadata } from "next";
-import { CapitalFlowMap } from "@/components/capital-flow-map";
 import { EditorialLink, LuxuryCard } from "@/components/luxury";
 import {
-  CompanyResearchCard,
   ResearchDisclaimer,
   ResearchSectionNav,
-  ThemeCard,
 } from "@/components/research-ui";
 import { PageHeader, SectionHeading } from "@/components/site";
-import {
-  companyResearch,
-  investmentThemes,
-  macroContext,
-  researchNotes,
-} from "@/lib/research-content";
-import {
-  primaryCoverage,
-  researchReportStandard,
-  secondaryCoverage,
-} from "@/lib/professional-profile";
 
 export const metadata: Metadata = {
   title: "Equity Research",
   description:
-    "Luna1 Equity Research combines company analysis with capital-flow mapping to track structural spending, bottlenecks, value chains, and public companies positioned to benefit.",
+    "Luna1 Equity Research organizes company evidence, investment reasoning, and ongoing monitoring into clear, educational research dossiers.",
 };
 
 export default function ResearchPage() {
@@ -50,133 +36,34 @@ export default function ResearchPage() {
           </p>
         </div>
       </section>
-      <CapitalFlowMap />
       <section>
         <SectionHeading
-          eyebrow="Research architecture"
-          title="A consistent standard across every company"
-          copy="A section appears as complete only when its evidence has been reviewed. Missing financials or source support remain visibly pending."
+          eyebrow="Research approach"
+          title="Reasoning before conclusion"
+          copy="Each research path separates reported evidence, analyst interpretation, open questions, and risk. The work is educational and never a personalized recommendation."
         />
-        <div className="research-standard-grid">
-          {researchReportStandard.map((item, index) => (
-            <div key={item}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <b>{item}</b>
+        <div className="research-pathways">
+          <LuxuryCard variant="research">
+            <span className="eyebrow">01 · Company dossiers</span>
+            <h2>Evidence at the company level</h2>
+            <p>Business structure, financial evidence, valuation context, catalysts, risks, and monitoring indicators in one consistent format.</p>
+            <EditorialLink href="/research/companies/glw">Open company research</EditorialLink>
+          </LuxuryCard>
+          <LuxuryCard variant="research">
+            <span className="eyebrow">02 · Capital Flows</span>
+            <h2>Trace spending through the value chain</h2>
+            <p>Explore capital intensity, bottlenecks, beneficiaries, and the operational evidence behind structural themes.</p>
+            <EditorialLink href="/research/capital-flows">Open Capital Flows</EditorialLink>
+          </LuxuryCard>
+          <LuxuryCard variant="research">
+            <span className="eyebrow">03 · Themes & notes</span>
+            <h2>Organized research paths</h2>
+            <p>Investment themes and working notes remain separate destinations, keeping this landing page concise.</p>
+            <div className="research-card-actions">
+              <EditorialLink href="/research/themes">Investment Themes</EditorialLink>
+              <EditorialLink href="/research/notes">Research Notes</EditorialLink>
             </div>
-          ))}
-        </div>
-      </section>
-      <section>
-        <SectionHeading
-          eyebrow="Industry specialization"
-          title="Coverage grounded in operating context"
-          copy="Primary coverage emphasizes infrastructure and financial systems where operations, capacity, accounting, and capital allocation intersect."
-        />
-        <div className="coverage-specialization">
-          <div>
-            <span className="eyebrow">Primary coverage</span>
-            <ul>
-              {primaryCoverage.map((industry) => (
-                <li key={industry}>{industry}</li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <span className="eyebrow">Secondary coverage</span>
-            <ul>
-              {secondaryCoverage.map((industry) => (
-                <li key={industry}>{industry}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-      <section>
-        <SectionHeading
-          eyebrow="01 · Company research"
-          title="Developing company dossiers"
-          copy="Three foundational dossiers organize the research question, business model, thesis, risks, catalysts, competitive position, and future financial evidence."
-        />
-        <div className="research-hub-grid">
-          {companyResearch.map((company) => (
-            <CompanyResearchCard key={company.ticker} company={company} />
-          ))}
-        </div>
-      </section>
-      <section>
-        <SectionHeading
-          eyebrow="02 · Investment themes"
-          title="Mapping the value chain before selecting the company"
-          copy="Theme work identifies bottlenecks, beneficiaries, risks, and the questions that must be answered before a company-specific conclusion."
-        />
-        <div className="research-hub-grid">
-          {investmentThemes.slice(0, 3).map((theme) => (
-            <ThemeCard key={theme.slug} theme={theme} />
-          ))}
-        </div>
-        <div className="section-action">
-          <EditorialLink href="/research/themes">
-            Explore all investment themes
-          </EditorialLink>
-        </div>
-      </section>
-      <section>
-        <SectionHeading
-          eyebrow="03 · Macro context"
-          title="Context, not prediction"
-          copy="These lenses frame financial conditions and market structure without substituting macro forecasts for company-level evidence."
-        />
-        <div className="macro-grid">
-          {macroContext.map((item) => (
-            <LuxuryCard key={item.title} variant="research">
-              <span className="eyebrow">Context lens</span>
-              <h3>{item.title}</h3>
-              <p>{item.summary}</p>
-              <small>{item.mostRecentNote}</small>
-            </LuxuryCard>
-          ))}
-        </div>
-      </section>
-      <section className="research-pathways">
-        <LuxuryCard variant="research">
-          <span className="eyebrow">04 · Research Notes</span>
-          <h2>{researchNotes.length} research notes</h2>
-          <p>
-            Published reports and developing research questions organized by
-            company, theme, macro context, and process.
-          </p>
-          <EditorialLink href="/research/notes">
-            Open Research Notes
-          </EditorialLink>
-        </LuxuryCard>
-        <LuxuryCard variant="research">
-          <span className="eyebrow">Development record</span>
-          <h2>How the platform evolved</h2>
-          <p>
-            A chronological record of product, research, portfolio, and
-            professional-development decisions.
-          </p>
-          <EditorialLink href="/development-log">
-            View development log
-          </EditorialLink>
-        </LuxuryCard>
-      </section>
-      <section>
-        <SectionHeading
-          eyebrow="Downloadable research"
-          title="Published research reports"
-          copy="Branded reports keep primary-source evidence, interpretation, open questions, and educational disclosures together in a portable format."
-        />
-        <div className="research-hub-grid">
-          {researchNotes.filter((note) => note.pdfUrl).map((note) => (
-            <LuxuryCard key={note.slug} variant="download">
-              <span className="eyebrow">{note.category}{note.ticker ? ` · ${note.ticker}` : ""}</span>
-              <h3>{note.title}</h3>
-              <p>{note.summary}</p>
-              <small>{note.date} · PDF</small>
-              <EditorialLink href={note.pdfUrl!}>Download PDF</EditorialLink>
-            </LuxuryCard>
-          ))}
+          </LuxuryCard>
         </div>
       </section>
       <section className="research-disclaimer-section">
