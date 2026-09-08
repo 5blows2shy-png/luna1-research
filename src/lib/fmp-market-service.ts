@@ -75,6 +75,10 @@ export async function getFmpResource<T = Record<string, unknown>>(resource: FmpR
   }
 }
 
+export function getMarketNews(params: { symbol?: string; page?: number; limit?: number } = {}) {
+  return getFmpResource("stock-news", params, { ttlMs: 5 * 60_000 });
+}
+
 export const getCompanyProfile = (symbol: string) => getFmpResource<CompanyProfile>("profile", { symbol }, { ttlMs: 24 * 60 * 60_000 });
 export const getHistoricalPrices = (symbol: string, from?: string, to?: string) => getFmpResource<HistoricalPrice>("historical-price-full", { symbol, from, to }, { ttlMs: 15 * 60_000 });
 export const getIncomeStatements = (symbol: string, limit = 8) => getFmpResource<FinancialStatement>("income-statement", { symbol, limit }, { ttlMs: 6 * 60 * 60_000 });
