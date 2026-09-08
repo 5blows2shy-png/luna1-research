@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionHeading } from "@/components/site";
+import { SectionDisclosure } from "@/components/section-disclosure";
 import styles from "./page.module.css";
 
 const title = "Shy Lee | Finance Analyst • Investment Research • FP&A";
@@ -145,10 +146,6 @@ const roles = [
   { title: "Finance Transformation", proof: "Process analysis · Automation · Financial data · Controls" },
 ] as const;
 
-function SectionLabel({ number, children }: { number: string; children: string }) {
-  return <span className={styles.sectionLabel}><b>{number}</b> {children}</span>;
-}
-
 export default function RecruiterView() {
   return <>
     <section className={styles.hero} aria-labelledby="recruiter-title">
@@ -183,17 +180,17 @@ export default function RecruiterView() {
       <a href="#profile">01 Profile</a><a href="#selected-work">02 Selected work</a><a href="#capabilities">03 Capabilities</a><a href="#experience">04 Experience</a><a href="#investment-experience">05 Investment experience</a><a href="#alignment">06 Career alignment</a>
     </nav>
 
-    <section id="profile" className={styles.snapshotSection}>
+    <SectionDisclosure id="profile" number="01" title="Candidate snapshot" defaultOpen>
+      <div className={styles.snapshotSection}>
       <div className={styles.snapshotHeading}>
-        <SectionLabel number="01">Candidate snapshot</SectionLabel>
         <h2>Finance capability grounded in accountable execution.</h2>
         <p>A concise view of education, current finance work, applied investment experience, and operating background.</p>
       </div>
       <dl className={styles.snapshotGrid}>{snapshot.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
-    </section>
+      </div>
+    </SectionDisclosure>
 
-    <section id="selected-work">
-      <SectionLabel number="02">Selected work</SectionLabel>
+    <SectionDisclosure id="selected-work" number="02" title="Selected work" defaultOpen>
       <SectionHeading eyebrow="Evidence, not claims" title="How I analyze, model, research, and improve financial workflows." copy="Completed work links directly to evidence. Developing work is labeled before publication." />
       <div className={styles.workGrid}>{selectedWork.map((work) => <article className={styles.workCard} key={work.title}>
         <div className={styles.cardMeta}><span>{work.number} · {work.label}</span><b>{work.status}</b></div>
@@ -206,10 +203,9 @@ export default function RecruiterView() {
           <small>Educational work only. The COST memo is a dated draft and is not current market data or investment advice.</small>
         </div> : "href" in work ? <Link className="text-link" href={work.href}>{work.action} <span aria-hidden="true">→</span></Link> : <span className={styles.pendingLink}>Supporting artifact forthcoming</span>}
       </article>)}</div>
-    </section>
+    </SectionDisclosure>
 
-    <section id="capabilities">
-      <SectionLabel number="03">Finance capabilities</SectionLabel>
+    <SectionDisclosure id="capabilities" number="03" title="Finance capabilities">
       <SectionHeading eyebrow="Capability register" title="Every capability points to work—or states that it is developing." copy="Applied indicates direct use in professional, academic, or portfolio work. Developing indicates continued study or an unfinished evidence artifact." />
       <div className={styles.capabilityLedger}>{capabilities.map((capability) => <article key={capability.title}>
         <span>{capability.number}</span><h3>{capability.title}</h3>
@@ -217,37 +213,34 @@ export default function RecruiterView() {
         <div><b>Developing</b>{capability.developing.length ? <ul>{capability.developing.map((item) => <li key={item}>{item}</li>)}</ul> : <p>Evidence available in published work.</p>}</div>
         <Link className="text-link" href={capability.href}>{capability.proof} <span aria-hidden="true">→</span></Link>
       </article>)}</div>
-    </section>
+    </SectionDisclosure>
 
-    <section id="experience">
-      <SectionLabel number="04">Applied finance experience</SectionLabel>
+    <SectionDisclosure id="experience" number="04" title="Applied finance experience">
       <SectionHeading eyebrow="Relevant experience" title="Finance work supported by operating discipline." copy="Focused on the responsibilities and transferable context most relevant to financial analysis and decision support." />
       <div className={styles.experienceLedger}>{experience.map((role, index) => <article key={role.company}>
         <span>{String(index + 1).padStart(2, "0")}</span>
         <div className={styles.roleIdentity}><small>{role.relevance}</small><h3>{role.company}</h3><b>{role.role}</b>{"date" in role && <time>{role.date}</time>}</div>
         <ul>{role.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul>
       </article>)}</div>
-    </section>
+    </SectionDisclosure>
 
-    <section id="investment-experience">
-      <SectionLabel number="05">Investment organizations & applied experience</SectionLabel>
+    <SectionDisclosure id="investment-experience" number="05" title="Investment organizations & applied experience">
       <SectionHeading eyebrow="Professional development" title="Investment participation and finance credentials." copy="An understated record of applied investment work, professional membership, completed credentials, and clearly labeled plans." />
       <div className={styles.organizationList}>{organizations.map((item, index) => <article key={item.name}>
         <span>{String(index + 1).padStart(2, "0")}</span><div><h3>{item.name}</h3><p>{item.detail}</p></div><b>{item.status}</b>
         {"href" in item ? <a className="text-link" href={item.href} download>View certificate <span aria-hidden="true">↓</span></a> : <span aria-hidden="true" />}
       </article>)}</div>
-    </section>
+    </SectionDisclosure>
 
     <section className={styles.differenceSection}>
       <div><span className="eyebrow">Why this profile is different</span><h2>Finance + Operations + Technology</h2></div>
       <div><p className={styles.editorialLead}>My experience sits at the intersection of financial operations, investment analysis, and technology.</p><p>I have worked directly with accounting records and financial reporting, developed investment research through Luna1 and applied investment work, and built tools aimed at making finance workflows more efficient.</p><p>The objective is straightforward: understand the numbers, identify what matters, and communicate the financial implications clearly.</p></div>
     </section>
 
-    <section id="alignment">
-      <SectionLabel number="06">Career alignment</SectionLabel>
+    <SectionDisclosure id="alignment" number="06" title="Career alignment">
       <SectionHeading eyebrow="Shared analytical foundation" title="Roles connected by the same finance disciplines." copy="Financial analysis, forecasting, valuation, decision support, and financial operations provide the common thread." />
       <div className={styles.roleGrid}>{roles.map((role, index) => <article key={role.title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{role.title}</h3><p>{role.proof}</p></article>)}</div>
-    </section>
+    </SectionDisclosure>
 
   </>;
 }
