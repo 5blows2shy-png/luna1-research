@@ -1856,6 +1856,12 @@ body:has(.lbt-shell) > .nav { display: none; }
 .capital-flow-theme>summary::after { content:"＋"; position:absolute; top:clamp(20px,3vw,36px); right:clamp(20px,3vw,36px); color:var(--accent-blue); font:500 20px var(--font-mono); }
 .capital-flow-theme[open]>summary::after { content:"−"; }
 .capital-flow-theme-summary { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:22px; align-items:start; padding-right:38px; }
+.capital-flow-collapsible { margin-top:14px; border-top:1px solid var(--divider-subtle); }
+.capital-flow-collapsible > summary { display:flex; justify-content:space-between; align-items:center; gap:18px; padding:15px 0; cursor:pointer; color:var(--text-primary); font:600 9px var(--font-mono); letter-spacing:.08em; text-transform:uppercase; list-style:none; }
+.capital-flow-collapsible > summary::-webkit-details-marker { display:none; }
+.capital-flow-collapsible > summary::before { content:"＋"; color:var(--accent-blue); font-size:14px; }
+.capital-flow-collapsible[open] > summary::before { content:"−"; }
+.capital-flow-collapsible > summary small { margin-left:auto; color:var(--text-muted); font:500 8px var(--font-mono); letter-spacing:.04em; text-transform:none; }
 .capital-flow-theme h3 { margin:0; font:500 clamp(28px,3vw,42px)/1.05 var(--font-serif); letter-spacing:-.03em; }
 .capital-flow-theme summary p { max-width:720px; margin:14px 0 0; color:var(--text-secondary); font-size:13px; }
 .capital-flow-status-block { display:flex; flex-direction:column; align-items:end; gap:8px; white-space:nowrap; }
