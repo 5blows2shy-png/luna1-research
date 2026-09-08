@@ -80,8 +80,8 @@ export function CapitalFlowMap() {
 
       <div className="capital-flow-themes">
         {capitalFlowThemes.map((theme, themeIndex) => (
-          <article className="capital-flow-theme" id={`capital-flow-${theme.id}`} key={theme.id}>
-            <header>
+          <details className="capital-flow-theme" id={`capital-flow-${theme.id}`} key={theme.id} open={themeIndex === 0}>
+            <summary className="capital-flow-theme-summary">
               <div>
                 <span className="eyebrow">
                   {String(themeIndex + 1).padStart(2, "0")} · Structural theme
@@ -95,9 +95,11 @@ export function CapitalFlowMap() {
                 </span>
                 <small>Updated {theme.lastUpdated}</small>
               </div>
-            </header>
+            </summary>
 
-            <div className="capital-flow-horizons" aria-label={`${theme.name} qualitative horizon`}>
+            <details className="capital-flow-collapsible" open>
+              <summary>Flow framework <small>Horizon and capital chain</small></summary>
+              <div className="capital-flow-horizons" aria-label={`${theme.name} qualitative horizon`}>
               {horizonLabels.map(([label, period, key]) => (
                 <div
                   className={`capital-flow-horizon capital-flow-horizon--${theme.horizons[key].toLowerCase()}`}
@@ -109,16 +111,17 @@ export function CapitalFlowMap() {
                 </div>
               ))}
               <p>Qualitative research view · not a probability forecast</p>
-            </div>
+              </div>
 
-            <ol className="capital-flow-chain" aria-label={`${theme.name} capital flow chain`}>
+              <ol className="capital-flow-chain" aria-label={`${theme.name} capital flow chain`}>
               {theme.flow.map((step, index) => (
                 <li key={step}>
                   <span>{String(index + 1).padStart(2, "0")}</span>
                   <b>{step}</b>
                 </li>
               ))}
-            </ol>
+              </ol>
+            </details>
 
             <details className="capital-flow-detail">
               <summary>Why this status?</summary>
@@ -126,7 +129,9 @@ export function CapitalFlowMap() {
               <p><b>Key change:</b> {theme.keyChange}</p>
             </details>
 
-            <div className="capital-flow-bottlenecks">
+            <details className="capital-flow-collapsible">
+              <summary>Bottlenecks <small>{theme.bottlenecks.length} operating constraints</small></summary>
+              <div className="capital-flow-bottlenecks">
               {theme.bottlenecks.map((bottleneck) => (
                 <section className="capital-flow-bottleneck-card" key={bottleneck.name}>
                   <span className="eyebrow">Bottleneck</span>
@@ -142,9 +147,12 @@ export function CapitalFlowMap() {
                   </div>
                 </section>
               ))}
-            </div>
+              </div>
+            </details>
 
-            <section className="capital-flow-companies" aria-labelledby={`${theme.id}-companies`}>
+            <details className="capital-flow-collapsible">
+              <summary>Company mapping <small>{theme.companies.length} mapped companies</small></summary>
+              <section className="capital-flow-companies" aria-labelledby={`${theme.id}-companies`}>
               <div className="capital-flow-section-label">
                 <span className="eyebrow">Public company mapping</span>
                 <h4 id={`${theme.id}-companies`}>Companies in the flow</h4>
@@ -183,9 +191,12 @@ export function CapitalFlowMap() {
               ) : (
                 <div className="research-empty">Research Pending · No company mapping has been published.</div>
               )}
-            </section>
+              </section>
+            </details>
 
-            <div className="capital-flow-evidence-grid">
+            <details className="capital-flow-collapsible">
+              <summary>Evidence &amp; risk <small>What could change the thesis?</small></summary>
+              <div className="capital-flow-evidence-grid">
               <section>
                 <span className="eyebrow">Capital flow evidence</span>
                 <h4>Evidence review</h4>
@@ -208,8 +219,9 @@ export function CapitalFlowMap() {
                   {theme.thesisRisks.map((risk) => <li key={risk}>{risk}</li>)}
                 </ul>
               </section>
-            </div>
-          </article>
+              </div>
+            </details>
+          </details>
         ))}
       </div>
 

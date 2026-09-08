@@ -35,4 +35,23 @@ export const setoraCoverageGroups = [
       { name: "Qualcomm", ticker: "QCOM", listing: "QCOM", segment: "Nervous system: compute & sensing", researchQuestion: "Track edge-AI, robotics, and autonomous-vehicle platform design wins." },
     ],
   },
+  {
+    id: "power-grid", name: "Power, Grid & Electrification",
+    description: "Generation, transmission, substations, transformers, switchgear, storage, and electrical systems required by AI, robotics, factories, and buildings.",
+    themes: ["Generation", "Transmission & grid expansion", "Transformers & substations", "Switchgear & power management", "Storage", "Copper, aluminum & materials"],
+    companies: setoraCompanyCandidates.filter((company) => ["Power & electrical", "Backup generation"].includes(company.segment)).map((company) => ({ ...company, listing: company.ticker })),
+  },
+  {
+    id: "tokenized-capital", name: "Tokenized Capital Markets",
+    description: "The financial infrastructure for issuing, owning, transferring, collateralizing, and settling tokenized assets.",
+    themes: ["Tokenized Treasuries", "Stablecoins & programmable money", "Tokenized funds & private credit", "Custody & digital identity", "Settlement & market infrastructure", "Collateral & financing"],
+    companies: [
+      { name: "BlackRock", ticker: "BLK", listing: "BLK", segment: "Tokenized funds & Treasuries", researchQuestion: "Track tokenized-fund launches, distribution, custody, and fee economics." },
+      { name: "Franklin Resources", ticker: "BEN", listing: "BEN", segment: "Tokenized funds & Treasuries", researchQuestion: "Track on-chain fund administration and tokenized-asset disclosures." },
+      { name: "JPMorgan Chase", ticker: "JPM", listing: "JPM", segment: "Banks & programmable money", researchQuestion: "Track deposit tokens, collateral rails, and institutional settlement disclosures." },
+      { name: "Coinbase", ticker: "COIN", listing: "COIN", segment: "Custody & digital-asset infrastructure", researchQuestion: "Track custody, institutional settlement, and regulated-market infrastructure." },
+      { name: "CME Group", ticker: "CME", listing: "CME", segment: "Market infrastructure", researchQuestion: "Track regulated trading, clearing, and collateral infrastructure relevant to tokenized markets." },
+      { name: "Visa", ticker: "V", listing: "V", segment: "Settlement networks", researchQuestion: "Track stablecoin settlement and tokenized-payment infrastructure partnerships." },
+    ],
+  },
 ] as const;

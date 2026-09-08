@@ -74,6 +74,34 @@ export const capitalEcosystems: CapitalEcosystem[] = [
       { id: "hesai-waymo", supplier: "hesai", customer: "waymo", kind: "Supply", description: "Waymo and Hesai are both tracked in the autonomy sensing chain, but this edge is a research candidate only until a current supplier disclosure verifies the relationship.", sourceTitle: "Waymo Driver", sourceUrl: "https://waymo.com/waymo-driver/", sourceDate: "Accessed 2026-09-07" },
     ],
   },
+  {
+    id: "power-grid", name: "Power, Grid & Electrification",
+    description: "Map the equipment and contractors that connect rising electricity demand to generation, transmission, and end users.",
+    capitalPath: ["AI · robotics · factory demand", "Generation & transmission", "Substations · transformers · switchgear", "Power management · storage · materials"],
+    companies: [
+      { id: "eaton-power", name: "Eaton", role: "Power management & switchgear", column: 1 },
+      { id: "abb-power", name: "ABB", role: "Electrification & grid equipment", column: 1 },
+      { id: "hubbell", name: "Hubbell", role: "Utility and electrical equipment", column: 1 },
+      { id: "nvent", name: "nVent Electric", role: "Electrical connection and protection", column: 1 },
+      { id: "ge-vernova", name: "GE Vernova", role: "Generation and grid equipment", column: 0 },
+      { id: "powell", name: "Powell Industries", role: "Electrical distribution", column: 2 },
+      { id: "quanta", name: "Quanta Services", role: "Grid and electrical construction", column: 2 },
+      { id: "cummins", name: "Cummins", role: "Distributed power and generation", column: 2 },
+    ],
+    relationships: [],
+  },
+  {
+    id: "tokenized-capital", name: "Tokenized Capital Markets",
+    description: "A research map for the rails that issue, custody, transfer, collateralize, and settle tokenized financial assets.",
+    capitalPath: ["Investor & issuer demand", "Identity · issuance · tokenized assets", "Custody · exchanges · settlement", "Collateral · programmable money · financing"],
+    companies: [
+      { id: "blackrock-tokenized", name: "Asset managers", role: "Tokenized funds and Treasuries", column: 0 },
+      { id: "banks-tokenized", name: "Banks & dealers", role: "Deposits, credit, and distribution", column: 1 },
+      { id: "custody-tokenized", name: "Custody platforms", role: "Safekeeping and transfer controls", column: 2 },
+      { id: "settlement-tokenized", name: "Settlement networks", role: "Programmable settlement and collateral", column: 3 },
+    ],
+    relationships: [],
+  },
 ];
 
 export function connectedCompanyIds(ecosystem: CapitalEcosystem, focus: string, depth: number): Set<string> {
