@@ -1,7 +1,58 @@
 {
-  "lastCheckedAt": "2026-09-08T00:18:52Z",
-  "coverageNote": "Initial check covers NVIDIA, Microsoft, and Teradyne. The remaining coverage universe is queued for daily checks; this is not a claim that every issuer has been scanned.",
+  "lastCheckedAt": "2026-09-27T04:15:26.162Z",
+  "coverageNote": "September 26 Pacific partial review: read Oracle's September 10 earnings release and NVIDIA's September 9 Australia announcement; searched Teradyne and ABB issuer news. Oracle's SEC submissions index was accessible, but individual filings were not reviewed; Teradyne's SEC submissions request failed. New earnings transcripts were not verified. Remaining issuers, foreign/private parent disclosures, and the full 10-K/10-Q/8-K/20-F/6-K universe remain unchecked this run. Absence of an update is not evidence of no disclosure.",
   "items": [
+    {
+      "id": "orcl-fy27-q1-20260910",
+      "segment": "data-centers",
+      "company": "Oracle",
+      "publishedDate": "2026-09-10",
+      "firstSeenAt": "2026-09-27T04:15:26.162Z",
+      "sourceType": "Issuer earnings release",
+      "eventType": "EARNINGS_RELEASE",
+      "status": "source_verified",
+      "title": "Oracle reports Q1 FY2027 cloud infrastructure growth",
+      "fact": "Oracle reported $7.4 billion in cloud infrastructure revenue, up 121% in USD, and $664 billion in remaining performance obligations. The issuer also reported completing $20 billion of common-stock sales before commissions through its ATM program.",
+      "interpretation": "RPO represents future contracted revenue, not current revenue or cash. The equity sales are reported as completed; this earnings record does not approve a capital-event classification.",
+      "url": "https://investor.oracle.com/investor-news/news-details/2026/Oracle-Announces-Q1-Results-Driven-by-Triple-Digit-Growth-in-Cloud-Infrastructure-Revenues/default.aspx",
+      "sourceTitle": "Oracle September 10 Q1 FY2027 earnings release",
+      "transcriptStatus": "Webcast referenced by issuer; transcript not verified",
+      "callUrl": "https://investor.oracle.com/home/default.aspx"
+    },
+    {
+      "id": "nvda-australia-expansion-20260909",
+      "segment": "data-centers",
+      "company": "NVIDIA",
+      "publishedDate": "2026-09-09",
+      "firstSeenAt": "2026-09-27T04:15:26.162Z",
+      "sourceType": "Issuer press release",
+      "eventType": "FACILITY_EXPANSION",
+      "status": "candidate",
+      "title": "Australian AI infrastructure expansion targets up to 2 GW",
+      "fact": "NVIDIA announced collaboration with Australian cloud and infrastructure partners to expand land, power, and shell capacity for DSX AI factories, targeting up to a 2-gigawatt buildout by 2027.",
+      "interpretation": "Candidate expansion event pending review. The capacity is an announced target, not confirmation of operating capacity, completed construction, or NVIDIA capital expenditure. Supplier relationships have not been changed.",
+      "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Expands-AI-Infrastructure-Capacity-in-Partnership-With-Australias-Data-Center-Ecosystem/default.aspx",
+      "sourceTitle": "NVIDIA September 9 Australia infrastructure announcement",
+      "transcriptStatus": "Press release; no associated earnings transcript verified",
+      "callUrl": "https://investor.nvidia.com/events-and-presentations"
+    },
+    {
+      "id": "orcl-fy26-q4-20260610",
+      "segment": "data-centers",
+      "company": "Oracle",
+      "publishedDate": "2026-06-10",
+      "firstSeenAt": "2026-09-08T14:01:23.205Z",
+      "sourceType": "Issuer earnings release",
+      "eventType": "EARNINGS_RELEASE",
+      "status": "source_verified",
+      "title": "Oracle FY2026 results: cloud infrastructure and funding disclosures",
+      "fact": "Oracle reported Q4 cloud infrastructure revenue of $5.8 billion and remaining performance obligations of $638 billion. It reported $43 billion of debt and $5 billion of equity financing raised in FY2026, while approximately $40 billion of FY2027 financing was an expectation.",
+      "interpretation": "Historical earnings coverage added September 8. RPO is contracted future revenue, not current revenue or cash received. Completed financing and expected future financing must be tracked separately; no capital-event approval is implied.",
+      "url": "https://investor.oracle.com/investor-news/news-details/2026/Oracle-Announces-Record-Q4-and-FY-2026-Results-Driven-by-Cloud-Infrastructure--Cloud-Applications/",
+      "sourceTitle": "Oracle June 10 FY2026 earnings release",
+      "transcriptStatus": "Transcript not reviewed",
+      "callUrl": "https://investor.oracle.com/Home/"
+    },
     {
       "id": "nvda-fy27-q2-20260826",
       "segment": "data-centers",
@@ -16,8 +67,8 @@
       "interpretation": "This supplies operating evidence for the compute layer. Revenue growth alone does not establish any particular customer's capital spending.",
       "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx",
       "sourceTitle": "NVIDIA Q2 FY2027 earnings release",
-      "transcriptStatus": "Earnings call page located; latest transcript not verified",
-      "callUrl": "https://investor.nvidia.com/events-and-presentations/events-and-presentations/event-details/2026/NVIDIA-2nd-Quarter-FY27-Financial-Results/default.aspx"
+      "transcriptStatus": "Issuer-hosted corrected August 26 transcript located; supply-constraint and outlook passages reviewed September 8",
+      "callUrl": "https://investor.nvidia.com/files/content_files/TRANSCRIPT_-NVIDIA-Corp-NVDA-US-Q2-2027-Earnings-Call-26-August-2026-5_00-PM-ET.pdf"
     },
     {
       "id": "msft-fy26-q4-20260729",
