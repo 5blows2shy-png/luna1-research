@@ -1,3 +1,4 @@
+import { CompanyExposure } from "@/components/global-finance/company-exposure";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -266,6 +267,7 @@ export function CompanyResearchPage({
         </div>
       </ResearchSection>
 
+      <CompanyExposure ticker={company.ticker} exposure={company.globalExposure} />
       <ResearchSection
         eyebrow={isEtf ? "Fund overview" : "Business overview"}
         title={

@@ -1,9 +1,12 @@
+import { globalExposureByTicker } from "@/data/global-finance/exposure";
+import type { GlobalExposure } from "@/data/global-finance/exposure";
 export const FINANCIAL_DISCLAIMER =
   "Luna1 Research is an educational and personal research project. Nothing presented on this website constitutes investment advice, a recommendation, or an offer to buy or sell securities.";
 
 export type ResearchStatus = "Published" | "In Progress" | "Draft" | "Watching";
 
 export type CompanyResearch = {
+  globalExposure?: GlobalExposure;
   ticker: string;
   slug: string;
   companyName: string;
@@ -126,6 +129,7 @@ export const companyResearch: CompanyResearch[] = [
   },
   {
     ticker: "GLW",
+    globalExposure: globalExposureByTicker.GLW,
     slug: "glw",
     companyName: "Corning Incorporated",
     sector: "Information Technology",

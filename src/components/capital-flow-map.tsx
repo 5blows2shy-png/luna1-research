@@ -1,3 +1,4 @@
+import { GlobalValueChain } from "@/components/global-finance/global-value-chain";
 import Link from "next/link";
 import { capitalFlowThemes } from "@/data/research/capital-flows";
 import { research } from "@/lib/data";
@@ -122,6 +123,8 @@ export function CapitalFlowMap() {
               ))}
               </ol>
             </details>
+
+            {theme.geography && <GlobalValueChain nodes={theme.geography} />}
 
             <details className="capital-flow-detail">
               <summary>Why this status?</summary>

@@ -1,3 +1,4 @@
+import { CompanyExposure } from "@/components/global-finance/company-exposure";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -69,6 +70,7 @@ export default async function CompanyResearchPage({ params }: Props) {
           </LuxuryCard>
         </div>
       </section>
+      <CompanyExposure ticker={company.ticker} exposure={company.globalExposure} />
       <section className="dossier-section">
         <SectionHeading
           eyebrow="02 · Investment thesis"

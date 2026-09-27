@@ -39,6 +39,7 @@ export function ResearchSectionNav() {
     <nav className="research-section-nav" aria-label="Research sections">
       <Link href="/research">Equity Research</Link>
       <Link href="/research/capital-flows">Capital Flows</Link>
+      <Link href="/research/global-finance">Global Finance</Link>
       <Link href="/research/themes">Investment Themes</Link>
       <Link href="/research/notes">Research Notes</Link>
     </nav>

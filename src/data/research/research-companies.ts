@@ -1,3 +1,4 @@
+import { globalExposureByTicker } from "@/data/global-finance/exposure";
 import type {
   CompanyResearchCoverage,
   ResearchKind,
@@ -56,6 +57,7 @@ function createCoverage(seed: CoverageSeed): CompanyResearchCoverage {
 
   return {
     ticker,
+    globalExposure: globalExposureByTicker[ticker],
     slug: ticker.toLowerCase(),
     companyName: seed.companyName,
     kind,
