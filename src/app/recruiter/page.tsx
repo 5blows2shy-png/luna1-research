@@ -244,6 +244,18 @@ export default function RecruiterView() {
       </article>)}</div>
     </SectionDisclosure>
 
+    <section aria-labelledby="global-finance-proof">
+      <span className="eyebrow">Additional proof of work</span>
+      <h2 id="global-finance-proof">Global Finance</h2>
+      <p>Educational models and dated company evidence demonstrate applied currency analysis, regional consolidation, and capital-allocation research.</p>
+      <div className="research-card-actions">
+        <Link className="text-link" href="/research/global-finance/treasury">Global Treasury Case →</Link>
+        <Link className="text-link" href="/research/global-finance/fpa">Global FP&amp;A Case →</Link>
+        <Link className="text-link" href="/research/capital-flows#capital-flow-compute">Global Capital Flow Map →</Link>
+        <Link className="text-link" href="/research/global-finance/casebook">Global Finance Casebook →</Link>
+      </div>
+    </section>
+
     <SectionDisclosure id="capabilities" number="03" title="Finance capabilities">
       <SectionHeading eyebrow="Capability register" title="Every capability points to work—or states that it is developing." copy="Applied indicates direct use in professional, academic, or portfolio work. Developing indicates continued study or an unfinished evidence artifact." />
       <div className={styles.capabilityLedger}>{capabilities.map((capability) => <article key={capability.title}>

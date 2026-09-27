@@ -1,3 +1,12 @@
+export type CapitalFlowGeography = {
+  country: string;
+  region: string;
+  industry: string;
+  bottleneck: string;
+  capitalNeed: string;
+  company?: { name: string; href: string };
+};
+
 export type CapitalFlowStatus =
   | "Confirmed"
   | "Developing"
@@ -14,6 +23,7 @@ export type CapitalFlowEvidenceStatus =
   | "Not Yet Evaluated";
 
 export type CapitalFlowTheme = {
+  geography?: CapitalFlowGeography[];
   id: string;
   name: string;
   description: string;
@@ -67,6 +77,14 @@ const evidencePending = [
 export const capitalFlowThemes: CapitalFlowTheme[] = [
   {
     id: "compute",
+    geography: [
+      { country: "United States", region: "North America", industry: "Cloud / data-center investment", bottleneck: "Compute and network capacity", capitalNeed: "Servers, optical connectivity, and new facilities", company: { name: "Corning", href: "/research/companies/glw" } },
+      { country: "Taiwan", region: "Asia-Pacific", industry: "Advanced semiconductors", bottleneck: "Fabrication and packaging capacity", capitalNeed: "Fabs and advanced packaging" },
+      { country: "South Korea", region: "Asia-Pacific", industry: "Memory", bottleneck: "High-bandwidth memory supply", capitalNeed: "Memory capacity and process investment" },
+      { country: "Japan", region: "Asia-Pacific", industry: "Semiconductor equipment", bottleneck: "Specialized production tools", capitalNeed: "Equipment and materials capacity" },
+      { country: "European markets", region: "Europe", industry: "Electrical infrastructure", bottleneck: "Grid and electrical equipment lead times", capitalNeed: "Power distribution and industrial capacity" },
+      { country: "Multiple markets", region: "Global", industry: "Power / cooling / construction", bottleneck: "Energy availability and project delivery", capitalNeed: "Generation, transmission, and construction" },
+    ],
     name: "Compute",
     description:
       "Advanced semiconductors, memory, networking, servers, and data-center systems required to expand computing capacity.",

@@ -56,6 +56,12 @@ export default function ResearchPage() {
             <EditorialLink href="/research/capital-flows">Open Capital Flows</EditorialLink>
           </LuxuryCard>
           <LuxuryCard variant="research">
+            <span className="eyebrow">Global Finance</span>
+            <h2>Capital and currencies across markets</h2>
+            <p>Multinational exposure, Treasury scenarios, and an applied global FP&amp;A case connect international context to financial results.</p>
+            <EditorialLink href="/research/global-finance">Explore Global Finance</EditorialLink>
+          </LuxuryCard>
+          <LuxuryCard variant="research">
             <span className="eyebrow">03 · Themes & notes</span>
             <h2>Organized research paths</h2>
             <p>Investment themes and working notes remain separate destinations, keeping this landing page concise.</p>

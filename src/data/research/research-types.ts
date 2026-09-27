@@ -1,3 +1,4 @@
+import type { GlobalExposure } from "@/data/global-finance/exposure";
 export type ResearchStatus =
   | "Full Coverage"
   | "Initial Research"
@@ -266,6 +267,7 @@ export type ResearchDocument = {
 };
 
 export type CompanyResearchCoverage = {
+  globalExposure?: GlobalExposure;
   ticker: string;
   slug: string;
   companyName: string;
