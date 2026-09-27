@@ -94,7 +94,7 @@ test("company provenance, capital-flow geography, casebook and recruiter links",
   ).toBeVisible();
   await page.goto("/research/capital-flows#capital-flow-compute");
   const theme = page.locator("#capital-flow-compute");
-  if (!(await theme.getAttribute("open")))
+  if ((await theme.getAttribute("open")) === null)
     await theme.locator(":scope > summary").click();
   await expect(theme.getByText("Taiwan", { exact: true })).toBeVisible();
   await page.goto("/research/global-finance/casebook");
