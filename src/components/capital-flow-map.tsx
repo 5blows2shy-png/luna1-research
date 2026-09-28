@@ -81,7 +81,7 @@ export function CapitalFlowMap() {
 
       <div className="capital-flow-themes">
         {capitalFlowThemes.map((theme, themeIndex) => (
-          <details className="capital-flow-theme" id={`capital-flow-${theme.id}`} key={theme.id} open={themeIndex === 0}>
+          <details className="capital-flow-theme" id={`capital-flow-${theme.id}`} key={theme.id}>
             <summary className="capital-flow-theme-summary">
               <div>
                 <span className="eyebrow">
@@ -98,7 +98,7 @@ export function CapitalFlowMap() {
               </div>
             </summary>
 
-            <details className="capital-flow-collapsible" open>
+            <details className="capital-flow-collapsible">
               <summary>Flow framework <small>Horizon and capital chain</small></summary>
               <div className="capital-flow-horizons" aria-label={`${theme.name} qualitative horizon`}>
               {horizonLabels.map(([label, period, key]) => (

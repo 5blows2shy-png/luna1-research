@@ -189,7 +189,7 @@ export default function RecruiterView() {
   return <>
     <section className={styles.hero} aria-labelledby="recruiter-title">
       <div className={styles.heroCopy}>
-        <span className="eyebrow">Recruiter profile · Finance</span>
+        <span className="eyebrow">Professional profile · Finance</span>
         <h1 id="recruiter-title">Shy Lee</h1>
         <p className={styles.professionalLine}>Finance Analyst <i /> Investment Research <i /> FP&amp;A <i /> Financial Automation</p>
         <p className={styles.positioning}>Finance candidate combining real accounting operations, investment research, financial modeling, and Python-based finance automation.</p>
@@ -215,11 +215,11 @@ export default function RecruiterView() {
       </aside>
     </section>
 
-    <nav className={styles.sectionNav} aria-label="Recruiter page sections">
+    <nav className={styles.sectionNav} aria-label="Professional profile sections">
       <a href="#profile">01 Profile</a><a href="#selected-work">02 Selected work</a><a href="#capabilities">03 Capabilities</a><a href="#experience">04 Experience</a><a href="#investment-experience">05 Investment experience</a><a href="#alignment">06 Career alignment</a>
     </nav>
 
-    <SectionDisclosure id="profile" number="01" title="Candidate snapshot" defaultOpen>
+    <SectionDisclosure id="profile" number="01" title="Candidate snapshot">
       <div className={styles.snapshotSection}>
       <div className={styles.snapshotHeading}>
         <h2>Finance capability grounded in accountable execution.</h2>
@@ -229,7 +229,7 @@ export default function RecruiterView() {
       </div>
     </SectionDisclosure>
 
-    <SectionDisclosure id="selected-work" number="02" title="Selected work" defaultOpen>
+    <SectionDisclosure id="selected-work" number="02" title="Selected work">
       <SectionHeading eyebrow="Evidence, not claims" title="How I analyze, model, research, and improve financial workflows." copy="Completed work links directly to evidence. Developing work is labeled before publication." />
       <div className={styles.workGrid}>{selectedWork.map((work) => <article className={styles.workCard} key={work.title}>
         <div className={styles.cardMeta}><span>{work.number} · {work.label}</span><b>{work.status}</b></div>

@@ -120,6 +120,40 @@
       "sourceTitle": "NVIDIA Q2 FY2027 earnings release — Data Center highlights",
       "transcriptStatus": "Candidate requires researcher review",
       "callUrl": "https://investor.nvidia.com/events-and-presentations"
+    },
+    {
+      "id": "franklin-benji-five-year-20260430",
+      "segment": "tokenized-capital",
+      "company": "Franklin Templeton",
+      "publishedDate": "2026-04-30",
+      "firstSeenAt": "2026-09-08T00:18:52Z",
+      "sourceType": "Issuer press release",
+      "eventType": "INVESTMENT_COMMITMENT",
+      "status": "source_verified",
+      "title": "Franklin Templeton marks five years of BENJI tokenized money fund",
+      "fact": "Franklin says FOBXX uses a public blockchain as its official system of record and that BENJI represents fund shares with peer-to-peer transferability on enabled networks.",
+      "interpretation": "This is evidence of live tokenized-fund infrastructure and operating adoption, not proof that all fund assets or settlement have moved on-chain.",
+      "url": "https://www.franklintempleton.com/press-releases/news-room/2026/franklin-templeton-stellar-development-foundation-mark-five-years-of-benji-the-first-u.s.-registered-tokenized-money-market-fund",
+      "sourceTitle": "Franklin Templeton / Stellar BENJI anniversary release",
+      "transcriptStatus": "No earnings transcript reviewed",
+      "callUrl": "https://www.franklintempleton.com/press-releases"
+    },
+    {
+      "id": "blackrock-tokenized-cash-20260803",
+      "segment": "tokenized-capital",
+      "company": "BlackRock",
+      "publishedDate": "2026-08-03",
+      "firstSeenAt": "2026-09-08T00:18:52Z",
+      "sourceType": "Issuer press release",
+      "eventType": "INVESTMENT_COMMITMENT",
+      "status": "source_verified",
+      "title": "BlackRock expands tokenized cash-management products",
+      "fact": "BlackRock announced tokenized money-market products and described token minting, burning, and transfer processes tied to fund records.",
+      "interpretation": "This supports a tokenized-cash product signal. It does not by itself establish secondary-market liquidity, institutional scale, or a completed settlement-network contract.",
+      "url": "https://www.blackrock.com/cash/en-us/press-release-t3",
+      "sourceTitle": "BlackRock Cash Management tokenized products release",
+      "transcriptStatus": "No earnings transcript reviewed",
+      "callUrl": "https://www.blackrock.com/corporate/investor-relations"
     }
   ]
 }
