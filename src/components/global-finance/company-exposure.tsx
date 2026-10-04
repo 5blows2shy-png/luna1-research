@@ -95,7 +95,7 @@ export function CompanyExposure({
         fields have not been verified; no currency exposure is inferred from
         geography.
       </p>
-      <Link className="text-link" href="/research/global-finance/treasury">
+      <Link className="text-link" href="/global-finance/treasury">
         Explore a separate illustrative FX scenario →
       </Link>
     </section>

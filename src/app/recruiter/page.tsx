@@ -40,13 +40,7 @@ const selectedWork = [
     href: "/valuation-models", action: "Review model", status: "Interactive sample",
   },
   {
-    number: "03", label: "Finance automation", title: "Klyro",
-    subtitle: "Transaction & Accounting Workflow",
-    description: "A structured workflow for financial imports, transaction review, exception detection, reconciliation support, controlled exports, and decision-oriented cash analysis.",
-    href: "/klyro", action: "View project", status: "Working preview",
-  },
-  {
-    number: "04", label: "Applied investment experience", title: "Aztec Investment Fund",
+    number: "03", label: "Applied investment experience", title: "Aztec Investment Fund",
     subtitle: "Student-Managed Investment Fund",
     description: "Equity research, valuation, investment-thesis development, portfolio analysis, and investment decision-making within a student-managed fund. The samples below show company analysis from investment and operating perspectives.",
     status: "2 work samples",
@@ -64,13 +58,13 @@ const selectedWork = [
     ],
   },
   {
-    number: "05", label: "FP&A case study", title: "Planning & Performance",
+    number: "04", label: "FP&A case study", title: "Planning & Performance",
     subtitle: "Forecasting, Variance & Cash Flow",
     description: "A focused case study for budget-versus-actual analysis, variance drivers, cash-flow planning, and management commentary.",
     status: "In development",
   },
   {
-    number: "06", label: "Capital intelligence platform", title: "SETORA",
+    number: "05", label: "Capital intelligence platform", title: "SETORA",
     subtitle: "AI Infrastructure & Capital Flows",
     description: "A source-linked research system organizing AI infrastructure themes, capital events, company coverage, and second-order beneficiaries across compute, networking, power, and related verticals.",
     href: "/setora", action: "Explore SETORA", status: "Working product",
@@ -88,7 +82,7 @@ const capabilities = [
     number: "02", title: "FP&A / Strategic Finance",
     applied: ["Financial reporting", "Cash-flow planning", "Management and board support", "Business decision support"],
     developing: ["Budget vs actual", "Variance analysis", "KPI analysis"],
-    href: "/klyro", proof: "Review the finance workflow",
+    href: "/valuation-models", proof: "Review the Valuation Lab",
   },
   {
     number: "03", title: "Investment Research",
@@ -96,12 +90,7 @@ const capabilities = [
     developing: [], href: "/research", proof: "Review published research",
   },
   {
-    number: "04", title: "Finance Automation",
-    applied: ["Financial-data processing", "Transaction analysis", "Exception detection", "Reconciliation support", "Workflow automation"],
-    developing: ["Python delivery", "Streamlit"], href: "/klyro", proof: "Review the automation workflow",
-  },
-  {
-    number: "05", title: "Data & Analytics",
+    number: "04", title: "Data & Analytics",
     applied: ["Excel", "Financial modeling", "Financial-data visualization"],
     developing: ["Power BI", "SQL", "Python"], href: "/valuation-models", proof: "Review analytical work",
   },
@@ -249,10 +238,10 @@ export default function RecruiterView() {
       <h2 id="global-finance-proof">Global Finance</h2>
       <p>Educational models and dated company evidence demonstrate applied currency analysis, regional consolidation, and capital-allocation research.</p>
       <div className="research-card-actions">
-        <Link className="text-link" href="/research/global-finance/treasury">Global Treasury Case →</Link>
-        <Link className="text-link" href="/research/global-finance/fpa">Global FP&amp;A Case →</Link>
+        <Link className="text-link" href="/global-finance/treasury">Global Treasury Case →</Link>
+        <Link className="text-link" href="/global-finance/fpa">Global FP&amp;A Case →</Link>
         <Link className="text-link" href="/research/capital-flows#capital-flow-compute">Global Capital Flow Map →</Link>
-        <Link className="text-link" href="/research/global-finance/casebook">Global Finance Casebook →</Link>
+        <Link className="text-link" href="/global-finance/casebook">Global Finance Casebook →</Link>
       </div>
     </section>
 

@@ -14,10 +14,11 @@ test("demo route is public, indexable, and contains no production gate", () => {
   assert.match(page, /index: true/); assert.match(page, /follow: true/);
 });
 
-test("the existing Luna Books experience links to the public test drive", () => {
+test("the preserved Luna Books experience is excluded from public discovery", () => {
   assert.match(lunaBooksPage, /href="\/demo\/luna-books-tour"/);
   assert.match(lunaBooksPage, /Safe public demo/);
-  assert.match(sitemap, /"\/demo\/luna-books-tour"/);
+  assert.doesNotMatch(sitemap, /"\/demo\/luna-books-tour"/);
+  assert.doesNotMatch(sitemap, /"\/klyro"/);
 });
 
 test("deterministic calculations are internally consistent", () => {

@@ -397,7 +397,6 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
     );
   for (const proofLink of [
     "/valuation-models",
-    "/klyro",
     "/contact",
     "linkedin.com/in/shyheim-lee",
     "shy-lee-resume.pdf",
@@ -434,7 +433,6 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
   for (const label of [
     "Home",
     "Equity Research",
-    "Klyro",
     "Portfolio Lab",
     "Professional Profile",
     "Development Log",
@@ -451,6 +449,7 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
     "Python Lab",
     "Mistake Journal",
     "Research Notes",
+    "Klyro",
   ])
     assert.ok(
       !data.includes(`label: "${retired}"`),
@@ -491,7 +490,6 @@ test("recruiter-facing architecture documents analyst process without fabricated
   for (const pillar of [
     "Equity Research",
     "Valuation Lab",
-    "Klyro",
     "Portfolio Lab",
     "Research Notes",
     "Development Log",

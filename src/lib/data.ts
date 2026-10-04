@@ -3,10 +3,7 @@ export const navigationItems: NavigationItem[] = [
   { label: "Home", href: "/" },
   { label: "SETORA", href: "/setora" },
   { label: "Equity Research", href: "/research" },
-  {
-    label: "Klyro",
-    href: "/klyro",
-  },
+  { label: "Global Finance", href: "/global-finance" },
   { label: "Portfolio Lab", href: "/portfolio" },
   { label: "Development Log", href: "/development-log" },
   { label: "Professional Profile", href: "/recruiter" },

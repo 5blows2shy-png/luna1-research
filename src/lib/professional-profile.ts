@@ -38,19 +38,6 @@ export const platformPillars: PlatformPillar[] = [
   },
   {
     number: "03",
-    title: "Klyro",
-    href: "/klyro",
-    purpose:
-      "An accounting-control workflow for cleaning, classifying, reconciling, reviewing, and exporting transaction records.",
-    evidence: [
-      "PDF, Excel, and CSV import",
-      "Duplicate detection",
-      "Reconciliation",
-      "Exception review",
-    ],
-  },
-  {
-    number: "04",
     title: "Portfolio Lab",
     href: "/portfolio",
     purpose:
@@ -63,7 +50,7 @@ export const platformPillars: PlatformPillar[] = [
     ],
   },
   {
-    number: "05",
+    number: "04",
     title: "Research Notes",
     href: "/research/notes",
     purpose:
@@ -76,7 +63,7 @@ export const platformPillars: PlatformPillar[] = [
     ],
   },
   {
-    number: "06",
+    number: "05",
     title: "Development Log",
     href: "/development-log",
     purpose:

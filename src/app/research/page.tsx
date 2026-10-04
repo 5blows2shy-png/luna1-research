@@ -59,7 +59,7 @@ export default function ResearchPage() {
             <span className="eyebrow">Global Finance</span>
             <h2>Capital and currencies across markets</h2>
             <p>Multinational exposure, Treasury scenarios, and an applied global FP&amp;A case connect international context to financial results.</p>
-            <EditorialLink href="/research/global-finance">Explore Global Finance</EditorialLink>
+            <EditorialLink href="/global-finance">Explore Global Finance</EditorialLink>
           </LuxuryCard>
           <LuxuryCard variant="research">
             <span className="eyebrow">03 · Themes & notes</span>

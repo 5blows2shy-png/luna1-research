@@ -37,9 +37,6 @@ export function Footer() {
         <div>
           <span className="eyebrow">Process and profile</span>
           <p>
-            <Link href="/klyro">
-              Klyro
-            </Link>
             <Link href="/research/notes">Research Notes</Link>
             <Link href="/development-log">Development Log</Link>
             <Link href="/recruiter">Professional Profile</Link>

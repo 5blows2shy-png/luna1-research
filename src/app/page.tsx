@@ -45,7 +45,7 @@ export default function Home() {
 
       <section>
         <div className="section-heading">
-          <span className="eyebrow">Six pillars</span>
+          <span className="eyebrow">Five pillars</span>
           <h2>Evidence of how an analyst thinks.</h2>
           <p>
             Each section documents a different part of the analytical process,

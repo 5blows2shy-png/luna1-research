@@ -30,7 +30,7 @@ export const financeCases: FinanceCase[] = [
     limitations:
       "No hedge book, tax, maturity schedule, or actual company forecast.",
     tools: ["TypeScript", "SVG charts"],
-    href: "/research/global-finance/treasury",
+    href: "/global-finance/treasury",
     action: "Open interactive model",
     status: "Interactive educational case",
   },
@@ -49,7 +49,7 @@ export const financeCases: FinanceCase[] = [
     limitations:
       "No intercompany eliminations, seasonality, tax, or profit forecast.",
     tools: ["TypeScript", "CSV export", "SVG / CSS charts"],
-    href: "/research/global-finance/fpa",
+    href: "/global-finance/fpa",
     action: "Open case and download inputs",
     status: "Fictional case study",
   },

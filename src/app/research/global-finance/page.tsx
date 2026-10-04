@@ -11,6 +11,7 @@ import {
   Calculator,
 } from "lucide-react";
 import { ResearchChain, BarChart } from "@/components/global-finance/visuals";
+import { GlobalMarketsDashboard } from "@/components/global-finance/global-markets-dashboard";
 import { northstarRegions } from "@/data/global-finance/northstar";
 import { consolidateRegions } from "@/lib/global-finance/models";
 import styles from "@/components/global-finance/global-finance.module.css";
@@ -24,14 +25,14 @@ const areas = [
     name: "Global Markets",
     icon: ChartNoAxesCombined,
     text: "Rates, equities, and currencies in regional context.",
-    planned:
-      "Phase 2 · An expanded regional market view will reuse the existing market-data adapters and their availability labels.",
+    href: "#global-markets",
+    action: "Open the live briefing",
   },
   {
     name: "FX & Treasury",
     icon: ArrowLeftRight,
     text: "Trace currency and funding changes into earnings and cash.",
-    href: "/research/global-finance/treasury",
+    href: "/global-finance/treasury",
     action: "Run a scenario",
   },
   {
@@ -45,7 +46,7 @@ const areas = [
     name: "Global FP&A",
     icon: Calculator,
     text: "Consolidate four regions. Separate operations from translation.",
-    href: "/research/global-finance/fpa",
+    href: "/global-finance/fpa",
     action: "Open Northstar case",
   },
   {
@@ -75,7 +76,7 @@ const areas = [
     name: "Global Casebook",
     icon: BookOpen,
     text: "A compact library of models, evidence, and limitations.",
-    href: "/research/global-finance/casebook",
+    href: "/global-finance/casebook",
     action: "Review the evidence",
   },
 ];
@@ -93,7 +94,7 @@ export default function GlobalFinancePage() {
             Researching how capital, currencies, corporate investment, and
             financial decisions move across markets.
           </p>
-          <Link className="button" href="/research/global-finance/treasury">
+          <Link className="button" href="/global-finance/treasury">
             Explore Treasury & FX →
           </Link>
         </div>
@@ -112,12 +113,13 @@ export default function GlobalFinancePage() {
           <p className={styles.source}>
             Local performance and reported results can tell different stories.
             Source: Luna1 fictional Northstar case.{" "}
-            <Link href="/research/global-finance/fpa">
+            <Link href="/global-finance/fpa">
               Inspect every input →
             </Link>
           </p>
         </div>
       </header>
+      <GlobalMarketsDashboard />
       <section className={styles.section}>
         <span className={styles.kicker}>One connected research process</span>
         <h2>Follow the capital. Explain the impact.</h2>

@@ -10,6 +10,7 @@ import { globalExposureByTicker } from "../src/data/global-finance/exposure.ts";
 import { capitalFlowThemes } from "../src/data/research/capital-flows.ts";
 import { financeCases } from "../src/data/global-finance/casebook.ts";
 import { unavailableFxProvider } from "../src/lib/global-finance/providers.ts";
+import { globalMarketGroups, globalMarketInstruments } from "../src/lib/global-finance/market-dashboard.ts";
 const near = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `${a} != ${b}`);
 const fx = {
   base: "EUR",
@@ -200,8 +201,14 @@ test("casebook artifacts are real phase-one routes with explicit limitations and
         c.limitations &&
         c.status,
     );
-    assert.ok(c.href.startsWith("/research/"));
+    assert.ok(c.href.startsWith("/global-finance") || c.href.startsWith("/research/"));
     assert.ok(c.tools.length);
     assert.ok(!c.tools.includes("Python"));
   }
+});
+test("global market briefing covers regional equities, FX, real assets, and rates without hiding proxies", () => {
+  assert.deepEqual(globalMarketGroups.map(({ id }) => id), ["equities", "fx", "commodities", "rates"]);
+  for (const group of globalMarketGroups) assert.ok(globalMarketInstruments.some((instrument) => instrument.group === group.id));
+  for (const symbol of ["ACWI", "EURUSD", "GCUSD", "IEF"]) assert.ok(globalMarketInstruments.some((instrument) => instrument.symbol === symbol));
+  assert.ok(globalMarketInstruments.filter(({ proxy }) => proxy).length >= 5);
 });
