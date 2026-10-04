@@ -353,6 +353,78 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     visibility: "Public",
   },
   {
+    id: "transaction-intelligence-preview",
+    date: "2026-07-24",
+    phase: "Current Work",
+    category: "Platform Expansion",
+    title: "Integrated Klyro Preview",
+    summary:
+      "Added the foundation of a transaction-analysis platform to the Luna1 development roadmap, connecting research and valuation work with accounting controls, financial operations, and transaction-level analysis.",
+    reason:
+      "Luna1 can demonstrate a broader finance-and-technology workflow by connecting investment analysis with transaction organization, reconciliation concepts, exception identification, and audit-ready reporting design.",
+    lessons: [
+      "Transaction-level analysis depends on consistent normalization and reviewable data-cleaning rules.",
+      "Accounting controls require visible exceptions, reconciliation logic, and an audit trail rather than silent automation.",
+      "Preview-stage work should remain clearly separated from tested production functionality.",
+    ],
+    skills: [
+      "Accounting-control awareness",
+      "Transaction-level financial analysis",
+      "Data-cleaning workflows",
+      "Reconciliation concepts",
+      "Exception identification",
+      "Operational problem solving",
+      "Product development",
+      "Finance and technology integration",
+    ],
+    impact:
+      "Establishes a transparent roadmap for integrating transaction analytics into Luna1 without representing unfinished capabilities as production-ready.",
+    status: "In Progress",
+    overview: [
+      "Expanded Luna1 beyond investment research by incorporating the foundation of a financial transaction analysis platform into the Luna1 ecosystem. This preview introduces the planned architecture for transaction import, data normalization, categorization, duplicate detection, transfer matching, reconciliation, exception review, and audit-ready reporting.",
+      "The integration demonstrates how Luna1 can connect investment research and valuation work with practical accounting controls, financial operations, and transaction-level data analysis.",
+    ],
+    milestones: [
+      "Incorporated the earlier transaction-analysis project into the Luna1 development roadmap.",
+      "Introduced the Klyro module and dashboard preview.",
+      "Established the foundation for transaction import, normalization, and categorization.",
+      "Designed workflows for duplicate detection and possible mirrored-entry review.",
+      "Planned transfer matching, reconciliation, and exception-review capabilities.",
+      "Defined professional Excel, CSV, and PDF export workflows.",
+      "Connected accounting analytics with the broader Luna1 research platform.",
+      "Preserved the original transaction-analysis project as the foundation for future development.",
+    ],
+    nextSteps: [
+      "Complete migration of reusable logic from the legacy transaction-analysis project.",
+      "Finalize the Klyro dashboard.",
+      "Build the transaction file upload and column-mapping workflow.",
+      "Implement categorization and duplicate-detection engines.",
+      "Add transfer matching and reconciliation tools.",
+      "Create an exception-review queue and audit trail.",
+      "Add downloadable Luna1-branded reports and Excel exports.",
+      "Replace preview content with tested functionality as development progresses.",
+    ],
+    projectOrigin:
+      "Klyro builds on an earlier transaction-analysis project developed to separate and organize financial records, identify duplicate transactions, review exceptions, and export structured results. The original project is now being evaluated and integrated into Luna1 through a more professional, scalable, and accounting-focused workflow.",
+    featurePreview: [
+      { label: "Transaction Import", status: "Preview" },
+      { label: "Data Normalization", status: "Preview" },
+      { label: "Transaction Categorization", status: "In Development" },
+      { label: "Duplicate Detection", status: "Planned" },
+      { label: "Transfer Matching", status: "Planned" },
+      { label: "Reconciliation", status: "Planned" },
+      { label: "Exception Review", status: "Planned" },
+      { label: "Audit Trail", status: "Planned" },
+      { label: "Export Center", status: "Planned" },
+    ],
+    evolutionStatement:
+      "Luna1 is evolving from an independent equity-research platform into a broader financial intelligence ecosystem that connects investment analysis, valuation, accounting controls, and transaction analytics.",
+    disclosure:
+      "Klyro is a portfolio and educational project. It is not a substitute for professional accounting, audit, tax, legal, or financial advice.",
+    route: "/klyro",
+    visibility: "Public",
+  },
+  {
     id: "active-position-research-expansion",
     date: "2026-09-07",
     phase: "Portfolio Research Expansion",
@@ -492,7 +564,7 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     ],
     disclosure:
       "Global Finance is an educational and career-development project. It does not provide personalized investment, tax, legal, or financial advice.",
-    route: "/research/global-finance",
+    route: "/global-finance",
     visibility: "Public",
   },
 ];

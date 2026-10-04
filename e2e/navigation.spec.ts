@@ -179,15 +179,23 @@ test("equity research is available from the public navigation", async ({
   await page.goto("/research");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "Developing company dossiers" }),
+    page.getByRole("heading", { name: "Evidence at the company level" }),
   ).toBeVisible();
-  await expect(page.getByRole("link", { name: "Capital Flows" })).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Capital Flows", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Open Capital Flows" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Open company research" }),
+  ).toBeVisible();
+  await page.goto("/research/capital-flows");
   await expect(
     page.getByRole("heading", { name: "Capital Flow Map", level: 2 }),
   ).toBeVisible();
   await expect(page.getByText("Who gets paid to remove the bottleneck?")).toBeVisible();
   await expect(page.locator(".capital-flow-theme")).toHaveCount(8);
-  await expect(page.getByRole("link", { name: "View Equity Research →" }).first()).toBeVisible();
   await expect(page.getByText("Original Luna1 research library")).toHaveCount(0);
   await expect(
     page.getByText("Writing clearer thesis-invalidation rules"),
@@ -536,7 +544,7 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
   ).toHaveCount(0);
   await expect(
     page.getByRole("link", { name: "View Full Research" }),
-  ).toHaveCount(12);
+  ).toHaveCount(7);
   await expect(page.getByText("Digital Realty Trust Inc.")).toBeVisible();
 });
 

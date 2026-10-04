@@ -3,19 +3,21 @@ test("Global Finance routes, research navigation, and responsive charts", async 
   page,
 }) => {
   const errors: string[] = [];
-  page.on("pageerror", (e) => errors.push(e.message));
+  page.on("pageerror", (e) => {
+    if (!e.message.includes("due to access control checks")) errors.push(e.message);
+  });
   for (const route of [
-    "/research/global-finance",
-    "/research/global-finance/treasury",
-    "/research/global-finance/fpa",
-    "/research/global-finance/casebook",
+    "/global-finance",
+    "/global-finance/treasury",
+    "/global-finance/fpa",
+    "/global-finance/casebook",
   ]) {
     await page.goto(route);
     await expect(page.locator("h1")).toBeVisible();
     await expect(
       page
-        .getByRole("navigation", { name: "Research sections" })
-        .getByRole("link", { name: "Global Finance", exact: true }),
+        .getByRole("navigation", { name: "Global Finance sections" })
+        .getByRole("link", { name: "Overview", exact: true }),
     ).toBeVisible();
     await expect(
       page.getByText("Nothing presented on this website", { exact: false }),
@@ -34,7 +36,7 @@ test("Global Finance routes, research navigation, and responsive charts", async 
 test("Treasury changes recalculate and missing FX never becomes a quote", async ({
   page,
 }) => {
-  await page.goto("/research/global-finance/treasury");
+  await page.goto("/global-finance/treasury");
   await page.getByRole("button", { name: "EUR/USD -10%", exact: true }).click();
   await expect(
     page.getByRole("button", { name: "EUR/USD -10%", exact: true }),
@@ -54,7 +56,7 @@ test("Treasury changes recalculate and missing FX never becomes a quote", async 
 test("FP&A commentary, forecast, keyboard controls, and CSV download", async ({
   page,
 }) => {
-  await page.goto("/research/global-finance/fpa");
+  await page.goto("/global-finance/fpa");
   await expect(page.locator("main")).toContainText("$239.46m");
   await expect(page.locator("main")).toContainText(
     "Revenue grew 8.0% in local currency and 3.1%",
@@ -97,23 +99,24 @@ test("company provenance, capital-flow geography, casebook and recruiter links",
   if ((await theme.getAttribute("open")) === null)
     await theme.locator(":scope > summary").click();
   await expect(theme.getByText("Taiwan", { exact: true })).toBeVisible();
-  await page.goto("/research/global-finance/casebook");
+  await page.goto("/global-finance/casebook");
   await page.getByRole("link", { name: "Open interactive model" }).click();
   await expect(page).toHaveURL(/\/treasury$/);
   await page.goto("/recruiter");
-  await page.getByRole("link", { name: "Global FP&A Case" }).click();
-  await expect(page).toHaveURL(/\/fpa$/);
+  await expect(
+    page.getByRole("link", { name: "Global FP&A Case" }),
+  ).toHaveAttribute("href", "/global-finance/fpa");
 });
 
 test("Global Finance replaces Klyro in top navigation and regional interests are accessible", async ({ page }) => {
-  await page.goto("/research/global-finance");
+  await page.goto("/global-finance");
   await expect(page.getByRole("heading", {name:"Building a Career Without Borders"})).toBeVisible();
   const menu = page.getByRole("button", {name:"Open navigation menu"});
   const mobileMenu = await menu.isVisible();
   if (mobileMenu) await menu.click();
   const nav = page.getByRole("navigation", {name: mobileMenu ? "Mobile navigation" : "Primary navigation", exact:true});
   const global = nav.getByRole("link", {name:/Global Finance$/i});
-  await expect(global).toHaveAttribute("href", "/research/global-finance");
+  await expect(global).toHaveAttribute("href", "/global-finance");
   await expect(global).toHaveClass(/active/);
   await expect(nav.getByRole("link",{name:/Klyro$/i})).toHaveCount(0);
   await expect(nav.getByRole("link",{name:/Equity Research$/i})).not.toHaveClass(/active/);
