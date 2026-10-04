@@ -104,3 +104,25 @@ test("company provenance, capital-flow geography, casebook and recruiter links",
   await page.getByRole("link", { name: "Global FP&A Case" }).click();
   await expect(page).toHaveURL(/\/fpa$/);
 });
+
+test("Global Finance replaces Klyro in top navigation and regional interests are accessible", async ({ page }) => {
+  await page.goto("/research/global-finance");
+  await expect(page.getByRole("heading", {name:"Building a Career Without Borders"})).toBeVisible();
+  const menu = page.getByRole("button", {name:"Open navigation menu"});
+  const mobileMenu = await menu.isVisible();
+  if (mobileMenu) await menu.click();
+  const nav = page.getByRole("navigation", {name: mobileMenu ? "Mobile navigation" : "Primary navigation", exact:true});
+  const global = nav.getByRole("link", {name:/Global Finance$/i});
+  await expect(global).toHaveAttribute("href", "/research/global-finance");
+  await expect(global).toHaveClass(/active/);
+  await expect(nav.getByRole("link",{name:/Klyro$/i})).toHaveCount(0);
+  await expect(nav.getByRole("link",{name:/Equity Research$/i})).not.toHaveClass(/active/);
+  if (await page.getByRole("button",{name:"Close navigation menu"}).isVisible()) await page.keyboard.press("Escape");
+  const singapore = page.getByRole("button",{name:"Singapore / Southeast Asia",exact:true});
+  await singapore.focus(); await page.keyboard.press("Enter");
+  await expect(singapore).toHaveAttribute("aria-pressed","true");
+  await expect(page.locator("#regional-interest-detail")).toContainText("Asia-Pacific corporate finance");
+  await expect(page.locator("#regional-interest-detail")).toContainText("not work history");
+  await expect(page.getByRole("heading",{name:"Global Markets I’m Watching"})).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
+});

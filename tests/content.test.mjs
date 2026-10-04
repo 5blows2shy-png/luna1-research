@@ -433,6 +433,7 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
   for (const label of [
     "Home",
     "Equity Research",
+    "Global Finance",
     "Portfolio Lab",
     "Professional Profile",
     "Development Log",

@@ -1,3 +1,8 @@
+import {
+  CareerThesis,
+  CareerEvidence,
+  CareerReadiness,
+} from "@/components/global-finance/career-profile";
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
@@ -87,12 +92,13 @@ export default function GlobalFinancePage() {
       <header className={styles.hero}>
         <div>
           <span className={styles.kicker}>
-            Independent investment & global finance research
+            Global Finance · Career direction & applied research
           </span>
-          <h1>Global Finance</h1>
+          <h1>Building a Career Without Borders</h1>
           <p>
-            Researching how capital, currencies, corporate investment, and
-            financial decisions move across markets.
+            I’m developing the financial, analytical, operational, and market
+            perspective required to evaluate businesses and allocate capital
+            across global markets.
           </p>
           <Link className="button" href="/global-finance/treasury">
             Explore Treasury & FX →
@@ -120,6 +126,7 @@ export default function GlobalFinancePage() {
         </div>
       </header>
       <GlobalMarketsDashboard />
+      <CareerThesis />
       <section className={styles.section}>
         <span className={styles.kicker}>One connected research process</span>
         <h2>Follow the capital. Explain the impact.</h2>
@@ -152,6 +159,8 @@ export default function GlobalFinancePage() {
           ))}
         </div>
       </section>
+      <CareerEvidence />
+      <CareerReadiness />
       <section className={styles.section}>
         <div className={styles.grid}>
           <div>

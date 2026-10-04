@@ -1,6 +1,8 @@
 # Global Finance — Phase 1 implementation
 
-Completed September 26, 2026. Additive expansion of Luna1 Research; no deployment performed.
+Completed September 26, 2026. Additive expansion of Luna1 Research.
+
+October 4 local update: Global Finance now replaces Klyro in the primary desktop/mobile navigation. The overview adds the career-positioning brief: regional interests, an analyst framework, example company coverage cards, a developing-skills panel, operating-background diagram, readiness, an aspirational timeline, an unavailable-market-data panel, and recruiter links. Existing analytical tools remain connected. This update is not yet merged or deployed.
 
 ## 1. Existing systems reused
 

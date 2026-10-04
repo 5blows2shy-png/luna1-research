@@ -123,7 +123,9 @@ export function Navbar() {
   const active = (href: string) =>
     path === href ||
     (href === "/portfolio-dashboard" && path === "/portfolios") ||
-    (href !== "/" && path.startsWith(`${href}/`));
+    (href !== "/" && path.startsWith(`${href}/`) &&
+      !navigationItems.some((item) => item.href.startsWith(`${href}/`) &&
+        (path === item.href || path.startsWith(`${item.href}/`))));
 
   return (
     <header className="nav">

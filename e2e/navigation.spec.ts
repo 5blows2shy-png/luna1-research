@@ -148,9 +148,9 @@ test("desktop and mobile navigation expose only the permanent product scope", as
   for (const label of [
     "Home",
     "Equity Research",
-    "Klyro",
+    "Global Finance",
     "Portfolio Lab",
-    "Recruiter View",
+    "Professional Profile",
     "Development Log",
   ])
     await expect(

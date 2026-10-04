@@ -449,4 +449,50 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     route: "/setora",
     visibility: "Public",
   },
+  {
+    id: "global-finance-career-framework",
+    date: "2026-10-04",
+    phase: "Professional Development",
+    category: "Professional Development",
+    title: "Added a Global Finance career and research framework",
+    summary:
+      "Introduced a focused Global Finance area that connects multinational business analysis, treasury and FX scenarios, global FP&A, infrastructure finance, and a transparent professional-development roadmap.",
+    reason:
+      "Cross-border financial decisions require an explicit view of revenue geography, currency exposure, capital allocation, operating dependencies, and valuation—not isolated market observations.",
+    lessons: [
+      "Professional interests and future coverage candidates should be labeled clearly rather than presented as completed work or operating experience.",
+      "Fictional learning cases need visible source and scenario labels so they cannot be confused with company-reported financial results.",
+      "A useful global-finance framework connects operating context, currencies, financing, and capital allocation in one reviewable process.",
+    ],
+    skills: [
+      "Global FP&A",
+      "Treasury and FX scenario analysis",
+      "Multinational business analysis",
+      "Capital allocation",
+      "Financial communication",
+      "Research governance",
+    ],
+    impact:
+      "Gives recruiters and employers a concrete view of how finance coursework, infrastructure operations, investment research, and global career direction are being developed into a disciplined analytical practice.",
+    status: "In Progress",
+    overview: [
+      "The Global Finance area organizes applied treasury, FX, global FP&A, company-geography, capital-flow, and infrastructure-finance questions into a single educational research framework.",
+      "It includes a clearly fictional Northstar consolidation case and planning-only coverage candidates; it does not represent live market data, published company recommendations, or international work history.",
+    ],
+    milestones: [
+      "Added a Global Finance research hub with a reusable analytical framework.",
+      "Connected treasury and FX scenarios to the existing global FP&A learning case.",
+      "Added a transparent regional-interest diagram and professional-development roadmap.",
+      "Separated planned company research fields from sourced, published research.",
+    ],
+    nextSteps: [
+      "Add primary-source evidence only where company research has been reviewed.",
+      "Expand FX and treasury scenarios without representing results as audited forecasts.",
+      "Link future global company coverage only after sources, dates, and limitations are documented.",
+    ],
+    disclosure:
+      "Global Finance is an educational and career-development project. It does not provide personalized investment, tax, legal, or financial advice.",
+    route: "/research/global-finance",
+    visibility: "Public",
+  },
 ];

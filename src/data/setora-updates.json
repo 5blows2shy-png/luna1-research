@@ -1,7 +1,41 @@
 {
-  "lastCheckedAt": "2026-09-27T04:15:26.162Z",
-  "coverageNote": "September 26 Pacific partial review: read Oracle's September 10 earnings release and NVIDIA's September 9 Australia announcement; searched Teradyne and ABB issuer news. Oracle's SEC submissions index was accessible, but individual filings were not reviewed; Teradyne's SEC submissions request failed. New earnings transcripts were not verified. Remaining issuers, foreign/private parent disclosures, and the full 10-K/10-Q/8-K/20-F/6-K universe remain unchecked this run. Absence of an update is not evidence of no disclosure.",
+  "lastCheckedAt": "2026-10-04T20:38:30.540Z",
+  "coverageNote": "October 4 Pacific partial review: read Tesla's October 2 8-K and furnished earnings exhibit and Equinix's corrected September 2 atNorth completion release (historical backfill). Reviewed Teradyne's release index; inspected ABB investor and Waymo blog pages and searched Equinix and TSMC issuer sources. NVIDIA's requested release index was inaccessible; an alternate page yielded no usable release list. Zoox's journal returned navigation only. No new authorized earnings transcripts were verified. Most issuers and parent disclosures and the full 10-K/10-Q/8-K/20-F/6-K universe remain unchecked; this is not a comprehensive daily scan. Absence of an update is not evidence of no disclosure.",
   "items": [
+    {
+      "id": "tsla-8k-0001628280-26-064366",
+      "segment": "robotics",
+      "company": "Tesla",
+      "publishedDate": "2026-10-02",
+      "firstSeenAt": "2026-10-04T20:38:30.540Z",
+      "sourceType": "8-K furnished exhibit 99.1",
+      "eventType": "SEC_FILING",
+      "status": "source_verified",
+      "title": "Tesla reports Q3 operating volumes; earnings scheduled October 21",
+      "fact": "Tesla reported production of 464,391 passenger vehicles, deliveries of 486,532, and 13.7 GWh of energy storage deployments. Its October 2 8-K furnishes the release; Q3 financial results and the webcast are scheduled for October 21.",
+      "interpretation": "Issuer-level context for the autonomy coverage universe, not evidence of Optimus sales, robotaxi deployments, capital expenditure, or quarterly profitability. The release explicitly limits vehicle counts to passenger vehicles sold to customers. No capital event is classified.",
+      "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026064366/exhibit991111111.htm",
+      "sourceTitle": "Tesla October 2, 2026 Form 8-K exhibit 99.1",
+      "transcriptStatus": "October 21 call is future as of this review; transcript unavailable",
+      "callUrl": "https://ir.tesla.com"
+    },
+    {
+      "id": "eqix-atnorth-completion-20260902",
+      "segment": "data-centers",
+      "company": "Equinix",
+      "publishedDate": "2026-09-02",
+      "firstSeenAt": "2026-10-04T20:38:30.540Z",
+      "sourceType": "Corrected issuer press release",
+      "eventType": "M&A_TRANSACTION",
+      "status": "candidate",
+      "title": "Equinix and CPP Investments report completed atNorth acquisition",
+      "fact": "The corrected September 2 release reports completion of the US$4 billion atNorth acquisition. Equinix's approximately 34% interest carries a US$895 million commitment. The release separately describes a US$4.1 billion financing package for the transaction and business expansion.",
+      "interpretation": "Historical backfill discovered October 4; candidate M&A classification pending human review. Completion is issuer-reported, while the financing package is not proof that all funds have been drawn or deployed. Neither total transaction value nor financing equals Equinix-only capital expenditure. Supplier relationships are unchanged.",
+      "url": "https://investor.equinix.com/news-events/press-releases/detail/1123/cpp-investments-and-equinix-complete-atnorth-acquisition-to",
+      "sourceTitle": "Equinix corrected September 2 atNorth completion release",
+      "transcriptStatus": "Transaction release; no associated transcript verified",
+      "callUrl": "https://investor.equinix.com/news-events"
+    },
     {
       "id": "orcl-fy27-q1-20260910",
       "segment": "data-centers",
