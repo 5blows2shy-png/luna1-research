@@ -14,7 +14,6 @@ export default function GlobalFinanceLayout({
       <ResearchSectionNav />
       <nav className={styles.nav} aria-label="Global Finance sections">
         <Link href="/global-finance">Overview</Link>
-        <Link href="/global-finance#global-markets">Global Markets</Link>
         <Link href="/global-finance/treasury">Treasury & FX</Link>
         <Link href="/global-finance/fpa">Global FP&A</Link>
         <Link href="/global-finance/casebook">Casebook</Link>

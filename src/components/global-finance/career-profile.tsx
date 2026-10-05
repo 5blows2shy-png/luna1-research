@@ -4,7 +4,6 @@ import {
   globalBusinessFramework,
   careerResearch,
   competencies,
-  developmentTimeline,
   careerMarketWatch,
   type CareerResearchCard,
 } from "@/data/global-finance/career";
@@ -208,23 +207,6 @@ export function CareerReadiness() {
             </article>
           ))}
         </div>
-      </section>
-      <section className={styles.section}>
-        <span className={styles.kicker}>Current development</span>
-        <h2>Building the Foundation</h2>
-        <ol className={styles.timeline}>
-          {developmentTimeline.map((m) => (
-            <li key={m.year}>
-              <strong>{m.year}</strong>
-              <span className={styles.badge}>{m.status}</span>
-              <ul>
-                {m.items.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ol>
       </section>
       <section className={styles.section}>
         <span className={styles.kicker}>

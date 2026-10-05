@@ -110,7 +110,7 @@ test("company provenance, capital-flow geography, casebook and recruiter links",
 
 test("Global Finance replaces Klyro in top navigation and regional interests are accessible", async ({ page }) => {
   await page.goto("/global-finance");
-  await expect(page.getByRole("heading", {name:"Building a Career Without Borders"})).toBeVisible();
+  await expect(page.getByRole("heading", {name:"Capital does not stop at the border."})).toBeVisible();
   const menu = page.getByRole("button", {name:"Open navigation menu"});
   const mobileMenu = await menu.isVisible();
   if (mobileMenu) await menu.click();

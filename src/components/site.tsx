@@ -14,36 +14,32 @@ export function Footer() {
             <LunaMark />
             <span className="brand-lockup">
               <b>LUNA1 RESEARCH</b>
-              <small>Independent investment research</small>
+              <small>Independent investment &amp; global finance research</small>
             </span>
           </Link>
           <p>
-            A professional financial research platform connecting operational
-            experience, accounting knowledge, and investment analysis.
+            Independent investment and global finance research by Shy Lee.
           </p>
         </div>
         <div>
-          <span className="eyebrow">Research and valuation</span>
+          <span className="eyebrow">Research</span>
           <p>
-            <Link href="/setora">SETORA MAP</Link>
             <Link href="/research">Equity Research</Link>
-            <Link href="/valuation-models">Valuation Lab</Link>
-            <Link href="/portfolio">Portfolio Lab</Link>
-            <Link href="/portfolio/mistake-journal">
-              Mistake Journal
-            </Link>
+            <Link href="/research/capital-flows">Capital Flows</Link>
+            <Link href="/global-finance">Global Finance</Link>
+            <Link href="/valuation-models">Models</Link>
           </p>
         </div>
         <div>
-          <span className="eyebrow">Process and profile</span>
+          <span className="eyebrow">Profile</span>
           <p>
-            <Link href="/research/notes">Research Notes</Link>
-            <Link href="/development-log">Development Log</Link>
             <Link href="/recruiter">Professional Profile</Link>
+            <Link href="/portfolio">Portfolio Lab</Link>
+            <Link href="/development-log">Development Log</Link>
           </p>
         </div>
         <div>
-          <span className="eyebrow">Professional inquiries</span>
+          <span className="eyebrow">Created by Shy Lee</span>
           <p>
             Recruiting, research, and collaboration inquiries are available
             through the secure <Link href="/contact">contact form</Link>.

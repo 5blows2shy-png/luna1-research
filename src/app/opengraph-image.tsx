@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "Luna1 Research — Independent research across public markets, capital allocation, and real assets";
+  "Luna1 Research — Independent investment and global finance research";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -14,8 +14,8 @@ export default function OpenGraphImage() {
           height: "100%",
           display: "flex",
           position: "relative",
-          background: "#090b10",
-          color: "#e5e7eb",
+          background: "#07090c",
+          color: "#f1eee7",
           padding: "74px 78px",
           fontFamily: "Arial, sans-serif",
         }}
@@ -42,8 +42,8 @@ export default function OpenGraphImage() {
               style={{
                 width: "28px",
                 height: "32px",
-                borderLeft: "2px solid #3b82f6",
-                borderRight: "2px solid #3b82f6",
+                borderLeft: "2px solid #c3a56a",
+                borderRight: "2px solid #c3a56a",
                 transform: "skew(-20deg)",
               }}
             />
@@ -52,14 +52,14 @@ export default function OpenGraphImage() {
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div
               style={{
-                color: "#f59e0b",
+              color: "#c3a56a",
                 fontSize: "15px",
                 letterSpacing: "4px",
                 textTransform: "uppercase",
                 marginBottom: "24px",
               }}
             >
-              Independent investment research
+              Independent investment &amp; global finance research
             </div>
             <div
               style={{
@@ -71,12 +71,12 @@ export default function OpenGraphImage() {
                 letterSpacing: "-2px",
               }}
             >
-              <span>Public markets.</span>
-              <span>Capital allocation.</span>
-              <span>Real assets.</span>
+              <span>Follow the capital.</span>
+              <span>Understand the business.</span>
+              <span>Find the opportunity.</span>
             </div>
           </div>
-          <div style={{ fontSize: "16px", color: "#9ca3af" }}>
+          <div style={{ fontSize: "16px", color: "#b7b4ad" }}>
             Discipline · Evidence · Continuous improvement
           </div>
         </div>
@@ -97,7 +97,7 @@ export default function OpenGraphImage() {
               position: "absolute",
               width: "180px",
               height: "230px",
-              border: "2px solid #3b82f6",
+              border: "2px solid #c3a56a",
               transform: "rotate(30deg) skew(-14deg)",
               opacity: 0.8,
             }}
@@ -107,7 +107,7 @@ export default function OpenGraphImage() {
               width: "10px",
               height: "10px",
               borderRadius: "50%",
-              background: "#f59e0b",
+              background: "#c3a56a",
             }}
           />
           <div
@@ -117,7 +117,7 @@ export default function OpenGraphImage() {
               top: "145px",
               width: "190px",
               height: "1px",
-              background: "#22d3ee",
+              background: "#aebac5",
               transform: "rotate(-13deg)",
               transformOrigin: "left",
             }}
@@ -129,7 +129,7 @@ export default function OpenGraphImage() {
               top: "150px",
               width: "205px",
               height: "1px",
-              background: "#3b82f6",
+              background: "#c3a56a",
             }}
           />
           <div
@@ -139,7 +139,7 @@ export default function OpenGraphImage() {
               top: "155px",
               width: "190px",
               height: "1px",
-              background: "#f59e0b",
+              background: "#8e7350",
               transform: "rotate(13deg)",
               transformOrigin: "left",
             }}
@@ -152,7 +152,7 @@ export default function OpenGraphImage() {
             right: "78px",
             top: "66px",
             height: "1px",
-            background: "#2a303b",
+            background: "#2a3039",
           }}
         />
       </div>

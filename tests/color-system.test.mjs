@@ -4,27 +4,27 @@ import fs from "node:fs";
 
 const theme = fs.readFileSync("src/app/luxury.css", "utf8").toLowerCase();
 
-test("Bloomberg-inspired palette is centralized in semantic tokens", () => {
+test("institutional palette is centralized in semantic tokens", () => {
   for (const [token, value] of [
-    ["--bg-main", "#090b10"],
-    ["--bg-secondary", "#0d1117"],
-    ["--bg-card", "#151922"],
-    ["--bg-elevated", "#1b202b"],
-    ["--bg-input", "#11151d"],
-    ["--border-primary", "#2a303b"],
-    ["--border-secondary", "#343b47"],
-    ["--divider-subtle", "#202631"],
-    ["--text-primary", "#e5e7eb"],
-    ["--text-secondary", "#9ca3af"],
-    ["--text-muted", "#6b7280"],
-    ["--text-disabled", "#4b5563"],
-    ["--accent-blue", "#3b82f6"],
-    ["--accent-orange", "#f59e0b"],
-    ["--accent-cyan", "#22d3ee"],
-    ["--status-positive", "#10b981"],
-    ["--status-negative", "#ef4444"],
-    ["--status-warning", "#fbbf24"],
-    ["--status-neutral", "#64748b"],
+    ["--bg-main", "#07090c"],
+    ["--bg-secondary", "#0b0f15"],
+    ["--bg-card", "#11161e"],
+    ["--bg-elevated", "#171d26"],
+    ["--bg-input", "#0d1218"],
+    ["--border-primary", "#2a3039"],
+    ["--border-secondary", "#3b424c"],
+    ["--divider-subtle", "#1c232d"],
+    ["--text-primary", "#f1eee7"],
+    ["--text-secondary", "#b7b4ad"],
+    ["--text-muted", "#83817b"],
+    ["--text-disabled", "#575b60"],
+    ["--accent-blue", "#c3a56a"],
+    ["--accent-orange", "#8e7350"],
+    ["--accent-cyan", "#aebac5"],
+    ["--status-positive", "#5c9a7c"],
+    ["--status-negative", "#c16a6d"],
+    ["--status-warning", "#c4a163"],
+    ["--status-neutral", "#7d8792"],
   ]) {
     assert.ok(
       theme.includes(`${token}:${value}`),
@@ -58,7 +58,7 @@ test("light mode provides a complete accessible semantic palette", () => {
     ["--border-primary", "#d4cdbf"],
     ["--text-primary", "#181b20"],
     ["--text-secondary", "#4f5863"],
-    ["--accent-blue", "#245f8c"],
+    ["--accent-blue", "#80683d"],
     ["--status-positive", "#177457"],
     ["--status-negative", "#a43b43"],
   ]) {
@@ -104,10 +104,10 @@ test("metadata, theme initialization, and social artwork use the approved palett
     .readFileSync("src/app/opengraph-image.tsx", "utf8")
     .toLowerCase();
   assert.match(layout, /colorscheme:"dark light"/);
-  assert.match(layout, /color:"#090b10"/);
+  assert.match(layout, /color:"#07090c"/);
   assert.match(layout, /color:"#f4f1e9"/);
   assert.match(layout, /localstorage\.getitem\("theme"\)/);
   assert.match(layout, /prefers-color-scheme: dark/);
-  for (const color of ["#090b10", "#e5e7eb", "#3b82f6", "#f59e0b", "#22d3ee"])
+  for (const color of ["#07090c", "#f1eee7", "#c3a56a", "#8e7350", "#aebac5"])
     assert.ok(social.includes(color), `social card missing ${color}`);
 });

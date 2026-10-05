@@ -7,7 +7,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowLeftRight,
-  ChartNoAxesCombined,
   Building2,
   Landmark,
   Factory,
@@ -16,7 +15,6 @@ import {
   Calculator,
 } from "lucide-react";
 import { ResearchChain, BarChart } from "@/components/global-finance/visuals";
-import { GlobalMarketsDashboard } from "@/components/global-finance/global-markets-dashboard";
 import { northstarRegions } from "@/data/global-finance/northstar";
 import { consolidateRegions } from "@/lib/global-finance/models";
 import styles from "@/components/global-finance/global-finance.module.css";
@@ -26,13 +24,6 @@ export const metadata: Metadata = {
     "Capital, currencies, multinational exposure, and applied global FP&A within Luna1 Research.",
 };
 const areas = [
-  {
-    name: "Global Markets",
-    icon: ChartNoAxesCombined,
-    text: "Rates, equities, and currencies in regional context.",
-    href: "#global-markets",
-    action: "Open the live briefing",
-  },
   {
     name: "FX & Treasury",
     icon: ArrowLeftRight,
@@ -92,13 +83,13 @@ export default function GlobalFinancePage() {
       <header className={styles.hero}>
         <div>
           <span className={styles.kicker}>
-            Global Finance · Career direction & applied research
+            Global Finance · cross-border business analysis
           </span>
-          <h1>Building a Career Without Borders</h1>
+          <h1>Capital does not stop at the border.</h1>
           <p>
-            I’m developing the financial, analytical, operational, and market
-            perspective required to evaluate businesses and allocate capital
-            across global markets.
+            A research perspective on currencies, trade, multinational
+            businesses, infrastructure, and cross-border capital flows—built
+            to connect operating realities with financial outcomes.
           </p>
           <Link className="button" href="/global-finance/treasury">
             Explore Treasury & FX →
@@ -125,7 +116,6 @@ export default function GlobalFinancePage() {
           </p>
         </div>
       </header>
-      <GlobalMarketsDashboard />
       <CareerThesis />
       <section className={styles.section}>
         <span className={styles.kicker}>One connected research process</span>

@@ -186,47 +186,6 @@ export const competencies = [
     ],
   },
 ];
-export const developmentTimeline = [
-  {
-    year: "2026",
-    status: "Building the foundation",
-    items: [
-      "Finance coursework",
-      "Financial modeling",
-      "Investment research",
-      "Professional finance experience",
-      "Global company research",
-    ],
-  },
-  {
-    year: "2027",
-    status: "Planned · not completed",
-    items: [
-      "Finance degree completion",
-      "Early-career finance / rotational opportunity",
-      "CFA Level I pathway",
-      "Expand international equity research",
-    ],
-  },
-  {
-    year: "2027–2029",
-    status: "Career objectives",
-    items: [
-      "Develop corporate finance or investment expertise",
-      "Pursue multinational assignments",
-      "Target international rotations or internal transfers",
-    ],
-  },
-  {
-    year: "Long Term",
-    status: "Aspirational direction",
-    items: [
-      "Build leadership experience across markets",
-      "Global finance / investment leadership",
-      "Regional or global financial responsibility",
-    ],
-  },
-];
 // Future adapters must provide source, date, units, and a verified availability status.
 export const careerMarketWatch = [
   "Global equity indices",

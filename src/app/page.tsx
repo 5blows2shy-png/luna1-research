@@ -13,31 +13,29 @@ export default function Home() {
         <div className="hero-copy">
           <span className="eyebrow">Professional Financial Research Platform · Shy Lee</span>
           <h1>
-            Operating context.
+            Follow the capital.
             <br />
-            <em>Analytical discipline.</em>
+            <em>Understand the business.</em>
+            <br />
+            Find the opportunity.
           </h1>
           <p>
-            Luna is a financial intelligence system that converts transactions,
-            financial statements and market data into decisions. {professionalPositioning}{" "}
-            Luna1 documents the research, valuation, accounting controls,
-            portfolio decisions, and lessons behind that process.
+            Independent investment and global finance research across public
+            companies, capital flows, valuation, and structural themes.
+            {" "}{professionalPositioning}
           </p>
           <div className="button-row">
             <Link className="button primary" href="/research">
-              Explore Equity Research <span>→</span>
+              Explore Research <span>→</span>
             </Link>
-            <Link className="button" href="/setora">
-              Open SETORA <span>→</span>
-            </Link>
-            <Link className="button" href="/recruiter">
-              View recruiter profile <span>→</span>
+            <Link className="button" href="/research/capital-flows">
+              View Capital Flows <span>→</span>
             </Link>
           </div>
           <div className="hero-proof">
-            <span>Financial reasoning</span>
-            <span>Operational understanding</span>
-            <span>Investment process</span>
+            <span>Companies</span>
+            <span>Capital flows</span>
+            <span>Global finance</span>
           </div>
         </div>
         <PrismSignature />
@@ -45,28 +43,33 @@ export default function Home() {
 
       <section>
         <div className="section-heading">
-          <span className="eyebrow">Five pillars</span>
-          <h2>Evidence of how an analyst thinks.</h2>
+          <span className="eyebrow">01 · Featured research</span>
+          <h2>Research built from evidence, not noise.</h2>
           <p>
-            Each section documents a different part of the analytical process,
-            from source-aware research and valuation to accounting controls,
-            portfolio accountability, and continuous improvement.
+            A focused selection of company work, capital-flow research, and
+            global-finance analysis. Every item keeps its sources, status, and
+            limitations visible.
           </p>
         </div>
-        <div className="analyst-pillar-grid">
-          {platformPillars.map((pillar) => (
-            <Link href={pillar.href} key={pillar.title}>
-              <span>{pillar.number}</span>
-              <h3>{pillar.title}</h3>
-              <p>{pillar.purpose}</p>
-              <ul>
-                {pillar.evidence.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-              <b>Explore {pillar.title} →</b>
-            </Link>
-          ))}
+        <div className="featured-research">
+          <Link className="featured-research-primary" href="/research/capital-flows">
+            <span className="eyebrow">Featured · AI infrastructure</span>
+            <h3>Follow the capital: from compute to power.</h3>
+            <p>
+              A structured view of demand, bottlenecks, and the companies
+              positioned along the infrastructure value chain.
+            </p>
+            <b>View Capital Flows →</b>
+          </Link>
+          <div className="featured-research-secondary">
+            {platformPillars.slice(0, 3).map((pillar) => (
+              <Link href={pillar.href} key={pillar.title}>
+                <span>{pillar.number} · {pillar.title}</span>
+                <p>{pillar.purpose}</p>
+                <b>Open research →</b>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

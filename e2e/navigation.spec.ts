@@ -60,7 +60,7 @@ test("primary pages load without horizontal overflow", async ({ page }) => {
   }
 });
 
-test("Bloomberg-inspired semantic palette renders at every viewport", async ({
+test("institutional semantic palette renders at every viewport", async ({
   page,
 }) => {
   await page.addInitScript(() => window.localStorage.setItem("theme", "dark"));
@@ -80,13 +80,13 @@ test("Bloomberg-inspired semantic palette renders at every viewport", async ({
     };
   });
   expect(palette).toEqual({
-    background: "rgb(9, 11, 16)",
-    inputBackground: "rgb(17, 21, 29)",
-    primaryText: "#e5e7eb",
-    secondaryText: "#9ca3af",
-    blue: "#3b82f6",
-    orange: "#f59e0b",
-    cyan: "#22d3ee",
+    background: "rgb(7, 9, 12)",
+    inputBackground: "rgb(13, 18, 24)",
+    primaryText: "#f1eee7",
+    secondaryText: "#b7b4ad",
+    blue: "#c3a56a",
+    orange: "#8e7350",
+    cyan: "#aebac5",
   });
 });
 
@@ -181,9 +181,7 @@ test("equity research is available from the public navigation", async ({
   await expect(
     page.getByRole("heading", { name: "Evidence at the company level" }),
   ).toBeVisible();
-  await expect(
-    page.getByRole("link", { name: "Capital Flows", exact: true }),
-  ).toBeVisible();
+  await expect(page.locator('main a[href="/research/capital-flows"]').first()).toBeVisible();
   await expect(
     page.getByRole("link", { name: "Open Capital Flows" }),
   ).toBeVisible();
