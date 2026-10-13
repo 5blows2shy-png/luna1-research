@@ -537,7 +537,7 @@ test("portfolio quote displays tolerate unavailable responses", async ({ page })
   await expect(page.locator('[data-symbol="GLW"]').getByText("Quote unavailable")).toBeVisible();
 });
 
-test("JBL decision review remains under Portfolio", async ({
+test("JBL and CASY decision reviews remain under Portfolio", async ({
   page,
 }, testInfo) => {
   await page.goto("/portfolio/mistake-journal");
@@ -546,7 +546,7 @@ test("JBL decision review remains under Portfolio", async ({
   ).toContainText("Portfolio");
   await expect(page.getByText("Jabil Inc.")).toBeVisible();
   await activate(
-    page.getByRole("button", { name: "View Review" }),
+    page.getByRole("row", { name: /JBL Jabil Inc\./ }).getByRole("button", { name: "View Review" }),
     testInfo.project.name,
   );
   await expect(page.getByRole("dialog", { name: /JBL/ })).toBeVisible();
@@ -558,6 +558,19 @@ test("JBL decision review remains under Portfolio", async ({
   ).toBeVisible();
   await activate(
     page.getByRole("button", { name: "Close JBL decision review" }),
+    testInfo.project.name,
+  );
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+
+  await expect(page.getByText("Casey's General Stores, Inc.")).toBeVisible();
+  await activate(
+    page.getByRole("row", { name: /CASY Casey's General Stores/ }).getByRole("button", { name: "View Review" }),
+    testInfo.project.name,
+  );
+  await expect(page.getByRole("dialog", { name: /CASY/ })).toBeVisible();
+  await expect(page.getByText("Luna1 Decision Review")).toBeVisible();
+  await activate(
+    page.getByRole("button", { name: "Close CASY decision review" }),
     testInfo.project.name,
   );
   await expect(page.getByRole("dialog")).toHaveCount(0);

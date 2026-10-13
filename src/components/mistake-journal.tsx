@@ -24,7 +24,7 @@ const classificationOptions = [
   "Emotional Decision",
   "Process Violation",
 ];
-const outcomeOptions = ["All", "Gain", "Loss", "Breakeven", "Open"];
+const outcomeOptions = ["All", "Gain", "Loss", "Breakeven", "Open", "Not Recorded"];
 const thesisOptions = ["All", "Intact at Exit", "Weakened", "Invalidated", "Uncertain"];
 const qualityOptions = ["All", "Poor", "Moderate", "Strong"];
 
@@ -35,8 +35,8 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
   timeZone: "UTC",
 });
 
-function formatDate(value?: string) {
-  return value ? dateFormatter.format(new Date(`${value}T00:00:00Z`)) : "Open";
+function formatDate(value?: string, emptyLabel = "Not recorded") {
+  return value ? dateFormatter.format(new Date(`${value}T00:00:00Z`)) : emptyLabel;
 }
 
 function JournalFilter({
@@ -101,11 +101,11 @@ function ReviewDrawer({ entry, onClose }: { entry: MistakeJournalEntry; onClose:
       >
         <header>
           <div>
-            <span className="eyebrow">Decision Review · {entry.lastUpdated}</span>
+            <span className="eyebrow">Luna1 Decision Review · {entry.lastUpdated}</span>
             <h2 id="review-title">{entry.ticker} · {entry.companyName}</h2>
             <p id="review-description">A structured audit of thesis quality, execution, and process discipline.</p>
           </div>
-          <button ref={closeButtonRef} className="drawer-close" onClick={onClose} aria-label="Close JBL decision review">×</button>
+          <button ref={closeButtonRef} className="drawer-close" onClick={onClose} aria-label={`Close ${entry.ticker} decision review`}>×</button>
         </header>
 
         <div className="review-meta" aria-label="Decision review summary">
@@ -129,9 +129,9 @@ function ReviewDrawer({ entry, onClose }: { entry: MistakeJournalEntry; onClose:
           <span className="eyebrow">Framework Updated</span>
           <h3 id="before-after-heading">Before Rule / After Rule</h3>
           <div>
-            <article><small>Before Rule</small><p>Exit when price action creates concern about a possible structural break.</p></article>
-            <article><small>Observed Failure</small><p>Intraday volatility prompted a full exit while the thesis and broader structure remained intact.</p></article>
-            <article><small>After Rule</small><p>Require a daily-close confirmation and a fundamental review before a full exit, absent emergency portfolio risk.</p></article>
+            <article><small>Before Rule</small><p>{entry.beforeRule ?? "Exit when price action creates concern about a possible structural break."}</p></article>
+            <article><small>Observed Failure</small><p>{entry.observedFailure ?? "Intraday volatility prompted a full exit while the thesis and broader structure remained intact."}</p></article>
+            <article><small>After Rule</small><p>{entry.afterRule ?? "Require a daily-close confirmation and a fundamental review before a full exit, absent emergency portfolio risk."}</p></article>
           </div>
         </section>
       </aside>
@@ -149,7 +149,7 @@ export function MistakeJournal() {
     [filters],
   );
   const years = ["All", ...new Set(mistakeJournalEntries.map((entry) =>
-    (entry.exitDate ?? entry.entryDate).slice(0, 4),
+    (entry.exitDate ?? entry.entryDate ?? "").slice(0, 4),
   ))];
 
   function updateFilter(name: keyof MistakeJournalFilters, value: string) {

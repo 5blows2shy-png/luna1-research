@@ -21,8 +21,8 @@ test("journal filters match primary and secondary classifications", () => {
     classification: "Failed Thesis",
   });
 
-  assert.equal(earlyExit.length, 1);
-  assert.equal(emotionalDecision.length, 1);
+  assert.equal(earlyExit.length, 2);
+  assert.equal(emotionalDecision.length, 2);
   assert.equal(failedThesis.length, 0);
 });
 
@@ -48,11 +48,11 @@ test("journal summary calculates decision and process totals", () => {
   const summary = calculateMistakeJournalSummary(mistakeJournalEntries);
 
   assert.deepEqual(summary, {
-    totalReviewedDecisions: 1,
+    totalReviewedDecisions: 2,
     failedTheses: 0,
-    earlyExits: 1,
+    earlyExits: 2,
     processViolations: 0,
     mostCommonMistake: "Early Exit",
-    processChangesAdopted: 6,
+    processChangesAdopted: 11,
   });
 });

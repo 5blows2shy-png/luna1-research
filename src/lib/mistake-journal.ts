@@ -15,11 +15,12 @@ export type MistakeJournalEntry = {
   id: string;
   ticker: string;
   companyName: string;
-  entryDate: string;
+  /** The original purchase date is intentionally omitted when it was not recorded. */
+  entryDate?: string;
   exitDate?: string;
   classification: MistakeClassification;
   secondaryClassifications?: MistakeClassification[];
-  outcome?: "Gain" | "Loss" | "Breakeven" | "Open";
+  outcome?: "Gain" | "Loss" | "Breakeven" | "Open" | "Not Recorded";
   returnPercentage?: number;
   originalThesis: string;
   whatHappened: string;
@@ -27,6 +28,9 @@ export type MistakeJournalEntry = {
   lessons: string[];
   missedOpportunities: string[];
   processChanges: string[];
+  beforeRule?: string;
+  observedFailure?: string;
+  afterRule?: string;
   thesisStatus: "Intact at Exit" | "Weakened" | "Invalidated" | "Uncertain";
   entryQuality: "Poor" | "Moderate" | "Strong";
   exitQuality: "Poor" | "Moderate" | "Strong";
@@ -69,7 +73,7 @@ export function filterMistakeJournalEntries(
   filters: MistakeJournalFilters,
 ) {
   return entries.filter((entry) => {
-    const year = entry.exitDate?.slice(0, 4) ?? entry.entryDate.slice(0, 4);
+    const year = entry.exitDate?.slice(0, 4) ?? entry.entryDate?.slice(0, 4) ?? "";
     return (
       (filters.classification === "All" ||
         entry.classification === filters.classification ||
