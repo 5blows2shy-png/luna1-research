@@ -1,17 +1,41 @@
 import Link from "next/link";
 import { PrismSignature } from "@/components/luxury";
 import {
-  careerProgression,
-  platformPillars,
   professionalPositioning,
 } from "@/lib/professional-profile";
+
+const researchPathways = [
+  {
+    number: "01",
+    title: "Equity Research",
+    href: "/research",
+    purpose:
+      "Source-aware company and industry work that moves from a research question to a documented conclusion.",
+  },
+  {
+    number: "02",
+    title: "Global Finance",
+    href: "/global-finance",
+    purpose:
+      "Cross-border business analysis connecting currencies, trade, infrastructure, and capital allocation.",
+  },
+  {
+    number: "03",
+    title: "Portfolio Lab",
+    href: "/portfolio",
+    purpose:
+      "A decision record centered on thesis quality, valuation, risk, position role, and what changed after purchase.",
+  },
+] as const;
 
 export default function Home() {
   return (
     <>
       <section className="luxury-hero">
         <div className="hero-copy">
-          <span className="eyebrow">Professional Financial Research Platform · Shy Lee</span>
+          <span className="eyebrow">
+            Independent Investment &amp; Global Finance Research · Shy Lee
+          </span>
           <h1>
             Follow the capital.
             <br />
@@ -62,7 +86,7 @@ export default function Home() {
             <b>View Capital Flows →</b>
           </Link>
           <div className="featured-research-secondary">
-            {platformPillars.slice(0, 3).map((pillar) => (
+            {researchPathways.map((pillar) => (
               <Link href={pillar.href} key={pillar.title}>
                 <span>{pillar.number} · {pillar.title}</span>
                 <p>{pillar.purpose}</p>
@@ -71,29 +95,6 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
-
-      <section>
-        <div className="section-heading">
-          <span className="eyebrow">Career progression</span>
-          <h2>Each role added another layer of financial understanding.</h2>
-          <p>
-            The progression is grounded in documented responsibilities and
-            shows how operating, accounting, and investment perspectives
-            connect.
-          </p>
-        </div>
-        <ol className="career-progression" aria-label="Career progression">
-          {careerProgression.map((item, index) => (
-            <li key={item.stage}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <div>
-                <h3>{item.stage}</h3>
-                <p>{item.contribution}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
       </section>
 
       <section className="contact-proof">

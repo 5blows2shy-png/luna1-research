@@ -28,7 +28,7 @@ test.beforeEach(async ({ page }) => {
   }));
 });
 
-for (const path of ["/", "/portfolio", "/transaction-intelligence"]) {
+for (const path of ["/", "/portfolio"]) {
   test(`Market Pulse renders globally on ${path}`, async ({ page }) => {
     await page.goto(path);
     const pulse = page.getByRole("region", { name: "Luna1 Market Pulse" });

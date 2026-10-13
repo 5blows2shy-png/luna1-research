@@ -43,7 +43,7 @@ export function FpaCase() {
     a.href = url;
     a.download = "northstar-fictional-inputs.csv";
     a.click();
-    URL.revokeObjectURL(url);
+    window.setTimeout(() => URL.revokeObjectURL(url), 0);
   }
   return (
     <>

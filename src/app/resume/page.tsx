@@ -233,7 +233,6 @@ export function ResumeContent({
             </header>
             <div className="recruiter-capability-grid">
               {platformPillars
-                .filter(({ href }) => href !== "/klyro")
                 .map((pillar) => (
                   <Link href={pillar.href} key={pillar.title}>
                     <span>{pillar.number}</span>

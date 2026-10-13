@@ -5,8 +5,6 @@ import fs from "node:fs";
 const routes = [
   "src/app/page.tsx",
   "src/app/analyst-journal/page.tsx",
-  "src/app/transaction-intelligence/page.tsx",
-  "src/app/login/page.tsx",
   "src/app/about/page.tsx",
   "src/app/investment-philosophy/page.tsx",
   "src/app/luna1-framework/page.tsx",
@@ -31,15 +29,6 @@ test("required routes and educational disclosure exist", () => {
     footer,
     /Always conduct your own research before\s+making investment decisions/,
   );
-});
-
-test("Luna Books login preview uses trust messaging without claiming live security", () => {
-  const login = fs.readFileSync("src/app/login/page.tsx", "utf8");
-  assert.match(login, /Your business\. Your books\. Your control\./);
-  assert.match(login, /is being designed to protect each business workspace/);
-  assert.match(login, /Customer authentication is not active yet/);
-  assert.match(login, /does not\s+collect credentials/);
-  assert.doesNotMatch(login, /type="password"/);
 });
 
 test("public source excludes private contact details", () => {
@@ -365,7 +354,6 @@ test("resume powers a dedicated recruiter view with privacy-safe downloads", () 
     "Portfolio · Mistake Journal",
     "A career built across finance and operations.",
     "Start a professional conversation.",
-    "Transaction Intelligence",
   ])
     assert.ok(!source.includes(removed), `removed resume content remains: ${removed}`);
   assert.match(
@@ -450,7 +438,6 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
     "Python Lab",
     "Mistake Journal",
     "Research Notes",
-    "Klyro",
   ])
     assert.ok(
       !data.includes(`label: "${retired}"`),

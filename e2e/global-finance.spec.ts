@@ -108,7 +108,7 @@ test("company provenance, capital-flow geography, casebook and recruiter links",
   ).toHaveAttribute("href", "/global-finance/fpa");
 });
 
-test("Global Finance replaces Klyro in top navigation and regional interests are accessible", async ({ page }) => {
+test("Global Finance appears in top navigation and regional interests are accessible", async ({ page }) => {
   await page.goto("/global-finance");
   await expect(page.getByRole("heading", {name:"Capital does not stop at the border."})).toBeVisible();
   const menu = page.getByRole("button", {name:"Open navigation menu"});
@@ -118,7 +118,6 @@ test("Global Finance replaces Klyro in top navigation and regional interests are
   const global = nav.getByRole("link", {name:/Global Finance$/i});
   await expect(global).toHaveAttribute("href", "/global-finance");
   await expect(global).toHaveClass(/active/);
-  await expect(nav.getByRole("link",{name:/Klyro$/i})).toHaveCount(0);
   await expect(nav.getByRole("link",{name:/Equity Research$/i})).not.toHaveClass(/active/);
   if (await page.getByRole("button",{name:"Close navigation menu"}).isVisible()) await page.keyboard.press("Escape");
   const singapore = page.getByRole("button",{name:"Singapore / Southeast Asia",exact:true});

@@ -103,7 +103,7 @@ def make_profile():
     top = draw_paragraph(pdf, "RESEARCH &amp; ANALYSIS APPROACH", right_x, top, right_width, styles["ProfileSection"]) - 4
     top = draw_paragraph(pdf, "• Fundamentals and valuation<br/>• Industry structure and competitive positioning<br/>• Institutional behavior and technical structure<br/>• Explicit risk rules and thesis updates", right_x, top, right_width, styles["ProfileBody"]) - 7
     top = draw_paragraph(pdf, "SELECTED PROOF OF WORK", right_x, top, right_width, styles["ProfileSection"]) - 4
-    top = draw_paragraph(pdf, "• Company research pages and transparent valuation models<br/>• Documented portfolio methodology and mistake-journal process<br/>• Luna1 Transaction Intelligence: upload, analyze, flag discrepancies, and export financial records", right_x, top, right_width, styles["ProfileBody"]) - 7
+    top = draw_paragraph(pdf, "• Company research pages and transparent valuation models<br/>• Documented portfolio methodology and mistake-journal process", right_x, top, right_width, styles["ProfileBody"]) - 7
     top = draw_paragraph(pdf, "PLATFORM DEVELOPMENT", right_x, top, right_width, styles["ProfileSection"]) - 4
     top = draw_paragraph(pdf, "Building Luna1 as a practical finance portfolio that connects equity research, valuation, accounting controls, transaction-level analysis, and recruiter-ready proof of work.", right_x, top, right_width, styles["ProfileBodyDark"]) - 7
     top = draw_paragraph(pdf, "INVESTMENT PHILOSOPHY", right_x, top, right_width, styles["ProfileSection"]) - 4
@@ -115,7 +115,7 @@ def make_profile():
     pdf.setFont("Helvetica-Bold", 10.5)
     pdf.drawString(54, 89, "EXPLORE LUNA1 RESEARCH")
     pdf.setFont("Helvetica", 8.8)
-    pdf.drawString(54, 70, "Research, models, development log, and Transaction Intelligence at luna1research.com")
+    pdf.drawString(54, 70, "Research, models, and development log at luna1research.com")
     pdf.setFont("Helvetica-Bold", 8.4)
     pdf.drawRightString(558, 88, "Open to finance, research, FP&A,")
     pdf.drawRightString(558, 75, "and investment roles")
