@@ -1,0 +1,10 @@
+{
+  "name": "Luna1 Infrastructure Investment Committee",
+  "dataColors": ["#C7B38E", "#8B9EAB", "#858580", "#E8E3D9"],
+  "background": "#101315",
+  "foreground": "#F1EDE4",
+  "tableAccent": "#C7B38E",
+  "good": "#78A68C",
+  "neutral": "#C7B38E",
+  "bad": "#C8796C"
+}

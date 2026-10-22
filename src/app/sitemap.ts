@@ -1,7 +1,10 @@
+import { professionalCaseStudies, caseStudyHref } from "@/data/professional-case-studies";
+import { developmentHref } from "@/lib/development-model";
 import type { MetadataRoute } from "next";
 import { commentary, research } from "@/lib/data";
 import { companyResearch, investmentThemes } from "@/lib/research-content";
 import { researchCompanies } from "@/data/research/research-companies";
+import { financeProjects, projectHref } from "@/data/applied-finance-projects";
 const routes = [
   "",
   "/analyst-journal",
@@ -18,6 +21,8 @@ const routes = [
   "/portfolio/mistake-journal",
   "/portfolio/positions/krys",
   "/recruiter",
+  "/recruiter/research-challenge",
+  developmentHref,
   "/research",
   "/research/capital-flows",
   "/global-finance",
@@ -40,6 +45,8 @@ const routes = [
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://luna1research.com";
   return [
+    ...professionalCaseStudies.map(study => ({ url: `${base}${caseStudyHref(study.slug)}`, changeFrequency: "monthly" as const, priority: 0.6 })),
+    ...financeProjects.map(project => ({ url: `${base}${projectHref(project.slug)}`, changeFrequency: "monthly" as const, priority: 0.6 })),
     ...routes.map((route) => ({
       url: `${base}${route}`,
       changeFrequency:

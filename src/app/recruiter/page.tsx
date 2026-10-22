@@ -1,8 +1,12 @@
+import { ProfessionalCasePreviews } from "@/components/applied-finance/professional-case-previews";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionHeading } from "@/components/site";
 import { SectionDisclosure } from "@/components/section-disclosure";
 import styles from "./page.module.css";
+import { ProjectPreviews } from "@/components/applied-finance/project-previews";
+import { financeProjects, projectHref } from "@/data/applied-finance-projects";
+import { challengeProfile } from "@/data/research-challenge";
 
 const title = "Shy Lee | Finance Analyst • Investment Research • FP&A";
 const description =
@@ -58,13 +62,7 @@ const selectedWork = [
     ],
   },
   {
-    number: "04", label: "FP&A case study", title: "Planning & Performance",
-    subtitle: "Forecasting, Variance & Cash Flow",
-    description: "A focused case study for budget-versus-actual analysis, variance drivers, cash-flow planning, and management commentary.",
-    status: "In development",
-  },
-  {
-    number: "05", label: "Capital intelligence platform", title: "SETORA",
+    number: "04", label: "Capital intelligence platform", title: "SETORA",
     subtitle: "AI Infrastructure & Capital Flows",
     description: "A source-linked research system organizing AI infrastructure themes, capital events, company coverage, and second-order beneficiaries across compute, networking, power, and related verticals.",
     href: "/setora", action: "Explore SETORA", status: "Working product",
@@ -160,6 +158,8 @@ const experience = [
 const organizations = [
   { name: "Aztec Investment Fund", detail: "Student-managed investment fund", status: "Applied investment experience" },
   { name: "CFA Society San Diego", detail: "Student Member", status: "2026–Present" },
+  { name: challengeProfile.title, detail: `${challengeProfile.role} | ${challengeProfile.dates}. ${challengeProfile.institution} · ${challengeProfile.summary}`, status: challengeProfile.selection, href: challengeProfile.href, linkLabel: "View research journey" },
+  { name: "Luna1 Research", detail: "Independent equity research and portfolio analysis", status: "Published work", href: "/research", linkLabel: "View research" },
   { name: "Bloomberg Market Concepts", detail: "Bloomberg for Education", status: "Completed", href: "/downloads/shy-lee-bloomberg-market-concepts-certificate.pdf" },
   { name: "QuickBooks Online Level 1", detail: "Intuit", status: "Completed" },
   { name: "Microsoft Excel", detail: "Microsoft", status: "Completed" },
@@ -185,6 +185,7 @@ export default function RecruiterView() {
         <ul className={styles.identifiers} aria-label="Professional identifiers">
           <li>SDSU Finance</li><li>Aztec Investment Fund</li><li>CFA Society San Diego</li><li>U.S. Army Veteran</li>
         </ul>
+        <div className={styles.researchHighlight}><strong>{challengeProfile.title}</strong><p>{challengeProfile.season} Selected Team Member · {challengeProfile.institution}</p><small>{challengeProfile.role} · {challengeProfile.dates}</small><p><Link className="text-link" href={challengeProfile.href}>View research experience →</Link></p></div>
         <div className={styles.actions}>
           <a className="button primary" href="#selected-work">View selected work <span aria-hidden="true">↓</span></a>
           <a className="button" href="/downloads/shy-lee-resume.pdf" download>Download resume <span aria-hidden="true">↓</span></a>
@@ -205,7 +206,7 @@ export default function RecruiterView() {
     </section>
 
     <nav className={styles.sectionNav} aria-label="Professional profile sections">
-      <a href="#profile">01 Profile</a><a href="#selected-work">02 Selected work</a><a href="#capabilities">03 Capabilities</a><a href="#experience">04 Experience</a><a href="#investment-experience">05 Investment experience</a><a href="#alignment">06 Career alignment</a>
+      <a href="#profile">01 Profile</a><a href="#experience">02 Experience</a><a href="#professional-case-studies">03 Case studies</a><a href="#applied-finance-projects">Work samples</a><a href="#selected-work">04 Selected work</a><a href="#capabilities">05 Capabilities</a><a href="#investment-experience">06 Investment experience</a><a href="#alignment">07 Career alignment</a>
     </nav>
 
     <SectionDisclosure id="profile" number="01" title="Candidate snapshot">
@@ -218,7 +219,19 @@ export default function RecruiterView() {
       </div>
     </SectionDisclosure>
 
-    <SectionDisclosure id="selected-work" number="02" title="Selected work">
+    <SectionDisclosure id="experience" number="02" title="Applied finance experience">
+      <SectionHeading eyebrow="Relevant experience" title="Finance work supported by operating discipline." copy="Focused on the responsibilities and transferable context most relevant to financial analysis and decision support." />
+      <div className={styles.experienceLedger}>{experience.map((role, index) => <article key={role.company}>
+        <span>{String(index + 1).padStart(2, "0")}</span>
+        <div className={styles.roleIdentity}><small>{role.relevance}</small><h3>{role.company}</h3><b>{role.role}</b>{"date" in role && <time>{role.date}</time>}</div>
+        <ul>{role.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul>
+      </article>)}</div>
+    </SectionDisclosure>
+
+    <ProfessionalCasePreviews />
+    <ProjectPreviews />
+
+    <SectionDisclosure id="selected-work" number="04" title="Selected work">
       <SectionHeading eyebrow="Evidence, not claims" title="How I analyze, model, research, and improve financial workflows." copy="Completed work links directly to evidence. Developing work is labeled before publication." />
       <div className={styles.workGrid}>{selectedWork.map((work) => <article className={styles.workCard} key={work.title}>
         <div className={styles.cardMeta}><span>{work.number} · {work.label}</span><b>{work.status}</b></div>
@@ -245,13 +258,15 @@ export default function RecruiterView() {
       </div>
     </section>
 
-    <SectionDisclosure id="capabilities" number="03" title="Finance capabilities">
+    <SectionDisclosure id="capabilities" number="05" title="Finance capabilities">
       <SectionHeading eyebrow="Capability register" title="Every capability points to work—or states that it is developing." copy="Applied indicates direct use in professional, academic, or portfolio work. Developing indicates continued study or an unfinished evidence artifact." />
       <div className={styles.capabilityLedger}>{capabilities.map((capability) => <article key={capability.title}>
         <span>{capability.number}</span><h3>{capability.title}</h3>
         <div><b>Applied</b><ul>{capability.applied.map((item) => <li key={item}>{item}</li>)}</ul></div>
         <div><b>Developing</b>{capability.developing.length ? <ul>{capability.developing.map((item) => <li key={item}>{item}</li>)}</ul> : <p>Evidence available in published work.</p>}</div>
-        <Link className="text-link" href={capability.href}>{capability.proof} <span aria-hidden="true">→</span></Link>
+        <div><Link className="text-link" href={capability.href}>{capability.proof} <span aria-hidden="true">→</span></Link>
+          {financeProjects.filter(project => project.capabilityTitles.includes(capability.title)).map(project => <p key={project.slug}><Link className="text-link" href={projectHref(project.slug)}>{project.title} · {project.status} →</Link></p>)}
+        </div>
       </article>)}</div>
       <div className={styles.dataProjects} aria-labelledby="data-projects-title">
         <div className={styles.dataProjectsHeading}><span className="eyebrow">Proof-oriented project briefs</span><h3 id="data-projects-title">Data &amp; Analytics projects</h3><p>These are planned evidence artifacts for making the toolset visible through finance work, not unsupported proficiency claims.</p></div>
@@ -262,20 +277,11 @@ export default function RecruiterView() {
       </div>
     </SectionDisclosure>
 
-    <SectionDisclosure id="experience" number="04" title="Applied finance experience">
-      <SectionHeading eyebrow="Relevant experience" title="Finance work supported by operating discipline." copy="Focused on the responsibilities and transferable context most relevant to financial analysis and decision support." />
-      <div className={styles.experienceLedger}>{experience.map((role, index) => <article key={role.company}>
-        <span>{String(index + 1).padStart(2, "0")}</span>
-        <div className={styles.roleIdentity}><small>{role.relevance}</small><h3>{role.company}</h3><b>{role.role}</b>{"date" in role && <time>{role.date}</time>}</div>
-        <ul>{role.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul>
-      </article>)}</div>
-    </SectionDisclosure>
-
-    <SectionDisclosure id="investment-experience" number="05" title="Investment organizations & applied experience">
+    <SectionDisclosure id="investment-experience" number="06" title="Investment organizations & applied experience">
       <SectionHeading eyebrow="Professional development" title="Investment participation and finance credentials." copy="An understated record of applied investment work, professional membership, completed credentials, and clearly labeled plans." />
       <div className={styles.organizationList}>{organizations.map((item, index) => <article key={item.name}>
-        <span>{String(index + 1).padStart(2, "0")}</span><div><h3>{item.name}</h3><p>{item.detail}</p></div><b>{item.status}</b>
-        {"href" in item ? <a className="text-link" href={item.href} download>View certificate <span aria-hidden="true">↓</span></a> : <span aria-hidden="true" />}
+        <span>{String(index + 1).padStart(2, "0")}</span><div><h3>{item.name}</h3><p>{item.detail}</p>{item.name === challengeProfile.title && <ul>{challengeProfile.responsibilities.map(responsibility => <li key={responsibility}>{responsibility}</li>)}</ul>}</div><b>{item.status}</b>
+        {"href" in item ? "linkLabel" in item ? <Link className="text-link" href={item.href}>{item.linkLabel} →</Link> : <a className="text-link" href={item.href} download>View certificate <span aria-hidden="true">↓</span></a> : <span aria-hidden="true" />}
       </article>)}</div>
     </SectionDisclosure>
 
@@ -284,7 +290,7 @@ export default function RecruiterView() {
       <div><p className={styles.editorialLead}>My experience sits at the intersection of financial operations, investment analysis, and technology.</p><p>I have worked directly with accounting records and financial reporting, developed investment research through Luna1 and applied investment work, and built tools aimed at making finance workflows more efficient.</p><p>The objective is straightforward: understand the numbers, identify what matters, and communicate the financial implications clearly.</p></div>
     </section>
 
-    <SectionDisclosure id="alignment" number="06" title="Career alignment">
+    <SectionDisclosure id="alignment" number="07" title="Career alignment">
       <SectionHeading eyebrow="Shared analytical foundation" title="Roles connected by the same finance disciplines." copy="Financial analysis, forecasting, valuation, decision support, and financial operations provide the common thread." />
       <div className={styles.roleGrid}>{roles.map((role, index) => <article key={role.title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{role.title}</h3><p>{role.proof}</p></article>)}</div>
     </SectionDisclosure>

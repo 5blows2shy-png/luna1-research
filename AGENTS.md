@@ -1,5 +1,7 @@
 # Project rules
 
+- When preparing user-uploaded documents for Luna1, add the existing Luna1 Research logo from `public/brand/luna1-logo-horizontal.png`, preserve the source content and formatting, and return a branded copy. Keep originals intact. Branding alone does not authorize publishing the document.
+
 - Preserve the professional institutional-investment design.
 - Use strict TypeScript and prefer server components where appropriate.
 - Use client components only for interactivity.
