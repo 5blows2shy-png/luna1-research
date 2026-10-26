@@ -6,7 +6,6 @@ import { useState, type KeyboardEvent } from "react";
 import { MarketQuotesProvider } from "@/components/market/market-quotes-provider";
 import { QuoteDisplay } from "@/components/market/quote-display";
 import { PageHeader, SectionHeading } from "@/components/site";
-import { activePositions } from "@/data/portfolio/active-positions";
 import { portfolioTickerSymbols } from "@/lib/market-ticker-config";
 import { watchlist } from "@/lib/watchlist-data";
 
@@ -129,7 +128,6 @@ const allPortfolioSymbols = [...portfolioTickerSymbols].sort();
 
 const tabs = [
   "Overview",
-  "Active Positions",
   "Watchlist",
   "Long-Term Compounders",
   "Mistake Journal",
@@ -187,118 +185,6 @@ function HoldingsTable({ title, items }: { title: string; items: Holding[] }) {
   );
 }
 
-function ActivePositionsTable() {
-  return (
-    <div className="active-positions-ledger">
-      <div className="placeholder-banner">
-        Position research is manually maintained and may be delayed. Financial
-        metrics are labeled by source type and are not real-time market data.
-      </div>
-      <div className="table-wrap active-positions-table-wrap">
-        <table className="active-positions-table">
-          <caption>
-            Active positions · research fields are manually maintained ·
-            educational use only
-          </caption>
-          <thead>
-            <tr>
-              <th>Ticker / Company</th>
-              <th>Market quote</th>
-              <th>Position thesis</th>
-              <th>Position type</th>
-              <th>Research evidence</th>
-              <th>What I am watching</th>
-              <th>Thesis invalidation</th>
-              <th>Status / What changed</th>
-              <th>Research</th>
-            </tr>
-          </thead>
-          <tbody>
-            {activePositions.map((position) => (
-              <tr key={position.ticker} data-symbol={position.ticker}>
-                <td data-label="Ticker / Company">
-                  <b className="portfolio-ticker">{position.ticker}</b>
-                  <small className="company-under">{position.company}</small>
-                  <small className="company-under">
-                    {position.sector} · {position.industry}
-                  </small>
-                </td>
-                <td data-label="Market quote">
-                  <QuoteDisplay symbol={position.ticker} compact />
-                </td>
-                <td data-label="Position thesis" className="portfolio-copy">
-                  {position.thesis}
-                </td>
-                <td data-label="Position type">{position.positionType}</td>
-                <td data-label="Research evidence">
-                  <div className="active-position-evidence">
-                    <strong>Key fundamentals</strong>
-                    <ul>
-                      {position.keyFundamentals.map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ul>
-                    <strong>Competitive advantage</strong>
-                    <p>{position.competitiveAdvantage}</p>
-                    <strong>Growth drivers</strong>
-                    <ul>
-                      {position.growthDrivers.map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ul>
-                    {position.previewMetrics && (
-                      <dl className="position-metrics-inline">
-                        {position.previewMetrics.map((metric) => (
-                          <div key={metric.label}>
-                            <dt>{metric.label}</dt>
-                            <dd>{metric.value}</dd>
-                          </div>
-                        ))}
-                      </dl>
-                    )}
-                  </div>
-                </td>
-                <td data-label="What I am watching">
-                  <ul className="active-position-list">
-                    {position.watching.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </td>
-                <td data-label="Thesis invalidation" className="portfolio-copy">
-                  {position.thesisInvalidation}
-                </td>
-                <td data-label="Status / What changed">
-                  <span
-                    className="status"
-                    data-status={position.status
-                      .toLowerCase()
-                      .replaceAll(" ", "-")}
-                  >
-                    {position.status}
-                  </span>
-                  <p className="active-position-change">{position.whatChanged}</p>
-                </td>
-                <td data-label="Research">
-                  {position.researchHref ? (
-                    <Link className="text-link" href={position.researchHref}>
-                      View Position Research <span aria-hidden="true">→</span>
-                    </Link>
-                  ) : (
-                    <span className="research-status-note">
-                      Research record maintained in this table
-                    </span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
-
 function Overview() {
   return (
     <div className="portfolio-overview">
@@ -307,14 +193,6 @@ function Overview() {
         illustrative. Past results do not predict future performance.
       </div>
       <div className="portfolio-overview-grid">
-        <article>
-          <span className="eyebrow">Active positions</span>
-          <strong>{activePositions.length}</strong>
-          <p>
-            Each position is governed by a written thesis, risk assessment, and
-            exit rule.
-          </p>
-        </article>
         <article>
           <span className="eyebrow">Long-term holdings</span>
           <strong>{coreAllocation.length + compounders.length}</strong>
@@ -354,11 +232,6 @@ function Overview() {
           <b>Concentrated</b>
           <i style={{ width: "56%" }} />
         </div>
-        <div>
-          <span>Active positions</span>
-          <b>Tactical</b>
-          <i style={{ width: "34%" }} />
-        </div>
         <small>
           Framework visualization only · not portfolio weights or real-time
           brokerage data
@@ -394,7 +267,7 @@ export default function Portfolios() {
       <PageHeader
         kicker="Portfolio Lab"
         title="Conviction made accountable."
-        description="Positions and decision reviews are organized around the position thesis, operating evidence, competitive advantage, explicit risk, thesis invalidation, and what changed."
+        description="Long-term holdings, research priorities, and decision reviews are organized around explicit thesis, evidence, risk, and process discipline."
       />
       <section>
         <div
@@ -425,7 +298,6 @@ export default function Portfolios() {
           aria-labelledby={`tab-${activeTab.toLowerCase().replaceAll(" ", "-")}`}
         >
           {activeTab === "Overview" && <Overview />}
-          {activeTab === "Active Positions" && <ActivePositionsTable />}
           {activeTab === "Long-Term Compounders" && (
             <div className="holdings-stack">
               <HoldingsTable

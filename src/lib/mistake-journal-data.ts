@@ -8,7 +8,7 @@ export const mistakeJournalEntries: MistakeJournalEntry[] = [
     exitDate: "2026-06-09",
     classification: "Early Exit",
     secondaryClassifications: ["Emotional Decision"],
-    outcome: "Not Recorded",
+    outcome: "Loss",
     originalThesis:
       "Casey's was held as a retail compounder supported by convenience-store expansion, prepared-food growth, disciplined integration of acquired stores, and improving returns on invested capital. The investment case depended on business execution over multiple quarters rather than a single earnings reaction.",
     whatHappened:
@@ -46,7 +46,7 @@ export const mistakeJournalEntries: MistakeJournalEntry[] = [
       "A post-earnings price decline prompted a full exit before the operating evidence and original thesis conditions were reviewed together.",
     afterRule:
       "Treat the earnings-day move as a review trigger. Before a full exit, assess reported operating evidence, guidance, thesis indicators, and predefined invalidation criteria; use a partial trim when risk must be reduced before that review is complete.",
-    thesisStatus: "Uncertain",
+    thesisStatus: "Intact at Exit",
     entryQuality: "Moderate",
     exitQuality: "Poor",
     emotionalDiscipline: "Needs Improvement",

@@ -277,7 +277,6 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
   await page.goto("/portfolio");
   for (const label of [
     "Overview",
-    "Active Positions",
     "Watchlist",
     "Long-Term Compounders",
     "Mistake Journal",
@@ -285,21 +284,8 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
     await expect(
       page.getByRole("tab", { name: label, exact: true }),
     ).toBeVisible();
-  await activate(
-    page.getByRole("tab", { name: "Active Positions" }),
-    testInfo.project.name,
-  );
   await expect(
-    page.locator('.active-positions-table tr[data-symbol="ANET"]'),
-  ).toHaveCount(0);
-  await expect(
-    page.locator('.active-positions-table tr[data-symbol="PANW"]'),
-  ).toHaveCount(0);
-  await expect(
-    page.getByRole("columnheader", { name: "Position size" }),
-  ).toHaveCount(0);
-  await expect(
-    page.getByRole("columnheader", { name: "Purchase date" }),
+    page.getByRole("tab", { name: "Active Positions", exact: true }),
   ).toHaveCount(0);
   await activate(
     page.getByRole("tab", { name: "Long-Term Compounders" }),
@@ -335,27 +321,13 @@ test("Portfolio exposes the required sections", async ({ page }, testInfo) => {
   await expect(page.getByText("Digital Realty Trust Inc.")).toBeVisible();
 });
 
-test("KRYS appears in Active Positions and opens sourced research", async ({
+test("KRYS sourced research remains available outside the portfolio sections", async ({
   page,
-}, testInfo) => {
-  await page.goto("/portfolio");
-  await activate(
-    page.getByRole("tab", { name: "Active Positions", exact: true }),
-    testInfo.project.name,
-  );
-  const krysPosition = page.locator(
-    '.active-positions-table tr[data-symbol="KRYS"]',
-  );
-  await expect(krysPosition.locator(".portfolio-ticker")).toHaveText("KRYS");
+}) => {
+  await page.goto("/portfolio/positions/krys");
   await expect(
     page.getByText("Krystal Biotech, Inc.", { exact: true }),
   ).toBeVisible();
-  await expect(
-    page.locator('.active-positions-table tr[data-symbol="ANET"]'),
-  ).toHaveCount(0);
-  await expect(page.getByText("Initial Thesis", { exact: true })).toHaveCount(0);
-  await krysPosition.getByRole("link", { name: "View Position Research" }).click();
-  await expect(page).toHaveURL(/\/portfolio\/positions\/krys$/);
   await expect(page.getByRole("heading", { name: "KRYS", level: 1 })).toBeVisible();
   await expect(page.getByText("$119.2M", { exact: true }).first()).toBeVisible();
   await expect(
@@ -369,20 +341,8 @@ for (const position of [
 ]) {
   test(`${position.ticker} opens active-position research with margin evidence`, async ({
     page,
-  }, testInfo) => {
-    await page.goto("/portfolio");
-    await activate(
-      page.getByRole("tab", { name: "Active Positions", exact: true }),
-      testInfo.project.name,
-    );
-    const row = page.locator(
-      `.active-positions-table tr[data-symbol="${position.ticker}"]`,
-    );
-    await expect(row).toContainText("Active Position");
-    await row.getByRole("link", { name: "View Position Research" }).click();
-    await expect(page).toHaveURL(
-      new RegExp(`/portfolio/positions/${position.ticker.toLowerCase()}$`),
-    );
+  }) => {
+    await page.goto(`/portfolio/positions/${position.ticker.toLowerCase()}`);
     await expect(
       page.getByRole("heading", { name: position.ticker, level: 1 }),
     ).toBeVisible();
@@ -516,13 +476,11 @@ test("portfolio sections share one quote request and reusable displays", async (
   await page.route("**/api/market-quotes?**", async (route) => {
     const url = new URL(route.request().url());
     const symbols = (url.searchParams.get("symbols") ?? "").split(",").filter(Boolean);
-    if (["CASY", "AIPO", "AAPL", "COST", "VOO"].every((symbol) => symbols.includes(symbol))) portfolioRequests += 1;
+    if (["AIPO", "AAPL", "COST", "VOO"].every((symbol) => symbols.includes(symbol))) portfolioRequests += 1;
     await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ status: "success", lastUpdated: "2026-07-31T20:00:00.000Z", provider: "Financial Modeling Prep", unavailableSymbols: [], quotes: symbols.map((symbol, index) => ({ symbol, price: 100 + index, change: 1.25, changePercent: 1.1, currency: "USD", marketStatus: "closed", timestamp: "2026-07-31T20:00:00.000Z", dataType: "previous-close" })) }) });
   });
   const quoteRow = (symbol: string) => page.locator(`[data-symbol="${symbol}"]`);
   await page.goto("/portfolio");
-  await activate(page.getByRole("tab", { name: "Active Positions" }), testInfo.project.name);
-  await expect(quoteRow("CASY").getByText("Previous Close")).toBeVisible({ timeout: 10_000 });
   await activate(page.getByRole("tab", { name: "Watchlist" }), testInfo.project.name);
   await expect(quoteRow("GLW").getByText("Previous Close")).toBeVisible();
   await activate(page.getByRole("tab", { name: "Long-Term Compounders" }), testInfo.project.name);

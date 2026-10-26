@@ -41,6 +41,16 @@ test("journal filters combine outcome, quality, thesis status, and year", () => 
   });
 
   assert.equal(matches[0]?.ticker, "JBL");
+
+  const casyLoss = filterMistakeJournalEntries(mistakeJournalEntries, {
+    classification: "All",
+    outcome: "Loss",
+    thesisStatus: "Intact at Exit",
+    entryQuality: "Moderate",
+    exitQuality: "Poor",
+    year: "2026",
+  });
+  assert.equal(casyLoss[0]?.ticker, "CASY");
   assert.equal(wrongYear.length, 0);
 });
 

@@ -37,7 +37,7 @@ test("market service uses secure normalized FMP endpoints and adaptive caching",
   assert.match(service, /changePercentage/);
   assert.match(service, /Promise\.allSettled/);
   assert.match(service, /encodeURIComponent\(symbols\)/);
-  for (const ticker of ["BE", "WELL", "AIPO"]) assert.match(`${config}\n${watchlist}\n${page}`, new RegExp(`\\b${ticker}\\b`));
+  for (const ticker of ["BE", "AIPO"]) assert.match(`${config}\n${watchlist}\n${page}`, new RegExp(`\\b${ticker}\\b`));
   assert.match(service, /60_000/);
   assert.match(service, /15 \* 60_000/);
 });
@@ -61,7 +61,6 @@ test("market quote route validates, rate limits, and sanitizes its public contra
 test("portfolio sections share a deduplicated quote provider", async () => {
   const [page, provider, display, hook, config] = await Promise.all([read("src/app/portfolios/page.tsx"), read("src/components/market/market-quotes-provider.tsx"), read("src/components/market/quote-display.tsx"), read("src/hooks/use-market-quotes.ts"), read("src/lib/market-ticker-config.ts")]);
   assert.match(page, /<MarketQuotesProvider symbols=\{allPortfolioSymbols\}>/);
-  assert.match(page, /<QuoteDisplay symbol=\{position\.ticker\}/);
   assert.match(page, /<QuoteDisplay symbol=\{item\.ticker\}/);
   for (const symbol of ["AAPL", "COST", "VOO", "QQQM", "IAU", "AIPO", "SGOV"]) assert.match(`${page}\n${config}`, new RegExp(`"${symbol}"`));
   assert.match(provider, /new Set/);
@@ -71,11 +70,11 @@ test("portfolio sections share a deduplicated quote provider", async () => {
   assert.match(hook, /quotesBySymbol/);
 });
 
-test("portfolio ticker exposes every Luna1 portfolio bucket", async () => {
+test("portfolio ticker exposes only visible portfolio sections", async () => {
   const [page, config, pulseConfig] = await Promise.all([read("src/app/portfolios/page.tsx"), read("src/lib/market-ticker-config.ts"), read("src/lib/market-pulse/config.ts")]);
-  for (const bucket of ["Active Positions", "Watchlist", "Long-Term Compounders"]) assert.ok(config.includes(bucket));
-  for (const ticker of ["CASY", "WELL", "LLY", "AAPL", "COST", "AMZN", "AIPO"]) assert.match(config, new RegExp(`["]${ticker}["]`));
-  assert.doesNotMatch(config, /"Active Positions": \[[^\]]*"ANET"/);
+  for (const bucket of ["Watchlist", "Long-Term Compounders"]) assert.ok(config.includes(bucket));
+  for (const ticker of ["LLY", "AAPL", "COST", "AMZN", "AIPO"]) assert.match(config, new RegExp(`["]${ticker}["]`));
+  assert.doesNotMatch(config, /"Active Positions"/);
   assert.match(page, /portfolioTickerSymbols/);
   assert.doesNotMatch(page, /PortfolioMarketBoard|Portfolio Market Monitor/);
   assert.match(pulseConfig, /portfolioTickerGroups/);

@@ -14,11 +14,10 @@ export const researchRouteBySymbol: Record<string, string> = {
   STRL: "/research/strl",
 };
 
-export type PortfolioTickerGroup = "Active Positions" | "Watchlist" | "Long-Term Compounders";
+export type PortfolioTickerGroup = "Watchlist" | "Long-Term Compounders";
 export type PortfolioTickerGroups = Record<PortfolioTickerGroup, readonly string[]>;
 
 export const portfolioTickerGroups: PortfolioTickerGroups = {
-  "Active Positions": ["CASY", "WELL", "KRYS"],
   Watchlist: ["GLW", "STRL", "ALAB", "RY", "DLR", "BE", "VRT"],
   "Long-Term Compounders": ["VOO", "QQQM", "IAU", "AIPO", "SGOV", "LLY", "AAPL", "COST", "AMZN"],
 };
