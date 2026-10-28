@@ -33,7 +33,8 @@ export function Footer() {
         <div>
           <span className="eyebrow">Profile</span>
           <p>
-            <Link href="/recruiter">Professional Profile</Link>
+            <Link href="/recruiter">Professional Resume</Link>
+            <Link href="/applied-projects">Applied Projects</Link>
             <Link href="/portfolio">Portfolio Lab</Link>
             <Link href="/development-log">Development Log</Link>
           </p>

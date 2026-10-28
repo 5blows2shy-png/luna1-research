@@ -1,0 +1,17 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {initialLeeProject,initialLeeDebt,calculateLee,leeScenarios,leeSensitivities,leeExport} from '../src/lib/lee-data-center.ts';
+const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-6*Math.max(1,Math.abs(b)),`${a} != ${b}`);
+test('Lee debt draws, balances, cash waterfall and source/use totals reconcile',()=>{
+ const a=initialLeeProject(),d=initialLeeDebt(),m=calculateLee(a,d);
+ close(m.project.totalCapex,240e6);close(m.commitment,108e6);
+ close(m.rows.reduce((s,r)=>s+r.Debt_Draw,0),m.commitment);
+ close(m.rows.reduce((s,r)=>s+r.Principal+r.Exit_Debt_Repayment,0),m.commitment);
+ for(const r of m.rows){close(r.Opening_Debt+r.Debt_Draw-r.Principal-r.Exit_Debt_Repayment,r.Ending_Debt);close(r.Interest,(r.Opening_Debt+.5*r.Debt_Draw)*d.interestRate);close(r.Equity_Cash_Flow,r.Total_Cash_Flow+r.Debt_Draw-r.Debt_Service-r.Exit_Debt_Repayment-r.Financing_Fee);if(r.DSCR!==null)close(r.DSCR,r.CFADS/r.Debt_Service);}
+ close(m.initialFundingEquity+m.commitment,m.totalUses);close(m.equityMoic,m.distributed/m.contributed);assert.deepEqual(m.breachYears,[2,4,5]);assert.ok(m.shortfall>0);
+});
+test('zero-debt equity cash flows and returns equal project returns',()=>{const a=initialLeeProject(),d={...initialLeeDebt(),leverage:0,equityDiscountRate:a.discountRate};const m=calculateLee(a,d);close(m.equityIrr,m.project.irr);close(m.equityMoic,m.project.moic);close(m.equityNpv,m.project.npv);assert.equal(m.minimumDscr,null);assert.equal(m.fees,0);});
+test('early exit pays remaining debt once without counting sale proceeds as CFADS',()=>{const a={...initialLeeProject(),exitYear:6};const m=calculateLee(a,initialLeeDebt());assert.ok(m.exitDebt>0);close(m.rows[6].Ending_Debt,0);assert.equal(m.rows.filter(r=>r.Exit_Debt_Repayment>0).length,1);for(const r of m.rows.slice(7))close(r.Equity_Cash_Flow,0);close(m.rows[6].CFADS,m.rows[6].Unlevered_FCF+m.rows[6].Development_CapEx);assert.ok(m.rows[6].Total_Cash_Flow>m.rows[6].CFADS);});
+test('annuity uses level service, zero interest is finite, maturity clears debt',()=>{for(const rate of [0,.07]){const m=calculateLee(initialLeeProject(),{...initialLeeDebt(),repayment:'annuity',interestRate:rate});const active=m.rows.filter(r=>r.Year>=4);active.forEach(r=>close(r.Debt_Service,active[0].Debt_Service));close(m.rows[10].Ending_Debt,0);}});
+test('covenant, timing and financial bounds fail explicitly',()=>{const a=initialLeeProject();for(const change of [{interestRate:NaN},{term:0},{term:1.5},{leverage:1},{amortizationStart:3}])assert.throws(()=>calculateLee(a,{...initialLeeDebt(),...change}));a.phases[0].allocation[0]=.3;assert.throws(()=>calculateLee(a,initialLeeDebt()));});
+test('downside, sensitivity centers and Power BI exports share the same engine',()=>{const a=initialLeeProject(),d=initialLeeDebt(),original=structuredClone(a);const m=calculateLee(a,d),scenarios=leeScenarios(a,d),cells=leeSensitivities(a,d),out=leeExport(a,d);assert.ok(scenarios[2].model.minimumDscr<m.minimumDscr);assert.equal(cells.length,27);close(cells.find(c=>c.Analysis.startsWith('Equity IRR')&&c.Row===1&&c.Column===1).Value,m.equityIrr);close(cells.find(c=>c.Analysis.startsWith('Minimum')&&c.Row===0&&c.Column===1).Value,m.minimumDscr);assert.equal(out.annual.length,33);assert.equal(out.returns.length,3);close(out.returns[0].Equity_MOIC,m.equityMoic);assert.deepEqual(a,original);});

@@ -44,7 +44,7 @@ test("profile links to completed projects without duplicate FP&A placeholders", 
   await page.goto("/recruiter");
   const section = page.locator("#applied-finance-projects");
   await expect(section.getByRole("heading", { name: "Applied Finance Projects", exact: true })).toBeVisible();
-  await expect(section.getByText("Completed", { exact: true })).toHaveCount(2);
+  await expect(section.getByText("Completed", { exact: true })).toHaveCount(1);
   await expect(page.getByText("Planning & Performance", { exact: true })).toHaveCount(0);
   await section.getByRole("link", { name: "View project: Nonprofit FP&A Dashboard" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nonprofit FP&A Dashboard");
@@ -144,7 +144,7 @@ test("eight-screen recruiting mode shares the selected scenario and preserves ed
 
 test("flagship and Research Challenge are additive, honest and responsive", async ({ page, request }) => {
   await page.goto('/recruiter');
-  await expect(page.locator('a[href="/recruiter/projects/ten-year-data-center-development"]').first()).toBeVisible();
+  await expect(page.locator('a[href="/recruiter/projects/lee-data-center-houston"]').first()).toBeVisible();
   await page.goto('/recruiter/research-challenge');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('CFA Institute Research Challenge');
   await expect(page.locator('#company-research')).toContainText('WD-40 Company · NASDAQ: WDFC');
@@ -209,4 +209,50 @@ test('flagship inputs calculate, export and reject an invalid construction sched
   await page.getByLabel('Phase 1 Year 0 allocation (%)', { exact: true }).fill('90');
   await expect(button).toBeDisabled();
   expect(errors).toEqual([]);
+});
+
+test('Lee listed-site model connects financing, sensitivities, Power BI and WD-40',async({page,request})=>{
+ const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('/recruiter/projects/lee-data-center-houston');
+ await expect(page.getByRole('heading',{level:1})).toHaveText('Lee Data Center');
+ await expect(page.locator('article > header')).toContainText('16000 Midlothian Turnpike');
+ await expect(page.getByText('Restructure before underwriting',{exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'Debt & equity',exact:true}).click();
+ await expect(page.getByRole('region',{name:'Debt roll-forward and covenant schedule',exact:true})).toContainText('0.50x');
+ await page.getByText('Edit investment & financing assumptions',{exact:true}).click();
+ await page.getByLabel('Construction debt / CapEx (%)',{exact:true}).fill('0');
+ await expect(page.getByRole('region',{name:'Debt roll-forward and covenant schedule',exact:true})).toContainText('Not tested');
+ await page.getByRole('button',{name:'Reset illustrative base',exact:true}).click();
+ await page.getByRole('button',{name:'Sensitivity lab',exact:true}).click();
+ await expect(page.getByRole('heading',{name:'Minimum DSCR · rate / power',exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'Power BI',exact:true}).click();
+ const zip=await request.get('/downloads/lee-data-center-power-bi.zip');expect(zip.ok()).toBeTruthy();expect((await zip.body()).subarray(0,2).toString()).toBe('PK');
+ await expect(page.getByRole('link',{name:'Download 10 MW expansion Excel model →',exact:true})).toHaveAttribute('href','/downloads/lee-data-center-10mw-expansion.xlsx');
+ const excel=await request.get('/downloads/lee-data-center-10mw-expansion.xlsx');expect(excel.ok()).toBeTruthy();expect((await excel.body()).subarray(0,2).toString()).toBe('PK');
+ await expect(page.getByRole('heading',{name:'10 MW site underwriting',exact:true})).toBeVisible();
+ await expect(page.getByRole('link',{name:'Download two-page investment committee memo →',exact:true})).toHaveAttribute('href','/downloads/lee-data-center-10mw-investment-committee.docx');
+ const memo=await request.get('/downloads/lee-data-center-10mw-investment-committee.docx');expect(memo.ok()).toBeTruthy();expect((await memo.body()).subarray(0,2).toString()).toBe('PK');
+ await expect(page.getByRole('link',{name:'Explore WD-40 research →'})).toHaveAttribute('href','/recruiter/research-challenge');
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ await page.screenshot({path:`/tmp/lee-${test.info().project.name}.png`,fullPage:true});
+ await page.getByRole('button',{name:'Debt & equity',exact:true}).click();
+ const pending=page.waitForEvent('download');await page.getByRole('button',{name:'Download model JSON',exact:true}).click();
+ const {readFile}=await import('node:fs/promises');const data=JSON.parse(await readFile((await(await pending).path())!,'utf8'));expect(data.annual).toHaveLength(33);expect(data.returns[0].Debt_Commitment).toBe(65471400);
+ await page.getByLabel('Annual debt interest (%)',{exact:true}).fill('');await expect(page.getByRole('alert').filter({hasText:'Outputs withheld'})).toBeVisible();expect(errors).toEqual([]);
+});
+
+test('Applied Projects is adjacent to the resume and connects the listed site case',async({page})=>{
+ await page.goto('/applied-projects');await expect(page.getByRole('heading',{name:'Applied Projects',exact:true})).toBeVisible();
+ // Shared navigation source drives desktop and mobile menus.
+ await page.getByRole('link',{name:'Explore Lee Data Center →',exact:true}).click();
+ await expect(page).toHaveURL(/lee-data-center$/);
+ if(await page.getByRole('button',{name:'Open navigation menu',exact:true}).isVisible()){
+  await page.getByRole('button',{name:'Open navigation menu',exact:true}).click();
+  await expect(page.locator('#mobile-navigation a[href="/applied-projects"]')).toHaveClass('active');
+  await page.keyboard.press('Escape');
+ }else await expect(page.locator('.desktop-nav a[href="/applied-projects"]')).toHaveClass('active');
+ await expect(page.getByRole('heading',{name:'The parcel sets the investment case.',exact:true})).toBeVisible();
+ await expect(page.getByRole('link',{name:'View broker listing →'})).toHaveAttribute('href','https://commonwealthcommercial.com/property/16000-midlothian-turnpike/');
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+
 });

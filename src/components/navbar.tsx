@@ -120,8 +120,9 @@ export function Navbar() {
     };
   }, [open]);
 
+  const projectPage = path.startsWith("/recruiter/projects/") || path.startsWith("/recruiter/case-studies/") || path === "/recruiter/research-challenge";
   const active = (href: string) =>
-    path === href ||
+    projectPage ? href === "/applied-projects" : path === href ||
     (href === "/portfolio-dashboard" && path === "/portfolios") ||
     (href !== "/" && path.startsWith(`${href}/`) &&
       !navigationItems.some((item) => item.href.startsWith(`${href}/`) &&

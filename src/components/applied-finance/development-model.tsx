@@ -19,7 +19,7 @@ function saveFile(name: string, text: string, type: string) {
   const a = document.createElement("a"); a.href = url; a.download = name; a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-type ScalarKey = { [K in keyof DevelopmentInput]: DevelopmentInput[K] extends Input ? K : never }[keyof DevelopmentInput];
+type ScalarKey = { [K in keyof DevelopmentInput]-?: DevelopmentInput[K] extends Input ? K : never }[keyof DevelopmentInput];
 const scalarFields: { key: ScalarKey; label: string; scale?: number; min?: number; max?: number; step?: number }[] = [
   { key: "startYear", label: "Start year · USER INPUT", min: 1900, max: 2200, step: 1 },
   { key: "capexPerMW", label: "CapEx per MW ($) · ILLUSTRATIVE ASSUMPTION" },

@@ -265,7 +265,7 @@ export default function RecruiterView() {
         <div><b>Applied</b><ul>{capability.applied.map((item) => <li key={item}>{item}</li>)}</ul></div>
         <div><b>Developing</b>{capability.developing.length ? <ul>{capability.developing.map((item) => <li key={item}>{item}</li>)}</ul> : <p>Evidence available in published work.</p>}</div>
         <div><Link className="text-link" href={capability.href}>{capability.proof} <span aria-hidden="true">→</span></Link>
-          {financeProjects.filter(project => project.capabilityTitles.includes(capability.title)).map(project => <p key={project.slug}><Link className="text-link" href={projectHref(project.slug)}>{project.title} · {project.status} →</Link></p>)}
+          {financeProjects.filter(project => project.capabilityTitles.includes(capability.title)).map(project => <p key={project.slug}><Link className="text-link" href={project.slug === "data-center-investment-model" ? "/recruiter/projects/lee-data-center" : projectHref(project.slug)}>{project.slug === "data-center-investment-model" ? "Lee Data Center — Site Investment Case" : project.title} · {project.status} →</Link></p>)}
         </div>
       </article>)}</div>
       <div className={styles.dataProjects} aria-labelledby="data-projects-title">

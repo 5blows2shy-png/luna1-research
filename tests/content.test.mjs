@@ -423,13 +423,15 @@ test("quiet-luxury tokens and permanent navigation are centralized", () => {
     "Equity Research",
     "Global Finance",
     "Portfolio Lab",
-    "Professional Profile",
+    "Professional Resume",
+    "Applied Projects",
     "Development Log",
   ])
     assert.ok(
       data.includes(`label: "${label}"`),
       `missing navigation item: ${label}`,
     );
+  assert.match(data, /label: "Professional Resume"[^\n]*\n\s*\{ label: "Applied Projects"/);
   for (const retired of [
     "Valuation Lab",
     "Contact",

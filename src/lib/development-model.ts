@@ -13,6 +13,7 @@ export type DevelopmentInput = {
   startYear: Input; capexPerMW: Input; discountRate: Input; exitYear: Input; exitMultiple: Input; sellingCost: Input;
   revenueRate: Input; revenueUnit: "kw-month" | "kw-year" | "mw-month" | "mw-year"; revenueBasis: "leased" | "utilized";
   revenueGrowth: Input; otherRevenuePerMW: Input; pue: Input; powerPrice: Input; cashTaxRate: Input; workingCapitalRate: Input; maintenancePerMW: Input;
+  siteCosts?: number[]; // Separate site acquisition/enabling cash spend; never scaled by construction scenarios.
   phases: PhaseInput[]; categories: { name: string; share: Input }[]; costs: CostInput[];
 };
 export const capexCategoryNames = ["Land / Site", "Building / Shell", "Electrical Infrastructure", "Utility Interconnection", "UPS", "Generators", "Cooling Infrastructure", "Networking", "Racks / White Space", "Security", "Engineering", "Construction", "Development Costs", "Contingency", "Other / Unallocated"];
@@ -58,6 +59,7 @@ export function validateDevelopment(a: DevelopmentInput): string[] {
   }
   if (!a.categories.length || a.categories.some(c => !c.name.trim() || !finite(c.share) || c.share < 0 || c.share > 1) || Math.abs(a.categories.reduce((s, c) => s + (c.share ?? 0), 0) - 1) > 1e-8) issues.push("Named CapEx category shares must total 100%.");
   if (a.costs.some(c => !c.name.trim() || !finite(c.amount) || c.amount < 0 || c.amount > (c.basis === "revenue-share" ? 1 : 1e9) || !["fixed", "per-utilized-mw", "revenue-share"].includes(c.basis))) issues.push("Complete each named operating cost; percentage costs must be 0–100%. Enter zero explicitly to exclude a cost.");
+  if (a.siteCosts && (a.siteCosts.length !== 11 || a.siteCosts.some((v,y) => !Number.isFinite(v) || v < 0 || (y > a.exitYear! && v > 0)))) issues.push("Site costs require eleven nonnegative annual amounts within the exit horizon.");
   return issues;
 }
 export function applyDevelopmentScenario(a: DevelopmentInput, s: DevelopmentScenario): DevelopmentInput {
@@ -113,15 +115,17 @@ export function calculateDevelopment(a: DevelopmentInput) {
       const otherCosts = a.costs.map(c => ({ Year: y, Phase_ID: phaseIndex + 1, Phase: p.name, Category: c.name, Amount: !open ? 0 : c.basis === "fixed" ? c.amount! * p.mw! / totalMW : c.basis === "per-utilized-mw" ? c.amount! * used : c.amount! * revenue }));
       operatingExpenses.push({ Year: y, Phase_ID: phaseIndex + 1, Phase: p.name, Category: "Power", Amount: power }, ...otherCosts);
       const otherOpex = otherCosts.reduce((s, c) => s + c.Amount, 0), opex = power + otherOpex, ebitda = revenue - opex;
-      const development = within ? phaseCapex * p.allocation[y]! : 0;
+      const siteSpend = within && phaseIndex === 0 ? (a.siteCosts?.[y] ?? 0) : 0;
+      const development = (within ? phaseCapex * p.allocation[y]! : 0) + siteSpend;
       cumulativeCapex += development;
-      capex.push(...a.categories.map(c => ({ Year: y, Calendar_Year: a.startYear! + y, Phase_ID: phaseIndex + 1, Phase: p.name, Category: c.name, Development_CapEx: development * c.share! })));
+      capex.push(...a.categories.map(c => ({ Year: y, Calendar_Year: a.startYear! + y, Phase_ID: phaseIndex + 1, Phase: p.name, Category: c.name, Development_CapEx: (development - siteSpend) * c.share! })));
+      if (siteSpend) capex.push({Year:y, Calendar_Year:a.startYear!+y, Phase_ID:phaseIndex+1, Phase:p.name, Category:"Site acquisition and enabling costs", Development_CapEx:siteSpend});
       const cashTaxes = Math.max(0, ebitda) * a.cashTaxRate!, wc = revenue * a.workingCapitalRate!;
       const deltaWC = within ? wc - previousWC : 0;
       const maintenance = available * a.maintenancePerMW!, ufcf = ebitda - cashTaxes - development - maintenance - deltaWC;
       const grossExit = y === exitYear ? Math.max(0, ebitda) * a.exitMultiple! : 0, exitCosts = grossExit * a.sellingCost!;
       const wcRelease = y === exitYear ? wc : 0, exit = grossExit - exitCosts;
-      const row: PhaseYear = { Year: y, Calendar_Year: a.startYear! + y, Phase: p.name, Phase_ID: phaseIndex + 1, MW_Total: p.mw!, MW_Under_Construction: within && y >= firstSpend && y < p.availableYear! ? p.mw! : 0, MW_Completed: within && y >= p.availableYear! ? p.mw! : 0, MW_Available: available, MW_Leased: leased, MW_Utilized: used, Lease_Rate: lease, Utilization_Pct: available ? used / available : 0, MW_Remaining: available - (open ? leased : 0), Revenue: revenue, Revenue_Growth: previousRevenue > 0 && within ? revenue / previousRevenue - 1 : null, Revenue_Per_Available_MW: available ? revenue / available : null, Revenue_Per_Utilized_MW: used ? revenue / used : null, IT_Energy_kWh: itEnergy, Facility_Energy_kWh: facilityEnergy, PUE: a.pue!, Power_Cost: power, Other_Opex: otherOpex, Total_Opex: opex, EBITDA: ebitda, EBITDA_Margin: revenue ? ebitda / revenue : null, Cash_Taxes: cashTaxes, Development_CapEx: development, Cumulative_CapEx: cumulativeCapex, Remaining_Development_Spend: Math.max(0, phaseCapex - cumulativeCapex), CapEx_Per_MW: a.capexPerMW!, Maintenance_CapEx: maintenance, Working_Capital: wc, Change_In_Working_Capital: deltaWC, Unlevered_FCF: ufcf, Gross_Exit_Value: grossExit, Exit_Costs: exitCosts, Net_Exit_Proceeds: exit, Working_Capital_Release: wcRelease, Total_Cash_Flow: ufcf + exit + wcRelease };
+      const row: PhaseYear = { Year: y, Calendar_Year: a.startYear! + y, Phase: p.name, Phase_ID: phaseIndex + 1, MW_Total: p.mw!, MW_Under_Construction: within && y >= firstSpend && y < p.availableYear! ? p.mw! : 0, MW_Completed: within && y >= p.availableYear! ? p.mw! : 0, MW_Available: available, MW_Leased: leased, MW_Utilized: used, Lease_Rate: lease, Utilization_Pct: available ? used / available : 0, MW_Remaining: available - (open ? leased : 0), Revenue: revenue, Revenue_Growth: previousRevenue > 0 && within ? revenue / previousRevenue - 1 : null, Revenue_Per_Available_MW: available ? revenue / available : null, Revenue_Per_Utilized_MW: used ? revenue / used : null, IT_Energy_kWh: itEnergy, Facility_Energy_kWh: facilityEnergy, PUE: a.pue!, Power_Cost: power, Other_Opex: otherOpex, Total_Opex: opex, EBITDA: ebitda, EBITDA_Margin: revenue ? ebitda / revenue : null, Cash_Taxes: cashTaxes, Development_CapEx: development, Cumulative_CapEx: cumulativeCapex, Remaining_Development_Spend: Math.max(0, phaseCapex + (phaseIndex === 0 ? (a.siteCosts ?? []).reduce((s,v)=>s+v,0) : 0) - cumulativeCapex), CapEx_Per_MW: a.capexPerMW!, Maintenance_CapEx: maintenance, Working_Capital: wc, Change_In_Working_Capital: deltaWC, Unlevered_FCF: ufcf, Gross_Exit_Value: grossExit, Exit_Costs: exitCosts, Net_Exit_Proceeds: exit, Working_Capital_Release: wcRelease, Total_Cash_Flow: ufcf + exit + wcRelease };
       previousWC = wc; previousRevenue = revenue;
       return row;
     });
@@ -155,11 +159,11 @@ export function calculateDevelopment(a: DevelopmentInput) {
   });
   const flows = rows.slice(0, exitYear + 1).map(r => r.Total_Cash_Flow);
   const invested = -flows.reduce((s, f) => s + Math.min(0, f), 0), realized = flows.reduce((s, f) => s + Math.max(0, f), 0);
-  const projectNPV = npv(a.discountRate!, flows), pvDevelopment = rows.reduce((s, r) => s + r.Development_CapEx / (1 + a.discountRate!) ** r.Year, 0);
+  const projectNPV = npv(a.discountRate!, flows), pvDevelopment = rows.reduce((s, r) => s + (r.Development_CapEx - (a.siteCosts?.[r.Year] ?? 0)) / (1 + a.discountRate!) ** r.Year, 0);
   const exitSlope = Math.max(0, consolidatedExitEBITDA) * (1 - a.sellingCost!) / (1 + a.discountRate!) ** exitYear;
   const exitBreakEven = exitSlope > 0 ? a.exitMultiple! - projectNPV / exitSlope : null;
   const capexBreakEven = pvDevelopment > 0 ? a.capexPerMW! * (1 + projectNPV / pvDevelopment) : null;
-  return { rows, phaseRows, operatingExpenses, capex, totalMW, totalCapex: totalMW * a.capexPerMW!, exitYear, npv: projectNPV, irr: irr(flows), moic: invested > 0 ? realized / invested : null, invested, realized, payback: operatingPayback(rows.slice(0, exitYear + 1).map(r => r.Unlevered_FCF)), exitValue: rows[exitYear].Net_Exit_Proceeds, breakEvenExitMultiple: exitBreakEven !== null && exitBreakEven >= 0 ? exitBreakEven : null, breakEvenCapexPerMW: capexBreakEven !== null && capexBreakEven >= 0 ? capexBreakEven : null };
+  return { rows, phaseRows, operatingExpenses, capex, totalMW, totalCapex: totalMW * a.capexPerMW! + (a.siteCosts ?? []).reduce((s,v)=>s+v,0), exitYear, npv: projectNPV, irr: irr(flows), moic: invested > 0 ? realized / invested : null, invested, realized, payback: operatingPayback(rows.slice(0, exitYear + 1).map(r => r.Unlevered_FCF)), exitValue: rows[exitYear].Net_Exit_Proceeds, breakEvenExitMultiple: exitBreakEven !== null && exitBreakEven >= 0 ? exitBreakEven : null, breakEvenCapexPerMW: capexBreakEven !== null && capexBreakEven >= 0 ? capexBreakEven : null };
 }
 export type DevelopmentResult = ReturnType<typeof calculateDevelopment>;
 export function evaluateDevelopment(a: DevelopmentInput, scenario: DevelopmentScenario) {

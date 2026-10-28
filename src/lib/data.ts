@@ -6,7 +6,8 @@ export const navigationItems: NavigationItem[] = [
   { label: "Global Finance", href: "/global-finance" },
   { label: "Portfolio Lab", href: "/portfolio" },
   { label: "Development Log", href: "/development-log" },
-  { label: "Professional Profile", href: "/recruiter" },
+  { label: "Professional Resume", href: "/recruiter" },
+  { label: "Applied Projects", href: "/applied-projects" },
 ];
 
 export type ResearchReport = {

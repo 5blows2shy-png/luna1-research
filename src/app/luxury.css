@@ -265,7 +265,7 @@ body{color:var(--text-primary)}
 .nav{background:color-mix(in srgb,var(--bg-secondary) 94%,transparent);border-color:var(--border-primary)}
 .desktop-nav a{color:var(--text-secondary)}
 .desktop-nav a:hover{color:var(--text-primary);background:var(--bg-card)}
-.desktop-nav a.active{color:#fff;background:var(--status-monitoring-bg)}
+.desktop-nav a.active{color:var(--text-primary);background:var(--status-monitoring-bg)}
 .desktop-nav a.active:after{background:var(--accent-blue)}
 .mobile-nav{background:var(--bg-secondary);border-color:var(--border-primary)}
 .mobile-nav nav a:hover{background:var(--bg-card)}
