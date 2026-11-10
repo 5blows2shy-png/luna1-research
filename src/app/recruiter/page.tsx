@@ -275,6 +275,11 @@ export default function RecruiterView() {
           <h4>{project.title}</h4><small>{project.tool}</small><p>{project.description}</p>
         </article>)}</div>
       </div>
+      <div className={styles.researchHighlight}>
+        <strong>BNY Investment Thesis</strong>
+        <p>Research case examining financial-market infrastructure, recurring fee economics, valuation, capital returns, digital-asset optionality, and asymmetric risk / reward.</p>
+        <Link className="text-link" href="/research/bny">View thought process →</Link>
+      </div>
     </SectionDisclosure>
 
     <SectionDisclosure id="investment-experience" number="06" title="Investment organizations & applied experience">
