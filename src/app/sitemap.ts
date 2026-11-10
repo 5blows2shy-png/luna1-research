@@ -25,6 +25,7 @@ const routes = [
   "/recruiter/research-challenge",
   developmentHref,
   "/research",
+  "/research/bny",
   "/research/capital-flows",
   "/global-finance",
   "/global-finance/treasury",

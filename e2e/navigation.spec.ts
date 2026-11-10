@@ -15,6 +15,7 @@ test("primary pages load without horizontal overflow", async ({ page }) => {
     "/",
     "/analyst-journal",
     "/research",
+    "/research/bny",
     "/development-log",
     "/research/companies/ry",
     "/research/companies/glw",
@@ -217,6 +218,26 @@ test("research hub exposes structured routes and transparent placeholders", asyn
   await expect(page.getByRole("link", { name: "Reading Library" })).toHaveCount(
     0,
   );
+});
+
+test("BNY featured research frames optionality as secondary to the base business", async ({
+  page,
+}) => {
+  await page.goto("/research/bny");
+  await expect(
+    page.getByRole("heading", { name: "BNY", level: 1 }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(
+      "The existing business must justify the investment first.",
+    ),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("group", { name: "Editable research scenario" }),
+  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "Bull case" })).toBeVisible();
+  await expect(page.getByText("KPIs to monitor")).toBeVisible();
+  await expect(page.getByText("What would break the thesis?")).toBeVisible();
 });
 
 test("research note and development log filters work", async ({ page }) => {

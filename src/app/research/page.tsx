@@ -64,6 +64,12 @@ export default function ResearchPage() {
               <EditorialLink href="/research/notes">Research Notes</EditorialLink>
             </div>
           </LuxuryCard>
+          <LuxuryCard variant="research">
+            <span className="eyebrow">Featured case study · BNY</span>
+            <h2>Financial infrastructure, valuation &amp; optionality</h2>
+            <p>A research case that makes the path from business model and moat to valuation, risk, asymmetry, and entry discipline visible.</p>
+            <EditorialLink href="/research/bny">View thought process</EditorialLink>
+          </LuxuryCard>
         </div>
       </section>
       <section className="research-disclaimer-section">
