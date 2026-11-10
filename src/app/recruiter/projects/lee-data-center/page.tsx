@@ -13,6 +13,5 @@ export default function LeePage(){return <article className={`${styles.page} ${s
 <LeeSiteCase/>
 <LeeModel/>
 <LeeExpansionCase/>
-<section><h2>The companion equity research case</h2><p>WD-40 Company · NASDAQ: WDFC. Selected SDSU CFA Institute Research Challenge team member, leading company overview and business mapping, management strategy, governance, ESG and business-risk research.</p><Link href='/recruiter/research-challenge'>Explore WD-40 research →</Link><p>Research in progress. Selection and role are owner-provided; a target price or completed valuation is not implied.</p></section>
 <p className={styles.note}>Educational and informational purposes only. No personalized financial advice. No actual lender commitment, operating asset, secured power capacity or investment opportunity is represented.</p>
 </article>;}

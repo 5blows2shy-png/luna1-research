@@ -9,11 +9,16 @@ export function ProjectPreviews() {
   return <section className={styles.projectSection} id="applied-finance-projects" aria-labelledby="applied-finance-title">
     <span className="eyebrow">03 · Applied finance projects</span>
     <h2 id="applied-finance-title">Applied Finance Projects</h2>
-    <p>Proof of capability: Lee Data Center demonstrates financing and cash-flow analysis; WD-40 demonstrates company and strategic research. Supporting financial-operations work remains below.</p>
+    <p>Independent work samples in infrastructure finance, equity research and financial operations. Explore each project and its supporting evidence.</p>
     <article className={`${styles.preview} ${styles.featuredProject}`}>
       <span className={styles.meta}>Featured</span>
       <div><span className={styles.meta}>Infrastructure Finance · Financial Modeling · Power BI</span><h3>{leeTitle}</h3><p>A 10 MW site investment case anchored to an actively advertised industrial parcel in Virginia. Acquisition basis, site feasibility, debt coverage and investment returns connect to a formula-driven workbook and committee memo.</p><small>Interactive model ready · Power BI project available; Desktop validation pending</small></div>
-      <aside><Link href={leeHref}>Explore Lee Data Center →</Link><Link href="/recruiter/research-challenge">Companion: WD-40 research →</Link></aside>
+      <aside><Link href={leeHref}>Explore Lee Data Center →</Link></aside>
+    </article>
+    <article className={styles.preview}>
+      <span className={styles.meta}>Equity research</span>
+      <div><span className={styles.meta}>CFA Institute Research Challenge · SDSU</span><h3>WD-40 Company — Company &amp; Strategic Research</h3><p>Company overview, business mapping, management strategy, governance, ESG and business-risk research for the SDSU equity research team.</p><small>Research in progress · Role and scope are owner-provided; completed valuation is not implied.</small></div>
+      <aside><Link href="/recruiter/research-challenge">Explore WD-40 research →</Link></aside>
     </article>
     <div className={styles.projects}>{financeProjects.filter(project => project.slug !== "data-center-investment-model").map(project => <article className={styles.preview} key={project.slug}>
       <span className={styles.meta}>{project.number}</span>

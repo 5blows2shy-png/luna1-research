@@ -211,7 +211,7 @@ test('flagship inputs calculate, export and reject an invalid construction sched
   expect(errors).toEqual([]);
 });
 
-test('Lee listed-site model connects financing, sensitivities, Power BI and WD-40',async({page,request})=>{
+test('Lee listed-site model connects financing, sensitivities and Power BI',async({page,request})=>{
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto('/recruiter/projects/lee-data-center-houston');
  await expect(page.getByRole('heading',{level:1})).toHaveText('Lee Data Center');
@@ -232,7 +232,7 @@ test('Lee listed-site model connects financing, sensitivities, Power BI and WD-4
  await expect(page.getByRole('heading',{name:'10 MW site underwriting',exact:true})).toBeVisible();
  await expect(page.getByRole('link',{name:'Download two-page investment committee memo →',exact:true})).toHaveAttribute('href','/downloads/lee-data-center-10mw-investment-committee.docx');
  const memo=await request.get('/downloads/lee-data-center-10mw-investment-committee.docx');expect(memo.ok()).toBeTruthy();expect((await memo.body()).subarray(0,2).toString()).toBe('PK');
- await expect(page.getByRole('link',{name:'Explore WD-40 research →'})).toHaveAttribute('href','/recruiter/research-challenge');
+ await expect(page.locator('main')).not.toContainText('WD-40');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  await page.screenshot({path:`/tmp/lee-${test.info().project.name}.png`,fullPage:true});
  await page.getByRole('button',{name:'Debt & equity',exact:true}).click();
@@ -243,6 +243,12 @@ test('Lee listed-site model connects financing, sensitivities, Power BI and WD-4
 
 test('Applied Projects is adjacent to the resume and connects the listed site case',async({page})=>{
  await page.goto('/applied-projects');await expect(page.getByRole('heading',{name:'Applied Projects',exact:true})).toBeVisible();
+ const leeCard=page.locator('article').filter({has:page.getByRole('heading',{level:3,name:'Lee Data Center — Site Investment Case',exact:true})}).last();
+ await expect(leeCard).not.toContainText('WD-40');
+ await page.getByRole('link',{name:'Explore WD-40 research →',exact:true}).click();
+ await expect(page).toHaveURL(/research-challenge$/);
+ await expect(page.locator('main')).not.toContainText('Lee Data Center');
+ await page.getByRole('link',{name:'← Applied Projects',exact:true}).click();
  // Shared navigation source drives desktop and mobile menus.
  await page.getByRole('link',{name:'Explore Lee Data Center →',exact:true}).click();
  await expect(page).toHaveURL(/lee-data-center$/);
