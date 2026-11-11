@@ -1,0 +1,123 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "monthly",
+  "position": {
+    "x": 32,
+    "y": 325,
+    "z": 1,
+    "width": 750,
+    "height": 280,
+    "tabOrder": 357
+  },
+  "visual": {
+    "visualType": "lineChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Spend"
+                    }
+                  },
+                  "Property": "Month"
+                }
+              },
+              "queryRef": "Spend.Month",
+              "displayName": "Month"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Spend"
+                    }
+                  },
+                  "Property": "Baseline Actual"
+                }
+              },
+              "queryRef": "Spend.Baseline Actual",
+              "displayName": "Baseline Actual"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Spend"
+                    }
+                  },
+                  "Property": "Annual Spend"
+                }
+              },
+              "queryRef": "Spend.Annual Spend",
+              "displayName": "Annual Spend"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Spend"
+                    }
+                  },
+                  "Property": "Budget"
+                }
+              },
+              "queryRef": "Spend.Budget",
+              "displayName": "Budget"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Actual / scenario / budget'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F1EDE4'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

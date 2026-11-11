@@ -1,0 +1,25 @@
+import { test, expect } from '@playwright/test';
+test('Cloud FinOps navigation, forecast and scenario controls work independently', async ({ page, request }) => {
+  const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
+  await page.goto('/applied-projects');
+  await page.getByRole('link', { name: 'Explore Cloud FinOps →' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Enterprise Cloud Cost Optimization & FinOps Dashboard');
+  await expect(page.getByText('$1,020,709', { exact: true }).first()).toBeVisible();
+  await page.getByLabel('Optimization scenario').selectOption('Baseline');
+  await expect(page.getByText('$1,200,000', { exact: true }).first()).toBeVisible();
+  await page.getByLabel('Forecast as of').selectOption('2026-06');
+  await expect(page.getByRole('region', { name: 'Forward forecast and budget', exact: true })).toContainText('2027-06');
+  await expect(page.getByRole('region', { name: 'Forward forecast and budget', exact: true })).not.toContainText('2027-12');
+  await page.getByRole('combobox', { name: 'Cloud provider', exact: true }).selectOption('AWS');
+  await page.getByRole('button', { name: 'Cost allocation & showback', exact: true }).click();
+  await expect(page.getByRole('region', { name: 'Workload economics', exact: true })).not.toContainText('sandbox');
+  await page.getByRole('button', { name: 'Optimization opportunities', exact: true }).click();
+  await expect(page.getByRole('region', { name: 'Top 10 cloud cost optimization opportunities', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Scenario analysis', exact: true }).click();
+  await expect(page.getByRole('region', { name: 'Three scenario investment screen', exact: true })).toContainText('Aggressive');
+  await expect(page.getByRole('heading', { name: 'Management recommendation' })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  const zip = await request.get('/downloads/cloud-finops-power-bi.zip'); expect(zip.ok()).toBeTruthy(); expect((await zip.body()).subarray(0, 2).toString()).toBe('PK');
+  expect(errors).toEqual([]);
+  await page.screenshot({path:`/tmp/finops-${test.info().project.name}.png`,fullPage:true});
+});

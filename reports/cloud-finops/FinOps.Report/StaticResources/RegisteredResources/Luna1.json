@@ -1,0 +1,51 @@
+{
+  "name": "Luna1",
+  "dataColors": [
+    "#D0BC97",
+    "#9AAFBD",
+    "#B97D65",
+    "#B7C3A6",
+    "#EEE8DC"
+  ],
+  "background": "#101315",
+  "foreground": "#F1EDE4",
+  "tableAccent": "#D0BC97",
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#181D20"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "title": [
+          {
+            "show": true,
+            "fontColor": {
+              "solid": {
+                "color": "#F1EDE4"
+              }
+            },
+            "fontSize": 12,
+            "fontFamily": "Segoe UI"
+          }
+        ],
+        "labels": [
+          {
+            "color": {
+              "solid": {
+                "color": "#F1EDE4"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

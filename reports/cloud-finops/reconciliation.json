@@ -1,0 +1,53 @@
+[
+  {
+    "Scenario": "Baseline",
+    "spend": 1200000.0000000014,
+    "baseline": 1200000.0000000014,
+    "budget": 1164000.0000000014,
+    "variance": 36000,
+    "variancePercent": 0.030927835051546355,
+    "savings": 0,
+    "savingsPercent": 0,
+    "utilization": 0.40656551724137935,
+    "buffer": 0.5934344827586207,
+    "minimumBuffer": 0.4019999999999999,
+    "coverage": 0,
+    "costPerUnit": 0.6280716629767463,
+    "units": 1910610,
+    "forecast": 1361278.8559402581
+  },
+  {
+    "Scenario": "Moderate",
+    "spend": 1020708.7768732958,
+    "baseline": 1200000.0000000014,
+    "budget": 1164000.0000000014,
+    "variance": -143291.22312670562,
+    "variancePercent": -0.12310242536658543,
+    "savings": 179291.22312670562,
+    "savingsPercent": 0.14940935260558785,
+    "utilization": 0.525184855233853,
+    "buffer": 0.47481514476614695,
+    "minimumBuffer": 0.33999999999999997,
+    "coverage": 0.5,
+    "costPerUnit": 0.5342318824214758,
+    "units": 1910610,
+    "forecast": 1155853.958534026
+  },
+  {
+    "Scenario": "Aggressive",
+    "spend": 885749.3395934316,
+    "baseline": 1200000.0000000014,
+    "budget": 1164000.0000000014,
+    "variance": -278250.66040656983,
+    "variancePercent": -0.2390469591121731,
+    "savings": 314250.66040656983,
+    "savingsPercent": 0.2618755503388079,
+    "utilization": 0.642283597537724,
+    "buffer": 0.357716402462276,
+    "minimumBuffer": 0.19999999999999996,
+    "coverage": 0.7999999999999997,
+    "costPerUnit": 0.46359505058250067,
+    "units": 1910610,
+    "forecast": 1002000.4648819952
+  }
+]

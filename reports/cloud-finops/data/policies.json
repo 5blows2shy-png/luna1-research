@@ -1,0 +1,26 @@
+{
+  "Baseline": {
+    "rightsizing": 0,
+    "utilizationCeiling": 0.7,
+    "idleRemoval": 0,
+    "storage": 0,
+    "coverage": 0,
+    "discount": 0
+  },
+  "Moderate": {
+    "rightsizing": 0.2,
+    "utilizationCeiling": 0.7,
+    "idleRemoval": 0.75,
+    "storage": 0.15,
+    "coverage": 0.5,
+    "discount": 0.22
+  },
+  "Aggressive": {
+    "rightsizing": 0.35,
+    "utilizationCeiling": 0.8,
+    "idleRemoval": 1,
+    "storage": 0.3,
+    "coverage": 0.8,
+    "discount": 0.3
+  }
+}

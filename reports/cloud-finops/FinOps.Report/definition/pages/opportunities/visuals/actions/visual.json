@@ -1,0 +1,161 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "actions",
+  "position": {
+    "x": 32,
+    "y": 595,
+    "z": 1,
+    "width": 1528,
+    "height": 300,
+    "tabOrder": 627
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Workloads"
+                    }
+                  },
+                  "Property": "Workload"
+                }
+              },
+              "queryRef": "Workloads.Workload",
+              "displayName": "Workload"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Spend"
+                    }
+                  },
+                  "Property": "Annual Savings"
+                }
+              },
+              "queryRef": "Spend.Annual Savings",
+              "displayName": "Annual Savings"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Spend"
+                    }
+                  },
+                  "Property": "Compute Utilization"
+                }
+              },
+              "queryRef": "Spend.Compute Utilization",
+              "displayName": "Compute Utilization"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Spend"
+                    }
+                  },
+                  "Property": "Idle Savings"
+                }
+              },
+              "queryRef": "Spend.Idle Savings",
+              "displayName": "Idle Savings"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Spend"
+                    }
+                  },
+                  "Property": "Rightsizing Savings"
+                }
+              },
+              "queryRef": "Spend.Rightsizing Savings",
+              "displayName": "Rightsizing Savings"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Spend"
+                    }
+                  },
+                  "Property": "Storage Savings"
+                }
+              },
+              "queryRef": "Spend.Storage Savings",
+              "displayName": "Storage Savings"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Spend"
+                    }
+                  },
+                  "Property": "Reservation Savings"
+                }
+              },
+              "queryRef": "Spend.Reservation Savings",
+              "displayName": "Reservation Savings"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Savings waterfall by workload'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F1EDE4'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -6,6 +6,7 @@ import { companyResearch, investmentThemes } from "@/lib/research-content";
 import { researchCompanies } from "@/data/research/research-companies";
 import { financeProjects, projectHref } from "@/data/applied-finance-projects";
 const routes = [
+  "/recruiter/projects/cloud-finops",
   "",
   "/analyst-journal",
   "/about",
