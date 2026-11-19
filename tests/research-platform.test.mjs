@@ -106,6 +106,18 @@ test("GLW research-note development entry is dated and completed", () => {
   assert.match(log, /status: "Completed"/);
 });
 
+test("BNY development entry records the source-aware thought-process case", () => {
+  const log = fs.readFileSync("src/lib/development-log.ts", "utf8");
+  assert.equal(
+    (log.match(/id: "bny-financial-infrastructure-case-study"/g) ?? []).length,
+    1,
+  );
+  assert.match(log, /date: "2026-11-10"/);
+  assert.match(log, /Added the BNY Financial Infrastructure Case Study/);
+  assert.match(log, /route: "\/research\/bny"/);
+  assert.match(log, /The existing business must stand on its own/);
+});
+
 test("every research surface renders the approved disclosure", () => {
   const disclosure = fs.readFileSync("src/lib/research-content.ts", "utf8");
   assert.match(
