@@ -495,4 +495,50 @@ export const developmentLogEntries: DevelopmentLogEntry[] = [
     route: "/global-finance",
     visibility: "Public",
   },
+  {
+    id: "bny-financial-infrastructure-case-study",
+    date: "2026-11-10",
+    phase: "Featured Research Case Study",
+    category: "Research",
+    title: "Added the BNY Financial Infrastructure Case Study",
+    summary:
+      "Published a source-aware BNY thought-process case that moves from business model and moat through economics, valuation discipline, optionality, risk, and entry review without presenting a stock recommendation.",
+    reason:
+      "The research platform needed a clear example of how an investment question can be structured before live market data or unsupported financial claims are added.",
+    lessons: [
+      "The existing business must stand on its own before optionality improves the upside case.",
+      "Scenario design is more useful when it makes uncertainty and invalidation criteria explicit.",
+      "Primary-source links should be established before reported financial figures are published.",
+    ],
+    skills: [
+      "Financial-infrastructure analysis",
+      "Valuation discipline",
+      "Risk framing",
+      "Research communication",
+      "TypeScript content modeling",
+    ],
+    impact:
+      "Adds a recruiter-visible research example demonstrating structured judgment across recurring-fee economics, institutional switching costs, capital return, tokenization optionality, and downside monitoring.",
+    status: "Completed",
+    overview: [
+      "The BNY case evaluates custody, servicing, clearing, collateral, payments, and related institutional workflows as financial infrastructure rather than relying on a conventional consumer-bank narrative.",
+      "It keeps reported values, live prices, price targets, and investment conclusions out of the case until they can be verified from dated primary sources.",
+    ],
+    milestones: [
+      "Added a dedicated BNY research route and a featured link from the Equity Research hub.",
+      "Documented the business-to-optionality thought process and bridge / toll-booth framework.",
+      "Added user-editable qualitative bear, base, and bull research scenarios with entry-discipline labels.",
+      "Included thesis-invalidation criteria, KPI monitoring, a capital-return lens, and a primary-source register.",
+      "Added the case as featured research evidence in the Professional Profile.",
+    ],
+    nextSteps: [
+      "Review dated BNY filings and investor-relations materials before publishing reported financial evidence.",
+      "Add sourced research updates only when a specific reporting period, publication date, and source link are documented.",
+      "Keep optionality separate from the existing-business valuation case.",
+    ],
+    disclosure:
+      "This case study is for educational and informational purposes only. It is not investment advice, a recommendation, or a solicitation to buy or sell any security.",
+    route: "/research/bny",
+    visibility: "Public",
+  },
 ];

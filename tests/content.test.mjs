@@ -269,16 +269,16 @@ test("homepage uses the restrained prism without restoring the removed price arr
 test("long-term portfolio allocations are complete", () => {
   const source = fs.readFileSync("src/app/portfolios/page.tsx", "utf8").replace(/\s+/g, "");
   for (const [ticker, allocation] of [
-    ["VOO", "30%"],
-    ["QQQM", "50%"],
-    ["IAU", "10%"],
+    ["VOO", "29%"],
+    ["QQQM", "47%"],
+    ["IAU", "9%"],
     ["AIPO", "9%"],
     ["SGOV", "1%"],
-    ["LLY", "25%"],
-    ["AAPL", "20%"],
-    ["COST", "20%"],
-    ["SpaceX", "15%"],
-    ["AMZN", "20%"],
+    ["LLY", "24%"],
+    ["AAPL", "19%"],
+    ["COST", "19%"],
+    ["SpaceX", "14%"],
+    ["AMZN", "19%"],
   ])
     assert.match(
       source,
@@ -286,6 +286,16 @@ test("long-term portfolio allocations are complete", () => {
       `${ticker} allocation is missing`,
     );
   assert.ok(!source.includes("Average cost"));
+  assert.equal(
+    (source.match(/ticker:"CASH"/g) ?? []).length,
+    2,
+    "each portfolio should expose its cash allocation",
+  );
+  assert.equal(
+    (source.match(/allocation:"5%"/g) ?? []).length,
+    2,
+    "each cash sleeve should be allocated at 5%",
+  );
 });
 
 test("equity research uses the canonical research route", () => {

@@ -72,7 +72,7 @@ test("portfolio sections share a deduplicated quote provider", async () => {
 
 test("portfolio ticker exposes only visible portfolio sections", async () => {
   const [page, config, pulseConfig] = await Promise.all([read("src/app/portfolios/page.tsx"), read("src/lib/market-ticker-config.ts"), read("src/lib/market-pulse/config.ts")]);
-  for (const bucket of ["Watchlist", "Long-Term Compounders"]) assert.ok(config.includes(bucket));
+  for (const bucket of ["Watchlist", "Long-Term Holdings"]) assert.ok(config.includes(bucket));
   for (const ticker of ["LLY", "AAPL", "COST", "AMZN", "AIPO"]) assert.match(config, new RegExp(`["]${ticker}["]`));
   assert.doesNotMatch(config, /"Active Positions"/);
   assert.match(page, /portfolioTickerSymbols/);

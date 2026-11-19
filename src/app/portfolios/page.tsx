@@ -25,6 +25,7 @@ type Holding = {
   type: string;
   horizon: string;
   isPrivate?: boolean;
+  isCash?: boolean;
 };
 
 const coreAllocation: Holding[] = [
@@ -33,7 +34,7 @@ const coreAllocation: Holding[] = [
     company: "Vanguard S&P 500 ETF",
     thesis:
       "Provides broad exposure to large U.S. companies and serves as the portfolio’s core equity foundation. The position is designed to capture long-term economic growth while reducing single-stock risk.",
-    allocation: "30%",
+    allocation: "29%",
     type: "Core equity ETF",
     horizon: "Long term",
   },
@@ -42,7 +43,7 @@ const coreAllocation: Holding[] = [
     company: "Invesco NASDAQ-100 ETF",
     thesis:
       "Provides concentrated exposure to large-cap growth and technology leaders with strong earnings and innovation potential. It complements VOO by increasing participation in secular growth themes such as AI, cloud computing, and digital services.",
-    allocation: "50%",
+    allocation: "47%",
     type: "Growth equity ETF",
     horizon: "Long term",
   },
@@ -51,7 +52,7 @@ const coreAllocation: Holding[] = [
     company: "iShares Gold Trust",
     thesis:
       "Provides a strategic allocation to gold as a hedge against inflation, currency weakness, geopolitical uncertainty, and financial-system stress. It is intended to improve diversification because gold may behave differently from stocks and bonds during periods of market instability.",
-    allocation: "10%",
+    allocation: "9%",
     type: "Real asset",
     horizon: "Strategic allocation",
   },
@@ -73,6 +74,16 @@ const coreAllocation: Holding[] = [
     type: "Treasury ETF",
     horizon: "Capital reserve",
   },
+  {
+    ticker: "CASH",
+    company: "Cash & liquidity reserve",
+    thesis:
+      "Maintains immediately deployable liquidity for rebalancing, drawdowns, and evidence-driven additions. This sleeve remains distinct from SGOV to separate overnight liquidity from short-duration Treasury exposure.",
+    allocation: "5%",
+    type: "Liquidity reserve",
+    horizon: "Near term",
+    isCash: true,
+  },
 ];
 
 const compounders: Holding[] = [
@@ -81,7 +92,7 @@ const compounders: Holding[] = [
     company: "Eli Lilly and Company",
     thesis:
       "Eli Lilly combines a strong pharmaceutical pipeline with leadership in diabetes, obesity, and other high-growth therapeutic markets. The long-term thesis depends on continued innovation, successful drug launches, manufacturing expansion, and durable demand for its major treatments.",
-    allocation: "25%",
+    allocation: "24%",
     type: "Long-term compounder",
     horizon: "5+ years",
   },
@@ -90,7 +101,7 @@ const compounders: Holding[] = [
     company: "Apple Inc.",
     thesis:
       "Apple benefits from a powerful global brand, a loyal installed base, recurring services revenue, and a tightly integrated hardware and software ecosystem. Its long-term value creation is supported by pricing power, strong free cash flow, share repurchases, and continued expansion into services and new product categories.",
-    allocation: "20%",
+    allocation: "19%",
     type: "Long-term compounder",
     horizon: "5+ years",
   },
@@ -99,7 +110,7 @@ const compounders: Holding[] = [
     company: "Costco Wholesale Corporation",
     thesis:
       "Costco’s membership model creates recurring revenue, customer loyalty, and a durable cost advantage built on high sales volume and limited product markups. Long-term growth can come from new warehouses, membership-fee increases, international expansion, and continued gains in traffic and renewal rates.",
-    allocation: "20%",
+    allocation: "19%",
     type: "Long-term compounder",
     horizon: "5+ years",
   },
@@ -108,7 +119,7 @@ const compounders: Holding[] = [
     company: "Space Exploration Technologies Corp. (SpaceX)",
     thesis:
       "The long-term investment thesis centers on Starlink, whose expanding satellite network can extend high-speed connectivity to underserved markets, mobile users, enterprises, and governments worldwide. SpaceX’s reusable-launch capabilities support the thesis by lowering deployment and replenishment costs, but the position remains subject to the risks and limited liquidity of a privately held company.",
-    allocation: "15%",
+    allocation: "14%",
     type: "Private growth company",
     horizon: "5+ years",
     isPrivate: true,
@@ -118,9 +129,19 @@ const compounders: Holding[] = [
     company: "Amazon.com Inc.",
     thesis:
       "Amazon combines leadership in e-commerce, cloud computing, digital advertising, logistics, and subscription services. The long-term thesis is driven by AWS growth, expanding operating margins, greater efficiency in fulfillment, and continued monetization of its large customer ecosystem.",
-    allocation: "20%",
+    allocation: "19%",
     type: "Long-term compounder",
     horizon: "5+ years",
+  },
+  {
+    ticker: "CASH",
+    company: "Cash & liquidity reserve",
+    thesis:
+      "Preserves dry powder for risk management and selective additions when valuation and evidence improve. The allocation is explicit so portfolio liquidity is visible alongside invested capital.",
+    allocation: "5%",
+    type: "Liquidity reserve",
+    horizon: "Near term",
+    isCash: true,
   },
 ];
 
@@ -129,7 +150,7 @@ const allPortfolioSymbols = [...portfolioTickerSymbols].sort();
 const tabs = [
   "Overview",
   "Watchlist",
-  "Long-Term Compounders",
+  "Long-Term Holdings",
   "Mistake Journal",
 ] as const;
 type PortfolioTab = (typeof tabs)[number];
@@ -161,7 +182,9 @@ function HoldingsTable({ title, items }: { title: string; items: Holding[] }) {
                   <b>{item.ticker}</b>
                 </td>
                 <td data-label="Market quote">
-                  {item.isPrivate ? (
+                  {item.isCash ? (
+                    <span>Manually entered cash balance</span>
+                  ) : item.isPrivate ? (
                     <span>Not publicly traded</span>
                   ) : (
                     <QuoteDisplay symbol={item.ticker} compact />
@@ -228,7 +251,7 @@ function Overview() {
           <i style={{ width: "72%" }} />
         </div>
         <div>
-          <span>Long-term compounders</span>
+          <span>Long-term holdings</span>
           <b>Concentrated</b>
           <i style={{ width: "56%" }} />
         </div>
@@ -298,14 +321,14 @@ export default function Portfolios() {
           aria-labelledby={`tab-${activeTab.toLowerCase().replaceAll(" ", "-")}`}
         >
           {activeTab === "Overview" && <Overview />}
-          {activeTab === "Long-Term Compounders" && (
+          {activeTab === "Long-Term Holdings" && (
             <div className="holdings-stack">
               <HoldingsTable
                 title="Portfolio 1 · Core Asset Allocation"
                 items={coreAllocation}
               />
               <HoldingsTable
-                title="Portfolio 2 · Long-Term Compounders"
+                title="Portfolio 2 · Concentrated Long-Term Holdings"
                 items={compounders}
               />
             </div>
