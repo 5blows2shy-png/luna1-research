@@ -1,12 +1,13 @@
 """Read-only validation of the delivered formula workbook against the web model."""
 import json
 import math
+import sys
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from zipfile import ZipFile
 
 ROOT = Path(__file__).resolve().parents[1]
-FILE = ROOT / 'public/downloads/lee-data-center-10mw-expansion.xlsx'
+FILE = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'public/downloads/lee-data-center-10mw-expansion.xlsx'
 DATA = json.loads((ROOT / 'reports/lee-data-center/expansion-model.json').read_text())
 NS = {'s': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
 
@@ -52,5 +53,19 @@ with ZipFile(FILE) as z:
     for row in range(8, 13):
         for year in range(11):
             assert abs(float(val('Audit', f'{chr(68+year)}{row}'))) < .01
-    print('PASS: annual schedules, return metrics, 27 sensitivity cells, native table definitions, charts, and audit reconciliations.')
+    for year in range(11):
+        col = chr(68 + year)
+        for factor_row, flow_row, source_row, rate_cell in [(58, 59, 20, 'D22'), (61, 62, 13, 'D21')]:
+            factor = 1 / (1 + float(val('Assumptions', rate_cell))) ** year
+            near(val('Returns', f'{col}{factor_row}'), factor, f'{col} discount factor')
+            near(val('Returns', f'{col}{flow_row}'), float(val('Returns', f'{col}{source_row}')) * factor, f'{col} present value')
+            assert cell('Returns', f'{col}{flow_row}').find('s:f', NS) is not None
+    near(val('Returns', 'D64'), float(val('Returns', 'D36')), 'Equity NPV bridge')
+    near(val('Returns', 'D65'), float(val('Returns', 'D46')), 'Project NPV bridge')
+    for address in ['D35', 'D36']:
+        assert abs(float(val('Audit', address))) < .01
+    for row in range(39, 53):
+        assert 'FORMULATEXT(' in cell('ReadMe', f'D{row}').find('s:f', NS).text
+        assert cell('ReadMe', f'E{row}').find('s:f', NS) is not None
+    print('PASS: annual schedules, returns, discounting bridges, live formula walkthrough, 27 sensitivity cells, charts, and audit reconciliations.')
     print('Cached results reconcile to the TypeScript model. Native Excel application recalculation is a separate check.')
