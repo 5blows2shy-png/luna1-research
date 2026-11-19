@@ -8,14 +8,17 @@ test('Cloud FinOps navigation, forecast and scenario controls work independently
   await page.getByLabel('Optimization scenario').selectOption('Baseline');
   await expect(page.getByText('$1,200,000', { exact: true }).first()).toBeVisible();
   await page.getByLabel('Forecast as of').selectOption('2026-06');
+  await page.getByText('View data: Forward forecast and budget', { exact: true }).click();
   await expect(page.getByRole('region', { name: 'Forward forecast and budget', exact: true })).toContainText('2027-06');
   await expect(page.getByRole('region', { name: 'Forward forecast and budget', exact: true })).not.toContainText('2027-12');
   await page.getByRole('combobox', { name: 'Cloud provider', exact: true }).selectOption('AWS');
   await page.getByRole('button', { name: 'Cost allocation & showback', exact: true }).click();
   await expect(page.getByRole('region', { name: 'Workload economics', exact: true })).not.toContainText('sandbox');
   await page.getByRole('button', { name: 'Optimization opportunities', exact: true }).click();
+  await page.getByText('View data: Top 10 cloud cost optimization opportunities', { exact: true }).click();
   await expect(page.getByRole('region', { name: 'Top 10 cloud cost optimization opportunities', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Scenario analysis', exact: true }).click();
+  await page.getByText('View data: Three scenario investment screen', { exact: true }).click();
   await expect(page.getByRole('region', { name: 'Three scenario investment screen', exact: true })).toContainText('Aggressive');
   await expect(page.getByRole('heading', { name: 'Management recommendation' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
