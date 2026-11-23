@@ -20,6 +20,11 @@ export function ProjectPreviews() {
       <div><span className={styles.meta}>CFA Institute Research Challenge · SDSU</span><h3>WD-40 Company — Company &amp; Strategic Research</h3><p>Company overview, business mapping, management strategy, governance, ESG and business-risk research for the SDSU equity research team.</p><small>Research in progress · Role and scope are owner-provided; completed valuation is not implied.</small></div>
       <aside><Link href="/recruiter/research-challenge">Explore WD-40 research →</Link></aside>
     </article>
+    <article className={`${styles.preview} ${styles.featuredProject}`}>
+      <span className={styles.meta}>FinOps platform</span>
+      <div><span className={styles.meta}>Cloud engineering · Financial analytics</span><h3>Luna1 CloudSpend</h3><p>A working FinOps intelligence application for AWS, Azure and simulated VMware: cost allocation, safeguarded VM rightsizing, forecasts, anomaly investigation and local FOCUS CSV import.</p><small>Browser-local application · Simulated demo · No employer data</small></div>
+      <aside><Link href="/cloudspend">Launch Luna1 CloudSpend</Link></aside>
+    </article>
     <article className={styles.preview}>
       <span className={styles.meta}>Cloud FinOps</span>
       <div><span className={styles.meta}>Technology Finance &amp; Infrastructure</span><h3>Enterprise Cloud Cost Optimization &amp; FinOps Dashboard</h3><p>A simulated $1.2M AWS/Azure environment with showback, rolling forecasts and capacity-aware savings scenarios.</p><small>Interactive analysis · Four-page Power BI project; Desktop validation pending</small></div>
