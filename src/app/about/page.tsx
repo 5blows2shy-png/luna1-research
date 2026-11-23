@@ -1,4 +1,5 @@
 import { PageHeader, SectionHeading } from "@/components/site";
+import { Luna1ResearchOverview } from "@/components/luna1-research-overview";
 import {
   careerProgression,
   professionalPositioning,
@@ -30,6 +31,9 @@ export default function About() {
           is a professional portfolio of research methods, documented decisions,
           and developing analytical work.
         </p>
+      </section>
+      <section>
+        <Luna1ResearchOverview />
       </section>
       <section>
         <SectionHeading

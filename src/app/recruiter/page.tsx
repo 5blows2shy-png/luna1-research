@@ -2,6 +2,7 @@ import { ProfessionalCasePreviews } from "@/components/applied-finance/professio
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionHeading } from "@/components/site";
+import { Luna1ResearchOverview } from "@/components/luna1-research-overview";
 import { SectionDisclosure } from "@/components/section-disclosure";
 import styles from "./page.module.css";
 import { ProjectPreviews } from "@/components/applied-finance/project-previews";
@@ -216,6 +217,7 @@ export default function RecruiterView() {
         <p>A concise view of education, current finance work, applied investment experience, and operating background.</p>
       </div>
       <dl className={styles.snapshotGrid}>{snapshot.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
+      <Luna1ResearchOverview />
       </div>
     </SectionDisclosure>
 

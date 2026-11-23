@@ -266,6 +266,25 @@ test("homepage uses the restrained prism without restoring the removed price arr
   assert.ok(!home.includes("PRICE <b>→<\/b>"));
 });
 
+test("Luna1 research overview is shared across the primary profile surfaces", () => {
+  const overview = fs.readFileSync(
+    "src/components/luna1-research-overview.tsx",
+    "utf8",
+  );
+  assert.match(overview, /Independent Financial &amp; Technology Research/);
+  assert.match(overview, /Cloud Infrastructure & FinOps Research/);
+  assert.match(overview, /Financial Modeling & Analytics/);
+  assert.match(overview, /Cloud Economics/);
+  for (const path of [
+    "src/app/page.tsx",
+    "src/app/about/page.tsx",
+    "src/app/recruiter/page.tsx",
+  ]) {
+    const source = fs.readFileSync(path, "utf8");
+    assert.match(source, /Luna1ResearchOverview/);
+  }
+});
+
 test("long-term portfolio allocations are complete", () => {
   const source = fs.readFileSync("src/app/portfolios/page.tsx", "utf8").replace(/\s+/g, "");
   for (const [ticker, allocation] of [

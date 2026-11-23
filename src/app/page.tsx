@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PrismSignature } from "@/components/luxury";
+import { Luna1ResearchOverview } from "@/components/luna1-research-overview";
 import {
   professionalPositioning,
 } from "@/lib/professional-profile";
@@ -63,6 +64,10 @@ export default function Home() {
           </div>
         </div>
         <PrismSignature />
+      </section>
+
+      <section>
+        <Luna1ResearchOverview />
       </section>
 
       <section>
