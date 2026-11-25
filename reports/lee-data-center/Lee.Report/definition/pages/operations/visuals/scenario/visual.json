@@ -62,7 +62,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Select one scenario'"
+                  "Value": "'Scenario (Base when unfiltered)'"
                 }
               }
             },

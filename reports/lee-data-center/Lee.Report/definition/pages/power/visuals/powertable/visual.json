@@ -1,0 +1,133 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "powertable",
+  "position": {
+    "x": 32,
+    "y": 600,
+    "z": 1,
+    "width": 1376,
+    "height": 205,
+    "tabOrder": 632
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Power"
+                    }
+                  },
+                  "Property": "Power_Price"
+                }
+              },
+              "queryRef": "Power.Power_Price",
+              "displayName": "Power_Price"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Power"
+                    }
+                  },
+                  "Property": "Power Equity IRR"
+                }
+              },
+              "queryRef": "Power.Power Equity IRR",
+              "displayName": "Power Equity IRR"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Power"
+                    }
+                  },
+                  "Property": "Power Equity NPV"
+                }
+              },
+              "queryRef": "Power.Power Equity NPV",
+              "displayName": "Power Equity NPV"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Power"
+                    }
+                  },
+                  "Property": "Power Minimum DSCR"
+                }
+              },
+              "queryRef": "Power.Power Minimum DSCR",
+              "displayName": "Power Minimum DSCR"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Power"
+                    }
+                  },
+                  "Property": "Power Breach Years"
+                }
+              },
+              "queryRef": "Power.Power Breach Years",
+              "displayName": "Power Breach Years"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Price sensitivity — no operating or financing changes'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F1EDE4'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # Lee Data Center — 10 MW listed-site case validation
 
-Prepared October 28, 2026. Hypothetical acquisition and development of the publicly advertised 16000 Midlothian Turnpike parcel; the existing 20 MW web / Power BI case is separate.
+Prepared October 28, 2026. Hypothetical acquisition and development of the publicly advertised 16000 Midlothian Turnpike parcel; this historical validation predates the November 24, 2026 Power BI update, which now uses the same 10 MW site defaults.
 
 ## Workbook checks
 

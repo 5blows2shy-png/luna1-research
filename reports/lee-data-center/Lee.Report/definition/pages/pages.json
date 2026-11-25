@@ -3,7 +3,9 @@
   "pageOrder": [
     "overview",
     "operations",
-    "credit"
+    "credit",
+    "sourcing",
+    "power"
   ],
   "activePageName": "overview"
 }

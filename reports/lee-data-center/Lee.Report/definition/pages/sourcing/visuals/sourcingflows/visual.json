@@ -1,0 +1,123 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "sourcingflows",
+  "position": {
+    "x": 730,
+    "y": 245,
+    "z": 1,
+    "width": 678,
+    "height": 340,
+    "tabOrder": 975
+  },
+  "visual": {
+    "visualType": "lineChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "SourcingAnnual"
+                    }
+                  },
+                  "Property": "Year"
+                }
+              },
+              "queryRef": "SourcingAnnual.Year",
+              "displayName": "Year"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "SourcingAnnual"
+                    }
+                  },
+                  "Property": "Cloud Cost"
+                }
+              },
+              "queryRef": "SourcingAnnual.Cloud Cost",
+              "displayName": "Cloud Cost"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "SourcingAnnual"
+                    }
+                  },
+                  "Property": "Colocation Cost"
+                }
+              },
+              "queryRef": "SourcingAnnual.Colocation Cost",
+              "displayName": "Colocation Cost"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "SourcingAnnual"
+                    }
+                  },
+                  "Property": "Owned infrastructure Cost"
+                }
+              },
+              "queryRef": "SourcingAnnual.Owned infrastructure Cost",
+              "displayName": "Owned infrastructure Cost"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Annual cash costs — shared demand schedule'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F1EDE4'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

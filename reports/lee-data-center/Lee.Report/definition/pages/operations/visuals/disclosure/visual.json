@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "LUNA1 RESEARCH  •  Hypothetical portfolio model. All inputs illustrative. No site, utility capacity, lender commitment or personalized investment advice. Select one scenario; blank cards mean no single scenario is selected.",
+                    "value": "LUNA1 RESEARCH  •  Hypothetical portfolio model. All inputs illustrative. No site, utility capacity, lender commitment or personalized investment advice. Investment cards default to Base when unfiltered; choose one scenario. Sourcing and power pages: independent Base assumptions. No live synchronization with browser edits.",
                     "textStyle": {
                       "fontSize": "10pt",
                       "color": "#C3C0B8"

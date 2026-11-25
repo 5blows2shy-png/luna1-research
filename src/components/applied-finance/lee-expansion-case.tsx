@@ -16,7 +16,7 @@ export function LeeExpansionCase() {
       <a href='/downloads/lee-data-center-10mw-expansion.xlsx' download>Download 10 MW expansion Excel model →</a>
       <a href='/downloads/lee-data-center-10mw-investment-committee.docx' download>Download two-page investment committee memo →</a>
     </div>
-    <p className={styles.note}>The workbook and interactive model use the same 10 MW site-case defaults. Browser edits do not sync to the workbook. The earlier 20 MW Power BI starter requires a dataset replacement. The asking price is sourced; development, financing and feasibility assumptions remain hypothetical.</p>
+    <p className={styles.note}>The workbook and interactive model use the same 10 MW site-case defaults. Browser edits do not sync to the workbook. The updated five-page Power BI package also uses the 10 MW defaults and adds sourcing-cost and power-price analysis; it is a fixed snapshot, not synchronized to browser edits. The asking price is sourced; development, financing and feasibility assumptions remain hypothetical.</p>
     <details><summary>Public benchmark sources and model use</summary><ul>{expansionSources.map(source=><li key={source.id}><a href={source.url}>{source.title}</a><p>{source.benchmark} {source.application}</p></li>)}</ul><p>Sources accessed October 28, 2026. No confidential employer, customer or facility information is used.</p></details>
   </section>;
 }

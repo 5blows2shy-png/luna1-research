@@ -1,0 +1,72 @@
+[
+  {
+    "Power_Price": 0.05,
+    "Is_Current": false,
+    "Exit_Year": 10,
+    "Exit_Facility_kWh": 89877600.00000001,
+    "Exit_Power_Cost": 4493880.000000001,
+    "Exit_EBITDA": 24939455.17915761,
+    "Equity_IRR": 0.18168303984342382,
+    "Equity_NPV": 19140049.01751077,
+    "Minimum_DSCR": 0.5808115225777253,
+    "Breach_Years": 5,
+    "Debt_Service_Shortfall": 8231957.157784611,
+    "Status": "Calculated"
+  },
+  {
+    "Power_Price": 0.075,
+    "Is_Current": true,
+    "Exit_Year": 10,
+    "Exit_Facility_kWh": 89877600.00000001,
+    "Exit_Power_Cost": 6740820.000000001,
+    "Exit_EBITDA": 22692515.17915761,
+    "Equity_IRR": 0.16181118197176036,
+    "Equity_NPV": 6846060.0887945,
+    "Minimum_DSCR": 0.5044384034210088,
+    "Breach_Years": 6,
+    "Debt_Service_Shortfall": 11198146.095284611,
+    "Status": "Calculated"
+  },
+  {
+    "Power_Price": 0.1,
+    "Is_Current": false,
+    "Exit_Year": 10,
+    "Exit_Facility_kWh": 89877600.00000001,
+    "Exit_Power_Cost": 8987760.000000002,
+    "Exit_EBITDA": 20445575.179157607,
+    "Equity_IRR": 0.14016341674986188,
+    "Equity_NPV": -5447928.839921817,
+    "Minimum_DSCR": 0.4258021469027442,
+    "Breach_Years": 7,
+    "Debt_Service_Shortfall": 15988305.680646649,
+    "Status": "Calculated"
+  },
+  {
+    "Power_Price": 0.125,
+    "Is_Current": false,
+    "Exit_Year": 10,
+    "Exit_Facility_kWh": 89877600.00000001,
+    "Exit_Power_Cost": 11234700.000000002,
+    "Exit_EBITDA": 18198635.179157607,
+    "Equity_IRR": 0.11630459269584181,
+    "Equity_NPV": -17741917.76863809,
+    "Minimum_DSCR": 0.30302212310671733,
+    "Breach_Years": 8,
+    "Debt_Service_Shortfall": 21926262.688119896,
+    "Status": "Calculated"
+  },
+  {
+    "Power_Price": 0.15,
+    "Is_Current": false,
+    "Exit_Year": 10,
+    "Exit_Facility_kWh": 89877600.00000001,
+    "Exit_Power_Cost": 13481640.000000002,
+    "Exit_EBITDA": 15951695.17915761,
+    "Equity_IRR": 0.08961459276043049,
+    "Equity_NPV": -30035906.69735437,
+    "Minimum_DSCR": 0.1802420993106904,
+    "Breach_Years": 9,
+    "Debt_Service_Shortfall": 29577101.967870943,
+    "Status": "Calculated"
+  }
+]

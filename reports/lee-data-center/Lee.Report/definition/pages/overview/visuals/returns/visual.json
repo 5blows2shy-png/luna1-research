@@ -89,7 +89,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Selected scenario investment screen'"
+                  "Value": "'Scenario investment screen (cards default to Base)'"
                 }
               }
             },
