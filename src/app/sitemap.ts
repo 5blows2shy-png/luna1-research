@@ -22,7 +22,7 @@ const routes = [
   "/portfolio",
   "/portfolio/mistake-journal",
   "/portfolio/positions/krys",
-  "/recruiter", "/applied-projects",
+  "/recruiter", "/applied-projects", "/applied-projects/hiring-manager-guide",
   "/recruiter/projects/lee-data-center",
   "/recruiter/research-challenge",
   developmentHref,

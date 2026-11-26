@@ -2,6 +2,10 @@
 
 Luna1 Research is Shyheim Lee's institutional-quality educational investment research website. It separates a stock price into the business, institutional, technical, valuation, and risk forces producing it.
 
+## Hiring manager review
+
+Start with the [illustrated portfolio guide](https://luna1research.com/applied-projects/hiring-manager-guide) or the [portfolio README](public/downloads/luna1-portfolio-README.md) for architecture diagrams, design choices and review steps.
+
 ## Product scope
 
 The permanent public platform consists of Home, Research, Portfolio, About, Recruiter View, and Contact. Portfolio contains Overview, Active Positions, Watchlist, Long-Term Compounders, Conviction Dashboard, Mistake Journal, and Performance. Mistake Journal is a Portfolio capability, not a separate top-level product.

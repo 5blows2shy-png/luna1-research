@@ -180,7 +180,7 @@ export default function RecruiterView() {
     <section className={styles.hero} aria-labelledby="recruiter-title">
       <div className={styles.heroCopy}>
         <span className="eyebrow">Professional profile · Finance</span>
-        <h1 id="recruiter-title">Shy Lee</h1>
+        <h1 id="recruiter-title">Shy Lee</h1><p><Link href="/applied-projects/hiring-manager-guide">Hiring Manager Guide: architecture, decisions and project evidence</Link></p>
         <p className={styles.professionalLine}>Finance Analyst <i /> Investment Research <i /> FP&amp;A <i /> Financial Automation</p>
         <p className={styles.positioning}>Finance candidate combining real accounting operations, investment research, financial modeling, and Python-based finance automation.</p>
         <ul className={styles.identifiers} aria-label="Professional identifiers">

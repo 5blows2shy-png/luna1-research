@@ -8,6 +8,7 @@ import styles from '@/components/applied-finance/project.module.css';
 export const metadata: Metadata = { title: 'Applied Projects | Luna1 Research', description: 'Financial operations, infrastructure investment and equity research work samples with transparent evidence and assumptions.', alternates: {canonical:'/applied-projects'} };
 export default function AppliedProjectsPage(){return <article className={`${styles.page} ${styles.flagshipPage}`}>
 <header><div className={styles.brandHeading}><ProjectBrand/><span className={styles.meta}>Models · Evidence · Investment decisions</span></div><h1>Applied Projects</h1><p>Financial operations, infrastructure investment and equity research. Explore the analysis, inspect the assumptions and download the supporting work.</p><Link href='/recruiter'>Professional Resume →</Link></header>
+<section className={styles.projectSection}><span className={styles.meta}>Start here · For hiring managers</span><h2>How the work is built</h2><p>Architecture diagrams, design decisions and a five-minute guide to reviewing CloudSpend, Lee Data Center and WD-40 research.</p><Link href="/applied-projects/hiring-manager-guide">Read the Hiring Manager Guide</Link></section>
 <ProjectInsights/>
 <ProjectPreviews/>
 <section className={styles.projectSection} aria-labelledby="energy-research-title">
